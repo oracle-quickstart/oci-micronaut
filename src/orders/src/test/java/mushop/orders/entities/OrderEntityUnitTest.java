@@ -1,42 +1,26 @@
 package mushop.orders.entities;
 
+import io.micronaut.context.annotation.Property;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import mushop.orders.repositories.CustomerOrderRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.Date;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
+@MicronautTest(rollback = true)
+@Property(name = "jpa.default.properties.hibernate.hbm2ddl.auto", value = "create-drop")
 public class OrderEntityUnitTest {
 
-    @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
+    @Inject
     private CustomerOrderRepository orderRepository;
-
-    public CustomerOrderRepository getOrderRepository() {
-        return orderRepository;
-    }
-
-    public void setOrderRepository(CustomerOrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
-
-    public TestEntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager(TestEntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public CustomerOrder createOrderObj(){
         Address address = new Address("id","000","street","city","00000","coutry");
@@ -56,39 +40,41 @@ public class OrderEntityUnitTest {
     @Test
     public void findOrdersByCustomerId() {
         CustomerOrder order = createOrderObj();
-        entityManager.persist(order);
-        entityManager.flush();
+        orderRepository.save(order);
+        orderRepository.flush();
         Long orderId = order.getId();
         Page<CustomerOrder> found =  orderRepository.findByCustomerId("cust001", Pageable.unpaged());
-        found.forEach(orderFound -> assertThat(orderFound.getId()).isEqualTo(orderId) );
+        found.forEach(orderFound -> {
+            assertEquals(orderId, orderFound.getId());
+        });
 
     }
 
     @Test
     public void findOrderByInvalidIdFails(){
         CustomerOrder order = createOrderObj();
-        entityManager.persist(order);
-        entityManager.flush();
+        orderRepository.save(order);
+        orderRepository.flush();
         Long orderId = order.getId();
-        assertThat(orderRepository.findById(orderId+50).isPresent()).isFalse();
+        assertFalse(orderRepository.findById(orderId+50).isPresent());
     }
 
     @Test
     public void findOrderByIdSucceeds(){
         CustomerOrder order = createOrderObj();
-        entityManager.persist(order);
-        entityManager.flush();
+        orderRepository.save(order);
+        orderRepository.flush();
         Long orderId = order.getId();
-        assertThat(orderRepository.findById(orderId).isPresent()).isTrue();
+        assertTrue(orderRepository.findById(orderId).isPresent());
     }
 
     @Test
     public void addressIsPersisted(){
         CustomerOrder order = createOrderObj();
-        entityManager.persist(order);
-        entityManager.flush();
+        orderRepository.save(order);
+        orderRepository.flush();
         Long orderId = order.getId();
-        assertThat(orderRepository.findById(orderId).get().getAddress()).isEqualTo(order.getAddress());
+        assertEquals(order.getAddress(), orderRepository.findById(orderId).get().getAddress());
     }
 
 }

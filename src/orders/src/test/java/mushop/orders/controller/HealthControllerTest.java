@@ -1,23 +1,25 @@
 package mushop.orders.controller;
 
-import mushop.orders.controllers.HealthCheckController;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import javax.inject.Inject;
 
-@WebMvcTest(HealthCheckController.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@MicronautTest
 public class HealthControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+
+    @Inject
+    @Client("/")
+    RxHttpClient httpClient;
 
     @Test
-    void getHealth_returns200() throws Exception {
-
-        this.mockMvc.perform(get("/health"))
-                .andExpect(status().isOk());
+    void getHealth_returns200() {
+        assertEquals(HttpStatus.OK.getCode(), httpClient.toBlocking().exchange(HttpRequest.GET("/health")).code());
     }
 }

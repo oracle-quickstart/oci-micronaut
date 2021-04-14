@@ -2,54 +2,82 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-  id 'org.springframework.boot' version '2.3.0.RELEASE'
-  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-  id 'java'
+  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("io.micronaut.application") version "1.4.2"
 }
 
-
-group = 'mushop.orders'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-  compileOnly {
-    extendsFrom annotationProcessor
-  }
-  compile.exclude module: 'spring-boot-starter-tomcat'
-}
+version = "0.1"
+group = "micronaut.mushop"
 
 repositories {
-  mavenLocal()
   mavenCentral()
 }
 
-
-dependencies {
-  annotationProcessor 'org.projectlombok:lombok'
-  compileOnly 'org.projectlombok:lombok'
-
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-jetty'
-  implementation 'org.springframework.boot:spring-boot-starter-validation'
-  implementation 'org.springframework.boot:spring-boot-starter-actuator'
-  implementation 'io.nats:jnats:2.6.6'
-  implementation 'com.h2database:h2:1.4.200'
-  runtimeOnly 'com.oracle.database.jdbc:ojdbc8:19.6.0.0'
-  runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
-  testImplementation('org.springframework.boot:spring-boot-starter-test') {
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+micronaut {
+  runtime("netty")
+  testRuntime("junit5")
+  processing {
+    incremental(true)
+    annotations("mushop.orders.*")
   }
-
-  testImplementation 'com.openpojo:openpojo:0.8.12'
-
 }
 
-test {
-  useJUnitPlatform()
+dependencies {
+  annotationProcessor("io.micronaut.data:micronaut-data-processor")
+  implementation("javax.annotation:javax.annotation-api")
+  implementation("io.micronaut:micronaut-validation")
+  implementation("io.micronaut:micronaut-http-client")
+  implementation("io.micronaut:micronaut-runtime")
+
+  // service discovery
+  implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+
+  // Metrics and tracing
+  implementation("io.micronaut:micronaut-management")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+  implementation("io.micronaut:micronaut-tracing")
+  runtime("io.zipkin.reporter2:zipkin-reporter")
+
+  // ATP db access
+  implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+  implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+//  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+  runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
+  runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+  runtimeOnly("com.oracle.database.security:oraclepki:19.8.0.0")
+  runtimeOnly("com.oracle.database.security:osdt_cert:19.8.0.0")
+  runtimeOnly("com.oracle.database.security:osdt_core:19.8.0.0")
+  implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+  implementation("io.micronaut.data:micronaut-data-model")
+
+  // Nats.io support
+  implementation("io.micronaut.nats:micronaut-nats")
+
+  runtimeOnly("ch.qos.logback:logback-classic")
+
+  testImplementation("com.h2database:h2")
+  testImplementation "org.mockito:mockito-core:3.+"
+  testImplementation 'com.openpojo:openpojo:0.8.12'
+}
+
+application {
+  mainClass.set("mushop.OrderApplication")
+}
+
+java {
+  sourceCompatibility = JavaVersion.toVersion("11")
+  targetCompatibility = JavaVersion.toVersion("11")
+}
+
+dockerBuild {
+  images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+}
+
+dockerBuildNative {
+  images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
 }
 
 tasks.withType(Test) {

@@ -1,0 +1,4 @@
+kubernetes:
+  client:
+    discovery:
+      enabled: true

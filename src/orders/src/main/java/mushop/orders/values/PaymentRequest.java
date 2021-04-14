@@ -4,12 +4,14 @@
  **/
 package  mushop.orders.values;
 
+import io.micronaut.core.annotation.Introspected;
 import mushop.orders.entities.Address;
 import mushop.orders.entities.Card;
 import mushop.orders.entities.Customer;
 
 import java.util.Objects;
 
+@Introspected
 public class PaymentRequest {
     private Address address;
     private Card card;

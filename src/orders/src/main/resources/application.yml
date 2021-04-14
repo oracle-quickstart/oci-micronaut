@@ -1,0 +1,28 @@
+micronaut:
+  application:
+    name: orders
+  server:
+    port: 8082
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+mushop:
+  messaging:
+    subjects:
+      orders: ${ORDERS_NEW:mushop-orders}
+      shipments: ${ORDERS_SHIPPED:mushop-shipments}
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+
+nats.addresses:
+  - nats://localhost:4222

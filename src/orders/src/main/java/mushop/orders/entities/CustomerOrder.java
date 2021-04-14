@@ -5,9 +5,8 @@
 package  mushop.orders.entities;
 
 
-import org.springframework.data.annotation.CreatedDate;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.data.annotation.DateCreated;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
@@ -51,7 +50,7 @@ public class CustomerOrder implements Serializable{
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
+    @DateCreated
     private Date orderDate = Calendar.getInstance().getTime();
 
     private Float total;

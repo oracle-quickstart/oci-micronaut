@@ -4,15 +4,11 @@
  **/
 package  mushop.orders;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
+import io.micronaut.runtime.Micronaut;
 
-@SpringBootApplication
-@EnableAsync
 public class OrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderApplication.class, args);
+        Micronaut.run(OrderApplication.class, args);
     }
 }

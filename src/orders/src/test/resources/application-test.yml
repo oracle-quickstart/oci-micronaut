@@ -1,3 +1,9 @@
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      oraclecloud:
+        enabled: false
 nats:
   enabled: false
 datasources:

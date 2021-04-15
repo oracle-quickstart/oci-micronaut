@@ -3,6 +3,8 @@ micronaut:
     name: orders
   server:
     port: 8082
+  metrics:
+    enabled: false
 
 endpoints:
   health:

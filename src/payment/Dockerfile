@@ -1,13 +1,12 @@
-FROM golang:1.12-alpine AS go-builder
-RUN apk add --no-cache ca-certificates git
-WORKDIR /src
-COPY . .
-
-RUN GO111MODULE=on GOARCH=amd64 CGO_ENABLED=0 GOOS=linux \
-    go build -a \
-    -installsuffix cgo \
-    -o /payment cmd/main.go
-
-FROM alpine:3.4
-COPY --from=go-builder /payment /
-CMD ["/payment", "-port=80"]
+# Run ./gradlew assemble first
+FROM ghcr.io/graalvm/graalvm-ce:java11-21.0.0.2 AS graalvm
+RUN gu install native-image
+WORKDIR /home/app
+COPY build/layers/libs /home/app/libs
+COPY build/layers/resources /home/app/resources
+COPY build/layers/application.jar /home/app/application.jar
+RUN native-image -H:IncludeResources='.*sql$|.*xml$|.*yml$' -H:Class=catalogue.Application -H:Name=application --no-fallback -cp /home/app/libs/*.jar:/home/app/resources:/home/app/application.jar
+FROM oraclelinux:8-slim
+COPY --from=graalvm /home/app/application /app/application
+ENTRYPOINT ["/app/application", "-Dmicronaut.server.port=80"]
+EXPOSE 80

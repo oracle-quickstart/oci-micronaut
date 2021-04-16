@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: payment
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, gradle, http-client, java, java-application, junit, logback, management, micrometer, micrometer-prometheus, netty-server, openapi, readme, shade, tracing-zipkin, yaml]

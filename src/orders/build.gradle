@@ -74,11 +74,11 @@ java {
 }
 
 dockerBuild {
-  images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
 }
 
 dockerBuildNative {
-  images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
 
 tasks.withType(Test) {

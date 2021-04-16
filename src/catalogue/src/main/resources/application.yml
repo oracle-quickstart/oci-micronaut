@@ -1,0 +1,37 @@
+micronaut:
+  application:
+    name: catalogue
+  server:
+    thread-selection: io
+  executors:
+    io:
+      n-threads: 75
+      type: fixed
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+    enabled: true
+  data:
+    pageable:
+      default-page-size: -1
+      sort-parameter-name: Order
+      page-parameter-name: PageNum
+      size-parameter-name: PageSize
+tracing:
+  zipkin:
+    enabled: true
+    http:
+      url: http://localhost:9411
+    sampler:
+      probability: 0.1
+datasources:
+  default:
+    dialect: oracle
+flyway:
+  datasources:
+    default:
+      enabled: true
+      baseline-on-migrate: true

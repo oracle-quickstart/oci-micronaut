@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: catalogue
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, data, data-jdbc, gradle, http-client, java, java-application, jdbc-hikari, junit, logback, management, micrometer, micrometer-prometheus, netty-server, openapi, oracle, readme, shade, testcontainers, tracing-zipkin, yaml]

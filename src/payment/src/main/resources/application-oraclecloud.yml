@@ -1,0 +1,20 @@
+tracing:
+  zipkin:
+    enabled: true
+    sampler:
+      probability: 1
+    http:
+      url: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}
+      path: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}
+micronaut:
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+      oraclecloud:
+        enabled: false
+        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut-mushop}
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:carts}

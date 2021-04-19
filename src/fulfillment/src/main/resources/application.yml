@@ -1,8 +1,8 @@
 micronaut:
   application:
-    name: fulfillment
+    name: orders
   server:
-    port: 80
+    port: 8082
   metrics:
     enabled: true
     export:
@@ -10,30 +10,20 @@ micronaut:
         enabled: true
         descriptions: true
         step: PT1M
-    binders:
-      jvm:
-        enabled: true
-      web:
-        enabled: true
-      uptime:
-        enabled: true
-      processor:
-        enabled: true
-
-
+      oraclecloud:
+        enabled: false
 
 endpoints:
-    prometheus:
-        enabled: true
-        sensitive: false
-
-        
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
 
 mushop:
   messaging:
-    host: ${nats.host:localhost}
-    port: ${nats.port:4222}
-    simulation-delay: ${simulation.delay:8000}
     subjects:
-      orders: ${orders.new:mushop-orders}
-      shipments: ${orders.shipped:mushop-shipments}
+      orders: ${ORDERS_NEW:mushop-orders}
+      shipments: ${ORDERS_SHIPPED:mushop-shipments}
+
+nats.addresses:
+  - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}

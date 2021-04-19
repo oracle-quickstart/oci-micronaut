@@ -9,30 +9,30 @@ throughput can be achieved with these designs than traditional synchronous, bloc
 
 ## Building
 
-The application uses a `gradle` build. However for convenience, it can be build inside a 
-docker container. To build the application execute the following command (from the repository root)
+The application uses a `gradle` build. To build the application in GraalVM native image execute the following command (
+from the repository root):
 
 ```shell script
-docker build -t mushop-fulfillment:latest src/fulfillment
+./gradlew dockerBuildNative
 ``` 
 This is a multi stage that sets-up the the build environment and generates a docker image 
 that runs the application. By default, the application that is built by `gradle` is processed by the 
-GraalVM native image builder that compiles the application in to a native binary.
-
+GraalVM native image builder that compiles the application in to a native binary. All of this is instrumented
+by the [Micronaut Gradle Plugin](https://github.com/micronaut-projects/micronaut-gradle-plugin).
 
 > **_NOTE:_** GraalVM's native image build is cpu and memory intensive, and could take a few minutes to complete.
 > Make sure your docker daemon has been allocated enough CPUs and memory.
 
 ### Building a JVM application
 
-If you would like to build the application as a standard executable jar file, we have 
-provided an alternate `Dockerfile` that will skip the GraalVM based native image generation 
-and build an image that uses a standard JVM to run the application. This is useful for either comparing 
-GraalVM against the normal JVM execution, as well as for rapid development.
+If you would like to build the application as a standard executable jar file execute the following command (
+from the repository root)
 
 ```shell script
-docker build -t mushop-fulfillment:latest -f src/fulfillment/Dockerfile.jvm src/fulfillment
+./gradlew dockerBuild
 ``` 
+
+This is useful for either comparing GraalVM against the normal JVM execution, as well as for rapid development.
 
 ## Running 
 
@@ -40,14 +40,14 @@ The fulfillment service is included in the `docker-compose` configuration can si
 To run the container stand-alone, simply run the following command.
 
 ```shell script
-docker run -p 8087:80  mushop-fulfillment:local
+docker run -p 8082:8082  iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:0.1
 ``` 
 
-This runs the container locally and exposes the application's api to the docker host's port `8099`.
+This runs the container locally and exposes the application's api to the docker host's port `8082`.
 You can validate the application state by simply making a health check request to 
 
 ```shell script
-curl localhost:8087/health
+curl localhost:8082/health
 ``` 
 
 ### Application Configuration
@@ -55,12 +55,12 @@ curl localhost:8087/health
 There are a few attributes that are externally configurable. These are
 |   |   |
 |---|---|
-| NATS_HOST  | The hostname for where NATS is reachable. Defaults to `localhost`  |
-| SIMULATION_DELAY | The artificial time delay between the fulfillment service receiving a message from the orders service and it replying  (for demos). Defaults to 8s. Value is in milliseconds. |
+| NATS_HOST | The hostname for where NATS is reachable. Defaults to `localhost` |
+| NATS_PORT | The port for where NATS is reachable. Defaults to `4222` | 
 
 ## Metrics & Monitoring
 
-The application uses micronaut-micrometer features to report metrics. Some of the JVM metrics are not reported as the application does not use a JVM in the default configuration.
+The application uses `micronaut-micrometer` features to report metrics. Some of the JVM metrics are not reported as the application does not use a JVM in the default configuration.
 To generate additional metrics, you can send fake message to indicate orders on to the NATS messaging platform. The fulfillment service does not validate the orders, and will "process" 
 the orders by sending an acknowledgement with shipment information back to orders over the `mushop-shipments` channel. Orders does validate `orderId`s so there will be no accidental update 
 of order records from the fake data.

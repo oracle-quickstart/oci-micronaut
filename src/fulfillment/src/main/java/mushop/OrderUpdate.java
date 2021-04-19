@@ -4,9 +4,7 @@
  **/
 package  mushop;
 
-import io.micronaut.core.annotation.Introspected;
 
-@Introspected
 public class OrderUpdate {
     private Long orderId;
     private Shipment Shipment;

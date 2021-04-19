@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  nats:
+    image: 'nats:latest'
+    expose:
+      - "4222"
+    ports:
+      - "8222:8222"
+  fulfillemnt:
+    image:  iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:0.1
+    hostname: carts
+    restart: always
+    read_only: true
+    depends_on:
+      - nats
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    environment:
+      - NATS_HOST=nats
+    ports:
+      - "8082:8082"
+

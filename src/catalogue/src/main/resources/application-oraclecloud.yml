@@ -1,3 +1,9 @@
+datasources:
+  default:
+    ocid: ${ORACLE_CLOUD_ATP_OCID}
+    walletPassword: ${ORACLE_CLOUD_ATP_WALLET_PASSWORD}
+    username: ${ORACLE_CLOUD_ATP_USERNAME}
+    password: ${ORACLE_CLOUD_ATP_PASSWORD}
 tracing:
   zipkin:
     enabled: true
@@ -17,4 +23,4 @@ micronaut:
       oraclecloud:
         enabled: false
         namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut-mushop}
-        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:carts}      
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:mushop-catalogue}

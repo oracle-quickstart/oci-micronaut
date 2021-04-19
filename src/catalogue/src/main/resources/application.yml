@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: catalogue
+    name: mushop-catalogue
   server:
     thread-selection: io
   executors:
@@ -13,6 +13,8 @@ micronaut:
         enabled: true
         descriptions: true
         step: PT1M
+      oraclecloud:
+        enabled: false
     enabled: true
   data:
     pageable:

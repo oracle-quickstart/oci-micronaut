@@ -1,6 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("io.micronaut.application") version "1.4.2"
+    id("io.micronaut.application") version "1.4.5"
 }
 
 version = "0.1"
@@ -34,18 +34,19 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.opentracing.brave:brave-opentracing")
     implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("io.micronaut:micronaut-validation")
     runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:oracle-xe")
-    testImplementation("org.testcontainers:testcontainers")
-    implementation("io.micronaut:micronaut-validation")
-
-// can't use due to https://github.com/micronaut-projects/micronaut-oracle-cloud/pull/161
-//    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.0")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.0")
+    runtimeOnly("com.oracle.oci.sdk:oci-java-sdk-monitoring")
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:oracle-xe")
+    testImplementation("org.testcontainers:testcontainers")
 }
 
 

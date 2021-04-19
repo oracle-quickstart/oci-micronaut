@@ -117,7 +117,7 @@ Development mode includes dependencies for TypeScript, and developer facilities.
 
 ## Deploy
 
-Refer to [kubernetes](./kubernetes/README.md) documentation
+Refer to [kubernetes](user/kubernetes/README.md) documentation
 
 ## Endpoints
 

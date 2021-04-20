@@ -16,6 +16,5 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-
 carts:
   collection: cart

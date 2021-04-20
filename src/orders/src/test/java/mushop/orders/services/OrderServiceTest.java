@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Value;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.Flowable;
+import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
 import mushop.orders.entities.Address;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @MicronautTest
-public class OrderServiceTest {
+public class OrderServiceTest extends AbstractTest {
     @Inject
     private OrdersService ordersService;
 

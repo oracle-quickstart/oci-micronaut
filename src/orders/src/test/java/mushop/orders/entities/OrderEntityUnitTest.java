@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import mushop.orders.AbstractTest;
 import mushop.orders.repositories.CustomerOrderRepository;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest(rollback = true)
 @Property(name = "jpa.default.properties.hibernate.hbm2ddl.auto", value = "create-drop")
-public class OrderEntityUnitTest {
+public class OrderEntityUnitTest extends AbstractTest {
 
     @Inject
     private CustomerOrderRepository orderRepository;

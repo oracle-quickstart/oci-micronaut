@@ -4,7 +4,14 @@ micronaut:
   server:
     port: 8082
   metrics:
-    enabled: false
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+      oraclecloud:
+        enabled: false
 
 endpoints:
   health:
@@ -18,6 +25,9 @@ mushop:
       orders: ${ORDERS_NEW:mushop-orders}
       shipments: ${ORDERS_SHIPPED:mushop-shipments}
 
+nats.addresses:
+  - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
+
 jpa:
   default:
     properties:
@@ -25,6 +35,3 @@ jpa:
         hbm2ddl:
           auto: update
         show_sql: true
-
-nats.addresses:
-  - nats://localhost:4222

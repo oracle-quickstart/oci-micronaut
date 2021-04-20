@@ -1,14 +1,14 @@
 plugins {
   id("com.github.johnrengelman.shadow") version "6.1.0"
-  id("io.micronaut.application") version "1.4.2"
+  id("io.micronaut.application") version "1.4.5"
 }
 
-version = "0.1"
+version = "1.0.0-SNAPSHOT"
 group = "micronaut.mushop"
 
 repositories {
   mavenCentral()
-  mavenLocal()
+  maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 micronaut {
@@ -28,19 +28,26 @@ dependencies {
   implementation("io.micronaut:micronaut-http-client")
   implementation("io.micronaut:micronaut-runtime")
 
-  // Metrics and tracing
+  // Swagger
+  implementation("io.swagger.core.v3:swagger-annotations")
+
+  // Metrics
   implementation("io.micronaut:micronaut-management")
   implementation("io.micronaut.micrometer:micronaut-micrometer-core")
   implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.2.2-SNAPSHOT")
-  implementation("io.swagger.core.v3:swagger-annotations")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1-SNAPSHOT")
+
+  // Tracing
   implementation("io.micronaut:micronaut-tracing")
+  implementation("io.opentracing.brave:brave-opentracing")
+  runtime("io.zipkin.brave:brave-instrumentation-http")
   runtime("io.zipkin.reporter2:zipkin-reporter")
+
 
   // ATP db access
   implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
   implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.2.2-SNAPSHOT")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.1-SNAPSHOT")
   runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
   runtimeOnly("com.oracle.database.jdbc:ojdbc8")
   runtimeOnly("com.oracle.database.security:oraclepki:19.8.0.0")
@@ -57,6 +64,8 @@ dependencies {
   testImplementation("com.h2database:h2")
   testImplementation "org.mockito:mockito-core:3.+"
   testImplementation 'com.openpojo:openpojo:0.8.12'
+  testImplementation("org.testcontainers:testcontainers")
+  testImplementation "org.testcontainers:junit-jupiter"
 }
 
 application {

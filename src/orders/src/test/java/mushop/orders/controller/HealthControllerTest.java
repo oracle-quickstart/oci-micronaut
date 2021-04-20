@@ -5,6 +5,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import mushop.orders.AbstractTest;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
@@ -12,7 +13,7 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest
-public class HealthControllerTest {
+public class HealthControllerTest extends AbstractTest {
 
     @Inject
     @Client("/")

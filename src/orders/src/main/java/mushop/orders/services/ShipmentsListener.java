@@ -39,7 +39,7 @@ public class ShipmentsListener {
         this.meterRegistry = meterRegistry;
     }
 
-    @Subject("${mushop.messaging.subjects.shipments}")
+    @Subject("mushop-shipments")
     public void handleMessage(OrderUpdate update) {
         Optional<CustomerOrder> customerOrderOptional = customerOrderRepository.findById(update.getOrderId());
         if(customerOrderOptional.isPresent()){

@@ -7,6 +7,6 @@ import mushop.orders.values.OrderUpdate;
 @NatsClient
 public interface OrdersPublisher {
 
-    @Subject("${mushop.messaging.subjects.orders}")
+    @Subject("mushop-orders")
     void dispatchToFulfillment(OrderUpdate orderUpdate);
 }

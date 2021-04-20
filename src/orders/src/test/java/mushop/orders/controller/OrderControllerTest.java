@@ -8,6 +8,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import mushop.orders.AbstractTest;
 import mushop.orders.controllers.OrdersController;
 import mushop.orders.controllers.OrdersController.OrderFailedException;
 import mushop.orders.entities.Address;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @MicronautTest
-public class OrderControllerTest {
+public class OrderControllerTest extends AbstractTest {
 
     @Inject
     private OrdersService ordersService;

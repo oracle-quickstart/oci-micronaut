@@ -9,6 +9,7 @@ group = "micronaut.mushop"
 repositories {
   mavenCentral()
   maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+  mavenLocal()
 }
 
 micronaut {
@@ -28,6 +29,9 @@ dependencies {
   implementation("io.micronaut:micronaut-http-client")
   implementation("io.micronaut:micronaut-runtime")
 
+  // Kubernetes service discovery
+  implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.2-SNAPSHOT")
+
   // Swagger
   implementation("io.swagger.core.v3:swagger-annotations")
 
@@ -42,7 +46,6 @@ dependencies {
   implementation("io.opentracing.brave:brave-opentracing")
   runtime("io.zipkin.brave:brave-instrumentation-http")
   runtime("io.zipkin.reporter2:zipkin-reporter")
-
 
   // ATP db access
   implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")

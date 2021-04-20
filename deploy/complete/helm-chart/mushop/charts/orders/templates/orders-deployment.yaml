@@ -40,7 +40,8 @@ spec:
             httpGet:
               port: 8082
               path: /health/readiness
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
+            periodSeconds: 2
             failureThreshold: 10
           env:
             - name: JAVA_OPTS

@@ -11,6 +11,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Error;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Status;
 import io.micronaut.http.hateoas.JsonError;
@@ -22,6 +23,7 @@ import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Controller("/orders")
 @ExecuteOn(TaskExecutors.IO)
@@ -37,6 +39,17 @@ public class OrdersController {
             throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
         }
         return ordersService.createNewOrder(newOrderResource);
+    }
+
+    @Get("/{orderId}")
+    public CustomerOrder getOrder(Long orderId){
+        return ordersService.getById(orderId);
+    }
+
+    @Get
+    public List<CustomerOrder> listOrders(){
+
+        return ordersService.listOrders();
     }
 
     public static class PaymentDeclinedException extends IllegalStateException {

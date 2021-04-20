@@ -24,6 +24,7 @@ import mushop.orders.values.OrderUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @NatsListener
@@ -40,16 +41,17 @@ public class ShipmentsListener {
     }
 
     @Subject("mushop-shipments")
+    @Transactional
     public void handleMessage(OrderUpdate update) {
         Optional<CustomerOrder> customerOrderOptional = customerOrderRepository.findById(update.getOrderId());
-        if(customerOrderOptional.isPresent()){
+        log.debug("Received order update {}", update);
+        if (customerOrderOptional.isPresent()) {
             CustomerOrder order = customerOrderOptional.get();
-            log.debug("Updating order {}", order.getId());
             order.setShipment(update.getShipment());
             customerOrderRepository.save(order);
-            log.info("order {} is now {}", order.getId(), update.getShipment().getName());
+            log.debug("order {} is now {}", order.getId(), update.getShipment().getName());
             meterRegistry.counter("orders.fulfillment_ack").increment();
-        }else{
+        } else {
             log.error("Order with id {} doesn't exists", update.getOrderId());
         }
     }

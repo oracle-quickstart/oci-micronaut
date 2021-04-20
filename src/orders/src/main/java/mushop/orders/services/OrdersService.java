@@ -5,10 +5,9 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.context.annotation.Value;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.client.HttpClientConfiguration;
-import io.micronaut.http.client.RxHttpClientFactory;
+import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.entities.Address;
 import mushop.orders.entities.Card;
@@ -25,14 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.transaction.Transactional;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -58,11 +56,31 @@ public class OrdersService {
     private PaymentClient paymentClient;
 
     @Inject
-    private AsyncGetService asyncGetService;
+    @Client("users")
+    private RxHttpClient userClient;
+
+    @Inject
+    @Client("carts")
+    private RxHttpClient cartsClient;
 
     @Value("${http.timeout:5}")
     private long timeout;
 
+    public CustomerOrder getById(Long id) {
+        Optional<CustomerOrder> customerOrder = customerOrderRepository.findById(id);
+        if (customerOrder.isPresent()) {
+            return customerOrder.get();
+        } else {
+            LOG.info("Order with id {} not found", id);
+            return null;
+        }
+    }
+
+    public List<CustomerOrder> listOrders() {
+        return customerOrderRepository.findAll();
+    }
+
+    @Transactional
     public CustomerOrder createNewOrder(NewOrderResource orderPayload) {
         LOG.info("Creating order {}", orderPayload);
         LOG.debug("Starting calls");
@@ -72,10 +90,10 @@ public class OrdersService {
             AtomicReference<List<Item>> orderItems = new AtomicReference<>();
 
             boolean finished = Completable.merge(Arrays.asList(
-                    Completable.fromPublisher(asyncGetService.getObject(orderPayload.address, Address.class).doOnNext(paymentRequest::setAddress)),
-                    Completable.fromPublisher(asyncGetService.getObject(orderPayload.customer, Customer.class).doOnNext(paymentRequest::setCustomer)),
-                    Completable.fromPublisher(asyncGetService.getObject(orderPayload.card, Card.class).doOnNext(paymentRequest::setCard)),
-                    Completable.fromPublisher(asyncGetService.getDataList(orderPayload.items, Item.class).doOnNext((items -> {
+                    Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.address.getPath()), Address.class).doOnNext(paymentRequest::setAddress)),
+                    Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.customer.getPath()), Customer.class).doOnNext(paymentRequest::setCustomer)),
+                    Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.card.getPath()), Card.class).doOnNext(paymentRequest::setCard)),
+                    Completable.fromPublisher(cartsClient.retrieve(HttpRequest.GET(orderPayload.items.getPath()), Argument.listOf(Item.class)).doOnNext((items -> {
                         orderItems.set(items);
                         //Calculate total
                         float amount = calculateTotal(items);
@@ -116,7 +134,7 @@ public class OrdersService {
                     paymentRequest.getAmount());
             LOG.debug("Received data: " + order.toString());
 
-            CustomerOrder savedOrder = customerOrderRepository.saveAndFlush(order);
+            CustomerOrder savedOrder = customerOrderRepository.save(order);
             LOG.debug("Saved order: " + savedOrder);
             meterRegistry.summary("orders.amount").record(paymentRequest.getAmount());
             DistributionSummary.builder("order.stats")
@@ -128,13 +146,11 @@ public class OrdersService {
                     .record(paymentRequest.getAmount());
             OrderUpdate update = new OrderUpdate(savedOrder.getId(), null);
             ordersPublisher.dispatchToFulfillment(update);
+            LOG.info("Order {} sent for fulfillment: {}", savedOrder, update);
             return savedOrder;
         } catch (TimeoutException e) {
-            meterRegistry.counter("orders.rejected","cause","timeout").increment();
+            meterRegistry.counter("orders.rejected", "cause", "timeout").increment();
             throw new OrderFailedException("Unable to create order due to timeout from one of the services.", e);
-        } catch (IOException e) {
-            meterRegistry.counter("orders.rejected", "cause", "connectivity").increment();
-            throw new OrderFailedException("Unable to create order due to unspecified IO error.", e);
         }
     }
 

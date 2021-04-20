@@ -1,0 +1,25 @@
+{{- if .Values.rbac.create }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "orders.fullname" . }}-service-discoverer
+  labels: {{ include "orders.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["services", "endpoints", "configmaps", "secrets", "pods"]
+    verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "orders.fullname" . }}-default--service-discoverer
+  labels: {{ include "orders.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "orders.fullname" . }}-service-discoverer
+  apiGroup: rbac.authorization.k8s.io
+{{- end -}}

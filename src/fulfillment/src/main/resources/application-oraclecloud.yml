@@ -1,15 +1,17 @@
 micronaut:
   metrics:
-    enabled: true
     export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
       oraclecloud:
         enabled: true
-        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut-mushop}
-        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:orders}
+        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:fulfillment}
+        compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
+
+oci:
+  config:
+    instance-principal:
+      enabled: true
+
 tracing:
   zipkin:
     enabled: true

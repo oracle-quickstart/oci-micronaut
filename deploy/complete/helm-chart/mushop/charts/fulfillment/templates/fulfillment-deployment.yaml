@@ -24,7 +24,7 @@ spec:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
         prometheus.io/scrape: "true"
         prometheus.io/path: /prometheus
-        prometheus.io/port: "80"
+        prometheus.io/port: "8082"
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8082
           env:
             - name: NATS_HOST
               value: "{{ .Release.Name }}-{{ .Values.env.natsHost }}"
@@ -42,5 +42,7 @@ spec:
               value: "{{ .Values.env.newOrdersSubject }}"
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
-            - name: SIMULATION_DELAY
-              value: "{{ .Values.env.simulationDelay }}"
+          {{- include "fulfillment.oapm.connection" . | nindent 12 }}
+          {{- include "fulfillment.oims.config" . | nindent 12 }}
+      imagePullSecrets:
+        - name: oci-secret

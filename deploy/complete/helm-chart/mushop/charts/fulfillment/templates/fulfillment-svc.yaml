@@ -10,6 +10,4 @@ spec:
     run: {{ include "fulfillment.name" . }}
   ports:
     - port: {{ .Values.service.port }}
-      name: http
-      protocol: TCP
-      targetPort: 80
+      targetPort: 8082

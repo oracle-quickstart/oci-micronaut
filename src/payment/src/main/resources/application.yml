@@ -11,6 +11,10 @@ micronaut:
       oraclecloud:
         enabled: false
 
+payment:
+  decline:
+    amount: 100
+
 endpoints:
   health:
     enabled: true

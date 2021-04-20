@@ -1,5 +1,6 @@
 package mushop.carts.test;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -9,13 +10,17 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import mushop.carts.entitites.Cart;
 import mushop.carts.entitites.Item;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @MicronautTest
 public class TestCartService {
@@ -23,6 +28,22 @@ public class TestCartService {
     @Inject
     @Client("/")
     RxHttpClient httpClient;
+
+    @Test
+    public void testMetricsJson() {
+        JsonNode result = httpClient.toBlocking().retrieve("/metrics", JsonNode.class);
+        assertThat(result.get("names").size(), greaterThan(0));
+    }
+
+    @Test
+    public void testHealthCheck(){
+        Arrays.asList("/health", "/health/liveness", "/health/readiness").forEach(uri -> {
+            HttpResponse<JsonNode> result = httpClient.toBlocking().exchange(uri, JsonNode.class);
+            assertThat(result.status(), equalTo(HttpStatus.OK));
+            assertThat(result.body().get("status").asText(),
+                    Matchers.either(Matchers.is("UP")).or(Matchers.is("UNKNOWN")));
+        });
+    }
 
     @Test
     public void testStoreCart() {

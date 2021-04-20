@@ -24,25 +24,33 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: "80"
     spec:
-      initContainers:
-        {{- include "carts.init.wallet" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+            - containerPort: 8080
           env:
-            - name: ZIPKIN
-              value: {{ .Values.env.zipkin }}
             - name: JAVA_OPTS
               value: {{ .Values.env.javaOpts }}
             {{- include "carts.oadb.connection" . | nindent 12 }}
+            {{- include "carts.oapm.connection" . | nindent 12 }}
+            {{- include "carts.oims.config" . | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health/liveness
+            initialDelaySeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health/readiness
+            initialDelaySeconds: 5
+            failureThreshold: 10
           volumeMounts:
             - mountPath: /tmp
               name: tmp-volume
-            {{- include "carts.mount.wallet" . | nindent 12 }}
       volumes:
         - name: tmp-volume
           emptyDir:

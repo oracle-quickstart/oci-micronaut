@@ -15,6 +15,7 @@
  */
 package mushop.carts.controllers;
 
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -88,6 +89,7 @@ public class CartsController {
     }
 
     @Delete("/{cartId}/items/{itemId}")
+    @Timed("carts.updated.timer")
     public Cart deleteCartItem(String cartId, String itemId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
@@ -98,9 +100,7 @@ public class CartsController {
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart item with id " + itemId + " not found " + cart);
         }
 
-        meterRegistry.timer("carts.updated.timer").record(() -> {
-            cartRepository.save(cart);
-        });
+        cartRepository.save(cart);
         meterRegistry.counter("carts.updated.counter").increment();
         LOG.info("Item deleted: {}", cart);
         return cart;
@@ -130,7 +130,7 @@ public class CartsController {
     }
 
     @Put("/{cartId}/items")
-    public HttpResponse<Cart> updateCartItem(@PathVariable String cartId, @Body Item qItem) {
+    public Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
@@ -145,11 +145,10 @@ public class CartsController {
                 });
                 meterRegistry.counter("carts.updated.counter").increment();
                 LOG.info("Cart item updated: {}", cart);
-                return HttpResponse.ok(cart);
+                return cart;
             }
         }
-
-        return HttpResponse.notFound(cart);
+        return null;
     }
 
     @Error

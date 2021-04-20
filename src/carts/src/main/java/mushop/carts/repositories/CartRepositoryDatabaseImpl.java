@@ -56,20 +56,23 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
     /**
      * The name of the backing collection
      */
-    @Value("${carts.collection}")
-    private String collectionName;
+    private final String collectionName;
 
     /**
      * Pool of reusable database connections
      */
-    @Inject
-    protected PoolDataSource pool;
+    protected final PoolDataSource pool;
 
     /**
      * Used to automatically convert a Cart object to and from JSON
      */
-    @Inject
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+
+    public CartRepositoryDatabaseImpl(@Value("${carts.collection}") String collectionName, PoolDataSource pool, ObjectMapper objectMapper) {
+        this.collectionName = collectionName;
+        this.pool = pool;
+        this.objectMapper = objectMapper;
+    }
 
     @EventListener
     public void onStartupEvent(StartupEvent startupEvent) {

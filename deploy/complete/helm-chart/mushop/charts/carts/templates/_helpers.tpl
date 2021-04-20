@@ -52,7 +52,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- $secretPrefix := (and .Values.osb.atp .Chart.Name) | default (and $globalOsb.atp ($globalOsb.instanceName | default "mushop")) | default .Chart.Name -}}
 {{- $connectionSecret := (and $usesOsbDb (printf "%s-oadb-connection" $secretPrefix)) | default .Values.oadbConnectionSecret | default (.Values.global.oadbConnectionSecret | default (printf "%s-oadb-connection" $secretPrefix)) -}}
 {{- $credentialSecret := (and $usesOsbDb (printf "%s-oadb-credentials" $secretPrefix)) | default .Values.oadbUserSecret | default (printf "%s-oadb-credentials" $secretPrefix) -}}
-- name: OADB_USER
+- name: ORACLECLOUD_ATP_USERNAME
   {{- if $globalOsb.atp }}
   value: {{ printf "mu_%s_user" .Chart.Name }}
   {{- else }}
@@ -61,16 +61,21 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
       name: {{ $credentialSecret }}
       key: oadb_user
   {{- end }}
-- name: OADB_PW
+- name: ORACLECLOUD_ATP_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ $credentialSecret }}
       key: oadb_pw
-- name: OADB_SERVICE
+- name: ORACLECLOUD_ATP_WALLET_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ $connectionSecret }}
-      key: oadb_service
+      key: oadb_wallet_pw
+- name: ORACLECLOUD_ATP_OCID
+  valueFrom:
+    secretKeyRef:
+      name: {{ $connectionSecret }}
+      key: oadb_ocid
 {{- end -}}
 
 {{/* OADB ADMIN environment */}}
@@ -102,7 +107,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 - name: decode-binding
   image: oraclelinux:7-slim
   command: ["/bin/sh","-c"]
-  args: 
+  args:
   - for i in `ls -1 /tmp/wallet | grep -v user_name`; do cat /tmp/wallet/$i | base64 --decode > /wallet/$i; done; ls -l /wallet/*;
   volumeMounts:
     - name: wallet-binding
@@ -146,4 +151,29 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     items:
     - key: atp.init.sql
       path: service.sql
+{{- end -}}
+
+{{/* OAPM Connection url */}}
+{{- define "carts.oapm.connection" -}}
+{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Chart.Name)) -}}
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_url
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_path
+{{- end -}}
+
+{{/* OIMS configuration */}}
+{{- define "carts.oims.config" -}}
+{{- $ociDeployment := .Values.ociDeploymentConfigMap | default (.Values.global.ociDeploymentConfigMap | default (printf "%s-oci-deployment" .Chart.Name)) -}}
+- name: ORACLECLOUD_METRICS_COMPARTMENT_ID
+  valueFrom:
+    configMapKeyRef:
+      name: {{ $ociDeployment }}
+      key: compartment_id
 {{- end -}}

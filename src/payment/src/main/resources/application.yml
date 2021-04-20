@@ -2,16 +2,17 @@ micronaut:
   application:
     name: payment
   metrics:
+    enabled: true
     export:
       prometheus:
         enabled: true
         descriptions: true
         step: PT1M
+      oraclecloud:
+        enabled: false
+
+endpoints:
+  health:
     enabled: true
-tracing:
-  zipkin:
-    enabled: true
-    http:
-      url: http://localhost:9411
-    sampler:
-      probability: 0.1
+    sensitive: false
+    details-visible: ANONYMOUS

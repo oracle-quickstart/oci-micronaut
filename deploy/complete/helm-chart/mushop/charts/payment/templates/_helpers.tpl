@@ -43,3 +43,28 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/* OAPM Connection url */}}
+{{- define "payment.oapm.connection" -}}
+{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Chart.Name)) -}}
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_url
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_path
+{{- end -}}
+
+{{/* OIMS configuration */}}
+{{- define "payment.oims.config" -}}
+{{- $ociDeployment := .Values.ociDeploymentConfigMap | default (.Values.global.ociDeploymentConfigMap | default (printf "%s-oci-deployment" .Chart.Name)) -}}
+- name: ORACLECLOUD_METRICS_COMPARTMENT_ID
+  valueFrom:
+    configMapKeyRef:
+      name: {{ $ociDeployment }}
+      key: compartment_id
+{{- end -}}

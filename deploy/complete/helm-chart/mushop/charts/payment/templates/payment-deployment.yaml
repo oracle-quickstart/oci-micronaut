@@ -20,29 +20,32 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "8080"
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+            - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /health
-              port: 80
-            initialDelaySeconds: 120
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 80
+              path: /health/liveness
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+          {{- include "payment.oapm.connection" . | nindent 12 }}
+          {{- include "payment.oims.config" . | nindent 12 }}
+      imagePullSecrets:
+        - name: oci-secret
       nodeSelector:
           beta.kubernetes.io/os: linux

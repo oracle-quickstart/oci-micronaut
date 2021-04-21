@@ -102,7 +102,6 @@ public class OrdersService {
         try {
             LOG.info("Placing new order {}", orderPayload);
 
-            LOG.debug("Preparing payment request");
             PaymentRequest paymentRequest = new PaymentRequest();
             AtomicReference<List<Item>> orderItems = new AtomicReference<>();
 

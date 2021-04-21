@@ -38,6 +38,11 @@ public class CartRepositoryMemoryImpl implements CartRepository {
     }
 
     @Override
+    public void update(Cart cart) {
+        save(cart);
+    }
+
+    @Override
     public Cart getById(String id) {
         for (Cart c : carts) {
             if (c.getId().equals(id)) {

@@ -1,6 +1,6 @@
 package mushop.carts.repositories;
 
-import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.annotation.Counted;
 import mushop.carts.entitites.Cart;
 
 import java.util.List;
@@ -15,6 +15,8 @@ public interface CartRepository {
      * exists, it is replaced. Otherwise, the cart is added.
      */
     void save(Cart cart);
+
+    void update(Cart cart);
 
     /**
      * Gets the cart with the specified cart id 

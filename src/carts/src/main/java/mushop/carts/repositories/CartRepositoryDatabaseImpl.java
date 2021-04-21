@@ -1,5 +1,7 @@
 package mushop.carts.repositories;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
@@ -53,6 +55,7 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
 
     @Override
     @Transactional
+    @Counted("carts.deleted")
     public boolean deleteCart(String id) {
         try {
             int ct = db.openCollection(collectionName).find().key(id).remove();
@@ -88,17 +91,19 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
 
     @Override
     @Transactional
+    @Counted("carts.created.counter")
+    @Timed("carts.created.timer")
     public void save(Cart cart) {
-        try {
-            OracleDocument cartDoc = db.createDocumentFromByteArray(
-                    cart.getId(), getCodec(MediaType.APPLICATION_JSON_TYPE).encode(cart)
-            );
-            db.openCollection(collectionName).save(cartDoc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        doSave(cart);
     }
 
+    @Override
+    @Transactional
+    @Counted("carts.updated.counter")
+    @Timed("carts.updated.timer")
+    public void update(Cart cart) {
+        doSave(cart);
+    }
 
     // TODO: SODA healthcheck endpoint
     @Override
@@ -110,6 +115,17 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
         } catch (Exception e) {
             LOG.info("DB health-check failed.", e);
             return false;
+        }
+    }
+
+    private void doSave(Cart cart) {
+        try {
+            OracleDocument cartDoc = db.createDocumentFromByteArray(
+                    cart.getId(), getCodec(MediaType.APPLICATION_JSON_TYPE).encode(cart)
+            );
+            db.openCollection(collectionName).save(cartDoc);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

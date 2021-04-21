@@ -135,6 +135,7 @@
         <dependency>
             <groupId>io.micronaut.micrometer</groupId>
             <artifactId>micronaut-micrometer-core</artifactId>
+            <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -228,6 +229,11 @@
                             <groupId>io.micronaut.data</groupId>
                             <artifactId>micronaut-data-processor</artifactId>
                             <version>${micronaut.data.version}</version>
+                        </annotationProcessorPath>
+                        <annotationProcessorPath>
+                            <groupId>io.micronaut.micrometer</groupId>
+                            <artifactId>micronaut-micrometer-annotation</artifactId>
+                            <version>3.4.0</version>
                         </annotationProcessorPath>
                     </annotationProcessorPaths>
                     <compilerArgs>

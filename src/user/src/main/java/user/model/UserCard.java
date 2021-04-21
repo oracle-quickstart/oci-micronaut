@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.annotation.Relation;
+import io.micronaut.data.annotation.Version;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -17,6 +18,9 @@ public class UserCard {
     @Id
     @AutoPopulated(updateable = false)
     private UUID id;
+
+    @Version
+    private Long version;
 
     @MappedProperty("nmbr")
     private String number;
@@ -50,6 +54,14 @@ public class UserCard {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getNumber() {

@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
+import io.micronaut.data.annotation.Version;
 import user.PasswordUtils;
 
 import javax.validation.constraints.Email;
@@ -20,6 +21,9 @@ public class User {
     @Id
     @AutoPopulated(updateable = false)
     private UUID id;
+
+    @Version
+    private Long version;
 
     private String username;
 
@@ -70,6 +74,14 @@ public class User {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getUsername() {

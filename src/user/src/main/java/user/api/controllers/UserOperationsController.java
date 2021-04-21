@@ -125,7 +125,8 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public List<UserAddressDetailDto> getUserAddresses(UUID userId) {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(userAddressRepository.findAll().iterator(), Spliterator.ORDERED), false)
+        userAddressRepository.findByUserId(userId)
+                .stream()
                 .map(dtoMapper::toUserAddressDetailDto)
                 .collect(Collectors.toList());
     }
@@ -167,7 +168,8 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public List<UserCardDetailDto> getUserCards(UUID userId) {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(userCardRepository.findAll().iterator(), Spliterator.ORDERED), false)
+        return userCardRepository.findByUserId(userId)
+                .stream()
                 .map(dtoMapper::toUserCardDetailDto)
                 .collect(Collectors.toList());
     }

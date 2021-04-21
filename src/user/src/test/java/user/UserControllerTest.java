@@ -126,6 +126,9 @@ public class UserControllerTest {
         List<UserAddressDetailDto> userAddresses = client.getUserAddresses(userDetail.getId());
         assertEquals(3, userAddresses.size());
 
+        address = client.getUserAddress(userDetail.getId(), userAddresses.get(0).getId());
+        assertEquals(address.getId(), userAddresses.get(0).getId());
+
         client.deleteUserAddress(userDetail.getId(), address.getId());
 
         userAddresses = client.getUserAddresses(userDetail.getId());
@@ -163,6 +166,8 @@ public class UserControllerTest {
 
         List<UserCardDetailDto> cards = client.getUserCards(userDetail.getId());
         assertEquals(1, cards.size());
+        userCard = client.getUserCard(userDetail.getId(), cards.get(0).getId());
+        assertEquals(userCard.getId(), cards.get(0).getId());
 
         client.deleteUserCard(userDetail.getId(), userCard.getId());
 

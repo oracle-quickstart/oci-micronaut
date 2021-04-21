@@ -126,7 +126,7 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public List<UserAddressDetailDto> getUserAddresses(UUID userId) {
-        userAddressRepository.findByUserId(userId)
+        return userAddressRepository.findByUserId(userId)
                 .stream()
                 .map(dtoMapper::toUserAddressDetailDto)
                 .collect(Collectors.toList());

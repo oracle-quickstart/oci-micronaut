@@ -142,27 +142,26 @@ public class UserControllerTest {
         UserDetailDto userDetail = createUser();
 
         UserCardDetailDto userCard = client.addUserCard(userDetail.getId(),
-                new UserCardDto("123", "0123456789", "03/10"));
+                new UserCardDto("123", "0123456789123456", "0310"));
 
         assertNotNull(userCard.getId());
         assertNotNull(userCard.getCreatedAt());
         assertNotNull(userCard.getUpdatedAt());
-        assertEquals("123", userCard.getNumber());
-        assertEquals("0123456789", userCard.getLongNum());
-        assertEquals("03/10", userCard.getExpires());
+        assertEquals("3456", userCard.getNumber());
+        assertEquals("xxxxxxxxxxxx3456", userCard.getLongNum());
+        assertEquals("0310", userCard.getExpires());
 
         userDetail = client.getUser(userDetail.getId());
 
         assertEquals(1, userDetail.getCards().size());
-
-        userCard = userDetail.getCards().stream().filter(a -> a.getNumber().equals("123")).findFirst().orElseThrow();
+        userCard = userDetail.getCards().stream().filter(a -> a.getNumber().equals("3456")).findFirst().orElseThrow();
 
         assertNotNull(userCard.getId());
         assertNotNull(userCard.getCreatedAt());
         assertNotNull(userCard.getUpdatedAt());
-        assertEquals("123", userCard.getNumber());
-        assertEquals("0123456789", userCard.getLongNum());
-        assertEquals("03/10", userCard.getExpires());
+        assertEquals("3456", userCard.getNumber());
+        assertEquals("xxxxxxxxxxxx3456", userCard.getLongNum());
+        assertEquals("0310", userCard.getExpires());
 
         List<UserCardDetailDto> cards = client.getUserCards(userDetail.getId());
         assertEquals(1, cards.size());

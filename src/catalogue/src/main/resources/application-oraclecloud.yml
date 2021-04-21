@@ -1,9 +1,24 @@
+micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: true
+        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:catalogue}
+        compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
+
+oci:
+  config:
+    instance-principal:
+      enabled: true
+
 datasources:
   default:
-    ocid: ${ORACLE_CLOUD_ATP_OCID}
-    walletPassword: ${ORACLE_CLOUD_ATP_WALLET_PASSWORD}
-    username: ${ORACLE_CLOUD_ATP_USERNAME}
-    password: ${ORACLE_CLOUD_ATP_PASSWORD}
+    ocid: ${ORACLECLOUD_ATP_OCID}
+    walletPassword: ${ORACLECLOUD_ATP_WALLET_PASSWORD}
+    username: ${ORACLECLOUD_ATP_USERNAME}
+    password: ${ORACLECLOUD_ATP_PASSWORD}
+
 tracing:
   zipkin:
     enabled: true
@@ -12,15 +27,9 @@ tracing:
     http:
       url: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}
       path: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}
-micronaut:
-  metrics:
-    enabled: true
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
-      oraclecloud:
-        enabled: false
-        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut-mushop}
-        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:mushop-catalogue}
+    supportsJoin: false
+
+flyway:
+  datasources:
+    default:
+      enabled: false

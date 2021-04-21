@@ -20,40 +20,33 @@ spec:
         mockmode: {{ .Values.global.mock.service | quote }}
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "8080"
+
     spec:
       terminationGracePeriodSeconds: 5
-      initContainers:
-        {{- include "catalogue.init.wallet" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/app"]
-          args:
-          - -port=80
           ports:
-            - name: http
-              containerPort: 80
+            - containerPort: 8080
           env:
-            - name: ZIPKIN
-              value: {{ .Values.env.zipkin }}
             {{- include "catalogue.oadb.connection" . | nindent 12 }}
-          volumeMounts:
-            {{- include "catalogue.mount.wallet" . | nindent 12 }}
+            {{- include "catalogue.oapm.connection" . | nindent 12 }}
+            {{- include "catalogue.oims.config" . | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 120
+              path: /health/liveness
+              port: 8080
+            initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /health
-              port: http
+              path: /health/readiness
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-      volumes: {{- include "catalogue.volumes" . | nindent 8 }}
+      imagePullSecrets:
+        - name: oci-secret

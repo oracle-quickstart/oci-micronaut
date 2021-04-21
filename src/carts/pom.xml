@@ -11,7 +11,7 @@
         <version>2.4.2</version>
     </parent>
 
-    <groupId>mushop</groupId>
+    <groupId>micronaut.mushop</groupId>
     <artifactId>carts</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 

@@ -22,7 +22,7 @@ spec:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
         prometheus.io/scrape: "true"
         prometheus.io/path: /metrics
-        prometheus.io/port: "80"
+        prometheus.io/port: "8080"
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -48,13 +48,7 @@ spec:
               path: /health/readiness
             initialDelaySeconds: 5
             failureThreshold: 10
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp-volume
-      volumes:
-        - name: tmp-volume
-          emptyDir:
-            medium: Memory
-        {{- include "carts.volumes" . | nindent 8 }}
+      imagePullSecrets:
+        - name: oci-secret
       nodeSelector:
           beta.kubernetes.io/os: linux

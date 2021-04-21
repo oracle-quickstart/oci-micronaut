@@ -1,8 +1,11 @@
 package mushop.carts.entitites;
 
+import io.micronaut.core.annotation.Introspected;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Introspected
 public class Item {
 
     private String id;

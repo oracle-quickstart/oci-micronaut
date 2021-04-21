@@ -1,11 +1,13 @@
 package mushop.carts.entitites;
 
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Introspected
 public class Cart {
 
     private String id;
@@ -18,6 +20,7 @@ public class Cart {
         id = UUID.randomUUID().toString();
     }
 
+    @Creator
     public Cart(String cartId) {
         this.id = cartId;
     }

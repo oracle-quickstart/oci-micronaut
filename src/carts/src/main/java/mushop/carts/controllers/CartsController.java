@@ -16,7 +16,6 @@
 package mushop.carts.controllers;
 
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -47,11 +46,9 @@ public class CartsController {
     public static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
 
     private final CartRepository cartRepository;
-    private final MeterRegistry meterRegistry;
 
-    public CartsController(CartRepository cartRepository, MeterRegistry meterRegistry) {
+    public CartsController(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
-        this.meterRegistry = meterRegistry;
     }
 
     @Get("/{cartId}")
@@ -80,7 +77,6 @@ public class CartsController {
         }
 
         if (cartRepository.deleteCart(cartId)) {
-            meterRegistry.counter("carts.deleted").increment();
             LOG.info("Cart deleted: {}", cart);
             return cart;
         } else {
@@ -101,7 +97,6 @@ public class CartsController {
         }
 
         cartRepository.save(cart);
-        meterRegistry.counter("carts.updated.counter").increment();
         LOG.info("Item deleted: {}", cart);
         return cart;
     }
@@ -112,18 +107,12 @@ public class CartsController {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             newCart.setId(cartId);
-            meterRegistry.timer("carts.created.timer").record(() -> {
-                cartRepository.save(newCart);
-            });
-            meterRegistry.counter("carts.created.counter").increment();
+            cartRepository.save(newCart);
             LOG.info("Cart created: {}", newCart);
             return HttpResponse.created(newCart);
         } else {
             cart.merge(newCart);
-            meterRegistry.timer("carts.updated.timer").record(() -> {
-                cartRepository.save(cart);
-            });
-            meterRegistry.counter("carts.updated.counter").increment();
+            cartRepository.update(cart);
             LOG.info("Cart updated: {}", cart);
             return HttpResponse.ok(cart);
         }
@@ -140,10 +129,7 @@ public class CartsController {
             if (item.getItemId().equals(qItem.getItemId())) {
                 item.setQuantity(qItem.getQuantity());
 
-                meterRegistry.timer("carts.updated.timer").record(() -> {
-                    cartRepository.save(cart);
-                });
-                meterRegistry.counter("carts.updated.counter").increment();
+                cartRepository.save(cart);
                 LOG.info("Cart item updated: {}", cart);
                 return cart;
             }

@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "order",
+                title = "order-api",
                 version = "1.0"
         )
 )

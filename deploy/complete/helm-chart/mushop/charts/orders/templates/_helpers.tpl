@@ -66,6 +66,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     secretKeyRef:
       name: {{ $credentialSecret }}
       key: oadb_pw
+- name: ORACLECLOUD_ATP_WALLET_SERVICE
+  valueFrom:
+    secretKeyRef:
+      name: {{ $connectionSecret }}
+      key: oadb_service
 - name: ORACLECLOUD_ATP_WALLET_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -84,7 +89,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- $usesOsbDb := (index (.Values.global | default .Values) "osb").atp | default .Values.osb.atp -}}
 {{- $secretPrefix := (and .Values.osb.atp .Chart.Name) | default (and $globalOsb.atp ($globalOsb.instanceName | default "mushop")) | default .Chart.Name -}}
 {{- $adminSecret := (and $usesOsbDb (printf "%s-oadb-admin" $secretPrefix)) | default .Values.oadbAdminSecret | default .Values.global.oadbAdminSecret | default (printf "%s-oadb-admin" $secretPrefix) -}}
-- name: OADB_ADMIN_PW
+- name: ORACLECLOUD_ATP_ADMIN_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ $adminSecret }}

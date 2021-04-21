@@ -3,6 +3,11 @@ micronaut:
     name: orders
   server:
     port: 8082
+    thread-selection: io
+    executors:
+      io:
+        n-threads: 75
+        type: fixed
   metrics:
     enabled: true
     export:

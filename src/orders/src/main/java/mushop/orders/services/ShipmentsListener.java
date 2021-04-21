@@ -15,6 +15,7 @@
  */
 package mushop.orders.services;
 
+import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.nats.annotation.NatsListener;
 import io.micronaut.nats.annotation.Subject;
@@ -27,32 +28,29 @@ import org.slf4j.LoggerFactory;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+/**
+ * Fulfilled orders listener.
+ */
 @NatsListener
 public class ShipmentsListener {
 
     private static final Logger log = LoggerFactory.getLogger(ShipmentsListener.class);
 
     private final CustomerOrderRepository customerOrderRepository;
-    private final MeterRegistry meterRegistry;
 
-    public ShipmentsListener(CustomerOrderRepository customerOrderRepository, MeterRegistry meterRegistry) {
+    public ShipmentsListener(CustomerOrderRepository customerOrderRepository) {
         this.customerOrderRepository = customerOrderRepository;
-        this.meterRegistry = meterRegistry;
     }
 
     @Subject("mushop-shipments")
     @Transactional
+    @Counted("orders.fulfilled")
     public void handleMessage(OrderUpdate update) {
-        Optional<CustomerOrder> customerOrderOptional = customerOrderRepository.findById(update.getOrderId());
         log.debug("Received order update {}", update);
-        if (customerOrderOptional.isPresent()) {
-            CustomerOrder order = customerOrderOptional.get();
-            order.setShipment(update.getShipment());
-            customerOrderRepository.save(order);
-            log.debug("order {} is now {}", order.getId(), update.getShipment().getName());
-            meterRegistry.counter("orders.fulfillment_ack").increment();
-        } else {
-            log.error("Order with id {} doesn't exists", update.getOrderId());
-        }
+        CustomerOrder order = customerOrderRepository.findById(update.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("Order with id " + update.getOrderId() + "  doesn't exists"));
+        order.setShipment(update.getShipment());
+        customerOrderRepository.save(order);
+        log.debug("order {} is now {}", order.getId(), update.getShipment().getName());
     }
 }

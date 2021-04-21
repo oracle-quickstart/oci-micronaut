@@ -24,6 +24,7 @@ micronaut {
 dependencies {
   annotationProcessor("io.micronaut.openapi:micronaut-openapi")
   annotationProcessor("io.micronaut.data:micronaut-data-processor")
+  annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
   implementation("javax.annotation:javax.annotation-api")
   implementation("io.micronaut:micronaut-validation")
   implementation("io.micronaut:micronaut-http-client")
@@ -37,9 +38,9 @@ dependencies {
 
   // Metrics
   implementation("io.micronaut:micronaut-management")
-  implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
   implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1-SNAPSHOT")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
 
   // Tracing
   implementation("io.micronaut:micronaut-tracing")
@@ -64,11 +65,11 @@ dependencies {
 
   runtimeOnly("ch.qos.logback:logback-classic")
 
-  testImplementation("com.h2database:h2")
   testImplementation "org.mockito:mockito-core:3.+"
   testImplementation 'com.openpojo:openpojo:0.8.12'
+  testImplementation("org.testcontainers:junit-jupiter")
+  testImplementation("org.testcontainers:oracle-xe")
   testImplementation("org.testcontainers:testcontainers")
-  testImplementation "org.testcontainers:junit-jupiter"
 }
 
 application {
@@ -76,8 +77,8 @@ application {
 }
 
 java {
-  sourceCompatibility = JavaVersion.toVersion("11")
-  targetCompatibility = JavaVersion.toVersion("11")
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
 dockerBuild {

@@ -8,9 +8,18 @@ import io.reactivex.Flowable;
 import mushop.orders.values.PaymentRequest;
 import mushop.orders.values.PaymentResponse;
 
-@Client(id="payment")
+/**
+ * Payment service client.
+ */
+@Client(id = "payment")
 public interface PaymentClient {
 
+    /**
+     * Sends payment request.
+     *
+     * @param paymentRequest payment request
+     * @return payment response
+     */
     @Post(uri = "/paymentAuth", processes = MediaType.APPLICATION_JSON)
     Flowable<PaymentResponse> createPayment(@Body PaymentRequest paymentRequest);
 }

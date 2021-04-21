@@ -4,97 +4,65 @@
  **/
 package mushop.orders.controllers;
 
-import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Error;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Status;
-import io.micronaut.http.hateoas.JsonError;
-import io.micronaut.http.hateoas.Link;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
+import io.micronaut.http.exceptions.HttpStatusException;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
 
-import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * Orders controller.
+ */
 @Controller("/orders")
-@ExecuteOn(TaskExecutors.IO)
 public class OrdersController {
 
-    @Inject
-    private OrdersService ordersService;
+    private final OrdersService ordersService;
+
+    public OrdersController(OrdersService ordersService) {
+        this.ordersService = ordersService;
+    }
 
     @Status(HttpStatus.CREATED)
-    @Post(processes = MediaType.APPLICATION_JSON)
+    @Post
     public CustomerOrder newOrder(@Body NewOrderResource newOrderResource) {
         if (newOrderResource.address == null || newOrderResource.customer == null || newOrderResource.card == null || newOrderResource.items == null) {
             throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
         }
-        return ordersService.createNewOrder(newOrderResource);
+        return ordersService.placeOrder(newOrderResource);
     }
 
-    @Get("/{orderId}")
-    public CustomerOrder getOrder(Long orderId){
+    @Get
+    public CustomerOrder getOrder(Long orderId) {
         return ordersService.getById(orderId);
     }
 
     @Get
-    public List<CustomerOrder> listOrders(){
-
+    public List<CustomerOrder> listOrders() {
         return ordersService.listOrders();
     }
 
-    public static class PaymentDeclinedException extends IllegalStateException {
+    public static class PaymentDeclinedException extends HttpStatusException {
         public PaymentDeclinedException(String s) {
-            super(s);
+            super(HttpStatus.NOT_ACCEPTABLE, s);
         }
     }
 
-    public class InvalidOrderException extends IllegalStateException {
+    public static class InvalidOrderException extends HttpStatusException {
         public InvalidOrderException(String s) {
-            super(s);
+            super(HttpStatus.NOT_ACCEPTABLE, s);
         }
     }
 
-    public static class OrderFailedException extends IllegalStateException {
-        public OrderFailedException(String s, Throwable e) {
-            super(s, e);
+    public static class OrderFailedException extends HttpStatusException {
+        public OrderFailedException(String s) {
+            super(HttpStatus.SERVICE_UNAVAILABLE, s);
         }
     }
-
-    @Error
-    HttpResponse<JsonError> failedOrderException(HttpRequest request, InvalidOrderException invalidOrderException) {
-        JsonError error = new JsonError("Invalid Order: " + invalidOrderException.getMessage())
-                .link(Link.SELF, Link.of(request.getUri()));
-
-        return HttpResponse.<JsonError>status(HttpStatus.NOT_ACCEPTABLE, "Invalid order")
-                .body(error);
-    }
-
-    @Error
-    HttpResponse<JsonError> orderFailedException(HttpRequest request, OrderFailedException orderFailedException) {
-        JsonError error = new JsonError("Order failed: " + orderFailedException.getMessage())
-                .link(Link.SELF, Link.of(request.getUri()));
-
-        return HttpResponse.<JsonError>status(HttpStatus.SERVICE_UNAVAILABLE, "Order failed")
-                .body(error);
-    }
-
-    @Error
-    HttpResponse<JsonError> paymentDeclinedException(HttpRequest request, PaymentDeclinedException paymentDeclinedException) {
-        JsonError error = new JsonError("Payment declined: " + paymentDeclinedException.getMessage())
-                .link(Link.SELF, Link.of(request.getUri()));
-
-        return HttpResponse.<JsonError>status(HttpStatus.NOT_ACCEPTABLE, "Payment declined")
-                .body(error);
-    }
-
 }

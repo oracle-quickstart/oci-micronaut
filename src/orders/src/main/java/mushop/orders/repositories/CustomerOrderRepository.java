@@ -1,8 +1,8 @@
 /**
- ** Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
- ** Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ * * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  **/
-package  mushop.orders.repositories;
+package mushop.orders.repositories;
 
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
@@ -11,6 +11,9 @@ import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import mushop.orders.entities.CustomerOrder;
 
+/**
+ * Customer order repository.
+ */
 @Repository
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
 

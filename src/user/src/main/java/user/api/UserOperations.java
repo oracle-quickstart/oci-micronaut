@@ -10,6 +10,7 @@ import user.api.dto.UserAddressDto;
 import user.api.dto.UserCardDetailDto;
 import user.api.dto.UserCardDto;
 import user.api.dto.UserDetailDto;
+import user.api.dto.UserDto;
 
 import javax.validation.Valid;
 import java.util.List;

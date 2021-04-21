@@ -1,4 +1,4 @@
-package user.api;
+package user.api.dto;
 
 import io.micronaut.core.annotation.Introspected;
 import user.api.dto.UserAddressDto;
@@ -58,5 +58,18 @@ public class UserDto {
 
     public List<UserAddressDto> getAddresses() {
         return addresses;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "username='" + username + '\'' +
+                ", password='*****'" +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", addresses=" + addresses +
+                '}';
     }
 }

@@ -50,9 +50,9 @@ dependencies {
 
     // Metrics
     implementation("io.micronaut:micronaut-management")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1-SNAPSHOT")
+    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

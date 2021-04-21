@@ -1,7 +1,6 @@
 package user.api.dto;
 
 import io.micronaut.core.annotation.Introspected;
-import user.api.UserDto;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

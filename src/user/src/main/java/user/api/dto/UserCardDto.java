@@ -32,4 +32,13 @@ public class UserCardDto {
     public String getExpires() {
         return expires;
     }
+
+    @Override
+    public String toString() {
+        return "UserCardDto{" +
+                "ccv='" + ccv + '\'' +
+                ", longNum='" + longNum + '\'' +
+                ", expires='" + expires + '\'' +
+                '}';
+    }
 }

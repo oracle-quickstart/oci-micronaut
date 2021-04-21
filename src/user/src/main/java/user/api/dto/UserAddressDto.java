@@ -49,4 +49,15 @@ public class UserAddressDto {
     public String getPostcode() {
         return postcode;
     }
+
+    @Override
+    public String toString() {
+        return "UserAddressDto{" +
+                "number='" + number + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", postcode='" + postcode + '\'' +
+                '}';
+    }
 }

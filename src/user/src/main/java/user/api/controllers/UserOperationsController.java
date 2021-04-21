@@ -9,7 +9,7 @@ import io.micronaut.transaction.annotation.ReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import user.api.DtoMapper;
-import user.api.UserDto;
+import user.api.dto.UserDto;
 import user.api.UserOperations;
 import user.api.dto.UserAddressDetailDto;
 import user.api.dto.UserAddressDto;
@@ -55,18 +55,18 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public UserDetailDto createUser(UserDto userDto) {
+        LOG.debug("Create {}", userDto);
         if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
             LOG.warn("User exists {}", userDto);
             throw new HttpStatusException(HttpStatus.CONFLICT, "Username already exists");
         }
-        LOG.debug("Create {}", userDto);
         User user = dtoMapper.fromUserDto(userDto);
         userRepository.save(user);
+        LOG.debug("created {} - {}", userDto, user.getId());
         if (user.getAddresses() != null) {
             user.getAddresses().forEach(userAddress -> userAddress.setUser(user));
             userAddressRepository.saveAll(user.getAddresses());
         }
-        LOG.debug("Created {}",user);
         return dtoMapper.toUserDetailDto(user);
     }
 
@@ -104,6 +104,7 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public void updateUser(UUID userId, UserDto userDto) {
+        LOG.debug("User[{}] update {}", userId, userDto);
         User user = getUserOrThrow(userId);
         dtoMapper.copyFromUserDto(user, userDto);
         userRepository.update(user);
@@ -113,7 +114,7 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public UserAddressDetailDto addUserAddress(UUID userId, UserAddressDto userAddressDto) {
-        LOG.debug("Create user {} address {}", userId, userAddressDto);
+        LOG.debug("User[{}] create {}", userId, userAddressDto);
         UserAddress userAddress = dtoMapper.fromUserAddressDto(userAddressDto);
         userAddress.setUser(getUserOrThrow(userId));
         userAddressRepository.save(userAddress);
@@ -136,18 +137,20 @@ public class UserOperationsController implements UserOperations {
     @Transactional
     @Override
     public UserAddressDetailDto getUserAddress(UUID userId, UUID addressId) {
-        return userAddressRepository.findByIdAndUserId(addressId, userId)
+        LOG.debug("User[{}] get address {}", userId, addressId);
+        UserAddressDetailDto userAddressDetailDto = userAddressRepository.findByIdAndUserId(addressId, userId)
                 .map(dtoMapper::toUserAddressDetailDto)
                 .orElseThrow(() -> userAddressNotFoundException(userId, addressId));
+        LOG.debug("Found {}", userAddressDetailDto);
+        return userAddressDetailDto;
     }
 
     @Timed("user.card.add")
     @Transactional
     @Override
     public UserCardDetailDto addUserCard(UUID userId, UserCardDto userCardDto) {
-        LOG.debug("Create user {} card {}", userId, userCardDto);
+        LOG.debug("User[{}] create {}", userId, userCardDto);
         UserCard userCard = dtoMapper.fromUserCardDto(userCardDto);
-        LOG.debug("Create user {} card {}", userId, userCard);
         userCard.setUser(getUserOrThrow(userId));
         userCardRepository.save(userCard);
         return dtoMapper.toUserCardDetailDto(userCard);

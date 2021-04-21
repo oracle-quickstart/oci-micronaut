@@ -74,4 +74,19 @@ public class UserAddressDetailDto {
     public UserDetailDto getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return "UserAddressDetailDto{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", user=" + user +
+                '}';
+    }
 }

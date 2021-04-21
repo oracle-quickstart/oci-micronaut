@@ -6,7 +6,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
 import user.api.LoginOperations;
-import user.api.UserDto;
+import user.api.dto.UserDto;
 import user.api.UserOperations;
 import user.api.dto.UserAddressDetailDto;
 import user.api.dto.UserAddressDto;

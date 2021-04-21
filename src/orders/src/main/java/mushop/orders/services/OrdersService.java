@@ -108,16 +108,12 @@ public class OrdersService {
 
             boolean finished = Completable.merge(Arrays.asList(
                     Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.address.getPath()), Address.class)
-                            .doOnError(t -> LOG.error("Failed to fetch address " + orderPayload.address.getPath() + ":" + t.getMessage()))
                             .doOnNext(paymentRequest::setAddress)),
                     Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.customer.getPath()), Customer.class)
-                            .doOnError(t -> LOG.error("Failed to fetch customer " + orderPayload.address.getPath() + ":" + t.getMessage()))
                             .doOnNext(paymentRequest::setCustomer)),
                     Completable.fromPublisher(userClient.retrieve(HttpRequest.GET(orderPayload.card.getPath()), Card.class)
-                            .doOnError(t -> LOG.error("Failed to fetch payment card " + orderPayload.card.getPath() + ":" + t.getMessage()))
                             .doOnNext(paymentRequest::setCard)),
                     Completable.fromPublisher(cartsClient.retrieve(HttpRequest.GET(orderPayload.items.getPath()), Argument.listOf(Item.class))
-                            .doOnError(t -> LOG.error("Failed to fetch carts items " + orderPayload.items.getPath() + ":" + t.getMessage()))
                             .doOnNext((items -> {
                         orderItems.set(items);
                         //Calculate total
@@ -128,7 +124,6 @@ public class OrdersService {
             if (!finished) {
                 throw new TimeoutException("Unable to create order due to timeout from one of the services.");
             }
-
             authorisePayment(paymentRequest);
 
             CustomerOrder order = createOrder(paymentRequest, orderItems.get());

@@ -43,6 +43,28 @@ resource "kubernetes_secret" "oadb-admin" {
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 
+resource "kubernetes_config_map" "oci-deployment" {
+  metadata {
+    name      = var.oci_deployment
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    region        = var.region
+    compartment_id = local.oke_compartment_ocid
+  }
+}
+
+resource "kubernetes_secret" "oapm-connection" {
+  metadata {
+    name      = var.apm_connection_name
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    zipkin_url        = "https://aaaac6gzqsj7waaaaaaaaaafse.apm-agt.us-ashburn-1.oci.oraclecloud.com"
+    zipkin_path       = "/20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=ISTRJC2G5SMYXA72VPLX6CM4IGWP76J"
+  }
+}
+
 resource "kubernetes_secret" "oadb-connection" {
   metadata {
     name      = var.db_connection_name
@@ -51,6 +73,7 @@ resource "kubernetes_secret" "oadb-connection" {
   data = {
     oadb_wallet_pw = random_string.autonomous_database_wallet_password.result
     oadb_service   = "${local.app_name_for_db}${random_string.deploy_id.result}_TP"
+    oadb_ocid      =  oci_database_autonomous_database.mushop_autonomous_database[0].id
   }
   type = "Opaque"
 

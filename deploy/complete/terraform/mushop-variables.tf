@@ -53,6 +53,14 @@ variable "db_wallet_name" {
 variable "oos_bucket_name" {
   default = "oos-bucket"
 }
+variable "apm_connection_name" {
+  default = "oapm-connection"
+}
+
+## Deployment details
+variable "oci_deployment" {
+  default = "oci-deployment"
+}
 
 # OCI Services
 ## Autonomous Database

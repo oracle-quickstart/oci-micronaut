@@ -1,10 +1,13 @@
-package mushop.carts;
+package mushop.carts.entitites;
+
+import io.micronaut.core.annotation.Creator;
+import io.micronaut.core.annotation.Introspected;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Introspected
 public class Cart {
 
     private String id;
@@ -17,6 +20,7 @@ public class Cart {
         id = UUID.randomUUID().toString();
     }
 
+    @Creator
     public Cart(String cartId) {
         this.id = cartId;
     }
@@ -46,7 +50,7 @@ public class Cart {
     }
 
     public boolean removeItem(String itemId) {
-        return items.removeIf(item -> itemId.equals(item.getItemId()));
+        return items.removeIf(item -> itemId.equalsIgnoreCase(item.getItemId()));
     }
 
     public void merge(Cart cart) {

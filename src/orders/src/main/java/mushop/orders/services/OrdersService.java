@@ -144,9 +144,6 @@ public class OrdersService {
             LOG.error("Timeout exception", e);
             meterRegistry.counter("orders.rejected", "cause", "timeout").increment();
             throw new OrderFailedException("Unable to create order due to timeout from one of the services: " + e.getMessage());
-        } catch (Exception e){
-            LOG.error("Unexpected failure", e);
-            throw new OrderFailedException("Unexpected failure");
         }
     }
 
@@ -166,6 +163,9 @@ public class OrdersService {
         } catch (NoSuchElementException e) {
             meterRegistry.counter("orders.rejected", "cause", "payment_response_invalid").increment();
             throw new PaymentDeclinedException("Unable to parse authorisation packet");
+        } catch (RuntimeException e){
+            meterRegistry.counter("orders.rejected", "cause", "payment_timeout").increment();
+            throw new PaymentDeclinedException("Timeout authorising payment");
         }
     }
 

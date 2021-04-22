@@ -4,9 +4,6 @@
  **/
 package  mushop;
 
-import io.micronaut.core.annotation.Introspected;
-
-@Introspected
 public class OrderUpdate {
     private Long orderId;
     private Shipment Shipment;
@@ -14,7 +11,7 @@ public class OrderUpdate {
     public OrderUpdate() {
     }
 
-    public OrderUpdate(Long orderId, mushop.Shipment shipment) {
+    public OrderUpdate(Long orderId, Shipment shipment) {
         this.orderId = orderId;
         Shipment = shipment;
     }
@@ -27,11 +24,11 @@ public class OrderUpdate {
         this.orderId = orderId;
     }
 
-    public mushop.Shipment getShipment() {
+    public Shipment getShipment() {
         return Shipment;
     }
 
-    public void setShipment(mushop.Shipment shipment) {
+    public void setShipment(Shipment shipment) {
         Shipment = shipment;
     }
 

@@ -4,9 +4,6 @@
  **/
 package  mushop;
 
-import io.micronaut.core.annotation.Introspected;
-
-@Introspected
 public class Shipment {
     private String id;
     private String name;

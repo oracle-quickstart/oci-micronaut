@@ -7,7 +7,15 @@ package  mushop;
 import io.micronaut.core.annotation.TypeHint;
 import io.micronaut.runtime.Micronaut;
 import io.nats.client.impl.SocketDataPort;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 
+@OpenAPIDefinition(
+        info = @Info(
+                title = "fulfillment-api",
+                version = "1.0"
+        )
+)
 @TypeHint(value = {SocketDataPort.class}, accessType = TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS)
 public class Application {
 

@@ -1,87 +1,71 @@
 plugins {
-    id "com.diffplug.eclipse.apt" version "3.22.0"
-    id "groovy"
-    id "com.github.johnrengelman.shadow" version "6.0.0"
-    id "application"
+    id("groovy")
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("io.micronaut.application") version "1.4.5"
 }
 
-version "0.1"
-group "mushop"
+version "1.0.0-SNAPSHOT"
+group "micronaut.mushop"
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
-configurations {
-    // for dependencies that are needed for development only
-    developmentOnly 
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("mushop.*")
+    }
 }
 
 dependencies {
-    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
-    annotationProcessor("io.micronaut:micronaut-graal")
-    annotationProcessor("io.micronaut:micronaut-inject-java")
-    annotationProcessor("io.micronaut:micronaut-validation")
-    compileOnly("org.graalvm.nativeimage:svm")
-    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
-    implementation("io.micronaut:micronaut-inject")
-    implementation("io.micronaut:micronaut-validation")
-    implementation("io.micronaut:micronaut-runtime")
-    implementation("javax.annotation:javax.annotation-api")
-    implementation("io.micronaut:micronaut-http-server-netty")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-management")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-validation")
+
+    // Swagger
+    implementation("io.swagger.core.v3:swagger-annotations")
+
+    // Monitoring
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-    implementation("io.nats:jnats:2.6.8")
+    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
+
+
+    // Tracing
+    implementation("io.micronaut:micronaut-tracing")
+    implementation("io.opentracing.brave:brave-opentracing")
+    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
+    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
     runtimeOnly("ch.qos.logback:logback-classic")
-    testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+
+    // Nats
+    implementation("io.micronaut.nats:micronaut-nats")
+
     testImplementation("io.micronaut:micronaut-inject-groovy")
-    testImplementation("org.spockframework:spock-core") {
-        exclude group: "org.codehaus.groovy", module: "groovy-all"
-    }
-    testImplementation("io.micronaut.test:micronaut-test-spock")
+    testImplementation("org.testcontainers:spock")
+    testImplementation("org.testcontainers:testcontainers")
 }
 
-test.classpath += configurations.developmentOnly
-
-mainClassName = "mushop.Application"
-
-// use JUnit 5 platform
-test {
-    useJUnitPlatform()
+application {
+    mainClass.set("mushop.Application")
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion('11')
-    targetCompatibility = JavaVersion.toVersion('11')
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-    options.compilerArgs.addAll([
-        '-parameters',
-        // enables incremental compilation
-        '-Amicronaut.processing.incremental=true',
-        '-Amicronaut.processing.annotations=com.example.*',
-        "-Amicronaut.processing.group=$project.group",
-        "-Amicronaut.processing.module=$project.name",
-    ])
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
 }
 
-shadowJar {
-    mergeServiceFiles()
-}
-
-tasks.withType(JavaExec) {
-    classpath += configurations.developmentOnly
-    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
-    if (gradle.startParameter.continuous) {
-        systemProperties(
-            'micronaut.io.watch.restart':'true',
-            'micronaut.io.watch.enabled':'true',
-            "micronaut.io.watch.paths":"src/main"
-        )
-    }
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }

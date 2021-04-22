@@ -1,5 +1,4 @@
 import base64
-import time
 
 from locust import HttpUser, task, between
 from random import randint, choice

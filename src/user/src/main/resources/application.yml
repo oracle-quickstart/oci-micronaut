@@ -18,6 +18,9 @@ micronaut:
     enabled: true
 
 endpoints:
+  prometheus:
+    sensitive: false
+    details-visible: ANONYMOUS
   health:
     enabled: true
     sensitive: false

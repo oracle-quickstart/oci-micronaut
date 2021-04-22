@@ -62,7 +62,7 @@ public class DtoMapper {
     }
 
     public UserDetailDto toUserDetailDto(User user) {
-        return toUserDetailDto(user, true, true);
+        return toUserDetailDto(user, false, false);
     }
 
     public UserDetailDto toUserDetailDto(User user, boolean includeAddresses, boolean includeCards) {

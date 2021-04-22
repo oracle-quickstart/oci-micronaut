@@ -1,0 +1,89 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("io.micronaut.application") version "1.4.2"
+}
+
+version = "1.0.0-SNAPSHOT"
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("user.*")
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+
+dependencies {
+    annotationProcessor("io.micronaut.data:micronaut-data-processor:2.3.2-SNAPSHOT")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-validation")
+
+    // ATP db access
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.1-SNAPSHOT")
+    implementation("io.micronaut.data:micronaut-data-jdbc:2.3.2-SNAPSHOT")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+    runtimeOnly("com.oracle.database.security:oraclepki:19.8.0.0")
+    runtimeOnly("com.oracle.database.security:osdt_cert:19.8.0.0")
+    runtimeOnly("com.oracle.database.security:osdt_core:19.8.0.0")
+    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+
+    // Metrics
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
+
+    // Tracing
+    implementation("io.micronaut:micronaut-tracing")
+    implementation("io.opentracing.brave:brave-opentracing")
+    runtime("io.zipkin.brave:brave-instrumentation-http")
+    runtime("io.zipkin.reporter2:zipkin-reporter")
+
+    // Swagger
+    implementation("io.swagger.core.v3:swagger-annotations")
+
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:oracle-xe")
+    testImplementation("org.testcontainers:testcontainers")
+}
+
+application {
+    mainClass.set("user.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}
+
+

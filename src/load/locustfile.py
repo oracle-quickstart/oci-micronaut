@@ -4,6 +4,7 @@ from locust import HttpUser, task, between
 from random import randint, choice
 
 
+
 class Web(HttpUser):
     wait_time = between(5, 15)
 

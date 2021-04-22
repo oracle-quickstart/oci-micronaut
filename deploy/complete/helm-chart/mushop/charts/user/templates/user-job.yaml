@@ -17,27 +17,20 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       restartPolicy: Never
-      initContainers:
+      containers:
         {{- include "user.init.wallet" . | nindent 8 }}
-        # DbTools Init
+        # create schema
         - name: init
           image: "{{ .Values.dbtools.repository }}:{{ .Values.dbtools.tag }}"
           imagePullPolicy: {{ .Values.dbtools.pullPolicy }}
           command: ["/bin/sh","-c"]
           args:
-            - sqlplus ADMIN/\"${OADB_ADMIN_PW}\"@${OADB_SERVICE} @service.sql ${OADB_USER^^} ${OADB_PW}
+            - sqlplus ADMIN/\"${ORACLECLOUD_ATP_ADMIN_PASSWORD}\"@${ORACLECLOUD_ATP_WALLET_SERVICE} @service.sql ${ORACLECLOUD_ATP_USERNAME^^} ${ORACLECLOUD_ATP_PASSWORD}
           env:
             {{- include "user.oadb.connection" . | nindent 12 }}
             {{- include "user.oadb.admin" . | nindent 12 }}
           volumeMounts:
             {{- include "user.mount.wallet" . | nindent 12 }}
             {{- include "user.mount.initdb" . | nindent 12 }}
-      containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["npm", "run", "schema:sync"]
-          env: {{- include "user.oadb.connection" . | nindent 12 }}
-          volumeMounts: {{- include "user.mount.wallet" . | nindent 12 }}
       volumes: {{- include "user.volumes" . | nindent 8 }}
 {{ end }}

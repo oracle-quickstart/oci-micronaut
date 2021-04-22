@@ -1,0 +1,38 @@
+micronaut:
+  application:
+    name: user
+  server:
+    thread-selection: io
+  executors:
+    io:
+      n-threads: 75
+      type: fixed
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+      oraclecloud:
+        enabled: false
+    enabled: true
+
+endpoints:
+  prometheus:
+    sensitive: false
+    details-visible: ANONYMOUS
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+datasources:
+  default:
+    dialect: oracle
+
+flyway:
+  datasources:
+    default:
+      locations: classpath:db/migration
+      baseline-version: 0
+      baseline-on-migrate: true

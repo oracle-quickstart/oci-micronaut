@@ -15,7 +15,7 @@
  */
 package mushop;
 
-import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.annotation.Counted;
 import io.micronaut.nats.annotation.NatsListener;
 import io.micronaut.nats.annotation.Subject;
 import org.slf4j.Logger;
@@ -28,24 +28,19 @@ public class OrdersListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrdersListener.class);
 
-    private final MeterRegistry meterRegistry;
     private final ShipmentsPublisher shipmentsPublisher;
 
-    public OrdersListener(MeterRegistry meterRegistry, ShipmentsPublisher shipmentsPublisher) {
-        this.meterRegistry = meterRegistry;
+    public OrdersListener(ShipmentsPublisher shipmentsPublisher) {
         this.shipmentsPublisher = shipmentsPublisher;
     }
 
     @Subject("mushop-orders")
+    @Counted(value = "orders.received")
     public void handleMessage(OrderUpdate orderUpdate) {
         LOG.info("got message {} on the mushop orders subject", orderUpdate);
-        meterRegistry.counter("orders.received", "app", "fulfillment").increment();
-
         Shipment shipment = new Shipment(UUID.randomUUID().toString(), "Shipped");
         orderUpdate.setShipment(shipment);
         LOG.info("Sending shipment update {}", orderUpdate);
         shipmentsPublisher.publishShipment(orderUpdate);
-        meterRegistry.counter("orders.fulfilled","app","fulfillment").increment();
-
     }
 }

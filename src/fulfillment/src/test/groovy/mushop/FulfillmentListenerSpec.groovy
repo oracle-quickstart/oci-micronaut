@@ -5,24 +5,17 @@
 
 package mushop
 
-
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client
-import io.micronaut.nats.annotation.NatsClient
 import io.micronaut.nats.annotation.NatsListener
 import io.micronaut.nats.annotation.Subject
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
-import io.reactivex.Flowable
-import io.reactivex.Single
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
-import spock.lang.Specification
 import spock.util.concurrent.AsyncConditions
 
 import javax.inject.Inject
 
 @MicronautTest
-class FulfillmentListenerSpec extends Specification {
+class FulfillmentListenerSpec extends AbstractFulfillmentSpec{
 
     @Inject
     @Client("/fulfillment")
@@ -33,15 +26,6 @@ class FulfillmentListenerSpec extends Specification {
 
     @Inject
     OrdersPublisher ordersPublisher
-
-    static GenericContainer natsContainer =
-            new GenericContainer("nats:latest")
-                    .withExposedPorts(4222)
-                    .waitingFor(new LogMessageWaitStrategy().withRegEx("(?s).*Server is ready.*"))
-
-    static {
-        natsContainer.start()
-    }
 
     void 'test it adds shipment details to order'() {
         given:

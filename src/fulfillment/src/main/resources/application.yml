@@ -18,6 +18,10 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
+  prometheus:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
 
 mushop:
   messaging:

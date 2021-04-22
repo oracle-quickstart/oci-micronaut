@@ -15,6 +15,7 @@
  */
 package mushop;
 
+import io.micrometer.core.annotation.Counted;
 import io.micronaut.nats.annotation.NatsClient;
 import io.micronaut.nats.annotation.Subject;
 
@@ -22,5 +23,6 @@ import io.micronaut.nats.annotation.Subject;
 public interface ShipmentsPublisher {
 
     @Subject("mushop-shipments")
+    @Counted(value = "orders.fulfilled")
     void publishShipment(OrderUpdate orderUpdate);
 }

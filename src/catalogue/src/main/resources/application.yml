@@ -1,0 +1,40 @@
+micronaut:
+  application:
+    name: catalogue
+  server:
+    thread-selection: io
+  executors:
+    io:
+      n-threads: 75
+      type: fixed
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+      oraclecloud:
+        enabled: false
+    enabled: true
+  data:
+    pageable:
+      default-page-size: -1
+      sort-parameter-name: Order
+      page-parameter-name: PageNum
+      size-parameter-name: PageSize
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+datasources:
+  default:
+    dialect: oracle
+flyway:
+  datasources:
+    default:
+      enabled: true
+      baseline-version: 0
+      baseline-on-migrate: true

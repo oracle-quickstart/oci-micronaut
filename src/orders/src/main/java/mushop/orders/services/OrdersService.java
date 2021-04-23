@@ -157,8 +157,7 @@ public class OrdersService {
                                 .record(paymentRequest.getAmount());
 
                         OrderUpdate update = new OrderUpdate(order.getId(), null);
-                            final Single<OrderUpdate> orderUpdateSingle = ordersPublisher.dispatchToFulfillment(update);
-                            return orderUpdateSingle
+                            return ordersPublisher.dispatchToFulfillment(update)
                                 .flatMapPublisher(orderUpdate -> {
                                     LOG.info("Order {} sent for fulfillment: {}", order, update);
                                     return Flowable.just(order);

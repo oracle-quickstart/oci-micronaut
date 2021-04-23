@@ -167,7 +167,7 @@ public class OrdersService {
     }
 
     @Transactional
-    CustomerOrder createOrder(PaymentRequest paymentRequest, List<Item> orderItems) throws TimeoutException {
+    CustomerOrder createOrder(PaymentRequest paymentRequest, List<Item> orderItems) {
         CustomerOrder order = new CustomerOrder(
                 null,
                 paymentRequest.getCustomer(),

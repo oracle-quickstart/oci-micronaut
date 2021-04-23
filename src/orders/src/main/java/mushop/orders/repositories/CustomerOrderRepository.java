@@ -1,21 +1,23 @@
 /**
- ** Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
- ** Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ * * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  **/
-package  mushop.orders.repositories;
+package mushop.orders.repositories;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.annotation.RestResource;
-
+import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.jpa.repository.JpaRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import mushop.orders.entities.CustomerOrder;
 
-@RepositoryRestResource(path = "orders", itemResourceRel = "order")
-public interface CustomerOrderRepository extends PagingAndSortingRepository<CustomerOrder, Long>  {
-    @RestResource(path = "customer")
-    public Page<CustomerOrder> findByCustomerId(@Param("custId") String id, Pageable p);
+/**
+ * Customer order repository.
+ */
+@Repository
+public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
+
+    @Join(value = "customer", type = Join.Type.FETCH)
+    Page<CustomerOrder> findByCustomerId(String name, Pageable p);
 }
 

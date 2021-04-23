@@ -1,140 +1,187 @@
 package mushop.orders.services;
 
+import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.MeterRegistry;
-import mushop.orders.config.OrdersConfigurationProperties;
+import io.micronaut.core.type.Argument;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+import mushop.orders.OrdersConfiguration;
+import mushop.orders.client.PaymentClient;
 import mushop.orders.entities.*;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.values.OrderUpdate;
 import mushop.orders.values.PaymentRequest;
-import mushop.orders.values.PaymentResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import javax.inject.Singleton;
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static mushop.orders.controllers.OrdersController.OrderFailedException;
 import static mushop.orders.controllers.OrdersController.PaymentDeclinedException;
 
-@Service
+@Singleton
 public class OrdersService {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private OrdersConfigurationProperties config;
 
-    @Autowired
-    private AsyncGetService asyncGetService;
+    private final CustomerOrderRepository customerOrderRepository;
 
-    @Autowired
-    private MessagingService messagingService;
+    private final MeterRegistry meterRegistry;
 
-    @Autowired
-    private CustomerOrderRepository customerOrderRepository;
+    private final OrdersPublisher ordersPublisher;
 
-    @Autowired
-    private MeterRegistry meterRegistry;
+    private final PaymentClient paymentClient;
 
-    @Value(value = "${http.timeout:5}")
-    private long timeout;
+    private final OrdersConfiguration ordersConfiguration;
 
-    private ScheduledExecutorService cartDeleteExecutor = Executors.newScheduledThreadPool(5);
+    private final RxHttpClient userClient;
 
+    private final RxHttpClient cartsClient;
 
-    public CustomerOrder createNewOrder(NewOrderResource orderPayload) {
-        LOG.info("Creating order {}", orderPayload);
-        LOG.debug("Starting calls");
-        meterRegistry.counter("orders.placed").increment();
-        try {
-            Future<Address> addressFuture = asyncGetService.getObject(orderPayload.address,
-                    new ParameterizedTypeReference<Address>() {
-                    });
-            Future<Customer> customerFuture = asyncGetService.getObject(orderPayload.customer,
-                    new ParameterizedTypeReference<Customer>() {
-                    });
-            Future<Card> cardFuture = asyncGetService.getObject(orderPayload.card,
-                    new ParameterizedTypeReference<Card>() {
-                    });
-            Future<List<Item>> itemsFuture = asyncGetService.getDataList(orderPayload.items,
-                    new ParameterizedTypeReference<List<Item>>() {
-                    });
-            LOG.debug("End of calls.");
+    public OrdersService(CustomerOrderRepository customerOrderRepository,
+                         MeterRegistry meterRegistry,
+                         OrdersPublisher ordersPublisher,
+                         PaymentClient paymentClient,
+                         OrdersConfiguration ordersConfiguration,
+                         @Client("users") RxHttpClient userClient,
+                         @Client("carts") RxHttpClient cartsClient) {
+        this.customerOrderRepository = customerOrderRepository;
+        this.meterRegistry = meterRegistry;
+        this.ordersPublisher = ordersPublisher;
+        this.paymentClient = paymentClient;
+        this.ordersConfiguration = ordersConfiguration;
+        this.userClient = userClient;
+        this.cartsClient = cartsClient;
+    }
 
-            //Calculate total
-            float amount = calculateTotal(itemsFuture.get(timeout, TimeUnit.SECONDS));
-
-            // Call payment service to make sure they've paid
-            PaymentRequest paymentRequest = new PaymentRequest(
-                    addressFuture.get(timeout, TimeUnit.SECONDS),
-                    cardFuture.get(timeout, TimeUnit.SECONDS),
-                    customerFuture.get(timeout, TimeUnit.SECONDS),
-                    amount);
-
-            LOG.info("Sending payment request: " + paymentRequest);
-            Future<PaymentResponse> paymentFuture = asyncGetService.postResource(
-                    config.getPaymentUri(),
-                    paymentRequest,
-                    new ParameterizedTypeReference<PaymentResponse>() {
-                    });
-            PaymentResponse paymentResponse = paymentFuture.get(timeout, TimeUnit.SECONDS);
-            
-            LOG.info("Received payment response: " + paymentResponse);
-            if (paymentResponse == null) {
-                meterRegistry.counter("orders.rejected","cause","payment_response_invalid").increment();
-                throw new PaymentDeclinedException("Unable to parse authorisation packet");
-            }
-            if (!paymentResponse.isAuthorised()) {
-                meterRegistry.counter("orders.rejected","cause","payment_declined").increment();
-                throw new PaymentDeclinedException(paymentResponse.getMessage());
-            }
-
-            //Persist
-            CustomerOrder order = new CustomerOrder(
-                    null,
-                    customerFuture.get(timeout, TimeUnit.SECONDS),
-                    addressFuture.get(timeout, TimeUnit.SECONDS),
-                    cardFuture.get(timeout, TimeUnit.SECONDS),
-                    itemsFuture.get(timeout, TimeUnit.SECONDS),
-                    null,
-                    Calendar.getInstance().getTime(),
-                    amount);
-            LOG.debug("Received data: " + order.toString());
-
-            CustomerOrder savedOrder = customerOrderRepository.save(order);
-            LOG.debug("Saved order: " + savedOrder);
-            meterRegistry.summary("orders.amount").record(amount);
-            DistributionSummary.builder("order.stats")
-                    .serviceLevelObjectives(10d,20d,30d,40d,50d,60d,70d,80d,90d,100d,110d)
-                    //.publishPercentileHistogram()
-                    .maximumExpectedValue(120d)
-                    .minimumExpectedValue(5d)
-                    .register(meterRegistry)
-                    .record(amount);
-            OrderUpdate update = new OrderUpdate(savedOrder.getId(), null);
-            messagingService.dispatchToFulfillment(update);
-            return savedOrder;
-        } catch (TimeoutException e) {
-            meterRegistry.counter("orders.rejected","cause","timeout").increment();
-            throw new OrderFailedException("Unable to create order due to timeout from one of the services.", e);
-        } catch (InterruptedException e) {
-            meterRegistry.counter("orders.rejected","cause","interrupted").increment();
-            throw new OrderFailedException("Unable to create order due to unspecified IO error.", e);
-        }catch ( IOException  e) {
-            meterRegistry.counter("orders.rejected","cause","connectivity").increment();
-            throw new OrderFailedException("Unable to create order due to unspecified IO error.", e);
-        }catch (ExecutionException e) {
-            meterRegistry.counter("orders.rejected","cause","task_failed").increment();
-            throw new OrderFailedException("Unable to create order due to unspecified IO error.", e);
+    public CustomerOrder getById(Long id) {
+        Optional<CustomerOrder> customerOrder = customerOrderRepository.findById(id);
+        if (customerOrder.isPresent()) {
+            return customerOrder.get();
+        } else {
+            LOG.info("Order with id {} not found", id);
+            return null;
         }
+    }
 
+    public List<CustomerOrder> listOrders() {
+        return customerOrderRepository.findAll();
+    }
+
+    /**
+     * Create order.
+     *
+     * @param orderPayload order details
+     * @return created order
+     */
+    @Counted("orders.placed")
+    public Single<CustomerOrder> placeOrder(NewOrderResource orderPayload) {
+        return Flowable.just(new PaymentRequest())
+                .doOnNext((request) -> LOG.info("Placing new order {}", orderPayload))
+                .switchMap((request) ->
+                        userClient.retrieve(HttpRequest.GET(orderPayload.address.getPath()), Address.class)
+                                .map(request::setAddress)
+                ).switchMap((request) ->
+                        userClient.retrieve(HttpRequest.GET(orderPayload.customer.getPath()), Customer.class)
+                                .map(request::setCustomer)
+                ).switchMap((request) ->
+                        userClient.retrieve(HttpRequest.GET(orderPayload.card.getPath()), Card.class)
+                                .map(request::setCard)
+                ).switchMap((request) ->
+                        cartsClient.retrieve(HttpRequest.GET(orderPayload.items.getPath()), Argument.listOf(Item.class))
+                                .map((orderItems) -> {
+                                    //Calculate total
+                                    float amount = calculateTotal(orderItems);
+                                    request.setAmount(amount);
+                                    return new OrderDetail(request, orderItems);
+                                })
+                )
+                .timeout(ordersConfiguration.getTimeout(), TimeUnit.SECONDS)
+                .onErrorResumeNext((throwable -> {
+                            if (throwable instanceof TimeoutException) {
+                                LOG.error("Timeout exception", throwable);
+                                meterRegistry.counter("orders.rejected", "cause", "timeout").increment();
+                                return Flowable.error(new OrderFailedException("Unable to create order due to timeout from one of the services: " + throwable.getMessage()));
+                            }
+                            return Flowable.error(throwable);
+                        })
+                )
+                .switchMap((orderDetail -> {
+                    // authorize payment
+                    final PaymentRequest paymentRequest = orderDetail.request;
+                    LOG.info("Sending payment request: {}", paymentRequest);
+                    return paymentClient.createPayment(paymentRequest)
+                            .flatMap((paymentResponse -> {
+                                LOG.info("Received payment response: {}", paymentResponse);
+
+                                if (!paymentResponse.isAuthorised()) {
+                                    LOG.warn("Payment rejected: {}", paymentResponse);
+                                    meterRegistry.counter("orders.rejected", "cause", "payment_declined").increment();
+                                    return Flowable.error(new PaymentDeclinedException(paymentResponse.getMessage()));
+                                } else {
+                                    return Flowable.just(orderDetail);
+                                }
+                            }))
+                            .timeout(ordersConfiguration.getTimeout(), TimeUnit.SECONDS)
+                            .onErrorResumeNext((throwable -> {
+                                if (throwable instanceof TimeoutException) {
+                                    meterRegistry.counter("orders.rejected", "cause", "payment_timeout").increment();
+                                    return Flowable.error(new PaymentDeclinedException("Timeout authorising payment"));
+                                }
+                                return Flowable.error(throwable);
+                            }));
+                })).switchMap((orderDetail -> {
+                    final PaymentRequest paymentRequest = orderDetail.request;
+                    return Single.fromCallable(() -> createOrder(paymentRequest, orderDetail.items))
+                        .subscribeOn(Schedulers.io())
+                        .flatMapPublisher((order) -> {
+                        meterRegistry.summary("orders.amount").record(paymentRequest.getAmount());
+                        DistributionSummary.builder("order.stats")
+                                .serviceLevelObjectives(10d, 20d, 30d, 40d, 50d, 60d, 70d, 80d, 90d, 100d, 110d)
+                                //.publishPercentileHistogram()
+                                .maximumExpectedValue(120d)
+                                .minimumExpectedValue(5d)
+                                .register(meterRegistry)
+                                .record(paymentRequest.getAmount());
+
+                        OrderUpdate update = new OrderUpdate(order.getId(), null);
+                            return ordersPublisher.dispatchToFulfillment(update)
+                                .flatMapPublisher(orderUpdate -> {
+                                    LOG.info("Order {} sent for fulfillment: {}", order, update);
+                                    return Flowable.just(order);
+                                });
+                    });
+                })).firstOrError();
+    }
+
+    @Transactional
+    CustomerOrder createOrder(PaymentRequest paymentRequest, List<Item> orderItems) {
+        CustomerOrder order = new CustomerOrder(
+                null,
+                paymentRequest.getCustomer(),
+                paymentRequest.getAddress(),
+                paymentRequest.getCard(),
+                orderItems,
+                null,
+                Calendar.getInstance().getTime(),
+                paymentRequest.getAmount());
+
+        LOG.info("Creating order: {}", order);
+        CustomerOrder savedOrder = customerOrderRepository.save(order);
+        LOG.debug("Saved order: {}", savedOrder);
+        return savedOrder;
     }
 
     private float calculateTotal(List<Item> items) {
@@ -143,5 +190,15 @@ public class OrdersService {
         amount += items.stream().mapToDouble(i -> i.getQuantity() * i.getUnitPrice()).sum();
         amount += shipping;
         return amount;
+    }
+
+    private static final class OrderDetail {
+        final PaymentRequest request;
+        final List<Item> items;
+
+        public OrderDetail(PaymentRequest request, List<Item> items) {
+            this.request = request;
+            this.items = items;
+        }
     }
 }

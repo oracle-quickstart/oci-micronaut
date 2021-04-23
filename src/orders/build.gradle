@@ -1,76 +1,89 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
-  id 'org.springframework.boot' version '2.3.0.RELEASE'
-  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-  id 'java'
+  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("io.micronaut.application") version "1.4.5"
 }
 
-
-group = 'mushop.orders'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-  compileOnly {
-    extendsFrom annotationProcessor
-  }
-  compile.exclude module: 'spring-boot-starter-tomcat'
-}
+version = "1.0.0-SNAPSHOT"
+group = "micronaut.mushop"
 
 repositories {
-  mavenLocal()
   mavenCentral()
 }
-
+micronaut {
+  runtime("netty")
+  testRuntime("junit5")
+  processing {
+    incremental(true)
+    annotations("mushop.orders.*")
+  }
+}
 
 dependencies {
-  annotationProcessor 'org.projectlombok:lombok'
-  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+  annotationProcessor("io.micronaut.data:micronaut-data-processor")
+  annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
+  implementation("javax.annotation:javax.annotation-api")
+  implementation("io.micronaut:micronaut-validation")
+  implementation("io.micronaut:micronaut-http-client")
+  implementation("io.micronaut:micronaut-runtime")
 
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  implementation 'org.springframework.boot:spring-boot-starter-jetty'
-  implementation 'org.springframework.boot:spring-boot-starter-validation'
-  implementation 'org.springframework.boot:spring-boot-starter-actuator'
-  implementation 'io.nats:jnats:2.6.6'
-  implementation 'com.h2database:h2:1.4.200'
-  runtimeOnly 'com.oracle.database.jdbc:ojdbc8:19.6.0.0'
-  runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+  // Kubernetes service discovery
+  implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.1")
 
-  testImplementation('org.springframework.boot:spring-boot-starter-test') {
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
+  // Swagger
+  implementation("io.swagger.core.v3:swagger-annotations")
 
+  // Metrics
+  implementation("io.micronaut:micronaut-management")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
+
+  // Tracing
+  implementation("io.micronaut:micronaut-tracing")
+  implementation("io.opentracing.brave:brave-opentracing")
+  runtime("io.zipkin.brave:brave-instrumentation-http")
+  runtime("io.zipkin.reporter2:zipkin-reporter")
+
+  // ATP db access
+  implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+  implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.1")
+  runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
+  runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+  runtimeOnly("com.oracle.database.security:oraclepki:21.1.0.0")
+  runtimeOnly("com.oracle.database.security:osdt_cert:21.1.0.0")
+  runtimeOnly("com.oracle.database.security:osdt_core:21.1.0.0")
+  implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+  implementation("io.micronaut.data:micronaut-data-model")
+
+  // Nats.io support
+  implementation("io.micronaut.nats:micronaut-nats")
+
+  runtimeOnly("ch.qos.logback:logback-classic")
+
+  testImplementation "org.mockito:mockito-core:3.+"
   testImplementation 'com.openpojo:openpojo:0.8.12'
-
+  testImplementation("org.testcontainers:junit-jupiter")
+  testImplementation("org.testcontainers:oracle-xe")
+  testImplementation("org.testcontainers:testcontainers")
 }
 
-test {
-  useJUnitPlatform()
+application {
+  mainClass.set("mushop.orders.OrderApplication")
 }
 
-tasks.withType(Test) {
-  testLogging {
-    // set options for log level LIFECYCLE
-    events TestLogEvent.FAILED,
-        TestLogEvent.PASSED,
-        TestLogEvent.SKIPPED
-    exceptionFormat TestExceptionFormat.FULL
-    showExceptions true
-    showCauses true
-    showStackTraces true
-    afterSuite { desc, result ->
-      if (!desc.parent) { // will match the outermost suite
-        def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
-        def startItem = '|  ', endItem = '  |'
-        def repeatLength = startItem.length() + output.length() + endItem.length()
-        println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
-      }
-    }
-  }
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
+
+dockerBuild {
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
+}
+
+dockerBuildNative {
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
 
 

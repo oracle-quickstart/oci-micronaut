@@ -1,52 +1,62 @@
 package mushop.orders.services;
 
-import mushop.orders.config.OrdersConfigurationProperties;
+import io.micronaut.context.annotation.Value;
+import io.micronaut.core.type.Argument;
+import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.test.annotation.MockBean;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import mushop.orders.AbstractTest;
+import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
-import mushop.orders.entities.*;
+import mushop.orders.entities.Address;
+import mushop.orders.entities.Card;
+import mushop.orders.entities.Customer;
+import mushop.orders.entities.CustomerOrder;
+import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
+import mushop.orders.values.OrderUpdate;
 import mushop.orders.values.PaymentRequest;
 import mushop.orders.values.PaymentResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.ParameterizedTypeReference;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-import java.io.IOException;
+import javax.inject.Inject;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-public class OrderServiceTest {
-    @Autowired
+@MicronautTest
+public class OrderServiceTest extends AbstractTest {
+    @Inject
     private OrdersService ordersService;
 
-    @Autowired
-    private OrdersConfigurationProperties config;
+    @Inject
+    private PaymentClient paymentClient;
 
-    @MockBean
+    @Inject
+    private OrdersPublisher ordersPublisher;
+
+    @Inject
     private CustomerOrderRepository customerOrderRepository;
-
-    @MockBean
-    private AsyncGetService asyncGetService;
-
-    @MockBean
-    private MessagingService messagingService;
 
     @Value(value = "${http.timeout:5}")
     private long timeout;
 
+    @Inject
+    private RxHttpClient httpClient;
 
     NewOrderResource orderPayload = new NewOrderResource(
             URI.create("http://user/customers/1"),
@@ -77,235 +87,146 @@ public class OrderServiceTest {
     PaymentResponse payment_authorized = new PaymentResponse(true, "Payment authorized");
 
     @Test
-    public void normalOrdersSucceed() throws IOException, InterruptedException {
+    public void normalOrdersSucceed() {
 
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
 
-        when(asyncGetService.postResource(config.getPaymentUri(), paymentRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(payment_authorized));
+        when(paymentClient.createPayment(paymentRequest))
+                .thenReturn(Flowable.just(payment_authorized));
 
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
+        when(httpClient.retrieve(any(), eq(Card.class)))
+                .thenReturn(Flowable.just(card));
 
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
+        when(httpClient.retrieve(any(), eq(Customer.class)))
+                .thenReturn(Flowable.just(customer));
 
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(items));
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
+
+        when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
+                .thenReturn(Flowable.just(items));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
-        assertThat(ordersService.createNewOrder(orderPayload))
-                .isInstanceOf(CustomerOrder.class);
-
+        assertNotNull(ordersService.placeOrder(orderPayload));
     }
 
     @Test
-    public void highValueOrdersDeclied() throws IOException, InterruptedException {
-
-
+    public void highValueOrdersDeclined() {
         List<Item> expensiveItems = Arrays.asList(new Item("001", "001", 1, 200f));
         PaymentRequest priceyRequest = new PaymentRequest(address, card, customer, 204.99f);
         PaymentResponse payment_unauthorized = new PaymentResponse(false, "Payment unauthorized");
 
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
 
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
+        when(paymentClient.createPayment(priceyRequest))
+                .thenReturn(Flowable.just(payment_unauthorized));
 
-        when(asyncGetService.postResource(config.getPaymentUri(), priceyRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(payment_unauthorized));
+        when(httpClient.retrieve(any(), eq(Card.class)))
+                .thenReturn(Flowable.just(card));
 
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
+        when(httpClient.retrieve(any(), eq(Customer.class)))
+                .thenReturn(Flowable.just(customer));
 
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
 
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(expensiveItems));
+        when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
+                .thenReturn(Flowable.just(expensiveItems));
+
+
+        when(customerOrderRepository.save(any(CustomerOrder.class)))
+                .then(returnsFirstArg());
+
+        assertThrows(OrdersController.PaymentDeclinedException.class,
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
+    }
+
+    @Test
+    public void paymentTimeoutOrdersDeclined() {
+
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
+
+        when(paymentClient.createPayment(paymentRequest))
+                .thenReturn(Flowable.just(payment_authorized).delay(timeout + 1, TimeUnit.SECONDS));
+
+        when(httpClient.retrieve(any(), eq(Card.class)))
+                .thenReturn(Flowable.just(card));
+
+        when(httpClient.retrieve(any(), eq(Customer.class)))
+                .thenReturn(Flowable.just(customer));
+
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
+
+        when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
+                .thenReturn(Flowable.just(items));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.createNewOrder(orderPayload));
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
     }
 
     @Test
-    public void paymentTimeoutOrdersDeclied() throws IOException, InterruptedException {
+    public void timeoutException_rethrown_as_OrderFailedException() {
 
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
 
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
+        when(paymentClient.createPayment(paymentRequest))
+                .thenReturn(Flowable.just(payment_authorized));
 
-        when(asyncGetService.postResource(config.getPaymentUri(), paymentRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(null));
+        when(httpClient.retrieve(any(), eq(Card.class)))
+                .thenReturn(Flowable.just(card));
 
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
+        when(httpClient.retrieve(any(), eq(Customer.class)))
+                .thenReturn(Flowable.just(customer));
 
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
+        when(httpClient.retrieve(any(), eq(Address.class)))
+                .thenReturn(Flowable.just(address));
 
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(items));
+        when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
+                .thenReturn(Flowable.just(items).delay(timeout + 1, TimeUnit.SECONDS));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
+        when(ordersPublisher.dispatchToFulfillment(any(OrderUpdate.class)))
+                .thenAnswer(invocation -> Single.just(invocation.getArgument(0)));
 
-        assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.createNewOrder(orderPayload));
+        assertThrows(OrdersController.OrderFailedException.class,
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
     }
 
-    @Test
-    public void ioException_rethrown_as_IllegalStateException() throws IOException, InterruptedException {
-
-
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
-
-        when(asyncGetService.postResource(config.getPaymentUri(), paymentRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(payment_authorized));
-
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
-
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
-
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenThrow(new IOException());
-
-        when(customerOrderRepository.save(any(CustomerOrder.class)))
-                .then(returnsFirstArg());
-
-
-        assertThrows(IllegalStateException.class,
-                () -> ordersService.createNewOrder(orderPayload));
+    @MockBean(OrdersPublisher.class)
+    OrdersPublisher ordersPublisher() {
+        return mock(OrdersPublisher.class);
     }
 
-    @Test
-    public void interruptedException_rethrown_as_IllegalStateException() throws IOException, InterruptedException {
-
-
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
-
-        when(asyncGetService.postResource(config.getPaymentUri(), paymentRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(payment_authorized));
-
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
-
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
-
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenThrow(new InterruptedException());
-
-        when(customerOrderRepository.save(any(CustomerOrder.class)))
-                .then(returnsFirstArg());
-
-
-        assertThrows(IllegalStateException.class,
-                () -> ordersService.createNewOrder(orderPayload));
+    @MockBean(ShipmentsListener.class)
+    ShipmentsListener shipmentsListener() {
+        return mock(ShipmentsListener.class);
     }
 
-    @Test
-    public void timeoutException_rethrown_as_IllegalStateException() throws IOException, InterruptedException {
-
-
-        when(asyncGetService.getObject(orderPayload.address,
-                new ParameterizedTypeReference<Address>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(address));
-
-        when(asyncGetService.postResource(config.getPaymentUri(), paymentRequest,
-                new ParameterizedTypeReference<PaymentResponse>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(payment_authorized));
-
-        when(asyncGetService.getObject(orderPayload.card,
-                new ParameterizedTypeReference<Card>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(card));
-
-        when(asyncGetService.getObject(orderPayload.customer,
-                new ParameterizedTypeReference<Customer>() {
-                }))
-                .thenReturn(CompletableFuture.completedFuture(customer));
-
-        when(asyncGetService.getDataList(orderPayload.items,
-                new ParameterizedTypeReference<List<Item>>() {
-                }))
-                .thenReturn(Executors.newSingleThreadExecutor().submit(
-                        () -> {
-                            Thread.sleep((timeout * 1000) + 1000);
-                            return items;
-                        }
-                ));
-
-        when(customerOrderRepository.save(any(CustomerOrder.class)))
-                .then(returnsFirstArg());
-
-        assertThrows(IllegalStateException.class,
-                () -> ordersService.createNewOrder(orderPayload));
-
+    @MockBean(RxHttpClient.class)
+    RxHttpClient httpClient(){
+        return mock(RxHttpClient.class);
     }
 
+    @MockBean(PaymentClient.class)
+    PaymentClient paymentClient() {
+        return mock(PaymentClient.class);
+    }
 
+    @MockBean(CustomerOrderRepository.class)
+    CustomerOrderRepository customerOrderRepository() {
+        return mock(CustomerOrderRepository.class);
+    }
 }

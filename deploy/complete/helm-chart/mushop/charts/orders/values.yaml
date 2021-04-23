@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/oracle/ateam/mushop-orders
-  tag: 2.2.2
-  pullPolicy: IfNotPresent
+  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders
+  tag: 1.0.0-SNAPSHOT
+  pullPolicy: Always
 
 dbtools:
   repository: iad.ocir.io/oracle/ateam/mushop-dbtools
@@ -13,6 +13,7 @@ dbtools:
 osb: {}
 
 secrets:
+  oadbId:
   oadbService:
   oadbUser:
   oadbPassword:
@@ -27,3 +28,6 @@ env:
   shippedOrdersSubject: mushop-shipments
 service:
   port: 80
+
+rbac:
+  create: true

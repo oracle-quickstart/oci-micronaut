@@ -5,11 +5,10 @@
 package  mushop.orders.entities;
 
 
-import org.springframework.data.annotation.CreatedDate;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.data.annotation.DateCreated;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -35,23 +34,29 @@ public class CustomerOrder implements Serializable{
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
+	@Nullable
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
+	@Nullable
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @Nullable
     private Card card;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @Nullable
     private Collection<Item> items;
 
+
     @OneToOne(cascade = CascadeType.ALL)
+    @Nullable
     private Shipment shipment;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
+    @DateCreated
     private Date orderDate = Calendar.getInstance().getTime();
 
     private Float total;
@@ -85,6 +90,7 @@ public class CustomerOrder implements Serializable{
 		this.id = id;
 	}
 
+	@Nullable
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -93,6 +99,7 @@ public class CustomerOrder implements Serializable{
 		this.customer = customer;
 	}
 
+	@Nullable
 	public Address getAddress() {
 		return address;
 	}
@@ -101,6 +108,7 @@ public class CustomerOrder implements Serializable{
 		this.address = address;
 	}
 
+	@Nullable
 	public Card getCard() {
 		return card;
 	}
@@ -109,6 +117,7 @@ public class CustomerOrder implements Serializable{
 		this.card = card;
 	}
 
+	@Nullable
 	public Collection<Item> getItems() {
 		return items;
 	}
@@ -117,6 +126,7 @@ public class CustomerOrder implements Serializable{
 		this.items = items;
 	}
 
+	@Nullable
 	public Shipment getShipment() {
 		return shipment;
 	}

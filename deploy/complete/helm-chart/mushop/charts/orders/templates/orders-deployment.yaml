@@ -21,35 +21,29 @@ spec:
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
         prometheus.io/scrape: "true"
-        prometheus.io/path: /actuator/prometheus
-        prometheus.io/port: "80"
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "8082"
     spec:
-      initContainers:
-        {{- include "orders.init.wallet" . | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+            - containerPort: 8082
           livenessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 15
-            failureThreshold: 5
             httpGet:
-              path: /actuator/health/liveness
-              port: http
+              port: 8082
+              path: /health/liveness
+            initialDelaySeconds: 5
+            failureThreshold: 10
           readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 5
             httpGet:
-              path: /actuator/health/readiness
-              port: http
-
+              port: 8082
+              path: /health/readiness
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            failureThreshold: 10
           env:
-            - name: ZIPKIN
-              value: {{ .Values.env.zipkin }}
             - name: JAVA_OPTS
               value: {{ .Values.env.javaOpts }}
             - name: NATS_HOST
@@ -61,14 +55,12 @@ spec:
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
             {{- include "orders.oadb.connection" . | nindent 12 }}
+            {{- include "carts.oapm.connection" . | nindent 12 }}
+            {{- include "carts.oims.config" . | nindent 12 }}
           volumeMounts:
             - mountPath: /tmp
               name: tmp-volume
-            {{- include "orders.mount.wallet" . | nindent 12 }}
-      volumes:
-        - name: tmp-volume
-          emptyDir:
-            medium: Memory
-        {{- include "orders.volumes" . | nindent 8 }}
+      imagePullSecrets:
+        - name: oci-secret
       nodeSelector:
           beta.kubernetes.io/os: linux

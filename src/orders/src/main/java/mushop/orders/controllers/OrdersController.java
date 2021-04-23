@@ -11,6 +11,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Status;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.reactivex.Single;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
@@ -31,7 +32,7 @@ public class OrdersController {
 
     @Status(HttpStatus.CREATED)
     @Post
-    public CustomerOrder newOrder(@Body NewOrderResource newOrderResource) {
+    public Single<CustomerOrder> newOrder(@Body NewOrderResource newOrderResource) {
         if (newOrderResource.address == null || newOrderResource.customer == null || newOrderResource.card == null || newOrderResource.items == null) {
             throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
         }

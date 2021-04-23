@@ -71,7 +71,7 @@ public class OrderControllerTest extends AbstractTest {
     void orderPayload_returns_201() throws Exception {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload))
+        when(ordersService.placeOrder(orderPayload).blockingGet())
                 .thenReturn(order);
 
         assertEquals(HttpStatus.CREATED, httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class)
@@ -82,7 +82,7 @@ public class OrderControllerTest extends AbstractTest {
     void missingCustomer_returns_406(){
         NewOrderResource orderPayload = new NewOrderResource(null, addressURI, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload))
+        when(ordersService.placeOrder(orderPayload).blockingGet())
                 .thenReturn(order);
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
@@ -96,7 +96,7 @@ public class OrderControllerTest extends AbstractTest {
     void missingAddress_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, null, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload))
+        when(ordersService.placeOrder(orderPayload).blockingGet())
                 .thenReturn(order);
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
@@ -110,7 +110,7 @@ public class OrderControllerTest extends AbstractTest {
     void missingCard_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, null, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload))
+        when(ordersService.placeOrder(orderPayload).blockingGet())
                 .thenReturn(order);
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
@@ -124,7 +124,7 @@ public class OrderControllerTest extends AbstractTest {
     void missingCartItems_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, null);
 
-        when(ordersService.placeOrder(orderPayload))
+        when(ordersService.placeOrder(orderPayload).blockingGet())
                 .thenReturn(order);
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {

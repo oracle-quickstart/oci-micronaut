@@ -6,6 +6,7 @@ import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
@@ -16,9 +17,12 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
+import mushop.orders.values.OrderUpdate;
 import mushop.orders.values.PaymentRequest;
 import mushop.orders.values.PaymentResponse;
 import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -41,6 +45,9 @@ public class OrderServiceTest extends AbstractTest {
 
     @Inject
     private PaymentClient paymentClient;
+
+    @Inject
+    private OrdersPublisher ordersPublisher;
 
     @Inject
     private CustomerOrderRepository customerOrderRepository;
@@ -107,7 +114,7 @@ public class OrderServiceTest extends AbstractTest {
     }
 
     @Test
-    public void highValueOrdersDeclied() {
+    public void highValueOrdersDeclined() {
         List<Item> expensiveItems = Arrays.asList(new Item("001", "001", 1, 200f));
         PaymentRequest priceyRequest = new PaymentRequest(address, card, customer, 204.99f);
         PaymentResponse payment_unauthorized = new PaymentResponse(false, "Payment unauthorized");
@@ -135,11 +142,11 @@ public class OrderServiceTest extends AbstractTest {
                 .then(returnsFirstArg());
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.placeOrder(orderPayload));
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
     }
 
     @Test
-    public void paymentTimeoutOrdersDeclied() {
+    public void paymentTimeoutOrdersDeclined() {
 
         when(httpClient.retrieve(any(), eq(Address.class)))
                 .thenReturn(Flowable.just(address));
@@ -164,7 +171,7 @@ public class OrderServiceTest extends AbstractTest {
 
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.placeOrder(orderPayload));
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
     }
 
     @Test
@@ -191,8 +198,11 @@ public class OrderServiceTest extends AbstractTest {
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
+        when(ordersPublisher.dispatchToFulfillment(any(OrderUpdate.class)))
+                .thenAnswer(invocation -> Single.just(invocation.getArgument(0)));
+
         assertThrows(OrdersController.OrderFailedException.class,
-                () -> ordersService.placeOrder(orderPayload));
+                () -> ordersService.placeOrder(orderPayload).blockingGet());
     }
 
     @MockBean(OrdersPublisher.class)

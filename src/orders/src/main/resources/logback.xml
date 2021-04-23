@@ -13,8 +13,5 @@
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="mushop.orders" level="debug"/>
-    <logger name="io.micronaut.kubernetes" level="debug"/>
-    <logger name="org.testcontainers" level="debug"/>
-    <logger name="io.nats" level="debug"/>
+    <logger name="mushop.orders" level="trace"/>
 </configuration>

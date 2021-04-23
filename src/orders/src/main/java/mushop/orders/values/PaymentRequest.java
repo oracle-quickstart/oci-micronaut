@@ -43,24 +43,27 @@ public class PaymentRequest {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public PaymentRequest setAddress(Address address) {
         this.address = address;
+        return this;
     }
 
     public Card getCard() {
         return card;
     }
 
-    public void setCard(Card card) {
+    public PaymentRequest setCard(Card card) {
         this.card = card;
+        return this;
     }
 
     public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public PaymentRequest setCustomer(Customer customer) {
         this.customer = customer;
+        return this;
     }
 
     public float getAmount() {

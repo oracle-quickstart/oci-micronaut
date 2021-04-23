@@ -178,9 +178,9 @@ public class OrdersService {
                 Calendar.getInstance().getTime(),
                 paymentRequest.getAmount());
 
-        LOG.info("Creating order: " + order);
+        LOG.info("Creating order: {}", order);
         CustomerOrder savedOrder = customerOrderRepository.save(order);
-        LOG.debug("Saved order: " + savedOrder);
+        LOG.debug("Saved order: {}", savedOrder);
         return savedOrder;
     }
 

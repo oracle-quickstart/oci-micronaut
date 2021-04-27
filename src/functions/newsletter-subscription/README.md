@@ -114,7 +114,7 @@ To test the function through the gateway, use the command below. Make sure to re
 curl -X POST -d '{"email": "youremail@example.com"}'  https://aaaaaaaaa.apigateway.us-ashburn-1.oci.customer-oci.com/newsletter/subscribe
 ```
 
-If everything worked fine, the function will respond with a message similar to this one: 
+If everything worked fine, the function will respond with a message similar to this one:
 
 ```
 {"messageId":"<0cc76573-2b9b-5a22-6032-8b7e7fec8378@example.com>"}

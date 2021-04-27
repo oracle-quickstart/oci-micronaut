@@ -71,6 +71,16 @@ variableGroups:
     - create_vault_policies_for_group
     - user_admin_group_for_vault_policy
 
+  - title: "Newsletter subcrsiption oracle function"
+    variables:
+    - create_oracle_function_newsletter
+    - newsletter_function_approved_email_address
+    - newsletter_function_smtp_endpoint
+    - newsletter_function_docker_image_repository
+    - newsletter_function_docker_image_version
+    - newsletter_function_timeout
+    - newsletter_function_memory
+
   - title: "Cluster Utilities (MuShop Utilities)"
     variables:
     - grafana_enabled
@@ -468,6 +478,68 @@ variables:
         - use_encryption_from_oci_vault
         - create_new_encryption_key
         - create_vault_policies_for_group
+        -
+  # Oracle Cloud Function newsletter
+  create_oracle_function_newsletter:
+    type: boolean
+    title: "Create Oracle Cloud Function for Newsletter subscription"
+    required: true
+    visible: true
+    default: false
+
+  newsletter_function_approved_email_address:
+    type: string
+    required: true
+    title: "Email sender for Newsletter Subscription Function"
+    visible:
+      and:
+        - create_oracle_function_newsletter
+
+  newsletter_function_smtp_endpoint:
+    type: string
+    required: true
+    title: "Oracle Cloud Email Delivery SMTP endpoint"
+    visible:
+      and:
+        - create_oracle_function_newsletter
+
+  newsletter_function_docker_image_repository:
+    type: string
+    required: true
+    title: "Newsletter subscription function docker image repository."
+    visible:
+      and:
+        - create_oracle_function_newsletter
+
+  newsletter_function_docker_image_version:
+    type: string
+    required: true
+    title: "Newsletter subscription function docker image version."
+    visible:
+      and:
+        - create_oracle_function_newsletter
+
+  newsletter_function_timeout:
+    type: integer
+    required: true
+    min: 1
+    title: "Newsletter subscription function timeout in seconds."
+    visible:
+      and:
+        - create_oracle_function_newsletter
+
+  newsletter_function_memory:
+    type: enum
+    title: "Newsletter subscription function required memory in MiB."
+    enum:
+      - "128"
+      - "256"
+      - "512"
+      - "1024"
+    required: true
+    visible:
+      and:
+        - create_oracle_function_newsletter
 
   # Cluster Utilities
   grafana_enabled:

@@ -1,0 +1,6 @@
+applicationType: function
+defaultPackage: newsletter.subscription
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, gradle, java, junit, oracle-cloud-sdk, oracle-function, readme, shade, slf4j-simple, yaml]

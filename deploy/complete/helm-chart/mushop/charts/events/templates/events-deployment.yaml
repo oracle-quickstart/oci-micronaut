@@ -25,25 +25,26 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/app"]
-          args:
-          - -port=8080
           env:
+            - name: KAFKA_HEALTH_ENABLED
+              value: "false"
             {{- include "events.env.stream" . | nindent 12 }}
+            {{- include "events.oapm.connection" . | nindent 12 }}
+            {{- include "events.oims.config" . | nindent 12 }}
           ports:
-            - name: http
-              containerPort: 8080
+            - containerPort: 8080
           livenessProbe:
-            periodSeconds: 120
+            periodSeconds: 10
+            initialDelaySeconds: 10
             httpGet:
-              path: /health
-              port: http
+              path: /health/liveness
+              port: 8080
           readinessProbe:
             periodSeconds: 10
+            initialDelaySeconds: 10
             httpGet:
-              path: /health
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+              path: /health/readiness
+              port: 8080
+      imagePullSecrets:
+        - name: oci-secret
+

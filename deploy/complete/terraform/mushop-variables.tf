@@ -56,6 +56,9 @@ variable "oos_bucket_name" {
 variable "apm_connection_name" {
   default = "oapm-connection"
 }
+variable "oss_conection" {
+  default = "oss-connection"
+}
 
 ## Deployment details
 variable "oci_deployment" {

@@ -80,6 +80,19 @@ resource "kubernetes_secret" "oadb-connection" {
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 
+### OSS events streaming
+resource "kubernetes_secret" "oss-connection" {
+  metadata {
+    name      = var.oss_conection
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    bootstrapServers    = oci_streaming_stream_pool.stream_pool.kafka_settings.bootstrap_servers
+    jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user.name}/${oci_streaming_stream_pool.stream_pool.id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token.token}\";"
+  }
+  type = "Opaque"
+}
+
 ### OADB Wallet extraction <>
 resource "kubernetes_secret" "oadb_wallet_zip" {
   metadata {

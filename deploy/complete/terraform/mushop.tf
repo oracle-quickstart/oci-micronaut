@@ -33,6 +33,10 @@ resource "helm_release" "mushop" {
     name  = "global.oadbWalletSecret"
     value = var.db_wallet_name
   }
+  set {
+    name  = "global.ossConnectionSecret"
+    value = var.oss_conection
+  }
   # set {
   #   name  = "global.oosBucketSecret" # Commented until come with solution to gracefull removal of objects when terraform destroy
   #   value = var.oos_bucket_name
@@ -43,7 +47,7 @@ resource "helm_release" "mushop" {
   }
   set {
     name  = "tags.streaming"
-    value = var.mushop_mock_mode_all ? false : false
+    value = var.mushop_mock_mode_all ? false : true
   }
 
   depends_on = [helm_release.ingress_nginx] # Ugly workaround because of the oci pvc provisioner not be able to wait for the node be active and retry.

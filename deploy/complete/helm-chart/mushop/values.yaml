@@ -11,6 +11,7 @@ global:
   oosBucketSecret:
   oapmConnectionSecret:
   ociDeploymentConfigMap:
+  ossConnectionSecret:
 
 # Depending on the scenario, certain resources might need to be skipped.
 # For example, --set tags.streaming=false to disable required streaming manifests

@@ -1,0 +1,33 @@
+micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: true
+        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:events}
+        compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
+
+oci:
+  config:
+    instance-principal:
+      enabled: true
+
+kafka:
+  bootstrap:
+    servers: ${ORACLECLOUD_KAFKA_BOOTSTRAP_SERVERS}
+  security:
+    protocol: SASL_SSL
+  sasl:
+    mechanism: PLAIN
+    jaas:
+      config: ${ORACLECLOUD_KAFKA_SASL_JAAS_CONFIG}
+
+tracing:
+  zipkin:
+    enabled: true
+    sampler:
+      probability: 1
+    http:
+      url: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}
+      path: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}
+    supportsJoin: false

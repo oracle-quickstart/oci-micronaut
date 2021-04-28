@@ -46,56 +46,40 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/* OSS Configurations */}}
 {{- define "events.env.stream" -}}
-{{- if ne .Values.global.mock.service "all" }}
-{{- $globalOsb := index (.Values.global | default .) "osb" -}}
-{{- $usesOsb := (index .Values.global "osb").oss  -}}
-{{- $bindingSecret := printf "%s-oss-binding" ($globalOsb.instanceName | default "mushop") -}}
-{{- $streamSecret := (and $usesOsb $bindingSecret) | default .Values.global.ossStreamSecret | default (printf "%s-oss-connection" .Release.Name) -}}
-{{- $credentialSecret := required "Value .ociAuthSecret is required!" (.Values.ociAuthSecret | default .Values.global.ociAuthSecret) -}}
-# API credentials
-- name: TENANCY
+{{- $ossConnection := .Values.ossConnectionSecret | default (.Values.global.ossConnectionSecret | default (printf "%s-oss-connection" .Chart.Name)) -}}
+- name: ORACLECLOUD_KAFKA_SASL_JAAS_CONFIG
   valueFrom:
     secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: tenancy
-- name: REGION
+      name: {{ $ossConnection }}
+      key: jaasConfig
+- name: ORACLECLOUD_KAFKA_BOOTSTRAP_SERVERS
   valueFrom:
     secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: region
-      optional: true
-- name: USER_ID
-  valueFrom:
-    secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: user
-- name: PRIVATE_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: privatekey
-- name: FINGERPRINT
-  valueFrom:
-    secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: fingerprint
-- name: PASSPHRASE
-  valueFrom:
-    secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: passphrase
-      optional: true
-# Stream connection
-- name: STREAM_ID
-  valueFrom:
-    secretKeyRef:
-      name: {{ $streamSecret }}
-      key: streamId
-- name: MESSAGES_ENDPOINT
-  valueFrom:
-    secretKeyRef:
-      name: {{ $streamSecret }}
-      key: messageEndpoint
-      optional: true
+      name: {{ $ossConnection }}
+      key: bootstrapServers
 {{- end -}}
+
+{{/* OAPM Connection url */}}
+{{- define "events.oapm.connection" -}}
+{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Chart.Name)) -}}
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_url
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_path
+{{- end -}}
+
+{{/* OIMS configuration */}}
+{{- define "events.oims.config" -}}
+{{- $ociDeployment := .Values.ociDeploymentConfigMap | default (.Values.global.ociDeploymentConfigMap | default (printf "%s-oci-deployment" .Chart.Name)) -}}
+- name: ORACLECLOUD_METRICS_COMPARTMENT_ID
+  valueFrom:
+    configMapKeyRef:
+      name: {{ $ociDeployment }}
+      key: compartment_id
 {{- end -}}

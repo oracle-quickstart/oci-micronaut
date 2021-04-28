@@ -87,7 +87,7 @@ resource "kubernetes_secret" "oss-connection" {
     namespace = kubernetes_namespace.mushop_namespace.id
   }
   data = {
-    bootstrapServers    = oci_streaming_stream_pool.stream_pool.kafka_settings.bootstrap_servers
+    bootstrapServers    = oci_streaming_stream_pool.stream_pool.kafka_settings[0].bootstrap_servers
     jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user.name}/${oci_streaming_stream_pool.stream_pool.id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token.token}\";"
   }
   type = "Opaque"

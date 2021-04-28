@@ -42,13 +42,13 @@ resource "oci_identity_group" "events_streaming_user_group" {
   name = "events-stream-${local.app_name_normalized}${random_string.deploy_id.result}-user-group"
 }
 
-resource "oci_identity_user_group_membership" "fn_email_user_group_membership" {
+resource "oci_identity_user_group_membership" "events_streaming_user_group_membership" {
   #Required
   group_id = oci_identity_group.events_streaming_user_group.id
   user_id = oci_identity_user.events_streaming_user.id
 }
 
-resource "oci_identity_policy" "fn_email_user_group_policy" {
+resource "oci_identity_policy" "events_streaming_user_group_policy" {
   name = "events-streaming-${local.app_name_normalized}-${random_string.deploy_id.result}-group-policy"
   description = "policy created for ${var.app_name} events streaming"
   compartment_id = var.compartment_ocid

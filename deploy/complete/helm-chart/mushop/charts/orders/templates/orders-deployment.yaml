@@ -55,11 +55,8 @@ spec:
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
             {{- include "orders.oadb.connection" . | nindent 12 }}
-            {{- include "carts.oapm.connection" . | nindent 12 }}
-            {{- include "carts.oims.config" . | nindent 12 }}
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp-volume
+            {{- include "orders.oapm.connection" . | nindent 12 }}
+            {{- include "orders.oims.config" . | nindent 12 }}
       imagePullSecrets:
         - name: oci-secret
       nodeSelector:

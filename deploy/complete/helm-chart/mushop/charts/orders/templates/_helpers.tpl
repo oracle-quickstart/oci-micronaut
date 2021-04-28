@@ -166,7 +166,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/* OAPM Connection url */}}
-{{- define "carts.oapm.connection" -}}
+{{- define "orders.oapm.connection" -}}
 {{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Chart.Name)) -}}
 - name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
   valueFrom:
@@ -181,7 +181,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/* OIMS configuration */}}
-{{- define "carts.oims.config" -}}
+{{- define "orders.oims.config" -}}
 {{- $ociDeployment := .Values.ociDeploymentConfigMap | default (.Values.global.ociDeploymentConfigMap | default (printf "%s-oci-deployment" .Chart.Name)) -}}
 - name: ORACLECLOUD_METRICS_COMPARTMENT_ID
   valueFrom:

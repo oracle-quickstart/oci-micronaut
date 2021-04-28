@@ -37,6 +37,19 @@ resource "helm_release" "mushop" {
     name  = "global.ossConnectionSecret"
     value = var.oss_conection
   }
+  set {
+    name  = "global.oapmConnectionSecret"
+    value = var.apm_connection_name
+  }
+  set {
+    name  = "global.ociDeploymentConfigMap"
+    value = var.oci_deployment
+  }
+  set {
+    name = "global.test"
+    value = var.oci_deployment
+  }
+  }
   # set {
   #   name  = "global.oosBucketSecret" # Commented until come with solution to gracefull removal of objects when terraform destroy
   #   value = var.oos_bucket_name

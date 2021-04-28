@@ -120,14 +120,6 @@ resource "oci_core_internet_gateway" "fn_vcn_ig" {
   enabled = true
 }
 
-data "oci_core_services" "all_services" {
-  filter {
-    name = "name"
-    values = [
-      "All .* Services In Oracle Services Network"]
-    regex = true
-  }
-}
 
 resource "oci_core_service_gateway" "fn_vcn_service_gw" {
   compartment_id = var.compartment_ocid
@@ -236,10 +228,6 @@ resource "oci_functions_application" "fn_mushop_application" {
 data "oci_functions_application" "fn_mushop_application" {
   #Required
   application_id = oci_functions_application.fn_mushop_application.id
-
-  #Optional
-  id = oci_functions_application.fn_mushop_application.id
-  state = "AVAILABLE"
 }
 
 resource "oci_functions_function" "fn_newsletter_function" {

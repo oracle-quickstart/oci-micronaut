@@ -1,7 +1,13 @@
 package mushop.orders.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micronaut.core.type.Argument;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.data.model.Sort;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
@@ -22,9 +28,14 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -161,9 +172,36 @@ public class OrderControllerTest extends AbstractTest {
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, e.getStatus());
     }
 
+    @Test
+    void customerOrdersWithoutSort_returns_200(){
+        Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
+
+        when(ordersService.searchCustomerOrders("123", any(Pageable.class)))
+                .thenReturn(p);
+
+        HttpResponse<JsonNode> lists = httpClient.exchange(HttpRequest.GET("/orders/search/customer?custId=123"), JsonNode.class).blockingSingle();
+        assertEquals(HttpStatus.OK, lists.getStatus());
+    }
+
+    @Test
+    void customerOrdersWithSort_returns_200(){
+        Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
+
+        when(ordersService.searchCustomerOrders(
+                eq("123"),
+                eq(Pageable.from(0, -1, Sort.of(Sort.Order.desc("orderDate", true))))))
+                .thenReturn(p);
+
+        HttpResponse<JsonNode> response = httpClient.exchange(HttpRequest.GET("/orders/search/customer?custId=123&sort=orderDate,desc"), JsonNode.class).blockingSingle();
+        assertEquals(HttpStatus.OK, response.getStatus());
+        assertTrue(response.body().has("_embedded"));
+        assertTrue(response.body().has("page"));
+        JsonNode jsonNode = response.body().get("_embedded");
+        assertTrue(jsonNode.has("customerOrders"));
+    }
+
     @MockBean(OrdersService.class)
     OrdersService ordersService(){
         return mock(OrdersService.class);
     }
-
 }

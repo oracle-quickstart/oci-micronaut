@@ -4,6 +4,8 @@ import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.core.type.Argument;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
@@ -76,6 +78,11 @@ public class OrdersService {
         }
     }
 
+    public Page<CustomerOrder> searchCustomerOrders(String customerId, Pageable pagable){
+        LOG.info("Searching for {} orders {}", customerId, pagable);
+        return customerOrderRepository.findByCustomerId(customerId, pagable);
+    }
+
     public List<CustomerOrder> listOrders() {
         return customerOrderRepository.findAll();
     }
@@ -145,24 +152,23 @@ public class OrdersService {
                 })).switchMap((orderDetail -> {
                     final PaymentRequest paymentRequest = orderDetail.request;
                     return Single.fromCallable(() -> createOrder(paymentRequest, orderDetail.items))
-                        .subscribeOn(Schedulers.io())
-                        .flatMapPublisher((order) -> {
-                        meterRegistry.summary("orders.amount").record(paymentRequest.getAmount());
-                        DistributionSummary.builder("order.stats")
-                                .serviceLevelObjectives(10d, 20d, 30d, 40d, 50d, 60d, 70d, 80d, 90d, 100d, 110d)
-                                //.publishPercentileHistogram()
-                                .maximumExpectedValue(120d)
-                                .minimumExpectedValue(5d)
-                                .register(meterRegistry)
-                                .record(paymentRequest.getAmount());
+                            .subscribeOn(Schedulers.io())
+                            .flatMapPublisher((order) -> {
+                                meterRegistry.summary("orders.amount").record(paymentRequest.getAmount());
+                                DistributionSummary.builder("order.stats")
+                                        .serviceLevelObjectives(10d, 20d, 30d, 40d, 50d, 60d, 70d, 80d, 90d, 100d, 110d)
+                                        //.publishPercentileHistogram()
+                                        .maximumExpectedValue(120d)
+                                        .minimumExpectedValue(5d)
+                                        .register(meterRegistry)
+                                        .record(paymentRequest.getAmount());
 
-                        OrderUpdate update = new OrderUpdate(order.getId(), null);
-                            return ordersPublisher.dispatchToFulfillment(update)
-                                .flatMapPublisher(orderUpdate -> {
-                                    LOG.info("Order {} sent for fulfillment: {}", order, update);
-                                    return Flowable.just(order);
-                                });
-                    });
+                                OrderUpdate update = new OrderUpdate(order.getId(), null);
+                                ordersPublisher.dispatchToFulfillment(update);
+                                LOG.info("Order {} sent for fulfillment: {}", order, update);
+                                return Flowable.just(order);
+
+                            });
                 })).firstOrError();
     }
 

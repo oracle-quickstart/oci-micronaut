@@ -38,7 +38,7 @@ datasources:
     url: ${JDBC_URL}
     username: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
-    dialect: ${JDBC_DIALECT}
+    dialect: ${JDBC_DIALECT:oracle}
 
 jpa:
   default:

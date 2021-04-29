@@ -1,6 +1,12 @@
 micronaut:
   application:
     name: payment
+  server:
+    thread-selection: io
+    executors:
+      io:
+        n-threads: 75
+        type: fixed
   metrics:
     enabled: true
     export:

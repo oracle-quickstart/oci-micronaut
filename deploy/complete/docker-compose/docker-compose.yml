@@ -2,171 +2,48 @@ version: "3"
 
 services:
 #  # Edge router application entrypoint
-#  edge-router:
-#    image: iad.ocir.io/oracle/ateam/mushop-edge-router:1.1.0
-#    hostname: edge-router
-#    restart: always
-#    ports:
-#      - "81:8080"
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    environment:
-#      - reschedule=on-node-failure
-#
-#  # Storefront application middleware
-#  api:
-#    image: iad.ocir.io/oracle/ateam/mushop-api:2.1.0
-#    hostname: api
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    ports:
-#      - "8080:80"
-#    environment:
-#      - reschedule=on-node-failure
-#      - PORT=3000
-#      - SESSION_REDIS=session-db
-#      - CATALOGUE_URL=http://catalogue
-#      - CARTS_URL=http://carts
-#      - ORDERS_URL=http://orders
-#      - USERS_URL=http://user
-#      - STATIC_MEDIA_URL=${STATIC_MEDIA_URL:-/assets}
-#      - NEWSLETTER_SUBSCRIBE_URL
-#      - MOCK_MODE=catalogue
-#      - DEBUG=true
-#
-#  # Static media assets
-#  assets:
-#    image: iad.ocir.io/oracle/ateam/mushop-assets:1.0.0
-#    hostname: assets
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    environment:
-#      - reschedule=on-node-failure
-#      - PORT=3000
-#      - BUCKET_PAR
-#      - REGION
-#
-#  # Redis session DB
-#  session-db:
-#    image: redis:alpine
-#    hostname: session-db
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#      - CHOWN
-#      - SETGID
-#      - SETUID
-#      - DAC_OVERRIDE
-#    read_only: true
-#    tmpfs:
-#      - /tmp:rw,noexec,nosuid
-#    environment:
-#      - reschedule=on-node-failure
-#
-#  # Storefront backend API service
-#  storefront:
-#    image: iad.ocir.io/oracle/ateam/mushop-storefront:2.1.1
-#    hostname: storefront
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#      - CHOWN
-#      - SETGID
-#      - SETUID
-#    read_only: true
-#    tmpfs:
-#      - /tmp:rw,noexec,nosuid
-#    environment:
-#      - reschedule=on-node-failure
-#
-#  # OCI Catalog service
-#  catalogue:
-#    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue:1.0.0-SNAPSHOT
-#    hostname: catalogue
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    environment:
-#      - reschedule=on-node-failure
-#      - OADB_USER
-#      - OADB_PW
-#      - OADB_SERVICE=mock
-#
-#  # OCI Carts service
-#  carts:
-#    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:1.0.0-SNAPSHOT
-#    ports:
-#      - 8086:80
-#    hostname: carts
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    tmpfs:
-#      - /tmp:rw,noexec,nosuid
-#    environment:
-#      - OADB_USER
-#      - OADB_PW
-#      - OADB_SERVICE=mock
-#      - JAVA_OPTS=-Xms64m -Xmx128m -XX:+UseG1GC -Dlogging.level.mushop.carts=TRACE  -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
-#
-#  # OCI Orders service
-#  orders:
-#    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders:1.0.0-SNAPSHOT
-#    ports:
-#      - 8085:80
-#    hostname: orders
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
-#    tmpfs:
-#      - /tmp:rw,noexec,nosuid
-#    environment:
-#      - NATS_HOST=nats
-#      - NATS_PORT=4222
-#      - ORDERS_NEW=mushop-orders
-#      - ORDERS_SHIPPED=mushop-shipments
-#      - OADB_USER
-#      - OADB_PW
-#      - OADB_SERVICE=mock
-#      - JAVA_OPTS=-Xms32m -Xmx128m -XX:MaxRAM=128m -Dlogging.level.mushop.orders=INFO -Djava.security.egd=file:/dev/urandom -Doracle.jdbc.fanEnabled=false -XX:+UnlockExperimentalVMOptions -XX:+UseZGC
-#
-#  payment:
-#    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment:1.0.0-SNAPSHOT
-#    hostname: payment
-#    restart: always
-#    cap_drop:
-#      - all
-#    cap_add:
-#      - NET_BIND_SERVICE
-#    read_only: true
+  edge-router:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/edge-router:1.1.0
+    hostname: edge-router
+    restart: always
+    ports:
+      - "81:8080"
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    environment:
+      - reschedule=on-node-failure
 
-  user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user:1.0.0-SNAPSHOT
-    hostname: user
+  # Storefront application middleware
+  api:
+    image: iad.ocir.io/oracle/ateam/mushop-api:2.1.0
+    hostname: api
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    ports:
+      - "8080:80"
+    environment:
+      - reschedule=on-node-failure
+      - PORT=3000
+      - SESSION_REDIS=session-db
+      - CATALOGUE_URL=http://catalogue:8080
+      - CARTS_URL=http://carts:8080
+      - ORDERS_URL=http://orders:8082
+      - USERS_URL=http://user:8080
+      - STATIC_MEDIA_URL=${STATIC_MEDIA_URL:-/assets}
+      - NEWSLETTER_SUBSCRIBE_URL
+      - MOCK_MODE=catalogue
+      - DEBUG=true
+
+  # Static media assets
+  assets:
+    image: iad.ocir.io/oracle/ateam/mushop-assets:1.0.0
     restart: always
     cap_drop:
       - all
@@ -174,16 +51,183 @@ services:
       - NET_BIND_SERVICE
     read_only: true
     environment:
-      - OADB_USER=mock
-      - OADB_PW=mock
-      - OADB_SERVICE=mock
+      - reschedule=on-node-failure
+      - PORT=3000
+      - BUCKET_PAR
+      - REGION
+
+  # Redis session DB
+  session-db:
+    image: redis:alpine
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    environment:
+      - reschedule=on-node-failure
+#
+  # Storefront backend API service
+  storefront:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/storefront:2.1.2
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    environment:
+      - reschedule=on-node-failure
+
+  # OCI Catalog service
+  catalogue:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue:1.0.0-SNAPSHOT
+    restart: always
+    depends_on:
+      - oracledbcatalogue
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    environment:
+      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledbcatalogue:1521:xe
+      - JDBC_USERNAME=system
+      - JDBC_PASSWORD=oracle
+      - JDBC_DIALECT=oracle
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
+
+  # OCI Carts service
+  carts:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:1.0.2-SNAPSHOT
+    restart: always
+    depends_on:
+      - oracledbcarts
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    environment:
+      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledbcarts:1521:xe
+      - JDBC_USERNAME=system
+      - JDBC_PASSWORD=oracle
+      - JDBC_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - SODA_CREATE_USERNAME=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
+
+  # OCI Orders service
+  orders:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders:1.0.0-SNAPSHOT
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    depends_on:
+      - oracledborders
+    environment:
+      - NATS_HOST=nats
+      - NATS_PORT=4222
+      - ORDERS_NEW=mushop-orders
+      - ORDERS_SHIPPED=mushop-shipments
+      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledborders:1521:xe
+      - JDBC_USERNAME=system
+      - JDBC_PASSWORD=oracle
+      - JDBC_DIALECT=oracle
+      - MICRONAUT_HTTP_SERVICES_USERS_URL=http://user:8080
+      - MICRONAUT_HTTP_SERVICES_CARTS_URL=http://carts:8080
+      - MICRONAUT_HTTP_SERVICES_PAYMENT_URL=http://payment:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
+
+  # User service
+  user:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user:1.0.0-SNAPSHOT
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    depends_on:
+      - oracledbuser
+    environment:
+      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledbuser:1521:xe
+      - JDBC_USERNAME=system
+      - JDBC_PASSWORD=oracle
+      - JDBC_DIALECT=oracle
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
+
+  # Payment service
+  payment:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment:1.0.0-SNAPSHOT
+    restart: always
+    cap_drop:
+      - all
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
+
+  # Fulfillment service
+  fulfillment:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:1.0.0-SNAPSHOT
+    restart: always
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    depends_on:
+      - nats
+    environment:
+      - NATS_HOST=nats
+      - NATS_PORT=4222
+      - ORDERS_NEW=mushop-orders
+      - ORDERS_SHIPPED=mushop-shipments
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "5"
 
   nats:
-    image: nats:2.1.2
-    ports:
-      - 4222:4222
-      - 6222:6222
-      - 8222:8222
+    image: nats:2.2
     hostname: nats
     restart: always
     cap_drop:
@@ -192,30 +236,21 @@ services:
       - NET_BIND_SERVICE
     read_only: true
 
-# Fulfillment service
-  fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:1.0.0-SNAPSHOT
-    ports: 
-      - 8082:80
-    hostname: fulfillment
+  oracledbcarts:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
     restart: always
-    read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
-    environment:
-      - NATS_HOST=nats
-      - NATS_PORT=4222
-      - ORDERS_NEW=mushop-orders
-      - ORDERS_SHIPPED=mushop-shipments
 
-  oracle-db:
-    image: registry.gitlab.com/micronaut-projects/micronaut-graal-tests/oracle-database:18.4.0-xe
-    hostname: oracledb
+  oracledbuser:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
     restart: always
-    environment:
-      - ORACLE_PWD=micronaut.1
-    ports:
-      - 1521:1521
+
+  oracledbcatalogue:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
+    restart: always
+
+  oracledborders:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
+    restart: always
 
 # system : oracle
 

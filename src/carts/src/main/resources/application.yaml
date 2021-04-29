@@ -11,6 +11,25 @@ micronaut:
       oraclecloud:
         enabled: false
 
+datasources:
+  default:
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    driverClassName: ${JDBC_DRIVER_CLASS_NAME}
+    data-source-properties:
+      oracle:
+        jdbc:
+          fanEnabled: false
+    # Optimization: cache collection metadata to avoid extra roundtrips
+    # to the database when opening a collection
+    soda:
+      properties:
+        sharedMetadataCache: true
+      create-soda-user: ${SODA_CREATE_USERNAME:false}
+      create-collections:
+        - ${carts.collection}
+
 endpoints:
   prometheus:
     sensitive: false

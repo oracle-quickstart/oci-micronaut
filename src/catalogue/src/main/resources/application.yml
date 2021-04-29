@@ -31,10 +31,14 @@ endpoints:
 
 datasources:
   default:
-    dialect: oracle
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    dialect: ${JDBC_DIALECT}
+
 flyway:
   datasources:
     default:
-      enabled: true
+      locations: classpath:db/migration
       baseline-version: 0
       baseline-on-migrate: true

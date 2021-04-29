@@ -33,6 +33,13 @@ mushop:
 nats.addresses:
   - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
 
+datasources:
+  default:
+    url: ${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+    dialect: ${JDBC_DIALECT}
+
 jpa:
   default:
     properties:

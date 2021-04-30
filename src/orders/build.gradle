@@ -28,16 +28,16 @@ dependencies {
   implementation("io.micronaut:micronaut-runtime")
 
   // Kubernetes service discovery
-  implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.1")
+  implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
   // Swagger
   implementation("io.swagger.core.v3:swagger-annotations")
 
   // Metrics
   implementation("io.micronaut:micronaut-management")
-  implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
+  implementation("io.micronaut.micrometer:micronaut-micrometer-core")
   implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.1")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
   // Tracing
   implementation("io.micronaut:micronaut-tracing")
@@ -48,7 +48,7 @@ dependencies {
   // ATP db access
   implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
   implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.1")
+  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
   runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
   runtimeOnly("com.oracle.database.jdbc:ojdbc8")
   runtimeOnly("com.oracle.database.security:oraclepki:21.1.0.0")

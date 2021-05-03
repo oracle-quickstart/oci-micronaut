@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  carts:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:1.0.2-SNAPSHOT
+    hostname: carts
+    restart: always
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid
+    environment:
+      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledbcarts:1521:xe
+      - DATASOURCES_DEFAULT_USERNAME=system
+      - DATASOURCES_DEFAULT_PASSWORD=oracle
+      - SODA_CREATE_USERNAME=true
+    ports:
+      - "8080:80"
+    depends_on:
+      - oracledbcarts
+  oracledbcarts:
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
+    restart: always

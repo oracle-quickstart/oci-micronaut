@@ -58,18 +58,18 @@ public class User {
     private OffsetDateTime updatedAt;
 
     @Default
-    public User(String username, String password, String firstName, String lastName, String email, String phone, @Nullable List<UserAddress> addresses) {
+    public User(String username, String password, String firstName, String lastName, String email, @Nullable String phone, @Nullable List<UserAddress> addresses) {
         this.password = password;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.addresses = addresses == null ? Collections.emptyList() : addresses;
+        this.addresses = addresses;
     }
 
     @Creator
-    public User(String username, String password, String firstName, String lastName, String email, String phone, String salt) {
+    public User(String username, String password, String firstName, String lastName, String email, @Nullable String phone, String salt) {
         this(username, password, firstName, lastName, email, phone, Collections.emptyList());
         this.salt = salt;
     }
@@ -133,6 +133,7 @@ public class User {
         return email;
     }
 
+    @Nullable
     public void setEmail(@Nullable String email) {
         this.email = email;
     }
@@ -142,6 +143,7 @@ public class User {
         return phone;
     }
 
+    @Nullable
     public void setPhone(@Nullable String phone) {
         this.phone = phone;
     }

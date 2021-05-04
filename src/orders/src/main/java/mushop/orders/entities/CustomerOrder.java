@@ -1,8 +1,8 @@
 /**
- ** Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
- ** Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ * * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  **/
-package  mushop.orders.entities;
+package mushop.orders.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Nullable;
@@ -17,19 +17,19 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class CustomerOrder implements Serializable{
-	
-	@JsonProperty("orderId")
+public class CustomerOrder implements Serializable {
+
+    @JsonProperty("orderId")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-	@Nullable
+    @Nullable
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
-	@Nullable
+    @Nullable
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -51,164 +51,161 @@ public class CustomerOrder implements Serializable{
     private Date orderDate = Calendar.getInstance().getTime();
 
     private Float total;
-    
+
     public CustomerOrder() {
-		// TODO Auto-generated constructor stub
-	}
-    
-    
+        // TODO Auto-generated constructor stub
+    }
 
-	public CustomerOrder(Long id, Customer customer, Address address, Card card, List<Item> items,
-			Shipment shipment, Date orderDate, Float total) {
-		super();
-		this.id = id;
-		this.customer = customer;
-		this.address = address;
-		this.card = card;
-		this.items = items;
-		this.shipment = shipment;
-		this.orderDate = orderDate;
-		this.total = total;
-	}
 
-	public Long getId() {
-		return id;
-	}
+    public CustomerOrder(Long id, Customer customer, Address address, Card card, List<Item> items,
+                         Shipment shipment, Date orderDate, Float total) {
+        super();
+        this.id = id;
+        this.customer = customer;
+        this.address = address;
+        this.card = card;
+        this.items = items;
+        this.shipment = shipment;
+        this.orderDate = orderDate;
+        this.total = total;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	@Nullable
-	public Customer getCustomer() {
-		return customer;
-	}
-	
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Nullable
-	public Address getAddress() {
-		return address;
-	}
+    @Nullable
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-	@Nullable
-	public Card getCard() {
-		return card;
-	}
+    @Nullable
+    public Address getAddress() {
+        return address;
+    }
 
-	public void setCard(Card card) {
-		this.card = card;
-	}
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	@Nullable
-	public Collection<Item> getItems() {
-		return items;
-	}
+    @Nullable
+    public Card getCard() {
+        return card;
+    }
 
-	public void setItems(Collection<Item> items) {
-		this.items = items;
-	}
+    public void setCard(Card card) {
+        this.card = card;
+    }
 
-	@Nullable
-	public Shipment getShipment() {
-		return shipment;
-	}
+    @Nullable
+    public Collection<Item> getItems() {
+        return items;
+    }
 
-	public void setShipment(Shipment shipment) {
-		this.shipment = shipment;
-	}
+    public void setItems(Collection<Item> items) {
+        this.items = items;
+    }
 
-	public Date getOrderDate() {
-		return orderDate;
-	}
+    @Nullable
+    public Shipment getShipment() {
+        return shipment;
+    }
 
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
+    public void setShipment(Shipment shipment) {
+        this.shipment = shipment;
+    }
 
-	public Float getTotal() {
-		return total;
-	}
+    public Date getOrderDate() {
+        return orderDate;
+    }
 
-	public void setTotal(Float total) {
-		this.total = total;
-	}
-	
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((card == null) ? 0 : card.hashCode());
-		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((items == null) ? 0 : items.hashCode());
-		result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
-		result = prime * result + ((shipment == null) ? 0 : shipment.hashCode());
-		return result;
-	}
+    public Float getTotal() {
+        return total;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CustomerOrder other = (CustomerOrder) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (card == null) {
-			if (other.card != null)
-				return false;
-		} else if (!card.equals(other.card))
-			return false;
-		if (customer == null) {
-			if (other.customer != null)
-				return false;
-		} else if (!customer.equals(other.customer))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (items == null) {
-			if (other.items != null)
-				return false;
-		} else if (!items.equals(other.items))
-			return false;
-		if (orderDate == null) {
-			if (other.orderDate != null)
-				return false;
-		} else if (!orderDate.equals(other.orderDate))
-			return false;
-		if (shipment == null) {
-			if (other.shipment != null)
-				return false;
-		} else if (!shipment.equals(other.shipment))
-			return false;
-		return true;
-	}
+    public void setTotal(Float total) {
+        this.total = total;
+    }
 
-	@Override
-	public String toString() {
-		return "CustomerOrder [id=" + id + ", customer=" + customer + ", address=" + address + ", card=" + card
-				+ ", items=" + items + ", shipment=" + shipment + ", orderDate=" + orderDate + ", total=" + total + "]";
-	}
-    
-    
 
-    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ((card == null) ? 0 : card.hashCode());
+        result = prime * result + ((customer == null) ? 0 : customer.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((items == null) ? 0 : items.hashCode());
+        result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
+        result = prime * result + ((shipment == null) ? 0 : shipment.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CustomerOrder other = (CustomerOrder) obj;
+        if (address == null) {
+            if (other.address != null)
+                return false;
+        } else if (!address.equals(other.address))
+            return false;
+        if (card == null) {
+            if (other.card != null)
+                return false;
+        } else if (!card.equals(other.card))
+            return false;
+        if (customer == null) {
+            if (other.customer != null)
+                return false;
+        } else if (!customer.equals(other.customer))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (items == null) {
+            if (other.items != null)
+                return false;
+        } else if (!items.equals(other.items))
+            return false;
+        if (orderDate == null) {
+            if (other.orderDate != null)
+                return false;
+        } else if (!orderDate.equals(other.orderDate))
+            return false;
+        if (shipment == null) {
+            if (other.shipment != null)
+                return false;
+        } else if (!shipment.equals(other.shipment))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerOrder [id=" + id + ", customer=" + customer + ", address=" + address + ", card=" + card
+                + ", items=" + items + ", shipment=" + shipment + ", orderDate=" + orderDate + ", total=" + total + "]";
+    }
+
+
 }

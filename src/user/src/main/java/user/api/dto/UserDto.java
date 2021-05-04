@@ -1,7 +1,6 @@
 package user.api.dto;
 
 import io.micronaut.core.annotation.Introspected;
-import user.api.dto.UserAddressDto;
 
 import java.util.List;
 

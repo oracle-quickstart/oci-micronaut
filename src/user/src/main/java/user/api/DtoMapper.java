@@ -22,10 +22,25 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "jsr330")
 public abstract class DtoMapper {
 
+    @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "version")
+    @Mapping(ignore = true, target = "cards")
+    @Mapping(ignore = true, target = "createdAt")
+    @Mapping(ignore = true, target = "updatedAt")
     public abstract User fromUserDto(UserDto userDto);
 
+    @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "version")
+    @Mapping(ignore = true, target = "user")
+    @Mapping(ignore = true, target = "createdAt")
+    @Mapping(ignore = true, target = "updatedAt")
     public abstract UserAddress fromUserAddressDto(UserAddressDto userAddressDto);
 
+    @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "version")
+    @Mapping(ignore = true, target = "cards")
+    @Mapping(ignore = true, target = "createdAt")
+    @Mapping(ignore = true, target = "updatedAt")
     public abstract void copyFromUserDto(@MappingTarget User user, UserDto userDto);
 
     public abstract UserAddressDetailDto toUserAddressDetailDto(UserAddress userAddress);

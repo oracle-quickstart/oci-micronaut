@@ -86,7 +86,7 @@ public class UserOperationsController implements UserOperations {
     @Override
     public UserDetailDto getUser(UUID userId) {
         return userRepository.findById(userId)
-                .map(user -> dtoMapper.toUserDetailDto(user, true, true))
+                .map(user -> dtoMapper.toUserDetailDto(user, false, false))
                 .orElseThrow(() -> userNotFoundException(userId));
     }
 

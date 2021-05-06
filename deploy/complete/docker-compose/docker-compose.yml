@@ -18,7 +18,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/oracle/ateam/mushop-api:2.1.0
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api:1.0.0-SNAPSHOT
     hostname: api
     restart: always
     cap_drop:
@@ -29,13 +29,10 @@ services:
     ports:
       - "8080:80"
     environment:
-      - reschedule=on-node-failure
-      - PORT=3000
-      - SESSION_REDIS=session-db
-      - CATALOGUE_URL=http://catalogue:8080
-      - CARTS_URL=http://carts:8080
-      - ORDERS_URL=http://orders:8082
-      - USERS_URL=http://user:8080
+      - MICRONAUT_HTTP_SERVICES_CATALOGUE_URL=http://catalogue:8080
+      - MICRONAUT_HTTP_SERVICES_CARTS_URL=http://carts:8080
+      - MICRONAUT_HTTP_SERVICES_ORDERS_URL=http://orders:8082
+      - MICRONAUT_HTTP_SERVICES_USER_URL=http://user:8080
       - STATIC_MEDIA_URL=${STATIC_MEDIA_URL:-/assets}
       - NEWSLETTER_SUBSCRIBE_URL
       - MOCK_MODE=catalogue
@@ -103,6 +100,7 @@ services:
       - NET_BIND_SERVICE
     read_only: true
     environment:
+      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledbcatalogue:1521:xe
       - DATASOURCES_DEFAULT_USERNAME=system
       - DATASOURCES_DEFAULT_PASSWORD=oracle
@@ -180,10 +178,10 @@ services:
     depends_on:
       - oracledbuser
     environment:
-      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledbuser:1521:xe
-      - JDBC_USERNAME=system
-      - JDBC_PASSWORD=oracle
-      - JDBC_DIALECT=oracle
+      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledbuser:1521:xe
+      - DATASOURCES_DEFAULT_USERNAME=system
+      - DATASOURCES_DEFAULT_PASSWORD=oracle
     logging:
       driver: "json-file"
       options:

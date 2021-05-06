@@ -40,6 +40,9 @@ dependencies {
     runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
+    // Kubernetes service discovery
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+
     // Testing
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")

@@ -29,14 +29,11 @@ services:
     ports:
       - "8080:80"
     environment:
-      - MICRONAUT_HTTP_SERVICES_CATALOGUE_URL=http://catalogue:8080
-      - MICRONAUT_HTTP_SERVICES_CARTS_URL=http://carts:8080
-      - MICRONAUT_HTTP_SERVICES_ORDERS_URL=http://orders:8082
-      - MICRONAUT_HTTP_SERVICES_USER_URL=http://user:8080
-      - STATIC_MEDIA_URL=${STATIC_MEDIA_URL:-/assets}
-      - NEWSLETTER_SUBSCRIBE_URL
-      - MOCK_MODE=catalogue
-      - DEBUG=true
+      - MICRONAUT_HTTP_SERVICES_MUSHOP-CATALOGUE_URL=http://catalogue:8080
+      - MICRONAUT_HTTP_SERVICES_MUSHOP-CARTS_URL=http://carts:8080
+      - MICRONAUT_HTTP_SERVICES_MUSHOP-ORDERS_URL=http://orders:8082
+      - MICRONAUT_HTTP_SERVICES_MUSHOP-USER_URL=http://user:8080
+#      - MICRONAUT_HTTP_SERVICES_MUSHOP_NEWSLETTER_URL=
 
   # Static media assets
   assets:

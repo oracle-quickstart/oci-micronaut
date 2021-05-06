@@ -3,6 +3,7 @@ package api;
 import api.AbstractDatabaseServiceTest.LoginClient;
 import api.services.AuthClient;
 import api.model.Product;
+import api.services.ServiceLocator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
@@ -19,6 +20,7 @@ import io.micronaut.test.support.TestPropertyProvider;
 import io.reactivex.Maybe;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -34,18 +36,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartsServiceTest implements TestPropertyProvider {
-
-    @Container
-    static GenericContainer<?> cartsContainer = new GenericContainer<>(
-            DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:" + getServiceVersion())
-    ).withExposedPorts(8080);
+public class CartsServiceTest extends AbstractDatabaseServiceTest {
 
     private static String sessionID;
-
-    private static String getServiceVersion() {
-        return "1.0.1-SNAPSHOT";
-    }
 
     @BeforeAll
     static void login(LoginClient client) {
@@ -119,14 +112,6 @@ public class CartsServiceTest implements TestPropertyProvider {
         assertEquals(0, cart.size());
     }
 
-    @Nonnull
-    @Override
-    public Map<String, String> getProperties() {
-        return Collections.singletonMap(
-                "micronaut.http.services.carts.url", "http://localhost:" + cartsContainer.getFirstMappedPort()
-        );
-    }
-
     @Client("/api/cart")
     interface CartClient {
         @Get
@@ -175,4 +160,28 @@ public class CartsServiceTest implements TestPropertyProvider {
         }
     }
 
+    @Override
+    protected GenericContainer<?> initService() {
+        return new GenericContainer<>(
+                DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/" + getServiceId() + ":" + getServiceVersion())
+        ).withExposedPorts(getServiceExposedPort())
+                .withNetwork(Network.SHARED)
+                .withEnv(Map.of(
+                        "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
+                        "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
+                        "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword(),
+                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", "oracle.jdbc.OracleDriver",
+                        "SODA_CREATE_USERNAME", "true"
+                ));
+    }
+
+    @Override
+    protected String getServiceId() {
+        return "carts";
+    }
+
+    @Override
+    protected String getServiceVersion() {
+        return "1.0.3-SNAPSHOT";
+    }
 }

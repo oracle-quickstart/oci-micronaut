@@ -113,7 +113,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
     @Override
     public Map<String, String> getProperties() {
         return Collections.singletonMap(
-                "micronaut.http.services.carts.url", "http://localhost:" + cartsContainer.getFirstMappedPort()
+                "micronaut.http.services." + ServiceLocator.CARTS + ".url", "http://localhost:" + cartsContainer.getFirstMappedPort()
         );
     }
 

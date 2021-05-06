@@ -37,7 +37,7 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
         serviceContainer = initService();
         serviceContainer.start();
         return Map.of(
-                "micronaut.http.services." + getServiceId() + ".url", "http://localhost:" + serviceContainer.getFirstMappedPort()
+                "micronaut.http.services.mushop-" + getServiceId() + ".url", "http://localhost:" + serviceContainer.getFirstMappedPort()
         );
     }
 

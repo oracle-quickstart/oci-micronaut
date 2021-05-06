@@ -13,5 +13,6 @@
         <appender-ref ref="STDOUT" />
     </root>
 
+    <logger name="api" level="trace" />
     <logger name="io.micronaut.http" level="trace" />
 </configuration>

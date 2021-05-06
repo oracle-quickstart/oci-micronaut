@@ -26,13 +26,14 @@ import java.util.UUID;
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class OrdersService {
     private static final String USER_ID = "userId";
-    private static final String URI_CART_ITEMS = "/{cartId}/items";
-    private static final String URI_USER_ID = "/{userId}";
-    private static final String URI_USER_ADDRESS = "/{userId}/addresses/{addressId}";
-    private static final String URI_USER_CARD = "/{userId}/cards/{cardId}";
+    private static final String URI_CART_ITEMS = "/carts/{cartId}/items";
+    private static final String URI_USER_ID = "/customers/{userId}";
+    private static final String URI_USER_ADDRESS = "/customers/{userId}/addresses/{addressId}";
+    private static final String URI_USER_CARD = "/customers/{userId}/cards/{cardId}";
     private final OrdersClient client;
     private final UsersClient usersClient;
     private final ServiceLocator serviceLocator;
+
 
     public OrdersService(OrdersClient client, UsersClient usersClient, ServiceLocator serviceLocator) {
         this.client = client;
@@ -71,18 +72,18 @@ public class OrdersService {
         return usersClient.getProfile(userId)
                 .flatMap(userDetails -> serviceLocator.getUsersURL().flatMap(customerURI ->
                         serviceLocator.getCartsURL().flatMap(cartURI -> {
-                    final String customerId = userDetails.getId();
-                    return usersClient.getCards(customerId).firstOrError().flatMap(cardInfo ->
-                            usersClient.getAddresses(customerId).firstOrError().flatMap(addressInfo -> {
-                                OrderRequest orderRequest = new OrderRequest(
-                                        cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
-                                        customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
-                                        customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.getId())),
-                                        customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.getId()))
-                                );
-                                return client.newOrder(orderRequest);
-                            }));
-                })));
+                            final String customerId = userDetails.getId();
+                            return usersClient.getCards(customerId).firstOrError().flatMap(cardInfo ->
+                                    usersClient.getAddresses(customerId).firstOrError().flatMap(addressInfo -> {
+                                        OrderRequest orderRequest = new OrderRequest(
+                                                cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
+                                                customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
+                                                customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.getId())),
+                                                customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.getId()))
+                                        );
+                                        return client.newOrder(orderRequest);
+                                    }));
+                        })));
     }
 
     @Client(id = ServiceLocator.ORDERS, path = "/orders")
@@ -93,7 +94,7 @@ public class OrdersService {
         @Get("/{orderId}")
         Single<Map<String, Object>> getOrder(Long orderId);
 
-        @Post("orders")
+        @Post
         Single<Map<String, Object>> newOrder(@Body OrderRequest orderRequest);
     }
 

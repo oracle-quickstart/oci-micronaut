@@ -100,8 +100,8 @@ public class PlaceOrderTest implements TestPropertyProvider {
         assertNotNull(lastOrder.getCustomer());
         assertNotNull(lastOrder.getItems());
 
-        assertEquals("http://localhost/" + userDetails.getId() + "/addresses/" + addressId, lastOrder.getAddress());
-        assertEquals("http://localhost/" + userDetails.getId() + "/cards/" + cardId, lastOrder.getCard());
+        assertEquals("http://localhost/customers/" + userDetails.getId() + "/addresses/" + addressId, lastOrder.getAddress());
+        assertEquals("http://localhost/customers/" + userDetails.getId() + "/cards/" + cardId, lastOrder.getCard());
     }
 
     @MockBean(AuthClient.class)
@@ -149,7 +149,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
         return new OrdersService.OrdersClient() {
 
             @Override
-            public Single<Map<String, Object>> getOrders(String custId, @Nullable String sort) {
+            public Single<Map<String,Object>> getOrders(String custId, @Nullable String sort) {
                 return Single.just(Collections.emptyMap());
             }
 

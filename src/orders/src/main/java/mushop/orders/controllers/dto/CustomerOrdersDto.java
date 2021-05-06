@@ -15,35 +15,28 @@
  */
 package mushop.orders.controllers.dto;
 
-
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.model.Page;
+import io.micronaut.http.hateoas.AbstractResource;
+import io.micronaut.http.hateoas.Resource;
+import mushop.orders.entities.CustomerOrder;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Emulates spring RepositoryRestResource
- */
 @Introspected
-public class CustomerOrdersDto {
+public class CustomerOrdersDto extends AbstractResource<CustomerOrdersDto> {
 
-    private final Map<String, Object> _embedded;
     private final Map<String, Integer> page;
 
-    public CustomerOrdersDto(Collection<CustomerOrderDto> customerOrders, int size, int totalElements, int totalPages, int number) {
-        this._embedded = new HashMap<>(2);
-        this._embedded.put("customerOrders", customerOrders);
+    public CustomerOrdersDto(Collection<CustomerOrderDto> customerOrders, Page<CustomerOrder> page) {
+        embedded("customerOrders", customerOrders.toArray(new Resource[0]));
         this.page = Map.of(
-                "size", size,
-                "totalElements", totalElements,
-                "totalPages", totalPages,
-                "number", number
+                "size", page.getSize(),
+                "totalElements", page.getNumberOfElements(),
+                "totalPages", page.getTotalPages(),
+                "number", page.getPageNumber()
         );
-    }
-
-    public Map<String, Object> get_embedded() {
-        return _embedded;
     }
 
     public Map<String, Integer> getPage() {

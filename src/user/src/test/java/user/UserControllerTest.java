@@ -39,6 +39,7 @@ public class UserControllerTest {
         assertEquals("bunny@bugs.nnn", userDetail.getEmail());
         assertEquals("12345", userDetail.getPhone());
 
+        userDetail = client.getUser(userDetail.getId());
         assertEquals(2, userDetail.getAddresses().size());
 
         UserAddressDetailDto address1 = userDetail.getAddresses().stream().filter(a -> a.getNumber().equals("123")).findFirst().orElseThrow();

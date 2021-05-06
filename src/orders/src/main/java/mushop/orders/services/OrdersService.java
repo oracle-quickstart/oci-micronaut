@@ -17,8 +17,8 @@ import mushop.orders.client.PaymentClient;
 import mushop.orders.entities.*;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
-import mushop.orders.values.OrderUpdate;
-import mushop.orders.values.PaymentRequest;
+import mushop.orders.resources.OrderUpdate;
+import mushop.orders.resources.PaymentRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

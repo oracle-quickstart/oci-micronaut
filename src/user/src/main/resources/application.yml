@@ -28,10 +28,7 @@ endpoints:
 
 datasources:
   default:
-    url: ${JDBC_URL}
-    username: ${JDBC_USERNAME}
-    password: ${JDBC_PASSWORD}
-    dialect: ${JDBC_DIALECT}
+    dialect: oracle
 
 flyway:
   datasources:

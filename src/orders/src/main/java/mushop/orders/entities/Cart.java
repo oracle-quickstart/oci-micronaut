@@ -4,7 +4,6 @@
  **/
 package  mushop.orders.entities;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-
 
 @Entity
 public class Cart implements Serializable{

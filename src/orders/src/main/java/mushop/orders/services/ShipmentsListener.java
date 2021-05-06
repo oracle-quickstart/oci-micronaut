@@ -16,17 +16,15 @@
 package mushop.orders.services;
 
 import io.micrometer.core.annotation.Counted;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micronaut.nats.annotation.NatsListener;
 import io.micronaut.nats.annotation.Subject;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.repositories.CustomerOrderRepository;
-import mushop.orders.values.OrderUpdate;
+import mushop.orders.resources.OrderUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 /**
  * Fulfilled orders listener.

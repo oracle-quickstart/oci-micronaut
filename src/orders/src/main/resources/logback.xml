@@ -14,4 +14,5 @@
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="mushop.orders" level="trace"/>
+<!--    <logger name="io.micronaut.http.client" level="trace"/>-->
 </configuration>

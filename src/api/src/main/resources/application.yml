@@ -1,0 +1,21 @@
+micronaut:
+  application:
+    name: api
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+    enabled: true
+  security:
+    authentication: session
+    endpoints:
+      logout:
+        path: /api/logout
+        get-allowed: true
+      login:
+        path: /api/login
+  http:
+    client:
+      follow-redirects: false

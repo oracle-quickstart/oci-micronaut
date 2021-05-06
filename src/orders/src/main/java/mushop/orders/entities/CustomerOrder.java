@@ -4,7 +4,6 @@
  **/
 package  mushop.orders.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.DateCreated;
@@ -12,20 +11,12 @@ import io.micronaut.data.annotation.DateCreated;
 import javax.persistence.*;
 import java.io.Serializable;
 
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-// curl -XPOST -H 'Content-type: application/json' http://localhost:8082/orders -d '{"customer":
-// "http://localhost:8080/customer/1", "address": "http://localhost:8080/address/1", "card":
-// "http://localhost:8080/card/1", "items": "http://localhost:8081/carts/1/items"}'
-
-// curl http://localhost:8082/orders/search/customerId\?custId\=1
-
 @Entity
-
 public class CustomerOrder implements Serializable{
 	
 	@JsonProperty("orderId")
@@ -79,8 +70,6 @@ public class CustomerOrder implements Serializable{
 		this.orderDate = orderDate;
 		this.total = total;
 	}
-
-
 
 	public Long getId() {
 		return id;

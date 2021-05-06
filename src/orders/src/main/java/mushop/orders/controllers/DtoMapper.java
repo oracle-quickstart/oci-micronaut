@@ -23,23 +23,21 @@ import mushop.orders.controllers.dto.ItemDto;
 import mushop.orders.entities.Customer;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
+import org.mapstruct.Mapper;
 
 import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Singleton
-public class DtoMapper {
+@Mapper(componentModel = "jsr330")
+public abstract class DtoMapper {
 
-    public CustomerDto toCustomerDto(Customer customer) {
-        return new CustomerDto(
-                customer.getId(),
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getUsername()
-        );
-    }
+    public abstract CustomerDto toCustomerDto(Customer customer);
+
+    public abstract ItemDto toItemDto(Item item);
+
+    public abstract List<ItemDto> toItemDtoList(Collection<Item> items);
 
     public CustomerOrderDto toCustomerOrderDto(CustomerOrder customerOrder) {
         return new CustomerOrderDto(
@@ -59,26 +57,8 @@ public class DtoMapper {
                 .collect(Collectors.toList());
     }
 
-    public ItemDto toItemDto(Item item) {
-        return new ItemDto(
-                item.getId(),
-                item.getItemId(),
-                item.getQuantity(),
-                item.getUnitPrice()
-        );
-    }
-
-    public List<ItemDto> toItemDtoList(Collection<Item> items) {
-        if (items == null) {
-            return null;
-        }
-        return items.stream()
-                .map(this::toItemDto)
-                .collect(Collectors.toList());
-    }
-
     public CustomerOrdersDto toCustomerOrdersDto(Page<CustomerOrder> page) {
-        return new CustomerOrdersDto(toCustomerOrderDtoList(page.getContent()), page.getSize(), page.getNumberOfElements(), page.getTotalPages(), page.getPageNumber());
+        return new CustomerOrdersDto(toCustomerOrderDtoList(page.getContent()), page);
     }
 
 }

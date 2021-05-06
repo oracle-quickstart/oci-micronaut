@@ -20,7 +20,7 @@ import java.util.List;
 
 public class UnitPojo {
     // Configured for expectation, so we know when a class gets added or removed.
-    private static final int EXPECTED_CLASS_COUNT = 8;
+    private static final int EXPECTED_CLASS_COUNT = 7;
 
     // The package to test
     private static final String POJO_PACKAGE = "mushop.orders.entities";

@@ -17,12 +17,10 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
-import mushop.orders.values.OrderUpdate;
-import mushop.orders.values.PaymentRequest;
-import mushop.orders.values.PaymentResponse;
+import mushop.orders.resources.OrderUpdate;
+import mushop.orders.resources.PaymentRequest;
+import mushop.orders.resources.PaymentResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import javax.inject.Inject;
 import java.net.URI;

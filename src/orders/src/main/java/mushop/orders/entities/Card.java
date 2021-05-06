@@ -13,8 +13,6 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
 @Entity
 public class Card implements Serializable{
 

@@ -28,7 +28,9 @@
         <micronaut.micrometer.versio>3.4.0</micronaut.micrometer.versio>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-
+        <micronaut.oraclecloud.version>1.3.4</micronaut.oraclecloud.version>
+        <micronaut.micrometer.version>3.4.0</micronaut.micrometer.version>
+        <micronaut.testcontainers.version>1.15.3</micronaut.testcontainers.version>
         <jdbc.version>21.1.0.0</jdbc.version>
         <soda.version>1.1.4</soda.version>
 <!--        <libs.classpath.prefix>libs</libs.classpath.prefix>-->
@@ -41,11 +43,19 @@
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>sonatype-snapshots</id>-->
-<!--            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>-->
-<!--        </repository>-->
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>        
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc-bom</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${jdbc.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -93,17 +103,14 @@
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>oraclepki</artifactId>
-            <version>${jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>osdt_core</artifactId>
-            <version>${jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>osdt_cert</artifactId>
-            <version>${jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>io.micronaut.sql</groupId>
@@ -118,7 +125,6 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>${jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.soda</groupId>
@@ -175,13 +181,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.15.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>oracle-xe</artifactId>
-            <version>1.15.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>

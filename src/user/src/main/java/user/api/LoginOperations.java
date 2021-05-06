@@ -13,7 +13,7 @@ public interface LoginOperations {
      *
      * @param username The username
      * @param password The password
-     * @return the user object if login is successfull
+     * @return the user object if login is successful
      */
     @Post("/login")
     UserDetailDto login(String username, String password);

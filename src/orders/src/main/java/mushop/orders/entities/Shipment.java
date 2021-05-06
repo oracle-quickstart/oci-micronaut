@@ -10,21 +10,13 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-
-
-
-
-
-
 @Entity
 public class Shipment implements Serializable {
 	
     @Id
     private String id;
     private String name;
-    
-    
-    
+
 	public Shipment() {
 		super();
 	}

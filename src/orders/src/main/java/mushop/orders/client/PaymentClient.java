@@ -5,8 +5,8 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Flowable;
-import mushop.orders.values.PaymentRequest;
-import mushop.orders.values.PaymentResponse;
+import mushop.orders.resources.PaymentRequest;
+import mushop.orders.resources.PaymentResponse;
 
 /**
  * Payment service client.

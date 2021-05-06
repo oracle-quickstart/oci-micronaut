@@ -53,7 +53,7 @@ public class LoginOperationsController implements LoginOperations {
     @Counted("login.success")
     protected UserDetailDto loginSuccessful(User user) {
         LOG.debug("Success: {}", user.getUsername());
-        return dtoMapper.toUserDetailDto(user);
+        return dtoMapper.toSimpleUserDetailDto(user);
     }
 
     @Counted("login.invalid_username")

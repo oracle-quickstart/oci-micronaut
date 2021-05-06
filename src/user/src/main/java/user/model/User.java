@@ -1,5 +1,6 @@
 package user.model;
 
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.AutoPopulated;
 import io.micronaut.data.annotation.DateCreated;
@@ -8,10 +9,12 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
 import io.micronaut.data.annotation.Version;
+import io.micronaut.data.annotation.event.PrePersist;
 import user.PasswordUtils;
 
 import javax.validation.constraints.Email;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,18 +57,27 @@ public class User {
     @DateUpdated
     private OffsetDateTime updatedAt;
 
-    public User() {
-    }
-
-    public User(String username, String passwordToHash, String firstName, String lastName, String email, String phone, List<UserAddress> addresses) {
+    @Default
+    public User(String username, String password, String firstName, String lastName, String email, String phone, @Nullable List<UserAddress> addresses) {
+        this.password = password;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.addresses = addresses;
+        this.addresses = addresses == null ? Collections.emptyList() : addresses;
+    }
+
+    @Creator
+    public User(String username, String password, String firstName, String lastName, String email, String phone, String salt) {
+        this(username, password, firstName, lastName, email, phone, Collections.emptyList());
+        this.salt = salt;
+    }
+
+    @PrePersist
+    void hashPassword() {
         this.salt = PasswordUtils.generateSalt();
-        this.password = PasswordUtils.hash(passwordToHash, salt);
+        this.password = PasswordUtils.hash(password, salt);
     }
 
     public UUID getId() {
@@ -96,16 +108,8 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getSalt() {
         return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getFirstName() {

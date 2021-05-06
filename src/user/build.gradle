@@ -21,15 +21,15 @@ micronaut {
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
-    }
+    mavenLocal()
 }
 
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
 
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-http-client")
@@ -42,10 +42,12 @@ dependencies {
     runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
-    runtimeOnly("com.oracle.database.security:oraclepki:21.1.0.0")
-    runtimeOnly("com.oracle.database.security:osdt_cert:21.1.0.0")
-    runtimeOnly("com.oracle.database.security:osdt_core:21.1.0.0")
+    runtimeOnly("com.oracle.database.security:oraclepki")
+    runtimeOnly("com.oracle.database.security:osdt_cert")
+    runtimeOnly("com.oracle.database.security:osdt_core")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
 
     // Metrics

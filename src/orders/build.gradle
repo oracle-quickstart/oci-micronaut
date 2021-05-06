@@ -1,6 +1,6 @@
 plugins {
   id("com.github.johnrengelman.shadow") version "6.1.0"
-  id("io.micronaut.application") version "1.4.5"
+  id("io.micronaut.application") version "1.5.0"
 }
 
 version = "1.0.0-SNAPSHOT"
@@ -22,6 +22,8 @@ dependencies {
   annotationProcessor("io.micronaut.openapi:micronaut-openapi")
   annotationProcessor("io.micronaut.data:micronaut-data-processor")
   annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
+  annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+  implementation 'org.mapstruct:mapstruct:1.4.2.Final'
   implementation("javax.annotation:javax.annotation-api")
   implementation("io.micronaut:micronaut-validation")
   implementation("io.micronaut:micronaut-http-client")
@@ -37,23 +39,23 @@ dependencies {
   implementation("io.micronaut:micronaut-management")
   implementation("io.micronaut.micrometer:micronaut-micrometer-core")
   implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+  runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
   // Tracing
   implementation("io.micronaut:micronaut-tracing")
   implementation("io.opentracing.brave:brave-opentracing")
-  runtime("io.zipkin.brave:brave-instrumentation-http")
-  runtime("io.zipkin.reporter2:zipkin-reporter")
+  runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
+  runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
   // ATP db access
   implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
   implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-  runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+  runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
   runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
   runtimeOnly("com.oracle.database.jdbc:ojdbc8")
-  runtimeOnly("com.oracle.database.security:oraclepki:21.1.0.0")
-  runtimeOnly("com.oracle.database.security:osdt_cert:21.1.0.0")
-  runtimeOnly("com.oracle.database.security:osdt_core:21.1.0.0")
+  runtimeOnly("com.oracle.database.security:oraclepki")
+  runtimeOnly("com.oracle.database.security:osdt_cert")
+  runtimeOnly("com.oracle.database.security:osdt_core")
   implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
   implementation("io.micronaut.data:micronaut-data-model")
 
@@ -62,7 +64,7 @@ dependencies {
 
   runtimeOnly("ch.qos.logback:logback-classic")
 
-  testImplementation "org.mockito:mockito-core:3.+"
+  testImplementation "org.mockito:mockito-core:3.9.0"
   testImplementation 'com.openpojo:openpojo:0.8.12'
   testImplementation("org.testcontainers:junit-jupiter")
   testImplementation("org.testcontainers:oracle-xe")

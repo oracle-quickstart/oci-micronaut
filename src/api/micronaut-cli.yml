@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: api
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, gradle, http-client, java, java-application, junit, logback, management, micrometer, micrometer-prometheus, netty-server, readme, security-annotations, security-jwt, shade, yaml]

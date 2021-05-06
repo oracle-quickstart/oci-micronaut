@@ -67,7 +67,7 @@ public class UserOperationsController implements UserOperations {
             user.getAddresses().forEach(userAddress -> userAddress.setUser(user));
             userAddressRepository.saveAll(user.getAddresses());
         }
-        return dtoMapper.toUserDetailDto(user);
+        return dtoMapper.toSimpleUserDetailDto(user);
     }
 
     @Timed("user.list")
@@ -76,7 +76,7 @@ public class UserOperationsController implements UserOperations {
     @Override
     public List<UserDetailDto> getUsers() {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(userRepository.findAll().iterator(), Spliterator.ORDERED), false)
-                .map(dtoMapper::toUserDetailDto)
+                .map(dtoMapper::toSimpleUserDetailDto)
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +86,7 @@ public class UserOperationsController implements UserOperations {
     @Override
     public UserDetailDto getUser(UUID userId) {
         return userRepository.findById(userId)
-                .map(dtoMapper::toUserDetailDto)
+                .map(user -> dtoMapper.toUserDetailDto(user, true, true))
                 .orElseThrow(() -> userNotFoundException(userId));
     }
 
@@ -96,7 +96,7 @@ public class UserOperationsController implements UserOperations {
     @Override
     public UserDetailDto getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(dtoMapper::toUserDetailDto)
+                .map(dtoMapper::toSimpleUserDetailDto)
                 .orElseThrow(() -> userNotFoundException(username));
     }
 

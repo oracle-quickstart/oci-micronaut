@@ -4,31 +4,18 @@
  **/
 package mushop.orders.controllers;
 
-import io.micrometer.core.lang.Nullable;
-import io.micronaut.core.annotation.NonNull;
-import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
-import io.micronaut.data.model.Sort;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.http.annotation.Status;
+import io.micronaut.http.annotation.*;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.transaction.annotation.ReadOnly;
 import io.reactivex.Single;
-import mushop.orders.controllers.dto.CustomerOrderDto;
 import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Orders controller.
@@ -62,32 +49,11 @@ public class OrdersController {
 
     @Transactional
     @ReadOnly
-    @Get("/search/customer{?custId}{&sort}")
-    public CustomerOrdersDto searchCustomerOrders(Optional<String> custId, Optional<String> sort) {
-
-        if (custId.isEmpty()) {
-            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Missing custId parameter.");
-        }
-
-        Sort sorted = null;
-        if (sort.isPresent()) {
-            String[] arr = sort.get().split(",");
-            if (arr.length == 1) {
-                sorted = Sort.of(Sort.Order.desc(arr[0]));
-            } else if (arr.length == 2) {
-                try {
-                    Sort.Order.Direction d = Sort.Order.Direction.valueOf(arr[1].toUpperCase());
-                    sorted = Sort.of(new Sort.Order(arr[0], d, true));
-                } catch (IllegalArgumentException e) {
-                    sorted = Sort.of(Sort.Order.desc(arr[0]));
-                }
-            }
-        } else {
-            sorted = Sort.unsorted();
-        }
-
-        Page<CustomerOrder> customerOrders = ordersService.searchCustomerOrders(custId.get(), Pageable.from(0, -1, sorted));
-        return dtoMapper.toCustomerOrdersDto(customerOrders);
+    @Get("/search/customer")
+    public CustomerOrdersDto searchCustomerOrders(@QueryValue String custId, Pageable pageable) {
+        return dtoMapper.toCustomerOrdersDto(
+                ordersService.searchCustomerOrders(custId, Pageable.from(0, -1, pageable.getSort()))
+        );
     }
 
     public static class PaymentDeclinedException extends HttpStatusException {

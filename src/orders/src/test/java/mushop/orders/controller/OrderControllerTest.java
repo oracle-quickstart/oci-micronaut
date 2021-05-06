@@ -14,6 +14,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.reactivex.Single;
 import mushop.orders.AbstractTest;
 import mushop.orders.controllers.OrdersController;
 import mushop.orders.controllers.OrdersController.OrderFailedException;
@@ -82,8 +83,8 @@ public class OrderControllerTest extends AbstractTest {
     void orderPayload_returns_201() throws Exception {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload).blockingGet())
-                .thenReturn(order);
+        when(ordersService.placeOrder(orderPayload))
+                .thenReturn(Single.just(order));
 
         assertEquals(HttpStatus.CREATED, httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class)
                         .body(orderPayload)).blockingSingle().getStatus());
@@ -93,8 +94,8 @@ public class OrderControllerTest extends AbstractTest {
     void missingCustomer_returns_406(){
         NewOrderResource orderPayload = new NewOrderResource(null, addressURI, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload).blockingGet())
-                .thenReturn(order);
+        when(ordersService.placeOrder(orderPayload))
+                .thenReturn(Single.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
             httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
@@ -107,8 +108,8 @@ public class OrderControllerTest extends AbstractTest {
     void missingAddress_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, null, cardURI, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload).blockingGet())
-                .thenReturn(order);
+        when(ordersService.placeOrder(orderPayload))
+                .thenReturn(Single.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
             httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
@@ -121,8 +122,8 @@ public class OrderControllerTest extends AbstractTest {
     void missingCard_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, null, itemsURI);
 
-        when(ordersService.placeOrder(orderPayload).blockingGet())
-                .thenReturn(order);
+        when(ordersService.placeOrder(orderPayload))
+                .thenReturn(Single.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
             httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
@@ -135,8 +136,8 @@ public class OrderControllerTest extends AbstractTest {
     void missingCartItems_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, null);
 
-        when(ordersService.placeOrder(orderPayload).blockingGet())
-                .thenReturn(order);
+        when(ordersService.placeOrder(orderPayload))
+                .thenReturn(Single.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
             httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
@@ -176,7 +177,7 @@ public class OrderControllerTest extends AbstractTest {
     void customerOrdersWithoutSort_returns_200(){
         Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
 
-        when(ordersService.searchCustomerOrders("123", any(Pageable.class)))
+        when(ordersService.searchCustomerOrders(eq("123"), any(Pageable.class)))
                 .thenReturn(p);
 
         HttpResponse<JsonNode> lists = httpClient.exchange(HttpRequest.GET("/orders/search/customer?custId=123"), JsonNode.class).blockingSingle();

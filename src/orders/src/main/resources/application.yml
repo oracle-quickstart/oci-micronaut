@@ -17,7 +17,9 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
-
+  data:
+    pageable:
+      sort-ignore-case: true
 endpoints:
   health:
     enabled: true

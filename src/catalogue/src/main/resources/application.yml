@@ -7,6 +7,12 @@ micronaut:
     io:
       n-threads: 75
       type: fixed
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/catalogue/images/**"
+        paths: "classpath:images"
   metrics:
     export:
       prometheus:

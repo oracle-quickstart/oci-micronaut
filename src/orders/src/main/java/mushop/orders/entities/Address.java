@@ -13,10 +13,8 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
 @Entity
-public class Address implements Serializable{
+public class Address implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,6 +29,7 @@ public class Address implements Serializable{
     private String city;
     private String postcode;
     private String country;
+
 	public Address(String id, String street_number, String street, String city, String postcode, String country) {
 		super();
 		this.id = id;
@@ -40,9 +39,11 @@ public class Address implements Serializable{
 		this.postcode = postcode;
 		this.country = country;
 	}
+
 	public Address() {
 		super();
 	}
+
 	/**
 	 * @return the id
 	 */
@@ -188,7 +189,4 @@ public class Address implements Serializable{
 		return "Address [id=" + id + ", street_number=" + street_number + ", street=" + street + ", city=" + city
 				+ ", postcode=" + postcode + ", country=" + country + "]";
 	}
-
-    
-
 }

@@ -41,6 +41,7 @@ dependencies {
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.4")
     runtimeOnly("com.oracle.oci.sdk:oci-java-sdk-monitoring")
 

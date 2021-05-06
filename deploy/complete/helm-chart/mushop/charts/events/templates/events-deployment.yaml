@@ -45,6 +45,3 @@ spec:
             httpGet:
               path: /health/readiness
               port: 8080
-      imagePullSecrets:
-        - name: oci-secret
-

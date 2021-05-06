@@ -44,5 +44,3 @@ spec:
               value: "{{ .Values.env.shippedOrdersSubject }}"
           {{- include "fulfillment.oapm.connection" . | nindent 12 }}
           {{- include "fulfillment.oims.config" . | nindent 12 }}
-      imagePullSecrets:
-        - name: oci-secret

@@ -31,8 +31,6 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: JAVA_OPTS
-              value: {{ .Values.env.javaOpts }}
             {{- include "carts.oadb.connection" . | nindent 12 }}
             {{- include "carts.oapm.connection" . | nindent 12 }}
             {{- include "carts.oims.config" . | nindent 12 }}
@@ -48,7 +46,5 @@ spec:
               path: /health/readiness
             initialDelaySeconds: 5
             failureThreshold: 10
-      imagePullSecrets:
-        - name: oci-secret
       nodeSelector:
           beta.kubernetes.io/os: linux

@@ -45,7 +45,5 @@ spec:
           env:
           {{- include "payment.oapm.connection" . | nindent 12 }}
           {{- include "payment.oims.config" . | nindent 12 }}
-      imagePullSecrets:
-        - name: oci-secret
       nodeSelector:
           beta.kubernetes.io/os: linux

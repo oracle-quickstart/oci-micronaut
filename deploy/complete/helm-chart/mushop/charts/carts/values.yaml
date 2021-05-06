@@ -2,12 +2,12 @@ replicaCount: 1
 
 image:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts
-  tag: 1.0.0-SNAPSHOT
+  tag: 1.0.3-SNAPSHOT
   pullPolicy: Always
 
 dbtools:
-  repository: iad.ocir.io/oracle/ateam/mushop-dbtools
-  tag: 1.0.1
+  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/dbtools
+  tag: 21.0.0
   pullPolicy: IfNotPresent
 
 osb: {}
@@ -18,9 +18,6 @@ secrets:
   oadbUser:
   oadbPassword:
   oadbWalletPassword:
-
-env:
-  javaOpts: -Xms64m -Xmx128m -XX:+UseG1GC -Dlogging.level.mushop.carts=DEBUG  -Djava.security.egd=file:/dev/urandom
 
 service:
   port: 80

@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8080
           env:
           - name: MOCK_MODE
             value: "{{ .Values.global.mock.service }}"

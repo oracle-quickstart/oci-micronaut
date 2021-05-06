@@ -48,5 +48,3 @@ spec:
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
-      imagePullSecrets:
-        - name: oci-secret

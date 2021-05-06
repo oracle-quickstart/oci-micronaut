@@ -40,7 +40,7 @@ services:
 
   # Static media assets
   assets:
-    image: iad.ocir.io/oracle/ateam/mushop-assets:1.0.0
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/assets:1.0.0
     restart: always
     cap_drop:
       - all

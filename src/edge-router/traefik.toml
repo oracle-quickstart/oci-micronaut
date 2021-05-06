@@ -17,7 +17,7 @@ entryPoint = "http"
       [backends.api.loadbalancer]
         method = "wrr"
       [backends.api.servers.server1]
-        url = "http://api:3000"
+        url = "http://api:8080"
     # web
     [backends.web1]
       [backends.web1.loadbalancer]

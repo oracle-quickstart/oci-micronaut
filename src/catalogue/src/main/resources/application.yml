@@ -25,22 +25,15 @@ micronaut:
   data:
     pageable:
       default-page-size: -1
-      sort-parameter-name: Order
-      page-parameter-name: PageNum
-      size-parameter-name: PageSize
+      sort-parameter-name: sort
+      page-parameter-name: page
+      size-parameter-name: size
 
 endpoints:
   health:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-
-datasources:
-  default:
-    url: ${JDBC_URL}
-    username: ${JDBC_USERNAME}
-    password: ${JDBC_PASSWORD}
-    dialect: ${JDBC_DIALECT}
 
 flyway:
   datasources:

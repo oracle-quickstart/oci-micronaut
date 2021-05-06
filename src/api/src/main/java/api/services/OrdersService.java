@@ -42,20 +42,21 @@ public class OrdersService {
     }
 
     @Get("/orders{?sort}")
-    Single<Object> getOrders(Authentication authentication, @Nullable String sort) {
+    Single<List<?>> getOrders(Authentication authentication, @Nullable String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
         return client.getOrders(customerId, sort)
                 .map(stringObjectMap -> {
-                    Map<String, Object> m = (Map<String, Object>) stringObjectMap.computeIfAbsent("_embedded", k -> Collections.EMPTY_MAP);
+                    List<?> orders = Collections.EMPTY_LIST;
+                    Map<String, Object> m = (Map<String, Object>) stringObjectMap.getOrDefault("_embedded", Collections.EMPTY_MAP);
                     if (m.containsKey("customerOrders")) {
-                        Object orders = m.get("customerOrders");
-                        if (orders instanceof List) {
-                            return Single.just((List<?>) orders);
-                        } else if (orders instanceof Map) {
-                            return Single.just(Collections.singletonList(orders));
+                        Object customerOrders = m.get("customerOrders");
+                        if (customerOrders instanceof List) {
+                            orders = (List<?>) customerOrders;
+                        } else if (customerOrders instanceof Map) {
+                            orders = Collections.singletonList(customerOrders);
                         }
                     }
-                    return Single.just(Collections.EMPTY_LIST);
+                    return orders;
                 });
     }
 

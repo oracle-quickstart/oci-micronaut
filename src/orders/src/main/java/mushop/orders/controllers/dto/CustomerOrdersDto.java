@@ -18,9 +18,9 @@ package mushop.orders.controllers.dto;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.hateoas.AbstractResource;
-import io.micronaut.http.hateoas.Resource;
 import mushop.orders.entities.CustomerOrder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class CustomerOrdersDto extends AbstractResource<CustomerOrdersDto> {
     private final Map<String, Integer> page;
 
     public CustomerOrdersDto(Collection<CustomerOrderDto> customerOrders, Page<CustomerOrder> page) {
-        embedded("customerOrders", customerOrders.toArray(new Resource[0]));
+        embedded("customerOrders", new ArrayList<>(customerOrders));
         this.page = Map.of(
                 "size", page.getSize(),
                 "totalElements", page.getNumberOfElements(),

@@ -7,7 +7,7 @@
 
 IMAGE=mushop-dev-storefront
 
-API=http://api:3000
+API=http://api:8080
 PROJECT=mutest
 
 up: services test-image start

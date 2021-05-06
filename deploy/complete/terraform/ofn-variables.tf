@@ -1,4 +1,9 @@
 # Oracle Functions Variables
+variable "create_oracle_function_newsletter" {
+  description = "Create Oracle Function Newsletter"
+  default = false
+}
+
 variable "newsletter_function_approved_email_address" {
   description = "Email sender for Newsletter Subscription Function"
 }

@@ -94,7 +94,7 @@ locals {
     "Allow group ${var.user_admin_group_for_vault_policy} to manage vaults in compartment id ${local.oke_compartment_ocid}",
     "Allow group ${var.user_admin_group_for_vault_policy} to manage keys in compartment id ${local.oke_compartment_ocid}",
     "Allow group ${var.user_admin_group_for_vault_policy} to use key-delegate in compartment id ${local.oke_compartment_ocid}"
-  ]y
+  ]
   allow_oke_use_monitoring = [
     "Allow dynamic-group ${local.oke_nodes_dg} to use apm-domains in compartment id ${local.oke_compartment_ocid}",
     "Allow dynamic-group ${local.oke_nodes_dg} to use metrics in compartment id ${local.oke_compartment_ocid}"

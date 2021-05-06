@@ -15,7 +15,7 @@ micronaut:
         path: /api/logout
         get-allowed: true
       login:
-        path: /api/login
+        enabled: false
   http:
     client:
       follow-redirects: false

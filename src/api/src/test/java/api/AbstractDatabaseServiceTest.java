@@ -1,6 +1,9 @@
 package api;
 
+import io.micronaut.http.BasicAuth;
+import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.support.TestPropertyProvider;
@@ -61,6 +64,6 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     @Client("/api")
     interface LoginClient {
         @Post("/login")
-        HttpResponse<?> login(String username, String password);
+        HttpResponse<?> login(BasicAuth basicAuth);
     }
 }

@@ -6,6 +6,7 @@ import api.model.Product;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
@@ -48,7 +49,7 @@ public class CartsServiceTest implements TestPropertyProvider {
 
     @BeforeAll
     static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login("test", "password");
+        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }

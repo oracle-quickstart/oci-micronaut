@@ -1,6 +1,7 @@
 package api;
 
 import api.services.AuthClient;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.CookieValue;
 import io.micronaut.http.annotation.Get;
@@ -42,7 +43,7 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
 
     @BeforeAll
     static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login("test", "password");
+        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }

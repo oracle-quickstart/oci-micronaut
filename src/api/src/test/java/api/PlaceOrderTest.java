@@ -9,6 +9,7 @@ import api.services.OrdersService;
 import api.services.ServiceLocator;
 import api.services.UsersClient;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.CookieValue;
@@ -61,7 +62,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
 
     @BeforeAll
     static void login(AbstractDatabaseServiceTest.LoginClient client) {
-        final HttpResponse<?> response = client.login("test", "password");
+        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }

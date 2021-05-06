@@ -17,6 +17,8 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Single;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,9 +41,21 @@ public class OrdersService {
     }
 
     @Get("/orders{?sort}")
-    Single<Map<String, Object>> getOrders(Authentication authentication, @Nullable String sort) {
+    Single<Object> getOrders(Authentication authentication, @Nullable String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
-        return client.getOrders(customerId, sort);
+        return client.getOrders(customerId, sort)
+                .map(stringObjectMap -> {
+                    Map<String, Object> m = (Map<String, Object>) stringObjectMap.computeIfAbsent("_embedded", k -> Collections.EMPTY_MAP);
+                    if (m.containsKey("customerOrders")) {
+                        Object orders = m.get("customerOrders");
+                        if (orders instanceof List) {
+                            return Single.just((List<?>) orders);
+                        } else if (orders instanceof Map) {
+                            return Single.just(Collections.singletonList(orders));
+                        }
+                    }
+                    return Single.just(Collections.EMPTY_LIST);
+                });
     }
 
     @Get("/orders/{orderId}")

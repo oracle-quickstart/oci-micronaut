@@ -18,7 +18,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.Map;
 
 @Testcontainers
 @MicronautTest
@@ -50,10 +49,8 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
 
     @Test
     void testListOrders(OrdersApiClient client) {
-        final Map<String, Object> orders = client.getOrders(sessionID);
-
-        Assertions.assertTrue(orders.containsKey("page"));
-
+        final List<?> orders = client.getOrders(sessionID);
+        Assertions.assertEquals(0, orders.size());
     }
 
     @Override
@@ -74,7 +71,7 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
     @Client("/api")
     interface OrdersApiClient {
         @Get("/orders")
-        Map<String, Object> getOrders(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID);
+        List<Object> getOrders(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID);
     }
 
     @MockBean(AuthClient.class)

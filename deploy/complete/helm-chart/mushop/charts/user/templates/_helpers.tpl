@@ -101,7 +101,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/* OADB Wallet mount */}}
 {{- define "user.mount.wallet" -}}
 - name: wallet
-  mountPath: /usr/lib/oracle/19.3/client64/lib/network/admin/
+  mountPath: /usr/lib/oracle/21/client64/lib/network/admin/
   readOnly: true
 {{- end -}}
 

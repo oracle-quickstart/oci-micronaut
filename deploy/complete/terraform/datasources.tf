@@ -1,6 +1,6 @@
 # Copyright (c) 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
-# 
+#
 
 # Gets a list of supported images based on the shape, operating_system and operating_system_version provided
 data "oci_core_images" "node_pool_images" {

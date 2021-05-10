@@ -45,7 +45,7 @@ public class NewsLetterService {
 
     @Client(id = ServiceLocator.NEWSLETTER)
     interface NewsLetterClient {
-        @Post("/subscribe")
+        @Post("/subscribe/")
         Single<SubscribeResponse> post(String email);
     }
 

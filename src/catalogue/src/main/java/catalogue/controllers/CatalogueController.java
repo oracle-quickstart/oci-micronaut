@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -95,28 +96,28 @@ public class CatalogueController implements CatalogueOperations {
     @Operation(parameters = {
             @Parameter(
                     in = ParameterIn.QUERY,
-                    name = "Order",
+                    name = "sort",
                     description = "Order the products by the given attribute",
                     schema = @Schema(type = "string"),
                     required = false
             ),
             @Parameter(
                     in = ParameterIn.QUERY,
-                    name = "PageNum",
+                    name = "page",
                     description = "Request the given page number",
                     schema = @Schema(type = "int"),
                     required = false
             ),
             @Parameter(
                     in = ParameterIn.QUERY,
-                    name = "PageSize",
+                    name = "size",
                     description = "Request the given page size",
                     schema = @Schema(type = "int"),
                     required = false
             ),
             @Parameter(
                     in = ParameterIn.QUERY,
-                    name = "Categories",
+                    name = "categories",
                     description = "Order the products by the given attribute",
                     schema = @Schema(type = "array"),
                     required = false

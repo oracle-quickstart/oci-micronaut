@@ -19,8 +19,8 @@ export class OrderController {
     order.humanId = ('0000000000' + order.id).slice(-11);
     order.href = router.href('orders', { id: order.id });
     order.date = order.date || order.orderDate;
-    // order.shortDate = new Date(order.date).toDateString();
-    order.shortDate = order.date.split('.').shift().replace('T', ' ');
+    order.shortDate = new Date(order.date).toDateString();
+    //order.shortDate = order.date.split('.').shift().replace('T', ' ');
     // totals
     order.totalPrice = order.total.toFixed(2);
     order.totalSize = order.items.map(item => item.quantity || 1)

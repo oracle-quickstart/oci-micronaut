@@ -4,11 +4,12 @@ import io.micronaut.http.uri.UriTemplate;
 import io.reactivex.Single;
 
 public interface ServiceLocator {
-    String CARTS = "carts";
-    String USER = "user";
-    String ORDERS = "orders";
-    String CATALOGUE = "catalogue";
-    String EVENTS = "events";
+    String CARTS = "mushop-carts";
+    String USER = "mushop-user";
+    String ORDERS = "mushop-orders";
+    String CATALOGUE = "mushop-catalogue";
+    String EVENTS = "mushop-events";
+    String NEWSLETTER = "mushop-newsletter";
 
     Single<UriTemplate> getCartsURL();
 

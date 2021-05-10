@@ -86,10 +86,10 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
       setCord(data.ASSETS, col(2), row(1.5));
       setCord(data.API, col(2.5), row(2));
 
-      setCord(data.EVENTS, col(3.5), row(1), skew.go);
+      setCord(data.EVENTS, col(3.5), row(1), skew.java);
       setCord(data.SESSION, col(3.5), row(3));
 
-      setCord(data.CATALOG, col(5), row(2), skew.go);
+      setCord(data.CATALOG, col(5), row(2), skew.java);
       setCord(data.CART, col(5), row(3), skew.java);
 
       setCord(data.ORDERS, col(6), row(2), skew.java);

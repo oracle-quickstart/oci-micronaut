@@ -219,7 +219,7 @@ export const Services = {
   },
   API: {
     name: 'REST API',
-    type: ServiceType.NODE,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     basic: TechType.COMPUTE,
     desc: `Session management and service gateway`,
@@ -232,7 +232,7 @@ export const Services = {
   },
   EVENTS: {
     name: 'Tracking',
-    type: ServiceType.GO,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     desc: `Streaming message producer for application level events`,
   },
@@ -244,20 +244,20 @@ export const Services = {
   },
   CATALOG: {
     name: 'Catalog',
-    type: ServiceType.GO,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     basic: TechType.COMPUTE,
     desc: `Product catalog services`,
   },
   CART: {
     name: 'Carts',
-    type: ServiceType.HELIDON,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     desc: `Shopping cart services`,
   },
   ORDERS: {
     name: 'Orders',
-    type: ServiceType.JAVA,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     desc: `Order management services`,
   },
@@ -269,13 +269,13 @@ export const Services = {
   },
   PAYMENT: {
     name: 'Payment',
-    type: ServiceType.GO,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     desc: `Checkout payment verification`,
   },
   USER: {
     name: 'Users',
-    type: ServiceType.TYPESCRIPT,
+    type: ServiceType.MICRONAUT,
     tech: TechType.OKE,
     desc: `Customer profile services`,
   },

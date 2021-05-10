@@ -43,7 +43,7 @@ public class NewsLetterService {
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    @Client(id = "newsletter")
+    @Client(id = ServiceLocator.NEWSLETTER)
     interface NewsLetterClient {
         @Post("/subscribe")
         Single<SubscribeResponse> post(String email);

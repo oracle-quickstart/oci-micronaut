@@ -8,7 +8,11 @@ import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Status;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
@@ -97,5 +101,4 @@ public class UsersService {
     Single<CardInfo> getCard(Authentication authentication) {
         return client.getCards(MuUserDetails.resolveId(authentication)).firstOrError();
     }
-
 }

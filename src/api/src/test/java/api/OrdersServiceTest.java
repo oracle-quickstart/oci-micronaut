@@ -1,6 +1,7 @@
 package api;
 
 import api.services.AuthClient;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.CookieValue;
 import io.micronaut.http.annotation.Get;
@@ -17,7 +18,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.Map;
 
 @Testcontainers
 @MicronautTest
@@ -42,17 +42,15 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
 
     @BeforeAll
     static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login("test", "password");
+        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }
 
     @Test
     void testListOrders(OrdersApiClient client) {
-        final Map<String, Object> orders = client.getOrders(sessionID);
-
-        Assertions.assertTrue(orders.containsKey("page"));
-
+        final List<?> orders = client.getOrders(sessionID);
+        Assertions.assertEquals(0, orders.size());
     }
 
     @Override
@@ -73,7 +71,7 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
     @Client("/api")
     interface OrdersApiClient {
         @Get("/orders")
-        Map<String, Object> getOrders(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID);
+        List<Object> getOrders(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID);
     }
 
     @MockBean(AuthClient.class)

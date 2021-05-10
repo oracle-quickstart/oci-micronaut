@@ -1,8 +1,8 @@
 /**
- ** Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
- ** Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ * * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  **/
-package  mushop.orders.entities;
+package mushop.orders.entities;
 
 import java.io.Serializable;
 
@@ -14,166 +14,166 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class Card implements Serializable{
+public class Card implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long cardId;
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long cardId;
+
     @JsonProperty("id")
     private String id;
 
     private String longNum;
     private String expires;
     private String ccv;
-    
-    
-	public Card() {
-		super();
-	}
 
 
-	public Card(String id, String longNum, String expires, String ccv) {
-		super();
-		this.id = id;
-		this.longNum = longNum;
-		this.expires = expires;
-		this.ccv = ccv;
-	}
+    public Card() {
+        super();
+    }
 
 
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+    public Card(String id, String longNum, String expires, String ccv) {
+        super();
+        this.id = id;
+        this.longNum = longNum;
+        this.expires = expires;
+        this.ccv = ccv;
+    }
 
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
 
-	/**
-	 * @return the cardId
-	 */
-	public Long getCardId() {
-		return cardId;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
-	/**
-	 * @param cardId the cardId to set
-	 */
-	public void setCardId(Long cardId) {
-		this.cardId = cardId;
-	}
+    /**
+     * @return the cardId
+     */
+    public Long getCardId() {
+        return cardId;
+    }
 
 
-	/**
-	 * @return the longNum
-	 */
-	public String getLongNum() {
-		return longNum;
-	}
+    /**
+     * @param cardId the cardId to set
+     */
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
+    }
 
 
-	/**
-	 * @param longNum the longNum to set
-	 */
-	public void setLongNum(String longNum) {
-		this.longNum = longNum;
-	}
+    /**
+     * @return the longNum
+     */
+    public String getLongNum() {
+        return longNum;
+    }
 
 
-	/**
-	 * @return the expires
-	 */
-	public String getExpires() {
-		return expires;
-	}
+    /**
+     * @param longNum the longNum to set
+     */
+    public void setLongNum(String longNum) {
+        this.longNum = longNum;
+    }
 
 
-	/**
-	 * @param expires the expires to set
-	 */
-	public void setExpires(String expires) {
-		this.expires = expires;
-	}
+    /**
+     * @return the expires
+     */
+    public String getExpires() {
+        return expires;
+    }
 
 
-	/**
-	 * @return the ccv
-	 */
-	public String getCcv() {
-		return ccv;
-	}
+    /**
+     * @param expires the expires to set
+     */
+    public void setExpires(String expires) {
+        this.expires = expires;
+    }
 
 
-	/**
-	 * @param ccv the ccv to set
-	 */
-	public void setCcv(String ccv) {
-		this.ccv = ccv;
-	}
+    /**
+     * @return the ccv
+     */
+    public String getCcv() {
+        return ccv;
+    }
 
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((ccv == null) ? 0 : ccv.hashCode());
-		result = prime * result + ((expires == null) ? 0 : expires.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((longNum == null) ? 0 : longNum.hashCode());
-		return result;
-	}
+    /**
+     * @param ccv the ccv to set
+     */
+    public void setCcv(String ccv) {
+        this.ccv = ccv;
+    }
 
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Card other = (Card) obj;
-		if (ccv == null) {
-			if (other.ccv != null)
-				return false;
-		} else if (!ccv.equals(other.ccv))
-			return false;
-		if (expires == null) {
-			if (other.expires != null)
-				return false;
-		} else if (!expires.equals(other.expires))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (longNum == null) {
-			if (other.longNum != null)
-				return false;
-		} else if (!longNum.equals(other.longNum))
-			return false;
-		return true;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ccv == null) ? 0 : ccv.hashCode());
+        result = prime * result + ((expires == null) ? 0 : expires.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((longNum == null) ? 0 : longNum.hashCode());
+        return result;
+    }
 
 
-	@Override
-	public String toString() {
-		return "Card [id=" + id + ", longNum=" + longNum + ", expires=" + expires + ", ccv=" + ccv + "]";
-	}
-	
-	
-    
-    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Card other = (Card) obj;
+        if (ccv == null) {
+            if (other.ccv != null)
+                return false;
+        } else if (!ccv.equals(other.ccv))
+            return false;
+        if (expires == null) {
+            if (other.expires != null)
+                return false;
+        } else if (!expires.equals(other.expires))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (longNum == null) {
+            if (other.longNum != null)
+                return false;
+        } else if (!longNum.equals(other.longNum))
+            return false;
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardId=" + cardId +
+                ", id='" + id + '\'' +
+                ", longNum='" + longNum + '\'' +
+                ", expires='" + expires + '\'' +
+                ", ccv='" + ccv + '\'' +
+                '}';
+    }
 }

@@ -13,10 +13,6 @@ micronaut:
 
 datasources:
   default:
-    url: ${JDBC_URL}
-    username: ${JDBC_USERNAME}
-    password: ${JDBC_PASSWORD}
-    driverClassName: ${JDBC_DRIVER_CLASS_NAME}
     data-source-properties:
       oracle:
         jdbc:

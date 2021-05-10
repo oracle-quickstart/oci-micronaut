@@ -3,6 +3,7 @@ package api;
 import api.model.AddressInfo;
 import api.model.CardInfo;
 import api.model.UserRegistrationRequest;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -15,11 +16,18 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,7 +41,7 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
     @Order(1)
     void testShouldFailLogin(UserApiClient client) {
         HttpClientResponseException error = assertThrows(HttpClientResponseException.class, () ->
-                client.login("junk", "junk")
+                client.login(new BasicAuth("junk", "junk"))
         );
         assertEquals(HttpStatus.UNAUTHORIZED, error.getStatus());
     }
@@ -56,7 +64,8 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(3)
     void testLogin(UserApiClient client) {
-        final HttpResponse<?> loginResult = client.login(userRegistrationRequest.getUsername(), userRegistrationRequest.getPassword());
+        final HttpResponse<?> loginResult = client.login(
+                new BasicAuth(userRegistrationRequest.getUsername(), userRegistrationRequest.getPassword()));
         assertEquals(HttpStatus.SEE_OTHER, loginResult.getStatus());
         assertTrue(loginResult.getHeaders().contains(HttpHeaders.AUTHORIZATION_INFO));
         assertTrue(loginResult.getHeaders().contains(HttpHeaders.SET_COOKIE));
@@ -135,7 +144,7 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
         Map<String, Object> getProfile(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID);
 
         @Post("/login")
-        HttpResponse<?> login(String username, String password);
+        HttpResponse<?> login(BasicAuth basicAuth);
 
         @Post("/address")
         AddressInfo addAddress(@CookieValue(HttpSessionConfiguration.DEFAULT_COOKIENAME) String sessionID, @Body AddressInfo addressInfo);

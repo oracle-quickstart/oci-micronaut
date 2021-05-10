@@ -1,5 +1,6 @@
 package api;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,6 +51,13 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
         assertEquals(MediaType.IMAGE_PNG_TYPE, response.getContentType().get());
     }
 
+    @Test
+    void testListCatalogue() {
+        final List<?> catalogue = catalogueApiClient.getCatalogue(null);
+        assertNotNull(catalogue);
+        assertTrue(catalogue.size() > 1);
+    }
+
 
     @Override
     protected String getServiceVersion() {
@@ -67,6 +76,9 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
         @Get("/categories")
         Map<String, Object> getCategories();
+
+        @Get("/catalogue{?categories}")
+        List<?> getCatalogue(@Nullable List<String> categories);
 
         @Get(value = "/catalogue/images/{name}", processes = MediaType.IMAGE_PNG)
         HttpResponse<byte[]> getImage(String name);

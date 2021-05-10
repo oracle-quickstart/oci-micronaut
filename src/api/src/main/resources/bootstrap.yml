@@ -1,0 +1,5 @@
+kubernetes:
+  client:
+    discovery:
+      mode: service
+      enabled: true

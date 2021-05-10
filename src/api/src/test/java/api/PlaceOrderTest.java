@@ -9,6 +9,7 @@ import api.services.OrdersService;
 import api.services.ServiceLocator;
 import api.services.UsersClient;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.CookieValue;
@@ -61,7 +62,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
 
     @BeforeAll
     static void login(AbstractDatabaseServiceTest.LoginClient client) {
-        final HttpResponse<?> response = client.login("test", "password");
+        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }
@@ -99,8 +100,8 @@ public class PlaceOrderTest implements TestPropertyProvider {
         assertNotNull(lastOrder.getCustomer());
         assertNotNull(lastOrder.getItems());
 
-        assertEquals("http://localhost/" + userDetails.getId() + "/addresses/" + addressId, lastOrder.getAddress());
-        assertEquals("http://localhost/" + userDetails.getId() + "/cards/" + cardId, lastOrder.getCard());
+        assertEquals("http://localhost/customers/" + userDetails.getId() + "/addresses/" + addressId, lastOrder.getAddress());
+        assertEquals("http://localhost/customers/" + userDetails.getId() + "/cards/" + cardId, lastOrder.getCard());
     }
 
     @MockBean(AuthClient.class)
@@ -112,7 +113,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
     @Override
     public Map<String, String> getProperties() {
         return Collections.singletonMap(
-                "micronaut.http.services.carts.url", "http://localhost:" + cartsContainer.getFirstMappedPort()
+                "micronaut.http.services." + ServiceLocator.CARTS + ".url", "http://localhost:" + cartsContainer.getFirstMappedPort()
         );
     }
 
@@ -148,7 +149,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
         return new OrdersService.OrdersClient() {
 
             @Override
-            public Single<Map<String, Object>> getOrders(String custId, @Nullable String sort) {
+            public Single<Map<String,Object>> getOrders(String custId, @Nullable String sort) {
                 return Single.just(Collections.emptyMap());
             }
 

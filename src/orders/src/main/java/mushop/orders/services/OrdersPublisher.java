@@ -9,5 +9,5 @@ import mushop.orders.resources.OrderUpdate;
 public interface OrdersPublisher {
 
     @Subject("mushop-orders")
-    Single<OrderUpdate> dispatchToFulfillment(OrderUpdate orderUpdate);
+    void dispatchToFulfillment(OrderUpdate orderUpdate);
 }

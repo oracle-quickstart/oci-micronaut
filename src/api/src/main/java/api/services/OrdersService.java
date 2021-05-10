@@ -17,6 +17,8 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Single;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,13 +26,14 @@ import java.util.UUID;
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class OrdersService {
     private static final String USER_ID = "userId";
-    private static final String URI_CART_ITEMS = "/{cartId}/items";
-    private static final String URI_USER_ID = "/{userId}";
-    private static final String URI_USER_ADDRESS = "/{userId}/addresses/{addressId}";
-    private static final String URI_USER_CARD = "/{userId}/cards/{cardId}";
+    private static final String URI_CART_ITEMS = "/carts/{cartId}/items";
+    private static final String URI_USER_ID = "/customers/{userId}";
+    private static final String URI_USER_ADDRESS = "/customers/{userId}/addresses/{addressId}";
+    private static final String URI_USER_CARD = "/customers/{userId}/cards/{cardId}";
     private final OrdersClient client;
     private final UsersClient usersClient;
     private final ServiceLocator serviceLocator;
+
 
     public OrdersService(OrdersClient client, UsersClient usersClient, ServiceLocator serviceLocator) {
         this.client = client;
@@ -39,9 +42,22 @@ public class OrdersService {
     }
 
     @Get("/orders{?sort}")
-    Single<Map<String, Object>> getOrders(Authentication authentication, @Nullable String sort) {
+    Single<List<?>> getOrders(Authentication authentication, @Nullable String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
-        return client.getOrders(customerId, sort);
+        return client.getOrders(customerId, sort)
+                .map(stringObjectMap -> {
+                    List<?> orders = Collections.EMPTY_LIST;
+                    Map<String, Object> m = (Map<String, Object>) stringObjectMap.getOrDefault("_embedded", Collections.EMPTY_MAP);
+                    if (m.containsKey("customerOrders")) {
+                        Object customerOrders = m.get("customerOrders");
+                        if (customerOrders instanceof List) {
+                            orders = (List<?>) customerOrders;
+                        } else if (customerOrders instanceof Map) {
+                            orders = Collections.singletonList(customerOrders);
+                        }
+                    }
+                    return orders;
+                });
     }
 
     @Get("/orders/{orderId}")
@@ -57,18 +73,18 @@ public class OrdersService {
         return usersClient.getProfile(userId)
                 .flatMap(userDetails -> serviceLocator.getUsersURL().flatMap(customerURI ->
                         serviceLocator.getCartsURL().flatMap(cartURI -> {
-                    final String customerId = userDetails.getId();
-                    return usersClient.getCards(customerId).firstOrError().flatMap(cardInfo ->
-                            usersClient.getAddresses(customerId).firstOrError().flatMap(addressInfo -> {
-                                OrderRequest orderRequest = new OrderRequest(
-                                        cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
-                                        customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
-                                        customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.getId())),
-                                        customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.getId()))
-                                );
-                                return client.newOrder(orderRequest);
-                            }));
-                })));
+                            final String customerId = userDetails.getId();
+                            return usersClient.getCards(customerId).firstOrError().flatMap(cardInfo ->
+                                    usersClient.getAddresses(customerId).firstOrError().flatMap(addressInfo -> {
+                                        OrderRequest orderRequest = new OrderRequest(
+                                                cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
+                                                customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
+                                                customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.getId())),
+                                                customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.getId()))
+                                        );
+                                        return client.newOrder(orderRequest);
+                                    }));
+                        })));
     }
 
     @Client(id = ServiceLocator.ORDERS, path = "/orders")
@@ -79,7 +95,7 @@ public class OrdersService {
         @Get("/{orderId}")
         Single<Map<String, Object>> getOrder(Long orderId);
 
-        @Post("orders")
+        @Post
         Single<Map<String, Object>> newOrder(@Body OrderRequest orderRequest);
     }
 

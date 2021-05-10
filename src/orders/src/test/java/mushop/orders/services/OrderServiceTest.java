@@ -196,9 +196,6 @@ public class OrderServiceTest extends AbstractTest {
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
-        when(ordersPublisher.dispatchToFulfillment(any(OrderUpdate.class)))
-                .thenAnswer(invocation -> Single.just(invocation.getArgument(0)));
-
         assertThrows(OrdersController.OrderFailedException.class,
                 () -> ordersService.placeOrder(orderPayload).blockingGet());
     }

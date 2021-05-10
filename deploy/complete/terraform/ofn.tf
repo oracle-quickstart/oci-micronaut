@@ -148,7 +148,7 @@ resource "oci_core_virtual_network" "fn_vcn" {
 resource "oci_core_nat_gateway" "fn_vcn_nat_gw" {
   block_traffic = "false"
   compartment_id = var.compartment_ocid
-  display_name = "oke-nat-gateway-${local.app_name_normalized}-${random_string.deploy_id.result}"
+  display_name = "fn-nat-gateway-${local.app_name_normalized}-${random_string.deploy_id.result}"
   vcn_id = oci_core_virtual_network.fn_vcn[0].id
 
   count = var.create_oracle_function_newsletter ? 1 : 0
@@ -249,7 +249,7 @@ resource "oci_core_subnet" "fn_private_subnet" {
 
 resource "oci_core_security_list" "api_gw_seclist" {
   compartment_id = var.compartment_ocid
-  display_name   = "api-wg-seclist-${local.app_name_normalized}-${random_string.deploy_id.result}"
+  display_name   = "api-gw-seclist-${local.app_name_normalized}-${random_string.deploy_id.result}"
   vcn_id         = oci_core_virtual_network.fn_vcn[0].id
 
   # Ingresses

@@ -115,3 +115,7 @@ variable "autonomous_database_visibility" {
 variable "autonomous_database_wallet_generate_type" {
   default = "SINGLE"
 }
+
+variable "newsletter_service_name" {
+  default = "mushop-newsletter"
+}

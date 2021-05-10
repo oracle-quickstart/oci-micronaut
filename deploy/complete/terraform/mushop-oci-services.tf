@@ -249,6 +249,32 @@ resource "kubernetes_secret" "oos_bucket" {
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 
+## OCI Functions
+
+module "newsletter_url" {
+  source  = "matti/urlparse/external"
+  version = "0.2.0"
+  url = oci_apigateway_deployment.fn_newsletter_deployment[0].endpoint
+  count = var.create_oracle_function_newsletter ? 1 : 0
+}
+
+resource "kubernetes_service" "newsletter_svc" {
+  metadata {
+    name = var.newsletter_service_name
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  spec {
+    type = "ExternalName"
+    external_name = module.newsletter_url[0].host
+    port {
+      target_port = "443"
+      port = 443
+    }
+  }
+
+  count = var.create_oracle_function_newsletter ? 1 : 0
+}
+
 ## OCI KMS Vault
 ### OCI Vault vault
 resource "oci_kms_vault" "mushop_vault" {

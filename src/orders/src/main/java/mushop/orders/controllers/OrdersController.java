@@ -14,6 +14,7 @@ import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
+import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 
@@ -42,7 +43,7 @@ public class OrdersController {
 
     @Transactional
     @ReadOnly
-    @Get
+    @Get("/{orderId}")
     public CustomerOrder getOrder(Long orderId) {
         return ordersService.getById(orderId);
     }

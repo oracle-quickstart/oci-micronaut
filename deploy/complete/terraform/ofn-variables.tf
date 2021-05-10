@@ -7,16 +7,12 @@ variable "create_oracle_function_newsletter" {
 variable "newsletter_function_approved_email_address" {
   description = "Email sender for Newsletter Subscription Function"
 }
-variable "newsletter_function_smtp_endpoint" {
-  default = "smtp.email.us-ashburn-1.oci.oraclecloud.com"
-  description = "Oracle Email Delivery SMTP endpoint to use for Newsletter Subscription Function"
-}
 variable "newsletter_function_display_name" {
   default = "newsletter-subscription"
   description = "Newsletter subscription function name."
 }
 variable "newsletter_function_docker_image_repository" {
-  default = "iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/newsletter-subscription"
+  default = "phx.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/newsletter-subscription"
   description = "Newsletter subscription function docker image repository."
 }
 variable "newsletter_function_docker_image_version" {

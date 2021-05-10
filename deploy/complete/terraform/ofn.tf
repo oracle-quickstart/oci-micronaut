@@ -6,6 +6,10 @@ data "oci_identity_compartment" "mushop_compartment" {
   id = var.compartment_ocid
 }
 
+locals {
+  smtp_endpoint="smtp.email.${var.region}.oci.oraclecloud.com"
+}
+
 resource "oci_identity_user" "fn_email_user" {
   name = "fn-${local.app_name_normalized}-newsletter-user-${random_string.deploy_id.result}"
   description = "${var.app_name} user created for email delivery"
@@ -297,7 +301,7 @@ resource "oci_functions_function" "fn_newsletter_function" {
   config = {
     "SMTP_USER": oci_identity_smtp_credential.fn_email_user_smtp_credential[0].username,
     "SMTP_PASSWORD": oci_identity_smtp_credential.fn_email_user_smtp_credential[0].password,
-    "SMTP_HOST": var.newsletter_function_smtp_endpoint,
+    "SMTP_HOST": local.smtp_endpoint,
     "APPROVED_SENDER_EMAIL": var.newsletter_function_approved_email_address
   }
 

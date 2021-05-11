@@ -151,10 +151,10 @@ services:
       - NATS_PORT=4222
       - ORDERS_NEW=mushop-orders
       - ORDERS_SHIPPED=mushop-shipments
-      - JDBC_URL=jdbc:oracle:thin:system/oracle@oracledborders:1521:xe
-      - JDBC_USERNAME=system
-      - JDBC_PASSWORD=oracle
-      - JDBC_DIALECT=oracle
+      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledborders:1521:xe
+      - DATASOURCES_DEFAULT_USERNAME=system
+      - DATASOURCES_DEFAULT_PASSWORD=oracle
       - MICRONAUT_HTTP_SERVICES_USERS_URL=http://user:8080
       - MICRONAUT_HTTP_SERVICES_CARTS_URL=http://carts:8080
       - MICRONAUT_HTTP_SERVICES_PAYMENT_URL=http://payment:8080

@@ -1,5 +1,5 @@
 # and edit them there. Note that it will be sync'ed to all the Micronaut repos
-name: Java CI
+name: Java CI - Gradle
 on:
   push:
     branches:
@@ -47,9 +47,9 @@ jobs:
           distribution: 'adopt'
           java-version: ${{ env.JAVA }}
       - name: Build with Gradle
+        working-directory: src/${{ matrix.project-path }}
         run: |
-          cd src/${PROJECT_PATH}
-          ./gradlew dependencyUpdates check --no-daemon --parallel --continue
+          ./gradlew check --no-daemon --parallel --continue
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
           PROJECT_PATH: ${{ matrix.project-path }}

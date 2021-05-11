@@ -14,5 +14,4 @@
     </root>
 
     <logger name="api" level="trace" />
-    <logger name="io.micronaut.kubernetes" level="trace"/>
 </configuration>

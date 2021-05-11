@@ -34,6 +34,7 @@ services:
       - MICRONAUT_HTTP_SERVICES_MUSHOP-ORDERS_URL=http://orders:8082
       - MICRONAUT_HTTP_SERVICES_MUSHOP-USER_URL=http://user:8080
 #      - MICRONAUT_HTTP_SERVICES_MUSHOP_NEWSLETTER_URL=
+      - REDIS_URI=redis://session-db:6379
 
   # Static media assets
   assets:

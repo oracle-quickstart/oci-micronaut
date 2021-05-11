@@ -16,7 +16,7 @@ jobs:
       JAVA: '11'
     strategy:
       matrix:
-        application-path: [
+        project-path: [
             'api',
             'catalogue',
             'events',
@@ -47,7 +47,9 @@ jobs:
           distribution: 'adopt'
           java-version: ${{ env.JAVA }}
       - name: Build with Gradle
-        run: ./gradlew dependencyUpdates check -p $PROJECT_PATH --no-daemon --parallel --continue
+        run: |
+          cd src/${PROJECT_PATH}
+          ./gradlew dependencyUpdates check --no-daemon --parallel --continue
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
-          PROJECT_PATH=${{ matrix.project-path }}
+          PROJECT_PATH: ${{ matrix.project-path }}

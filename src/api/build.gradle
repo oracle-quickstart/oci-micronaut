@@ -41,7 +41,7 @@ dependencies {
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.2")
 
     // Redis Http session store
     implementation("io.micronaut.redis:micronaut-redis-lettuce")

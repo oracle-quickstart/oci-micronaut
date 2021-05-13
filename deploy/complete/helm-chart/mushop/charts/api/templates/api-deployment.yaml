@@ -35,6 +35,9 @@ spec:
             httpGet:
               path: /health
               port: 8080
+          env:
+            - name: REDIS_URI
+              value: redis://mushop-session:6379
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           securityContext:

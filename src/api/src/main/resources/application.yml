@@ -19,13 +19,6 @@ micronaut:
   http:
     client:
       follow-redirects: false
-  session:
-    http:
-      redis:
-        enabled: true
-        namespace: 'mushop:sessions'
-        write-mode: BACKGROUND
-        enable-keyspace-events: false
   caches:
     discovery-client:
       enabled: false

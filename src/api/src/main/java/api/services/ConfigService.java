@@ -16,10 +16,7 @@ import java.util.Map;
 public class ConfigService {
 
     @Get("/config")
-    Single<Map<String, Object>> getConfig(HttpRequest<?> request) {
-        final Session session
-                = request.getAttribute(HttpSessionFilter.SESSION_ATTRIBUTE, Session.class)
-                .orElse(null);
+    Single<Map<String, Object>> getConfig(Session session) {
         String trackId = "";
         if (session != null) {
             trackId = session.getId();

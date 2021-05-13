@@ -26,6 +26,6 @@ micronaut:
         namespace: 'mushop:sessions'
         write-mode: BACKGROUND
         enable-keyspace-events: false
-redis:
-    caches:
-      discovery-client:
+  caches:
+    discovery-client:
+      enabled: false

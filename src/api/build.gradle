@@ -53,7 +53,7 @@ dependencies {
     testImplementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     testImplementation("com.oracle.database.jdbc:ojdbc8")
     testImplementation "org.mockito:mockito-core:3.9.0"
-    testCompile "com.github.kstyrc:embedded-redis:0.6"
+    testImplementation "com.github.kstyrc:embedded-redis:0.6"
 
 }
 

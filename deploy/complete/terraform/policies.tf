@@ -1,6 +1,6 @@
 # Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
-# 
+#
 
 resource "oci_identity_dynamic_group" "oke_nodes_dg" {
   name           = "${local.app_name_normalized}-oke-cluster-dg-${random_string.deploy_id.result}"
@@ -56,6 +56,8 @@ locals {
   )
   oke_compartment_statements = concat(
     local.oci_grafana_logs_statements,
+    local.allow_oke_to_manage_atp,
+    local.allow_oke_use_monitoring,
     var.use_encryption_from_oci_vault ? local.allow_oke_use_oci_vault_keys_statements : [],
     var.cluster_autoscaler_enabled ? local.cluster_autoscaler_statements : []
   )
@@ -92,5 +94,12 @@ locals {
     "Allow group ${var.user_admin_group_for_vault_policy} to manage vaults in compartment id ${local.oke_compartment_ocid}",
     "Allow group ${var.user_admin_group_for_vault_policy} to manage keys in compartment id ${local.oke_compartment_ocid}",
     "Allow group ${var.user_admin_group_for_vault_policy} to use key-delegate in compartment id ${local.oke_compartment_ocid}"
+  ]
+  allow_oke_use_monitoring = [
+    "Allow dynamic-group ${local.oke_nodes_dg} to use apm-domains in compartment id ${local.oke_compartment_ocid}",
+    "Allow dynamic-group ${local.oke_nodes_dg} to use metrics in compartment id ${local.oke_compartment_ocid}"
+  ]
+  allow_oke_to_manage_atp = [
+    "Allow dynamic-group ${local.oke_nodes_dg} to manage autonomous-database-family in compartment id ${local.oke_compartment_ocid}"
   ]
 }

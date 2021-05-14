@@ -1,0 +1,8 @@
+micronaut:
+  session:
+    http:
+      redis:
+        enabled: true
+        namespace: 'mushop:sessions'
+        write-mode: BACKGROUND
+        enable-keyspace-events: false

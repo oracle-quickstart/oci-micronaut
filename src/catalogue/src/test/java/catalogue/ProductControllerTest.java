@@ -70,12 +70,12 @@ public class ProductControllerTest {
 
     @Client("/")
     interface CatalogueClient extends CatalogueOperations {
-        @Get("/catalogue{?categories,PageSize,PageNum,Order}")
+        @Get("/catalogue{?categories,size,page,order}")
         List<CatalogueItemDTO> listPaged(
                 @Nullable @QueryValue List<String> categories,
-                @Nullable @QueryValue("Order") String sort,
-                @Nullable @QueryValue("PageNum") Integer page,
-                @Nullable @QueryValue("PageSize") Integer size
+                @Nullable @QueryValue("order") String sort,
+                @Nullable @QueryValue("page") Integer page,
+                @Nullable @QueryValue("size") Integer size
         );
 
     }

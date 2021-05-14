@@ -1,6 +1,6 @@
 # Copyright (c) 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
-# 
+#
 
 # Gets a list of supported images based on the shape, operating_system and operating_system_version provided
 data "oci_core_images" "node_pool_images" {
@@ -42,7 +42,11 @@ data "oci_identity_regions" "home_region" {
 
 # Gets kubeconfig
 data "oci_containerengine_cluster_kube_config" "oke_cluster_kube_config" {
-  cluster_id = var.create_new_oke_cluster ? oci_containerengine_cluster.oke_cluster[0].id : var.existent_oke_cluster_id
+  cluster_id = local.oke_cluster_id
+}
+
+locals {
+  oke_cluster_id = var.create_new_oke_cluster ? oci_containerengine_cluster.oke_cluster[0].id : var.existent_oke_cluster_id
 }
 
 # OCI Services

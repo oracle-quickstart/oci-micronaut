@@ -7,7 +7,7 @@ terraform {
   required_providers {
     oci = {
       source  = "hashicorp/oci"
-      version = ">= 4.20.0"
+      version = ">= 4.23.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -59,6 +59,7 @@ provider "oci" {
 
 # https://docs.cloud.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#notes
 provider "kubernetes" {
+//  config_path = "/Users/pgressa/oracle/git/oraclecloud-cloudnative/deploy/complete/terraform/generated/kubeconfig"
   load_config_file       = "false" # Workaround for tf k8s provider < 1.11.1 to work with ORM
   cluster_ca_certificate = base64decode(yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["certificate-authority-data"])
   host                   = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["server"]
@@ -78,6 +79,7 @@ provider "kubernetes" {
 # https://docs.cloud.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#notes
 provider "helm" {
   kubernetes {
+//    config_path = "/Users/pgressa/oracle/git/oraclecloud-cloudnative/deploy/complete/terraform/generated/kubeconfig"
     load_config_file       = "false" # Workaround for tf helm provider < 1.1.1 to work with ORM
     cluster_ca_certificate = base64decode(yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["certificate-authority-data"])
     host                   = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["server"]

@@ -71,15 +71,18 @@ variableGroups:
     - create_vault_policies_for_group
     - user_admin_group_for_vault_policy
 
-  - title: "Newsletter subcrsiption oracle function"
+  - title: "Newsletter subscription using Oracle Functions"
     variables:
     - create_oracle_function_newsletter
     - newsletter_function_approved_email_address
-    - newsletter_function_smtp_endpoint
     - newsletter_function_docker_image_repository
     - newsletter_function_docker_image_version
     - newsletter_function_timeout
     - newsletter_function_memory
+
+  - title: "Events streaming to Oracle Streaming Service"
+    variables:
+      - create_oracle_streaming_service_stream
 
   - title: "Cluster Utilities (MuShop Utilities)"
     variables:
@@ -495,14 +498,6 @@ variables:
       and:
         - create_oracle_function_newsletter
 
-  newsletter_function_smtp_endpoint:
-    type: string
-    required: true
-    title: "Oracle Cloud Email Delivery SMTP endpoint"
-    visible:
-      and:
-        - create_oracle_function_newsletter
-
   newsletter_function_docker_image_repository:
     type: string
     required: true
@@ -540,6 +535,14 @@ variables:
     visible:
       and:
         - create_oracle_function_newsletter
+
+  # Oracle Cloud Streaming service
+  create_oracle_streaming_service_stream:
+    type: boolean
+    title: "Create Oracle Cloud Streaming for Events service"
+    required: true
+    visible: true
+    default: true
 
   # Cluster Utilities
   grafana_enabled:

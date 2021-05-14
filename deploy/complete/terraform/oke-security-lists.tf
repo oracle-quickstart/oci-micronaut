@@ -7,7 +7,13 @@ resource "oci_core_security_list" "oke_nodes_security_list" {
   display_name   = "oke-nodes-wkr-seclist-${local.app_name_normalized}-${random_string.deploy_id.result}"
   vcn_id         = oci_core_virtual_network.oke_vcn[0].id
 
-  # Ingresses
+  lifecycle {
+    # Ignore changes made by OKE to ingress/egress rules in lb sec list.
+    ignore_changes = all
+  }
+
+
+# Ingresses
   ingress_security_rules {
     description = "Allow pods on one worker node to communicate with pods on other worker nodes"
     source      = lookup(var.network_cidrs, "SUBNET-REGIONAL-CIDR")
@@ -130,6 +136,11 @@ resource "oci_core_security_list" "oke_lb_security_list" {
   compartment_id = local.oke_compartment_ocid
   display_name   = "oke-lb-seclist-${local.app_name_normalized}-${random_string.deploy_id.result}"
   vcn_id         = oci_core_virtual_network.oke_vcn[0].id
+
+  lifecycle {
+    # Ignore changes made by OKE to ingress/egress rules in lb sec list.
+    ignore_changes = all
+  }
 
   count = var.create_new_oke_cluster ? 1 : 0
 }

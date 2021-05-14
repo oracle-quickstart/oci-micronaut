@@ -19,3 +19,6 @@ micronaut:
   http:
     client:
       follow-redirects: false
+  caches:
+    discovery-client:
+      enabled: false

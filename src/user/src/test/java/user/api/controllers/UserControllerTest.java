@@ -1,18 +1,12 @@
-package user;
+package user.api.controllers;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
-import user.api.LoginOperations;
-import user.api.dto.UserDto;
-import user.api.UserOperations;
-import user.api.dto.UserAddressDetailDto;
-import user.api.dto.UserAddressDto;
-import user.api.dto.UserCardDetailDto;
-import user.api.dto.UserCardDto;
-import user.api.dto.UserDetailDto;
+import user.api.*;
+import user.api.dto.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -40,10 +34,12 @@ public class UserControllerTest {
         assertEquals("12345", userDetail.getPhone());
 
         userDetail = client.getUser(userDetail.getId());
-        assertEquals(2, userDetail.getAddresses().size());
 
-        UserAddressDetailDto address1 = userDetail.getAddresses().stream().filter(a -> a.getNumber().equals("123")).findFirst().orElseThrow();
-        UserAddressDetailDto address2 = userDetail.getAddresses().stream().filter(a -> a.getNumber().equals("345")).findFirst().orElseThrow();
+        List<UserAddressDetailDto> addresses = client.getUserAddresses(userDetail.getId());
+        assertEquals(2, addresses.size());
+
+        UserAddressDetailDto address1 = addresses.stream().filter(a -> a.getNumber().equals("123")).findFirst().orElseThrow();
+        UserAddressDetailDto address2 = addresses.stream().filter(a -> a.getNumber().equals("345")).findFirst().orElseThrow();
 
         assertNotNull(address1.getId());
         assertNotNull(address1.getCreatedAt());
@@ -88,7 +84,9 @@ public class UserControllerTest {
         assertEquals("Bunny2", userDetail.getLastName());
         assertEquals("bunny2@bugs.nnn", userDetail.getEmail());
         assertEquals("12345222", userDetail.getPhone());
-        assertEquals(2, userDetail.getAddresses().size());
+
+        List<UserAddressDetailDto> addresses = client.getUserAddresses(userDetail.getId());
+        assertEquals(2, addresses.size());
 
         client.deleteUser(userDetail.getId());
     }
@@ -109,11 +107,10 @@ public class UserControllerTest {
         assertEquals("Country3", address.getCountry());
         assertEquals("333333", address.getPostcode());
 
-        userDetail = client.getUser(userDetail.getId());
+        List<UserAddressDetailDto> userAddresses = client.getUserAddresses(userDetail.getId());
+        assertEquals(3, userAddresses.size());
 
-        assertEquals(3, userDetail.getAddresses().size());
-
-        address = userDetail.getAddresses().stream().filter(a -> a.getNumber().equals("333")).findFirst().orElseThrow();
+        address = userAddresses.stream().filter(a -> a.getNumber().equals("333")).findFirst().orElseThrow();
 
         assertNotNull(address.getId());
         assertNotNull(address.getCreatedAt());
@@ -123,9 +120,6 @@ public class UserControllerTest {
         assertEquals("City3", address.getCity());
         assertEquals("Country3", address.getCountry());
         assertEquals("333333", address.getPostcode());
-
-        List<UserAddressDetailDto> userAddresses = client.getUserAddresses(userDetail.getId());
-        assertEquals(3, userAddresses.size());
 
         address = client.getUserAddress(userDetail.getId(), userAddresses.get(0).getId());
         assertEquals(address.getId(), userAddresses.get(0).getId());
@@ -152,10 +146,10 @@ public class UserControllerTest {
         assertEquals("xxxxxxxxxxxx3456", userCard.getLongNum());
         assertEquals("0310", userCard.getExpires());
 
-        userDetail = client.getUser(userDetail.getId());
+        List<UserCardDetailDto> cards  = client.getUserCards(userDetail.getId());
 
-        assertEquals(1, userDetail.getCards().size());
-        userCard = userDetail.getCards().stream().filter(a -> a.getNumber().equals("3456")).findFirst().orElseThrow();
+        assertEquals(1, cards.size());
+        userCard = cards.stream().filter(a -> a.getNumber().equals("3456")).findFirst().orElseThrow();
 
         assertNotNull(userCard.getId());
         assertNotNull(userCard.getCreatedAt());
@@ -164,8 +158,6 @@ public class UserControllerTest {
         assertEquals("xxxxxxxxxxxx3456", userCard.getLongNum());
         assertEquals("0310", userCard.getExpires());
 
-        List<UserCardDetailDto> cards = client.getUserCards(userDetail.getId());
-        assertEquals(1, cards.size());
         userCard = client.getUserCard(userDetail.getId(), cards.get(0).getId());
         assertEquals(userCard.getId(), cards.get(0).getId());
 

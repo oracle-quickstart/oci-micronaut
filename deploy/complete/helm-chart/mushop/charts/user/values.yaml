@@ -6,8 +6,8 @@ image:
   pullPolicy: Always
 
 dbtools:
-  repository: iad.ocir.io/oracle/ateam/mushop-dbtools
-  tag: 1.0.1
+  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/dbtools
+  tag: 21.0.0
   pullPolicy: IfNotPresent
 
 osb: {}

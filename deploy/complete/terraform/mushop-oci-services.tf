@@ -87,10 +87,12 @@ resource "kubernetes_secret" "oss-connection" {
     namespace = kubernetes_namespace.mushop_namespace.id
   }
   data = {
-    bootstrapServers    = oci_streaming_stream_pool.stream_pool.kafka_settings.bootstrap_servers
-    jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user.name}/${oci_streaming_stream_pool.stream_pool.id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token.token}\";"
+    bootstrapServers    = oci_streaming_stream_pool.stream_pool[0].kafka_settings[0].bootstrap_servers
+    jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user[0].name}/${oci_streaming_stream_pool.stream_pool[0].id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token[0].token}\";"
   }
   type = "Opaque"
+
+  count = var.create_oracle_streaming_service_stream ? 1 : 0
 }
 
 ### OADB Wallet extraction <>
@@ -245,6 +247,32 @@ resource "kubernetes_secret" "oos_bucket" {
   type = "Opaque"
 
   count = var.mushop_mock_mode_all ? 0 : 1
+}
+
+## OCI Functions
+
+module "newsletter_url" {
+  source  = "matti/urlparse/external"
+  version = "0.2.0"
+  url = oci_apigateway_deployment.fn_newsletter_deployment[0].endpoint
+  count = var.create_oracle_function_newsletter ? 1 : 0
+}
+
+resource "kubernetes_service" "newsletter_svc" {
+  metadata {
+    name = var.newsletter_service_name
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  spec {
+    type = "ExternalName"
+    external_name = module.newsletter_url[0].host
+    port {
+      target_port = "443"
+      port = 443
+    }
+  }
+
+  count = var.create_oracle_function_newsletter ? 1 : 0
 }
 
 ## OCI KMS Vault

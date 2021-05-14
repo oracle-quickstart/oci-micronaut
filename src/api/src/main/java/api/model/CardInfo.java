@@ -3,22 +3,28 @@ package api.model;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Optional;
 
+@Schema(title = "Payment card", description = "User payment card details.")
 @Introspected
 public class CardInfo {
+    @Schema(title = "Card id.", example = "22")
     @Nullable
     private final String id;
 
+    @Schema(title = "Card ccv.", example = "359")
     @Nullable
     private final String ccv;
 
+    @Schema(title = "Card number.", example = "111122223333444")
     @Size(min = 16, max = 16)
     private final String longNum;
 
+    @Schema(title = "Card expiration.", example = "0426")
     @Size(min = 4, max = 4)
     private final String expires;
 

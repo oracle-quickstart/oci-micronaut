@@ -25,6 +25,7 @@ import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Status;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.authentication.Authenticator;
@@ -38,6 +39,11 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.validation.Validated;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,9 +73,20 @@ public class LoginController {
         this.eventPublisher = eventPublisher;
     }
 
+    @Operation(
+            summary = "User login",
+            description = "Logs user into MuShop.",
+            security = @SecurityRequirement(name = "BasicAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "303", description = "Successfully authenticated", headers = @Header(required = true, name = "Set-Cookie", description = "Set session cookie")),
+                    @ApiResponse(responseCode = "400", description = "Missing Authorization header."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            },
+            tags = {"user"})
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON})
     @Post
-    public Single<MutableHttpResponse<?>> login(HttpRequest<?> request) {
+    @Status(HttpStatus.SEE_OTHER)
+    public Single<MutableHttpResponse<?>> login(@Parameter(hidden = true) HttpRequest<?> request) {
         Optional<UsernamePasswordCredentials> credentials = request.getHeaders().getAuthorization().flatMap(BasicAuthUtils::parseCredentials);
         if (credentials.isPresent()) {
             Flowable<AuthenticationResponse> authenticationResponseFlowable = Flowable.fromPublisher(authenticator.authenticate(request, credentials.get()));

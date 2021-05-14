@@ -3,6 +3,7 @@ package api.services;
 import api.model.AddressInfo;
 import api.model.CardInfo;
 import api.model.MuUserDetails;
+import api.model.UserDetail;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Client(id = ServiceLocator.USER, path = "/customers")
 public interface UsersClient {
     @Get("/{customerId}")
-    Maybe<Map<String, Object>> getUser(String customerId);
+    Maybe<UserDetail> getUser(String customerId);
 
     @Post("/{customerId}/addresses")
     Single<AddressInfo> addAddress(String customerId, @Body AddressInfo address);

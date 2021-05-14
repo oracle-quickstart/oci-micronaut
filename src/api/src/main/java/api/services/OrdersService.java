@@ -1,5 +1,6 @@
 package api.services;
 
+import api.Application;
 import api.model.MuUserDetails;
 import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
@@ -16,6 +17,11 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Single;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,8 +47,18 @@ public class OrdersService {
         this.serviceLocator = serviceLocator;
     }
 
+    @Operation(
+            summary = "List orders",
+            description = "List user orders.",
+            security = @SecurityRequirement(name = Application.COOKIE_AUTH),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Returns list of user orders."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized.")
+            },
+            tags = {"orders"}
+    )
     @Get("/orders{?sort}")
-    Single<List<?>> getOrders(Authentication authentication, @Nullable String sort) {
+    Single<List<?>> getOrders(Authentication authentication, @Nullable @Parameter(description = "Sort orders", example = "createdDate,asc") String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
         return client.getOrders(customerId, sort)
                 .map(stringObjectMap -> {
@@ -60,11 +76,34 @@ public class OrdersService {
                 });
     }
 
+    @Operation(
+            summary = "Get order",
+            description = "Get order by order id.",
+            security = @SecurityRequirement(name = Application.COOKIE_AUTH),
+            parameters = {
+                    @Parameter(name = "orderId", in = ParameterIn.PATH, required = true, description = "Order id", example = "22")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Returns order detail."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized.")
+            },
+            tags = {"orders"}
+    )
     @Get("/orders/{orderId}")
     Single<Map<String, Object>> getOrder(Long orderId) {
         return client.getOrder(orderId);
     }
 
+    @Operation(
+            summary = "Create order",
+            description = "Creates new order based on specified cartId.",
+            security = @SecurityRequirement(name = Application.COOKIE_AUTH),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Returns order summary."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized.")
+            },
+            tags = {"orders"}
+    )
     @Post("/orders")
     @Status(HttpStatus.CREATED)
     @TrackEvent("create:order")

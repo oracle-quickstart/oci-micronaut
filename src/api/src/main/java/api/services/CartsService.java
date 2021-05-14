@@ -17,9 +17,14 @@ import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 import java.util.*;
 
 @MuService
@@ -36,26 +41,50 @@ public class CartsService {
         this.catalogueClient = catalogueClient;
     }
 
+    @Operation(
+            summary = "Get cart",
+            description = "Get current cart items.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Returns items in cart."),
+            },
+            tags = {"cart"}
+    )
     @Get(value = "/cart", produces = MediaType.APPLICATION_JSON)
-    Single<List<?>> getCart(@CartId UUID cartID) {
+    Single<List<CartItem>> getCart(@Parameter(hidden = true) @CartId UUID cartID) {
         return client.getCartItems(cartID)
                 .onErrorReturnItem(Collections.emptyList());
     }
 
+    @Operation(
+            summary = "Deletes cart",
+            description = "Deletes current cart.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Cart deleted."),
+            },
+            tags = {"cart"}
+    )
     @Delete(value = "/cart", produces = MediaType.APPLICATION_JSON)
     @Status(HttpStatus.NO_CONTENT)
     @TrackEvent("delete:cart")
-    Completable deleteCart(@CartId UUID cartID) {
+    Completable deleteCart(@Parameter(hidden = true) @CartId UUID cartID) {
         return client.deleteCart(cartID)
                     .onErrorComplete();
     }
 
+    @Operation(
+            summary = "Add item",
+            description = "Adds item to current cart.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Item added to cart."),
+            },
+            tags = {"cart"}
+    )
     @Status(HttpStatus.CREATED)
     @Post(value = "/cart")
     @TrackEvent("cart:addItem")
     Completable addItem(
             Authentication authentication,
-            @CartId UUID cartId,
+            @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
         return catalogueClient.getItem(addItem.id)
             .switchIfEmpty(Single.error(() ->
@@ -77,10 +106,18 @@ public class CartsService {
             ));
     }
 
+    @Operation(
+            summary = "Update item",
+            description = "Updates item in current cart.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Item updated."),
+            },
+            tags = {"cart"}
+    )
     @Status(HttpStatus.OK)
     @Post(value = "/cart/update")
     Completable updateItem(
-            @CartId UUID cartId,
+            @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
         return catalogueClient.getItem(addItem.id)
                 .switchIfEmpty(Single.error(() ->
@@ -99,10 +136,18 @@ public class CartsService {
                 ));
     }
 
+    @Operation(
+            summary = "Delete cart item",
+            description = "Deletes item from cart.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Item removed."),
+            },
+            tags = {"cart"}
+    )
     @Delete(value = "/cart/{id}", produces = MediaType.APPLICATION_JSON)
     @Status(HttpStatus.NO_CONTENT)
     @TrackEvent("delete:cartItem")
-    Completable deleteCartItem(@CartId UUID cartID, String id) {
+    Completable deleteCartItem( @Parameter(hidden = true) @CartId UUID cartID, String id) {
         return client.deleteCartItem(cartID, id);
     }
 
@@ -115,7 +160,7 @@ public class CartsService {
     @Client(id = ServiceLocator.CARTS, path = "/carts")
     interface CartsClient {
         @Get(uri = "/{cartId}/items", produces = MediaType.APPLICATION_JSON)
-        Single<List<?>> getCartItems(UUID cartId);
+        Single<List<CartItem>> getCartItems(UUID cartId);
 
         @Delete(uri = "/{cartId}")
         Completable deleteCart(UUID cartId);
@@ -130,6 +175,7 @@ public class CartsService {
         Single<HttpStatus> updateCartItem(UUID cartId, @Body Map<String, Object> body);
     }
 
+    @Schema(title = "Cart item update")
     @Introspected
     static class ItemUpdate {
         @NotBlank
@@ -141,6 +187,65 @@ public class CartsService {
             this.id = id;
             this.quantity = quantity;
         }
+
+        /**
+         * Item id.
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * New quantity of item.
+         */
+        public int getQuantity() {
+            return quantity;
+        }
     }
 
+    @Schema(title = "Cart item")
+    @Introspected
+    static class CartItem {
+
+        private String id;
+
+        private String itemId;
+
+        private int quantity;
+
+        private BigDecimal unitPrice;
+
+        public CartItem() {
+            this.id = UUID.randomUUID().toString();
+            this.quantity = 1;
+        }
+
+        /**
+         * Item id.
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * Item name.
+         */
+        public String getItemId() {
+            return itemId;
+        }
+
+        /**
+         * Item quantity.
+         */
+        public int getQuantity() {
+            return quantity;
+        }
+
+        /**
+         * Item unit price.
+         */
+        public BigDecimal getUnitPrice() {
+            return unitPrice;
+        }
+    }
 }

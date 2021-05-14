@@ -11,6 +11,12 @@ import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.reactivex.Single;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +31,14 @@ public class NewsLetterService {
         this.client = client;
     }
 
+    @Operation(
+            summary = "Newsletter subscription",
+            description = "Subscribe to newsletter.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Returns list of user orders."),
+            },
+            tags = {"newsletter"}
+    )
     @Post("/newsletter")
     @TrackEvent("subscribe:newsletter")
     Single<SubscribeResponse> subscribe(@Email @NotBlank String email) {
@@ -49,6 +63,7 @@ public class NewsLetterService {
         Single<SubscribeResponse> post(String email);
     }
 
+    @Schema(name = "Subscription response", description = "Subscription summary.")
     @Introspected
     static class SubscribeResponse {
         private final String messageId;

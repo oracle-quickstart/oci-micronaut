@@ -3,26 +3,35 @@ package api.model;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
+@Schema(title = "User address", description = "User address details.")
 @Introspected
 public class AddressInfo {
+    @Schema(title = "Address id", example = "22")
     @Nullable
     private final String id;
+
+    @Schema(title = "Street number", example = "2")
     @NotEmpty
     private final String number;
 
+    @Schema(title = "Street name", example = "Round the corner")
     @NotEmpty
     private final String street;
 
+    @Schema(title = "Street name", example = "Lanai")
     @NotEmpty
     private final String city;
 
+    @Schema(title = "Country", example = "Hawaii")
     @NotEmpty
     private final String country;
 
+    @Schema(title = "Postcode", example = "96763")
     @NotEmpty
     private final String postcode;
 

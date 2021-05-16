@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.UserDetails;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
+@Schema(title = "Authentication details")
 @Introspected
 public class MuUserDetails extends UserDetails {
     public static final String ID = "id";

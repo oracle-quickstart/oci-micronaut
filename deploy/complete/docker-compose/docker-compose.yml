@@ -69,7 +69,7 @@ services:
     environment:
       - reschedule=on-node-failure
 
-  # Storefront backend API service
+  # Storefront frontend
   storefront:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/storefront:2.1.2
     restart: always
@@ -83,6 +83,8 @@ services:
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid
+    ports:
+      - "80:8080"
     environment:
       - reschedule=on-node-failure
 

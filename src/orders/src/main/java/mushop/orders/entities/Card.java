@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Card implements Serializable {
@@ -107,46 +108,23 @@ public class Card implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((ccv == null) ? 0 : ccv.hashCode());
-        result = prime * result + ((expires == null) ? 0 : expires.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((longNum == null) ? 0 : longNum.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Card card = (Card) o;
+        return Objects.equals(id, card.id) &&
+                Objects.equals(longNum, card.longNum) &&
+                Objects.equals(expires, card.expires) &&
+                Objects.equals(ccv, card.ccv);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Card other = (Card) obj;
-        if (ccv == null) {
-            if (other.ccv != null)
-                return false;
-        } else if (!ccv.equals(other.ccv))
-            return false;
-        if (expires == null) {
-            if (other.expires != null)
-                return false;
-        } else if (!expires.equals(other.expires))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (longNum == null) {
-            if (other.longNum != null)
-                return false;
-        } else if (!longNum.equals(other.longNum))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, longNum, expires, ccv);
     }
 
     @Override

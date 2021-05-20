@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class CustomerOrder implements Serializable {
@@ -151,64 +152,26 @@ public class CustomerOrder implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((address == null) ? 0 : address.hashCode());
-        result = prime * result + ((card == null) ? 0 : card.hashCode());
-        result = prime * result + ((customer == null) ? 0 : customer.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((items == null) ? 0 : items.hashCode());
-        result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
-        result = prime * result + ((shipment == null) ? 0 : shipment.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CustomerOrder that = (CustomerOrder) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(customer, that.customer) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(card, that.card) &&
+                Objects.equals(items, that.items) &&
+                Objects.equals(shipment, that.shipment) &&
+                Objects.equals(orderDate, that.orderDate);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CustomerOrder other = (CustomerOrder) obj;
-        if (address == null) {
-            if (other.address != null)
-                return false;
-        } else if (!address.equals(other.address))
-            return false;
-        if (card == null) {
-            if (other.card != null)
-                return false;
-        } else if (!card.equals(other.card))
-            return false;
-        if (customer == null) {
-            if (other.customer != null)
-                return false;
-        } else if (!customer.equals(other.customer))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (items == null) {
-            if (other.items != null)
-                return false;
-        } else if (!items.equals(other.items))
-            return false;
-        if (orderDate == null) {
-            if (other.orderDate != null)
-                return false;
-        } else if (!orderDate.equals(other.orderDate))
-            return false;
-        if (shipment == null) {
-            if (other.shipment != null)
-                return false;
-        } else if (!shipment.equals(other.shipment))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, customer, address, card, items, shipment, orderDate);
     }
 
     @Override

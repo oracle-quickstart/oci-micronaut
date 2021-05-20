@@ -1,9 +1,7 @@
 package api;
 
 import io.micronaut.http.BasicAuth;
-import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.support.TestPropertyProvider;
@@ -17,8 +15,8 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 
 abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
-    static OracleContainer oracleContainer;
 
+    static OracleContainer oracleContainer;
     static GenericContainer<?> serviceContainer;
 
     @AfterAll

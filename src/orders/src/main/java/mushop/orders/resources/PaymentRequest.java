@@ -14,6 +14,7 @@ import java.util.Objects;
 
 @Introspected
 public class PaymentRequest {
+
     private Address address;
     private Card card;
     private Customer customer;
@@ -23,7 +24,10 @@ public class PaymentRequest {
     }
 
     @Creator
-    public PaymentRequest(Address address, Card card, Customer customer, float amount) {
+    public PaymentRequest(Address address,
+                          Card card,
+                          Customer customer,
+                          float amount) {
         this.address = address;
         this.customer = customer;
         this.card = card;

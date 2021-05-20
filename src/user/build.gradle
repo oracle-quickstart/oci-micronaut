@@ -24,7 +24,6 @@ repositories {
     mavenLocal()
 }
 
-
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
@@ -75,6 +74,7 @@ dependencies {
 application {
     mainClass.set("user.Application")
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -87,5 +87,3 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
-
-

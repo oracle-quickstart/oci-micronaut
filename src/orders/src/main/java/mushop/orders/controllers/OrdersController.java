@@ -6,7 +6,12 @@ package mushop.orders.controllers;
 
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.Status;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.transaction.annotation.ReadOnly;
 import io.reactivex.Single;
@@ -14,7 +19,6 @@ import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
-import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
 
@@ -27,7 +31,8 @@ public class OrdersController {
     private final OrdersService ordersService;
     private final DtoMapper dtoMapper;
 
-    public OrdersController(OrdersService ordersService, DtoMapper dtoMapper) {
+    public OrdersController(OrdersService ordersService,
+                            DtoMapper dtoMapper) {
         this.ordersService = ordersService;
         this.dtoMapper = dtoMapper;
     }
@@ -35,7 +40,10 @@ public class OrdersController {
     @Status(HttpStatus.CREATED)
     @Post
     public Single<CustomerOrder> newOrder(@Body NewOrderResource newOrderResource) {
-        if (newOrderResource.address == null || newOrderResource.customer == null || newOrderResource.card == null || newOrderResource.items == null) {
+        if (newOrderResource.address == null ||
+                newOrderResource.customer == null ||
+                newOrderResource.card == null ||
+                newOrderResource.items == null) {
             throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
         }
         return ordersService.placeOrder(newOrderResource);

@@ -29,22 +29,22 @@ import java.util.Date;
 public class CustomerOrderDto extends AbstractResource<CustomerOrderDto> {
 
     private final Long id;
-
     private final CustomerDto customer;
-
     private final Address address;
-
     private final Card card;
-
     private final Collection<ItemDto> items;
-
     private final Shipment shipment;
-
     private final Date orderDate;
-
     private final Float total;
 
-    public CustomerOrderDto(Long id, CustomerDto customer, Address address, Card card, Collection<ItemDto> items, Shipment shipment, Date orderDate, Float total) {
+    public CustomerOrderDto(Long id,
+                            CustomerDto customer,
+                            Address address,
+                            Card card,
+                            Collection<ItemDto> items,
+                            Shipment shipment,
+                            Date orderDate,
+                            Float total) {
         this.id = id;
         this.customer = customer;
         this.address = address;

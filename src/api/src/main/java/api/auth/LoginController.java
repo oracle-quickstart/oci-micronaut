@@ -78,7 +78,8 @@ public class LoginController {
             description = "Logs user into MuShop.",
             security = @SecurityRequirement(name = "BasicAuth"),
             responses = {
-                    @ApiResponse(responseCode = "303", description = "Successfully authenticated", headers = @Header(required = true, name = "Set-Cookie", description = "Set session cookie")),
+                    @ApiResponse(responseCode = "303", description = "Successfully authenticated",
+                            headers = @Header(required = true, name = "Set-Cookie", description = "Set session cookie")),
                     @ApiResponse(responseCode = "400", description = "Missing Authorization header."),
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
             },

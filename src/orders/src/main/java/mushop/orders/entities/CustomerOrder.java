@@ -8,9 +8,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.DateCreated;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -40,7 +48,6 @@ public class CustomerOrder implements Serializable {
     @Nullable
     private Collection<Item> items;
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @Nullable
     private Shipment shipment;
@@ -53,12 +60,16 @@ public class CustomerOrder implements Serializable {
     private Float total;
 
     public CustomerOrder() {
-        // TODO Auto-generated constructor stub
     }
 
-
-    public CustomerOrder(Long id, Customer customer, Address address, Card card, List<Item> items,
-                         Shipment shipment, Date orderDate, Float total) {
+    public CustomerOrder(Long id,
+                         Customer customer,
+                         Address address,
+                         Card card,
+                         List<Item> items,
+                         Shipment shipment,
+                         Date orderDate,
+                         Float total) {
         super();
         this.id = id;
         this.customer = customer;
@@ -139,7 +150,6 @@ public class CustomerOrder implements Serializable {
         this.total = total;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -203,9 +213,14 @@ public class CustomerOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "CustomerOrder [id=" + id + ", customer=" + customer + ", address=" + address + ", card=" + card
-                + ", items=" + items + ", shipment=" + shipment + ", orderDate=" + orderDate + ", total=" + total + "]";
+        return "CustomerOrder [id=" + id +
+                ", customer=" + customer +
+                ", address=" + address +
+                ", card=" + card +
+                ", items=" + items +
+                ", shipment=" + shipment +
+                ", orderDate=" + orderDate +
+                ", total=" + total +
+                "]";
     }
-
-
 }

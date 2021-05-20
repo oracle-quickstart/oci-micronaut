@@ -9,20 +9,20 @@ import java.util.UUID;
 public class UserCardDetailDto {
 
     private final UUID id;
-
     private final String number;
-
     private final String longNum;
-
     private final String expires;
-
     private final OffsetDateTime createdAt;
-
     private final OffsetDateTime updatedAt;
-
     private final UserDetailDto user;
 
-    public UserCardDetailDto(UUID id, String number, String longNum, String expires, OffsetDateTime createdAt, OffsetDateTime updatedAt, UserDetailDto user) {
+    public UserCardDetailDto(UUID id,
+                             String number,
+                             String longNum,
+                             String expires,
+                             OffsetDateTime createdAt,
+                             OffsetDateTime updatedAt,
+                             UserDetailDto user) {
         this.id = id;
         this.number = number;
         this.longNum = longNum;

@@ -12,6 +12,7 @@ import java.util.Optional;
 @Schema(title = "Payment card", description = "User payment card details.")
 @Introspected
 public class CardInfo {
+
     @Schema(title = "Card id.", example = "22")
     @Nullable
     private final String id;
@@ -29,14 +30,19 @@ public class CardInfo {
     private final String expires;
 
     @Creator
-    public CardInfo(@Nullable String id, @Nullable String ccv, String longNum, String expires) {
+    public CardInfo(@Nullable String id,
+                    @Nullable String ccv,
+                    String longNum,
+                    String expires) {
         this.id = id;
         this.ccv = ccv;
         this.longNum = longNum;
         this.expires = expires;
     }
 
-    public CardInfo(@Nullable String ccv, String longNum, String expires) {
+    public CardInfo(@Nullable String ccv,
+                    String longNum,
+                    String expires) {
         this(null, ccv, longNum, expires);
     }
 
@@ -62,7 +68,8 @@ public class CardInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardInfo cardInfo = (CardInfo) o;
-        return longNum.equals(cardInfo.longNum) && expires.equals(cardInfo.expires);
+        return longNum.equals(cardInfo.longNum) &&
+                expires.equals(cardInfo.expires);
     }
 
     @Override

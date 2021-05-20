@@ -3,7 +3,13 @@ package newsletter.subscription;
 import io.micronaut.context.annotation.Property;
 
 import javax.inject.Singleton;
-import javax.mail.*;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -12,6 +18,7 @@ import java.util.Properties;
 
 @Singleton
 public class JavaMailSender implements MailSender {
+
     private final MailConfiguration configuration;
     private final String senderEmail;
 

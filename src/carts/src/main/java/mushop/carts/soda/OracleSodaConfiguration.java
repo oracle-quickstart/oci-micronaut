@@ -11,6 +11,7 @@ import java.util.Properties;
 
 @EachProperty(value = OracleSodaConfiguration.PREFIX, primary = "default")
 public class OracleSodaConfiguration {
+
     public static final String PREFIX = "datasources";
 
     private SodaConfiguration soda;

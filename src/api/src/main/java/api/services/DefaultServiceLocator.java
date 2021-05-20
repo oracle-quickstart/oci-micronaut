@@ -10,13 +10,14 @@ import javax.inject.Singleton;
 
 @Singleton
 class DefaultServiceLocator implements ServiceLocator {
+
     private final LoadBalancer userLoadBalancer;
     private final LoadBalancer cartLoadBalancer;
 
     DefaultServiceLocator(LoadBalancerResolver loadBalancerResolver) {
-        this.userLoadBalancer = loadBalancerResolver.resolve(ServiceLocator.USER)
+        userLoadBalancer = loadBalancerResolver.resolve(ServiceLocator.USER)
                 .orElseThrow(() -> new NoAvailableServiceException(ServiceLocator.USER));
-        this.cartLoadBalancer = loadBalancerResolver.resolve(ServiceLocator.CARTS)
+        cartLoadBalancer = loadBalancerResolver.resolve(ServiceLocator.CARTS)
                 .orElseThrow(() -> new NoAvailableServiceException(ServiceLocator.CARTS));
     }
 
@@ -31,6 +32,7 @@ class DefaultServiceLocator implements ServiceLocator {
     }
 
     private Single<UriTemplate> toUriTemplate(LoadBalancer cartLoadBalancer) {
-        return Single.fromPublisher(cartLoadBalancer.select()).map(serviceInstance -> UriTemplate.of(serviceInstance.getURI().toString()));
+        return Single.fromPublisher(cartLoadBalancer.select())
+                .map(serviceInstance -> UriTemplate.of(serviceInstance.getURI().toString()));
     }
 }

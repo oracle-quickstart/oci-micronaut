@@ -14,7 +14,11 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import mushop.orders.OrdersConfiguration;
 import mushop.orders.client.PaymentClient;
-import mushop.orders.entities.*;
+import mushop.orders.entities.Address;
+import mushop.orders.entities.Card;
+import mushop.orders.entities.Customer;
+import mushop.orders.entities.CustomerOrder;
+import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.resources.OrderUpdate;
@@ -39,17 +43,11 @@ public class OrdersService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     private final CustomerOrderRepository customerOrderRepository;
-
     private final MeterRegistry meterRegistry;
-
     private final OrdersPublisher ordersPublisher;
-
     private final PaymentClient paymentClient;
-
     private final OrdersConfiguration ordersConfiguration;
-
     private final RxHttpClient userClient;
-
     private final RxHttpClient cartsClient;
 
     public OrdersService(CustomerOrderRepository customerOrderRepository,

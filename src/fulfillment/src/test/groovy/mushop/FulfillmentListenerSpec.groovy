@@ -2,7 +2,6 @@
  * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
  * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  **/
-
 package mushop
 
 import io.micronaut.http.client.RxHttpClient
@@ -15,7 +14,7 @@ import spock.util.concurrent.AsyncConditions
 import javax.inject.Inject
 
 @MicronautTest
-class FulfillmentListenerSpec extends AbstractFulfillmentSpec{
+class FulfillmentListenerSpec extends AbstractFulfillmentSpec {
 
     @Inject
     @Client("/fulfillment")
@@ -48,8 +47,7 @@ class FulfillmentListenerSpec extends AbstractFulfillmentSpec{
             assert asyncConditions
             asyncConditions.evaluate(() -> {
                 assert orderUpdate.shipment
-            }
-            )
+            })
         }
     }
 }

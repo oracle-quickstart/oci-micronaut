@@ -43,6 +43,7 @@ import java.util.List;
 @Controller("/carts")
 @ExecuteOn(TaskExecutors.IO)
 public class CartsController {
+
     public static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
 
     private final CartRepository cartRepository;
@@ -55,7 +56,8 @@ public class CartsController {
     public Cart getCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
         return cart;
     }
@@ -64,7 +66,8 @@ public class CartsController {
     public List<Item> getCartItems(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
         return cart.getItems();
     }
@@ -73,14 +76,16 @@ public class CartsController {
     public Cart deleteCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         if (cartRepository.deleteCart(cartId)) {
             LOG.info("Cart deleted: {}", cart);
             return cart;
         } else {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Failed to delete cart " + cartId);
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Failed to delete cart " + cartId);
         }
     }
 
@@ -89,11 +94,13 @@ public class CartsController {
     public Cart deleteCartItem(String cartId, String itemId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         if (!cart.removeItem(itemId)) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart item with id " + itemId + " not found " + cart);
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart item with id " + itemId + " not found " + cart);
         }
 
         cartRepository.save(cart);
@@ -102,7 +109,8 @@ public class CartsController {
     }
 
     @Post("/{cartId}")
-    public HttpResponse<Cart> postCart(@PathVariable String cartId, @Body Cart newCart) {
+    public HttpResponse<Cart> postCart(@PathVariable String cartId,
+                                       @Body Cart newCart) {
 
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
@@ -122,7 +130,8 @@ public class CartsController {
     public Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         for (Item item : cart.getItems()) {

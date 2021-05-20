@@ -32,11 +32,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class UsersService {
+
     private final UsersClient client;
     private final AuthClient authClient;
     private final SessionLoginHandler sessionLoginHandler;
 
-    UsersService(UsersClient client, AuthClient authClient, SessionLoginHandler sessionLoginHandler) {
+    UsersService(UsersClient client,
+                 AuthClient authClient,
+                 SessionLoginHandler sessionLoginHandler) {
         this.client = client;
         this.authClient = authClient;
         this.sessionLoginHandler = sessionLoginHandler;

@@ -8,6 +8,7 @@ import io.micronaut.core.annotation.Introspected;
  */
 @Introspected
 public class AuthorizationRequest {
+
     private final double amount;
 
     public AuthorizationRequest(double amount) {

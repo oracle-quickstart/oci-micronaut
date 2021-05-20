@@ -23,6 +23,7 @@ import java.util.List;
 @Schema(title = "Categories list")
 @Introspected
 public class Categories {
+
     private final String[] categories;
 
     public Categories(List<String> categories) {

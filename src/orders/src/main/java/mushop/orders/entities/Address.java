@@ -4,14 +4,13 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 @Entity
 public class Address implements Serializable {
@@ -25,12 +24,18 @@ public class Address implements Serializable {
 
     @JsonProperty("number")
     private String street_number;
+
     private String street;
     private String city;
     private String postcode;
     private String country;
 
-    public Address(String id, String street_number, String street, String city, String postcode, String country) {
+    public Address(String id,
+                   String street_number,
+                   String street,
+                   String city,
+                   String postcode,
+                   String country) {
         super();
         this.id = id;
         this.street_number = street_number;
@@ -141,7 +146,6 @@ public class Address implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
-
 
     @Override
     public int hashCode() {

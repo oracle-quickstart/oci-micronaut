@@ -8,6 +8,7 @@ import java.util.Objects;
 
 @Introspected
 public class Event {
+
     private final String type;
     private final Map<String, String> detail;
 

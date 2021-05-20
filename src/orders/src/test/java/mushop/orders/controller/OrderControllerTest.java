@@ -2,7 +2,6 @@ package mushop.orders.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micronaut.core.type.Argument;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.Sort;
@@ -35,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -91,7 +89,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void missingCustomer_returns_406(){
+    void missingCustomer_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(null, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
@@ -147,7 +145,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void paymentDeclined_returns_406(){
+    void paymentDeclined_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
         when(ordersService.placeOrder(orderPayload))
                 .thenThrow(new OrdersController.PaymentDeclinedException("test"));
@@ -174,7 +172,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void customerOrdersWithoutSort_returns_200(){
+    void customerOrdersWithoutSort_returns_200() {
         Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
 
         when(ordersService.searchCustomerOrders(eq("123"), any(Pageable.class)))
@@ -185,7 +183,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void customerOrdersWithSort_returns_200(){
+    void customerOrdersWithSort_returns_200() {
         Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
 
         when(ordersService.searchCustomerOrders(
@@ -202,7 +200,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @MockBean(OrdersService.class)
-    OrdersService ordersService(){
+    OrdersService ordersService() {
         return mock(OrdersService.class);
     }
 }

@@ -9,8 +9,9 @@ import mushop.orders.entities.Shipment;
 
 @Introspected
 public class OrderUpdate {
+
     private final Long orderId;
-    private final mushop.orders.entities.Shipment Shipment;
+    private final Shipment Shipment;
 
     public OrderUpdate(Long orderId, Shipment shipment) {
         this.orderId = orderId;

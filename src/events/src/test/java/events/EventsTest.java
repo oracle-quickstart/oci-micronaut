@@ -13,7 +13,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.KafkaContainer;
@@ -29,7 +28,9 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @MicronautTest
@@ -75,7 +76,6 @@ class EventsTest implements TestPropertyProvider {
                 new Event(type, details)
         );
 
-
         assertNotNull(eventsReceived);
         assertTrue(eventsReceived.isSuccess());
         assertEquals(1, eventsReceived.getEvents());
@@ -87,25 +87,11 @@ class EventsTest implements TestPropertyProvider {
 
         final EventRecord eventRecord = eventsListener.received.stream().findFirst().orElse(null);
         assertNotNull(eventRecord);
-        assertEquals(
-                source,
-                eventRecord.getSource()
-        );
-        assertEquals(
-                track,
-                eventRecord.getTrack()
-        );
-        assertNotNull(
-                eventRecord.getTime()
-        );
-        assertEquals(
-                type,
-                eventRecord.getType()
-        );
-        assertEquals(
-                details,
-                eventRecord.getDetail()
-        );
+        assertEquals(source, eventRecord.getSource());
+        assertEquals(track, eventRecord.getTrack());
+        assertNotNull(eventRecord.getTime());
+        assertEquals(type, eventRecord.getType());
+        assertEquals(details, eventRecord.getDetail());
     }
 
     @NonNull
@@ -119,6 +105,7 @@ class EventsTest implements TestPropertyProvider {
     @KafkaListener(offsetReset = OffsetReset.EARLIEST)
     static class EventsListener {
         private final Collection<EventRecord> received = new ConcurrentLinkedDeque<>();
+
         @Topic("events")
         void receive(EventRecord eventRecord) {
             received.add(eventRecord);
@@ -133,5 +120,4 @@ class EventsTest implements TestPropertyProvider {
                 String track,
                 Event...events);
     }
-
 }

@@ -20,7 +20,6 @@ import org.reactivestreams.Publisher;
 
 import java.util.Collections;
 
-
 @Filter(Filter.MATCH_ALL_PATTERN)
 public class TrackEventFilter implements HttpServerFilter {
     private final EventsService eventsService;

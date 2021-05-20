@@ -2,18 +2,15 @@ package catalogue;
 
 import catalogue.controllers.CatalogueItemDTO;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

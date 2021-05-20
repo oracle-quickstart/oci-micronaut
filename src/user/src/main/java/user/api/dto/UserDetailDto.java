@@ -11,27 +11,24 @@ import java.util.UUID;
 public class UserDetailDto {
 
     private final UUID id;
-
     private final String username;
-
     private final String firstName;
-
     private final String lastName;
-
     private final String email;
-
     private final String phone;
-
-
-
     private final OffsetDateTime createdAt;
-
     private final OffsetDateTime updatedAt;
     private List<UserAddressDetailDto> addresses;
     private List<UserCardDetailDto> cards;
 
-    public UserDetailDto(UUID id, String username, String firstName, String lastName, String email, String phone,
-                         OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public UserDetailDto(UUID id,
+                         String username,
+                         String firstName,
+                         String lastName,
+                         String email,
+                         String phone,
+                         OffsetDateTime createdAt,
+                         OffsetDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -44,7 +41,6 @@ public class UserDetailDto {
 
     public void setAddresses(List<UserAddressDetailDto> addresses) {
         this.addresses = addresses != null ? addresses : Collections.emptyList();
-
     }
 
     public void setCards(List<UserCardDetailDto> cards) {

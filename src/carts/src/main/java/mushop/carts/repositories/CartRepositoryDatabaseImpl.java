@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * Implements CartRepository using Oracle Database JSON collections. SODA is the
  * simple CRUD-based API that allows the application to interact with document
@@ -150,7 +149,10 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
         }
     }
     private MediaTypeCodec getCodec(OracleDocument doc) {
-        final MediaType mediaType = Optional.ofNullable(doc.getMediaType()).map(MediaType::new).orElse(MediaType.APPLICATION_JSON_TYPE);
+        final MediaType mediaType = Optional
+                .ofNullable(doc.getMediaType())
+                .map(MediaType::new)
+                .orElse(MediaType.APPLICATION_JSON_TYPE);
         return getCodec(mediaType);
     }
 
@@ -159,5 +161,4 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
                 .findCodec(mediaType)
                 .orElseThrow(() -> new CodecException("No codec for type: " + mediaType));
     }
-
 }

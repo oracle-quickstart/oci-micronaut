@@ -19,11 +19,14 @@ import java.util.Scanner;
 
 @Singleton
 public class DbSetup {
+
     private final DataSource dataSource;
     private final ProductRepository repository;
     private final ResourceLoader resourceLoader;
 
-    public DbSetup(DataSource dataSource, ProductRepository repository, ResourceLoader resourceLoader) {
+    public DbSetup(DataSource dataSource,
+                   ProductRepository repository,
+                   ResourceLoader resourceLoader) {
         this.dataSource = dataSource;
         this.repository = repository;
         this.resourceLoader = resourceLoader;

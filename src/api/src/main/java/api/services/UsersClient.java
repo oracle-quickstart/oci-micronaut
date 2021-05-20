@@ -14,10 +14,9 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
-import java.util.Map;
-
 @Client(id = ServiceLocator.USER, path = "/customers")
 public interface UsersClient {
+
     @Get("/{customerId}")
     Maybe<UserDetail> getUser(String customerId);
 

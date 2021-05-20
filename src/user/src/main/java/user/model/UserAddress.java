@@ -45,7 +45,11 @@ public class UserAddress {
     public UserAddress() {
     }
 
-    public UserAddress(String number, String street, String city, String country, String postcode) {
+    public UserAddress(String number,
+                       String street,
+                       String city,
+                       String country,
+                       String postcode) {
         this.number = number;
         this.street = street;
         this.city = city;

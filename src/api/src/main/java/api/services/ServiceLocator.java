@@ -4,6 +4,7 @@ import io.micronaut.http.uri.UriTemplate;
 import io.reactivex.Single;
 
 public interface ServiceLocator {
+
     String CARTS = "mushop-carts";
     String USER = "mushop-user";
     String ORDERS = "mushop-orders";

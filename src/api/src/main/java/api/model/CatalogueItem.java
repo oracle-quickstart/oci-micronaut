@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(title = "Catalogue item")
 @Introspected
 public class CatalogueItem {
+
     private final String id;
     private final String brand;
     private final String title;

@@ -13,7 +13,9 @@ import javax.inject.Singleton;
 
 @Singleton
 public class ClientResponseExceptionHandler implements ExceptionHandler<HttpClientResponseException, HttpResponse<?>> {
+
     private static final Logger LOG = LoggerFactory.getLogger(ClientResponseExceptionHandler.class);
+
     @Override
     public HttpResponse<?> handle(HttpRequest request, HttpClientResponseException exception) {
         final HttpResponse<?> response = exception.getResponse();

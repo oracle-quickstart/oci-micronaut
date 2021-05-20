@@ -7,5 +7,5 @@ import io.micronaut.nats.annotation.Subject
 interface OrdersPublisher {
 
     @Subject("mushop-orders")
-    void publishOrder(OrderUpdate orderUpdate);
+    void publishOrder(OrderUpdate orderUpdate)
 }

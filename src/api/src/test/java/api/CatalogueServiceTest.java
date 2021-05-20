@@ -14,7 +14,10 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -22,7 +25,6 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Inject
     CatalogueApiClient catalogueApiClient;
-
 
     @Test
     void testListCategories() {
@@ -57,7 +59,6 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
         assertNotNull(catalogue);
         assertTrue(catalogue.size() > 1);
     }
-
 
     @Override
     protected String getServiceVersion() {

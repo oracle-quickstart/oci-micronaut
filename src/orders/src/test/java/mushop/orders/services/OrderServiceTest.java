@@ -6,7 +6,6 @@ import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
@@ -17,7 +16,6 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
-import mushop.orders.resources.OrderUpdate;
 import mushop.orders.resources.PaymentRequest;
 import mushop.orders.resources.PaymentResponse;
 import org.junit.jupiter.api.Test;
@@ -38,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 @MicronautTest
 public class OrderServiceTest extends AbstractTest {
+
     @Inject
     private OrdersService ordersService;
 
@@ -135,7 +134,6 @@ public class OrderServiceTest extends AbstractTest {
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
                 .thenReturn(Flowable.just(expensiveItems));
 
-
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
@@ -166,7 +164,6 @@ public class OrderServiceTest extends AbstractTest {
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
-
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
                 () -> ordersService.placeOrder(orderPayload).blockingGet());

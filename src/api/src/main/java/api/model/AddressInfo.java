@@ -36,7 +36,12 @@ public class AddressInfo {
     private final String postcode;
 
     @Creator
-    public AddressInfo(@Nullable String id, String number, String street, String city, String country, String postcode) {
+    public AddressInfo(@Nullable String id,
+                       String number,
+                       String street,
+                       String city,
+                       String country,
+                       String postcode) {
         this.id = id;
         this.number = number;
         this.street = street;
@@ -45,7 +50,11 @@ public class AddressInfo {
         this.postcode = postcode;
     }
 
-    public AddressInfo(String number, String street, String city, String country, String postcode) {
+    public AddressInfo(String number,
+                       String street,
+                       String city,
+                       String country,
+                       String postcode) {
         this(null, number, street, city, country, postcode);
     }
 
@@ -79,7 +88,11 @@ public class AddressInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AddressInfo that = (AddressInfo) o;
-        return number.equals(that.number) && street.equals(that.street) && city.equals(that.city) && country.equals(that.country) && postcode.equals(that.postcode);
+        return number.equals(that.number) &&
+                street.equals(that.street) &&
+                city.equals(that.city) &&
+                country.equals(that.country) &&
+                postcode.equals(that.postcode);
     }
 
     @Override

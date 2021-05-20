@@ -4,14 +4,13 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 @Entity
 public class Card implements Serializable {
@@ -27,11 +26,9 @@ public class Card implements Serializable {
     private String expires;
     private String ccv;
 
-
     public Card() {
         super();
     }
-
 
     public Card(String id, String longNum, String expires, String ccv) {
         super();
@@ -41,14 +38,12 @@ public class Card implements Serializable {
         this.ccv = ccv;
     }
 
-
     /**
      * @return the id
      */
     public String getId() {
         return id;
     }
-
 
     /**
      * @param id the id to set
@@ -57,14 +52,12 @@ public class Card implements Serializable {
         this.id = id;
     }
 
-
     /**
      * @return the cardId
      */
     public Long getCardId() {
         return cardId;
     }
-
 
     /**
      * @param cardId the cardId to set
@@ -73,14 +66,12 @@ public class Card implements Serializable {
         this.cardId = cardId;
     }
 
-
     /**
      * @return the longNum
      */
     public String getLongNum() {
         return longNum;
     }
-
 
     /**
      * @param longNum the longNum to set
@@ -89,14 +80,12 @@ public class Card implements Serializable {
         this.longNum = longNum;
     }
 
-
     /**
      * @return the expires
      */
     public String getExpires() {
         return expires;
     }
-
 
     /**
      * @param expires the expires to set
@@ -105,7 +94,6 @@ public class Card implements Serializable {
         this.expires = expires;
     }
 
-
     /**
      * @return the ccv
      */
@@ -113,14 +101,12 @@ public class Card implements Serializable {
         return ccv;
     }
 
-
     /**
      * @param ccv the ccv to set
      */
     public void setCcv(String ccv) {
         this.ccv = ccv;
     }
-
 
     @Override
     public int hashCode() {
@@ -132,7 +118,6 @@ public class Card implements Serializable {
         result = prime * result + ((longNum == null) ? 0 : longNum.hashCode());
         return result;
     }
-
 
     @Override
     public boolean equals(Object obj) {

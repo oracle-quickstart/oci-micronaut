@@ -4,17 +4,17 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 public class Shipment implements Serializable {
 
     @Id
     private String id;
+
     private String name;
 
     public Shipment() {

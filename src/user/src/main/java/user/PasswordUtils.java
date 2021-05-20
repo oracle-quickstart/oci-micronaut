@@ -69,7 +69,9 @@ public class PasswordUtils {
      * @param hashedPasswordBase64 the expected hashed value of the password
      * @return true if the given password and salt match the hashed value, false otherwise
      */
-    public static boolean isExpectedPassword(String passwordString, String saltBase64, String hashedPasswordBase64) {
+    public static boolean isExpectedPassword(String passwordString,
+                                             String saltBase64,
+                                             String hashedPasswordBase64) {
         return hashedPasswordBase64.equals(hash(passwordString, saltBase64));
     }
 }

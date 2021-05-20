@@ -4,14 +4,14 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 @Entity
 public class Item implements Serializable {
@@ -25,6 +25,7 @@ public class Item implements Serializable {
 
     @NotNull(message = "Item name must not be null")
     private String itemId;
+
     private int quantity;
     private float unitPrice;
 
@@ -32,14 +33,16 @@ public class Item implements Serializable {
         this(null, "", 1, 0F);
     }
 
-    public Item(String id, @NotNull(message = "Item Id must not be null") String itemId, int quantity, float unitPrice) {
+    public Item(String id,
+                @NotNull(message = "Item Id must not be null") String itemId,
+                int quantity,
+                float unitPrice) {
         super();
         this.id = id;
         this.itemId = itemId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-
 
     /**
      * @return the sId

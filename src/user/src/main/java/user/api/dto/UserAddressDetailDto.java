@@ -9,25 +9,24 @@ import java.util.UUID;
 public class UserAddressDetailDto {
 
     private final UUID id;
-
     private final String number;
-
     private final String street;
-
     private final String city;
-
     private final String country;
-
     private final String postcode;
-
     private final OffsetDateTime createdAt;
-
     private final OffsetDateTime updatedAt;
-
     private final UserDetailDto user;
 
-    public UserAddressDetailDto(UUID id, String number, String street, String city, String country,
-                                String postcode, OffsetDateTime createdAt, OffsetDateTime updatedAt, UserDetailDto user) {
+    public UserAddressDetailDto(UUID id,
+                                String number,
+                                String street,
+                                String city,
+                                String country,
+                                String postcode,
+                                OffsetDateTime createdAt,
+                                OffsetDateTime updatedAt,
+                                UserDetailDto user) {
         this.id = id;
         this.number = number;
         this.street = street;

@@ -21,6 +21,9 @@ public class HealthControllerTest extends AbstractTest {
 
     @Test
     void getHealth_returns200() {
-        assertEquals(HttpStatus.OK.getCode(), httpClient.toBlocking().exchange(HttpRequest.GET("/health")).code());
+        assertEquals(
+                HttpStatus.OK.getCode(),
+                httpClient.toBlocking().exchange(HttpRequest.GET("/health")).code()
+        );
     }
 }

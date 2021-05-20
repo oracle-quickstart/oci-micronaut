@@ -4,18 +4,16 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Customer implements Serializable {
@@ -41,7 +39,11 @@ public class Customer implements Serializable {
         super();
     }
 
-    public Customer(String id, String firstName, String lastName, String username, List<Address> addresses,
+    public Customer(String id,
+                    String firstName,
+                    String lastName,
+                    String username,
+                    List<Address> addresses,
                     List<Card> cards) {
         super();
         this.id = id;
@@ -52,7 +54,10 @@ public class Customer implements Serializable {
         this.cards = cards;
     }
 
-    public Customer(String firstName, String lastName, String username, List<Address> addresses,
+    public Customer(String firstName,
+                    String lastName,
+                    String username,
+                    List<Address> addresses,
                     List<Card> cards) {
         super();
         this.id = null;

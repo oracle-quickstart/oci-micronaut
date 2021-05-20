@@ -1,63 +1,21 @@
-
 # MuShop Storefront API
 
 ---
-Storefront backend written in [Node.js](https://nodejs.org/en/) orchestrating
-services for consumption by the microservices [web application](../storefront)
+Storefront backend written as a Micronaut application in Java orchestrating services for consumption by the microservices [web application](../storefront)
 
 > Modified from original source by Weaveworks [microservices-demo](https://github.com/microservices-demo/front-end)
 
-## Build
+# Micronaut Features
 
-### Dependencies
+* [Micronaut Oracle Cloud](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/)
+* Monitoring with [Micrometer](https://micrometer.io/) and [Prometheus](https://prometheus.io/)
+* Tracing with [Zipkin](https://zipkin.io/)
+* Session-based and HTTP Basic [security](https://micronaut-projects.github.io/micronaut-security/latest/guide/)
+* [Kubernetes service discovery](https://micronaut-projects.github.io/micronaut-kubernetes/latest/guide/)
+* [Redis HTTP session store](https://micronaut-projects.github.io/micronaut-redis/latest/guide/)
+* [Swagger API documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/)
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Version</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="https://docker.com">Docker</a></td>
-      <td>>= 1.12</td>
-    </tr>
-    <tr>
-      <td><a href="https://docs.docker.com/compose/">Docker Compose</a></td>
-      <td>>= 1.8.0</td>
-    </tr>
-    <tr>
-      <td><a href="gnu.org/s/make">Make</a>&nbsp;(optional)</td>
-      <td>>= 4.1</td>
-    </tr>
-  </tbody>
-</table>
+# Usage
 
-### Node
-
-`npm install`
-
-### Docker
-
-`make up`
-
-## Run
-
-### Node
-
-`npm start`
-
-### Docker
-
-`make up`
-
-## Use
-
-### Node
-
-`curl http://localhost:3000`
-
-### Docker Compose
-
-`curl http://localhost:8080`
+The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
+[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).

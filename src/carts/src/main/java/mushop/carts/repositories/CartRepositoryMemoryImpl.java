@@ -17,13 +17,13 @@ import java.util.List;
 @Secondary
 public class CartRepositoryMemoryImpl implements CartRepository {
 
-    public static final Logger LOG = LoggerFactory.getLogger(CartRepositoryMemoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CartRepositoryMemoryImpl.class);
 
     private final List<Cart> carts;
 
     public CartRepositoryMemoryImpl() {
         LOG.info("Using in-memory repository.");
-        this.carts = new ArrayList<Cart>();
+        carts = new ArrayList<>();
     }
 
     @Override

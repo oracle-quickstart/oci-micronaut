@@ -23,14 +23,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Controller("/")
-public class CatalogueController implements CatalogueOperations {
+@Controller
+class CatalogueController implements CatalogueOperations {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public CatalogueController(ProductRepository productRepository,
-                               CategoryRepository categoryRepository) {
+    CatalogueController(ProductRepository productRepository,
+                        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }

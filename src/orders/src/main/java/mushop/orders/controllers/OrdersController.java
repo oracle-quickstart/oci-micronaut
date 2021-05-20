@@ -31,19 +31,19 @@ public class OrdersController {
     private final OrdersService ordersService;
     private final DtoMapper dtoMapper;
 
-    public OrdersController(OrdersService ordersService,
-                            DtoMapper dtoMapper) {
+    OrdersController(OrdersService ordersService,
+                     DtoMapper dtoMapper) {
         this.ordersService = ordersService;
         this.dtoMapper = dtoMapper;
     }
 
     @Status(HttpStatus.CREATED)
     @Post
-    public Single<CustomerOrder> newOrder(@Body NewOrderResource newOrderResource) {
-        if (newOrderResource.address == null ||
-                newOrderResource.customer == null ||
-                newOrderResource.card == null ||
-                newOrderResource.items == null) {
+    Single<CustomerOrder> newOrder(@Body NewOrderResource newOrderResource) {
+        if (newOrderResource.getAddress() == null ||
+                newOrderResource.getCustomer() == null ||
+                newOrderResource.getCard() == null ||
+                newOrderResource.getItems() == null) {
             throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
         }
         return ordersService.placeOrder(newOrderResource);
@@ -52,14 +52,14 @@ public class OrdersController {
     @Transactional
     @ReadOnly
     @Get("/{orderId}")
-    public CustomerOrder getOrder(Long orderId) {
+    CustomerOrder getOrder(Long orderId) {
         return ordersService.getById(orderId);
     }
 
     @Transactional
     @ReadOnly
     @Get("/search/customer")
-    public CustomerOrdersDto searchCustomerOrders(@QueryValue String custId, Pageable pageable) {
+    CustomerOrdersDto searchCustomerOrders(@QueryValue String custId, Pageable pageable) {
         return dtoMapper.toCustomerOrdersDto(
                 ordersService.searchCustomerOrders(custId, Pageable.from(0, -1, pageable.getSort()))
         );

@@ -40,9 +40,7 @@ public class EventService {
             eventProducer.send(eventRecords);
             return new EventsReceived(true, events.length);
         } catch (Exception e) {
-            if (LOG.isErrorEnabled()) {
-                LOG.error("Unable to process events: " + e.getMessage(), e);
-            }
+            LOG.error("Unable to process events: {}", e.getMessage(), e);
             return new EventsReceived(false, events.length);
         }
     }

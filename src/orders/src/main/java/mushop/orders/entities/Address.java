@@ -36,7 +36,6 @@ public class Address implements Serializable {
                    String city,
                    String postcode,
                    String country) {
-        super();
         this.id = id;
         this.street_number = street_number;
         this.street = street;
@@ -46,7 +45,6 @@ public class Address implements Serializable {
     }
 
     public Address() {
-        super();
     }
 
     /**

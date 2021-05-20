@@ -22,7 +22,6 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
-import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Status;
@@ -44,8 +43,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -53,8 +50,7 @@ import java.util.Optional;
 @Controller("/api/login")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Validated
-public class LoginController {
-    public static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+class LoginController {
 
     protected final Authenticator authenticator;
     protected final LoginHandler loginHandler;
@@ -65,9 +61,9 @@ public class LoginController {
      * @param loginHandler   A collaborator which helps to build HTTP response depending on success or failure.
      * @param eventPublisher The application event publisher
      */
-    public LoginController(Authenticator authenticator,
-                           LoginHandler loginHandler,
-                           ApplicationEventPublisher eventPublisher) {
+    LoginController(Authenticator authenticator,
+                    LoginHandler loginHandler,
+                    ApplicationEventPublisher eventPublisher) {
         this.authenticator = authenticator;
         this.loginHandler = loginHandler;
         this.eventPublisher = eventPublisher;
@@ -84,10 +80,9 @@ public class LoginController {
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
             },
             tags = {"user"})
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON})
-    @Post
+    @Post(consumes = {MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON})
     @Status(HttpStatus.SEE_OTHER)
-    public Single<MutableHttpResponse<?>> login(@Parameter(hidden = true) HttpRequest<?> request) {
+    Single<MutableHttpResponse<?>> login(@Parameter(hidden = true) HttpRequest<?> request) {
         Optional<UsernamePasswordCredentials> credentials = request.getHeaders().getAuthorization().flatMap(BasicAuthUtils::parseCredentials);
         if (credentials.isPresent()) {
             Flowable<AuthenticationResponse> authenticationResponseFlowable = Flowable.fromPublisher(authenticator.authenticate(request, credentials.get()));

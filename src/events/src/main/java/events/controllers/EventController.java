@@ -11,10 +11,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Controller("/events")
-public class EventController {
+class EventController {
+
     private final EventService eventService;
 
-    public EventController(EventService eventService) {
+    EventController(EventService eventService) {
         this.eventService = eventService;
     }
 

@@ -8,6 +8,7 @@ import api.services.AuthClient;
 import api.services.OrdersService;
 import api.services.ServiceLocator;
 import api.services.UsersClient;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
@@ -32,7 +33,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -110,7 +110,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
         return mockAuth;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<String, String> getProperties() {
         return Collections.singletonMap(

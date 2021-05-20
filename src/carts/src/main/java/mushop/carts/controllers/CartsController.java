@@ -42,18 +42,18 @@ import java.util.List;
 
 @Controller("/carts")
 @ExecuteOn(TaskExecutors.IO)
-public class CartsController {
+class CartsController {
 
-    public static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
 
     private final CartRepository cartRepository;
 
-    public CartsController(CartRepository cartRepository) {
+    CartsController(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
     }
 
     @Get("/{cartId}")
-    public Cart getCart(String cartId) {
+    Cart getCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,
@@ -63,7 +63,7 @@ public class CartsController {
     }
 
     @Get("/{cartId}/items")
-    public List<Item> getCartItems(String cartId) {
+    List<Item> getCartItems(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,
@@ -73,7 +73,7 @@ public class CartsController {
     }
 
     @Delete("/{cartId}")
-    public Cart deleteCart(String cartId) {
+    Cart deleteCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,
@@ -91,7 +91,7 @@ public class CartsController {
 
     @Delete("/{cartId}/items/{itemId}")
     @Timed("carts.updated.timer")
-    public Cart deleteCartItem(String cartId, String itemId) {
+    Cart deleteCartItem(String cartId, String itemId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,
@@ -109,8 +109,8 @@ public class CartsController {
     }
 
     @Post("/{cartId}")
-    public HttpResponse<Cart> postCart(@PathVariable String cartId,
-                                       @Body Cart newCart) {
+    HttpResponse<Cart> postCart(@PathVariable String cartId,
+                                @Body Cart newCart) {
 
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
@@ -127,7 +127,7 @@ public class CartsController {
     }
 
     @Put("/{cartId}/items")
-    public Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
+    Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,

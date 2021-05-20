@@ -34,7 +34,7 @@ import java.util.Optional;
 @Requires(property = "datasources.default")
 public class CartRepositoryDatabaseImpl implements CartRepository {
 
-    public static final Logger LOG = LoggerFactory.getLogger(CartRepositoryDatabaseImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CartRepositoryDatabaseImpl.class);
 
     /**
      * Used to automatically convert a Cart object to and from JSON

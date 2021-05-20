@@ -3,7 +3,7 @@ package mushop.carts.test;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
-import mushop.carts.entitites.Cart;
+import mushop.carts.entities.Cart;
 import mushop.carts.repositories.CartRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

@@ -10,7 +10,7 @@ import io.micronaut.http.codec.CodecException;
 import io.micronaut.http.codec.MediaTypeCodec;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.transaction.annotation.ReadOnly;
-import mushop.carts.entitites.Cart;
+import mushop.carts.entities.Cart;
 import oracle.soda.OracleCursor;
 import oracle.soda.OracleDatabase;
 import oracle.soda.OracleDocument;

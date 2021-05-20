@@ -1,7 +1,7 @@
 package mushop.carts.repositories;
 
 import io.micronaut.context.annotation.Secondary;
-import mushop.carts.entitites.Cart;
+import mushop.carts.entities.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

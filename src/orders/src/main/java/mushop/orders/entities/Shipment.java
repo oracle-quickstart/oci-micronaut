@@ -18,7 +18,6 @@ public class Shipment implements Serializable {
     private String name;
 
     public Shipment() {
-        super();
     }
 
     public Shipment(String name) {
@@ -26,7 +25,6 @@ public class Shipment implements Serializable {
     }
 
     public Shipment(String id, String name) {
-        super();
         this.id = id;
         this.name = name;
     }

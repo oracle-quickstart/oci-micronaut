@@ -11,11 +11,11 @@ import mushop.orders.entities.Shipment;
 public class OrderUpdate {
 
     private final Long orderId;
-    private final Shipment Shipment;
+    private final Shipment shipment;
 
     public OrderUpdate(Long orderId, Shipment shipment) {
         this.orderId = orderId;
-        Shipment = shipment;
+        this.shipment = shipment;
     }
 
     public Long getOrderId() {
@@ -23,14 +23,14 @@ public class OrderUpdate {
     }
 
     public Shipment getShipment() {
-        return Shipment;
+        return shipment;
     }
 
     @Override
     public String toString() {
         return "OrderUpdate{" +
                 "orderId='" + orderId + '\'' +
-                ", Shipment=" + Shipment +
+                ", shipment=" + shipment +
                 '}';
     }
 }

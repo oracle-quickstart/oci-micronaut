@@ -1,7 +1,6 @@
 package mushop.orders.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.Sort;
@@ -27,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,9 +47,6 @@ public class OrderControllerTest extends AbstractTest {
     @Client("/")
     private RxHttpClient httpClient;
 
-    @Inject
-    private ObjectMapper objectMapper;
-
     Address address = new Address(
             "001",
             "000",
@@ -68,17 +64,17 @@ public class OrderControllerTest extends AbstractTest {
             "firstname",
             "lastName",
             "username",
-            Arrays.asList(address),
-            Arrays.asList(card));
+            Collections.singletonList(address),
+            Collections.singletonList(card));
 
     URI customerURI = URI.create("http://user/customers/1");
     URI addressURI = URI.create("http://user/customers/1/addresses/1");
     URI cardURI = URI.create("http://user/customers/1/cards/1");
     URI itemsURI = URI.create("http://carts/carts/1/items");
-    CustomerOrder order = new CustomerOrder(001l, customer, address, card, null, null, null, 00f);
+    CustomerOrder order = new CustomerOrder(1L, customer, address, card, null, null, null, 00f);
 
     @Test
-    void orderPayload_returns_201() throws Exception {
+    void orderPayload_returns_201() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
@@ -160,7 +156,7 @@ public class OrderControllerTest extends AbstractTest {
     @Test
     void illegalState_returns_503() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
-        
+
         when(ordersService.placeOrder(orderPayload))
                 .thenThrow(new OrderFailedException("test"));
 

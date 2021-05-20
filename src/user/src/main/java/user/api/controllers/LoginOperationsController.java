@@ -21,15 +21,15 @@ import static io.micronaut.http.HttpStatus.UNAUTHORIZED;
  * User login API controller.
  */
 @Controller
-public class LoginOperationsController implements LoginOperations {
+class LoginOperationsController implements LoginOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginOperationsController.class);
 
     private final UserRepository userRepository;
     private final DtoMapper dtoMapper;
 
-    public LoginOperationsController(UserRepository userRepository,
-                                     DtoMapper dtoMapper) {
+    LoginOperationsController(UserRepository userRepository,
+                              DtoMapper dtoMapper) {
         this.userRepository = userRepository;
         this.dtoMapper = dtoMapper;
     }

@@ -27,11 +27,9 @@ public class Card implements Serializable {
     private String ccv;
 
     public Card() {
-        super();
     }
 
     public Card(String id, String longNum, String expires, String ccv) {
-        super();
         this.id = id;
         this.longNum = longNum;
         this.expires = expires;

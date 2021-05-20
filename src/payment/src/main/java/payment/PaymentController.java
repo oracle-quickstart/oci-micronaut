@@ -8,12 +8,12 @@ import io.micronaut.http.exceptions.HttpStatusException;
 
 import static io.micronaut.http.HttpStatus.BAD_REQUEST;
 
-@Controller("/")
-public class PaymentController {
+@Controller
+class PaymentController {
 
     private final PaymentConfiguration configuration;
 
-    public PaymentController(PaymentConfiguration configuration) {
+    PaymentController(PaymentConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -37,8 +37,8 @@ public class PaymentController {
         if (amount > configuration.getDeclineAmount()) {
             throw new HttpStatusException(BAD_REQUEST,
                     new Authorization(false, String.format("Payment declined: amount exceeds %.2f", configuration.getDeclineAmount())));
-        } else {
-            return new Authorization(true, "Payment authorised");
         }
+
+        return new Authorization(true, "Payment authorised");
     }
 }

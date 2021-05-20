@@ -36,7 +36,6 @@ public class Customer implements Serializable {
     private List<Card> cards = new ArrayList<>();
 
     public Customer() {
-        super();
     }
 
     public Customer(String id,
@@ -45,7 +44,6 @@ public class Customer implements Serializable {
                     String username,
                     List<Address> addresses,
                     List<Card> cards) {
-        super();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,13 +57,7 @@ public class Customer implements Serializable {
                     String username,
                     List<Address> addresses,
                     List<Card> cards) {
-        super();
-        this.id = null;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.addresses = addresses;
-        this.cards = cards;
+        this(null, firstName, lastName, username, addresses, cards);
     }
 
     /**

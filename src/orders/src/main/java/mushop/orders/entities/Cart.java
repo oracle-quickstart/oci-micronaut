@@ -27,11 +27,9 @@ public class Cart implements Serializable {
     private List<Item> items = new ArrayList<>();
 
     public Cart() {
-        super();
     }
 
     public Cart(@NotNull Customer customer, String id, List<Item> items) {
-        super();
         this.customer = customer;
         this.id = id;
         this.items = items;

@@ -12,10 +12,10 @@ import java.util.Objects;
 @Introspected
 public class NewOrderResource {
 
-    public URI customer;
-    public URI address;
-    public URI card;
-    public URI items;
+    private final URI customer;
+    private final URI address;
+    private final URI card;
+    private final URI items;
 
     public NewOrderResource(URI customer,
                             URI address,

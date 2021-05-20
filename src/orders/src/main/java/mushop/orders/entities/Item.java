@@ -37,7 +37,6 @@ public class Item implements Serializable {
                 @NotNull(message = "Item Id must not be null") String itemId,
                 int quantity,
                 float unitPrice) {
-        super();
         this.id = id;
         this.itemId = itemId;
         this.quantity = quantity;
@@ -80,7 +79,7 @@ public class Item implements Serializable {
     }
 
     /**
-     * @param name the name to set
+     * @param itemId the itemId to set
      */
     public void setItemId(String itemId) {
         this.itemId = itemId;

@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
  * User API controller.
  */
 @Controller
-public class UserOperationsController implements UserOperations {
+class UserOperationsController implements UserOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserOperationsController.class);
 
@@ -44,10 +44,10 @@ public class UserOperationsController implements UserOperations {
     private final UserCardRepository userCardRepository;
     private final DtoMapper dtoMapper;
 
-    public UserOperationsController(UserRepository userRepository,
-                                    UserAddressRepository userAddressRepository,
-                                    UserCardRepository userCardRepository,
-                                    DtoMapper dtoMapper) {
+    UserOperationsController(UserRepository userRepository,
+                             UserAddressRepository userAddressRepository,
+                             UserCardRepository userCardRepository,
+                             DtoMapper dtoMapper) {
         this.userRepository = userRepository;
         this.userAddressRepository = userAddressRepository;
         this.userCardRepository = userCardRepository;

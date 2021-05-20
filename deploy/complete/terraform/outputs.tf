@@ -1,6 +1,6 @@
 # Copyright (c) 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
-# 
+#
 
 output "mushop_url_button" {
   value       = format("http://%s", local.mushop_ingress_ip)
@@ -40,7 +40,7 @@ output "grafana_admin_password" {
   sensitive = false
 }
 output "mushop_source_code" {
-  value = "https://github.com/oracle-quickstart/oci-cloudnative/"
+  value = "https://github.com/pgressa/oraclecloud-cloudnative"
 }
 locals {
   mushop_ingress_ip       = data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].ip

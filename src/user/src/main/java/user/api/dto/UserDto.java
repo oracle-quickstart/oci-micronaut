@@ -8,20 +8,20 @@ import java.util.List;
 public class UserDto {
 
     private final String username;
-
     private final String password;
-
     private final String firstName;
-
     private final String lastName;
-
     private final String email;
-
     private final String phone;
-
     private final List<UserAddressDto> addresses;
 
-    public UserDto(String username, String password, String firstName, String lastName, String email, String phone, List<UserAddressDto> addresses) {
+    public UserDto(String username,
+                   String password,
+                   String firstName,
+                   String lastName,
+                   String email,
+                   String phone,
+                   List<UserAddressDto> addresses) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

@@ -12,26 +12,25 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.retry.annotation.CircuitBreaker;
 import io.micronaut.tracing.annotation.ContinueSpan;
 import io.micronaut.tracing.annotation.SpanTag;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Controller("/")
-public class CatalogueController implements CatalogueOperations {
+@Controller
+class CatalogueController implements CatalogueOperations {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public CatalogueController(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    CatalogueController(ProductRepository productRepository,
+                        CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }

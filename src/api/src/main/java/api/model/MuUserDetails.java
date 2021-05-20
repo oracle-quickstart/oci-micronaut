@@ -13,7 +13,9 @@ import java.util.Optional;
 @Schema(title = "Authentication details")
 @Introspected
 public class MuUserDetails extends UserDetails {
+
     public static final String ID = "id";
+
     private final String id;
 
     public MuUserDetails(String id, String username) {

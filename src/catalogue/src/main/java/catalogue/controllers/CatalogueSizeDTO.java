@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.Introspected;
  */
 @Introspected
 public class CatalogueSizeDTO {
+
     private final int size;
 
     public CatalogueSizeDTO(int size) {

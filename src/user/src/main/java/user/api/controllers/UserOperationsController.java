@@ -9,13 +9,13 @@ import io.micronaut.transaction.annotation.ReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import user.api.DtoMapper;
-import user.api.dto.UserDto;
 import user.api.UserOperations;
 import user.api.dto.UserAddressDetailDto;
 import user.api.dto.UserAddressDto;
 import user.api.dto.UserCardDetailDto;
 import user.api.dto.UserCardDto;
 import user.api.dto.UserDetailDto;
+import user.api.dto.UserDto;
 import user.model.User;
 import user.model.UserAddress;
 import user.model.UserAddressRepository;
@@ -35,7 +35,7 @@ import java.util.stream.StreamSupport;
  * User API controller.
  */
 @Controller
-public class UserOperationsController implements UserOperations {
+class UserOperationsController implements UserOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserOperationsController.class);
 
@@ -44,7 +44,10 @@ public class UserOperationsController implements UserOperations {
     private final UserCardRepository userCardRepository;
     private final DtoMapper dtoMapper;
 
-    public UserOperationsController(UserRepository userRepository, UserAddressRepository userAddressRepository, UserCardRepository userCardRepository, DtoMapper dtoMapper) {
+    UserOperationsController(UserRepository userRepository,
+                             UserAddressRepository userAddressRepository,
+                             UserCardRepository userCardRepository,
+                             DtoMapper dtoMapper) {
         this.userRepository = userRepository;
         this.userAddressRepository = userAddressRepository;
         this.userCardRepository = userCardRepository;

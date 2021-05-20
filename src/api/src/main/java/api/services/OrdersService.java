@@ -2,9 +2,9 @@ package api.services;
 
 import api.Application;
 import api.model.MuUserDetails;
+import api.services.annotation.CartId;
 import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
-import api.services.annotation.CartId;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpStatus;
@@ -31,17 +31,20 @@ import java.util.UUID;
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class OrdersService {
+
     private static final String USER_ID = "userId";
     private static final String URI_CART_ITEMS = "/carts/{cartId}/items";
     private static final String URI_USER_ID = "/customers/{userId}";
     private static final String URI_USER_ADDRESS = "/customers/{userId}/addresses/{addressId}";
     private static final String URI_USER_CARD = "/customers/{userId}/cards/{cardId}";
+
     private final OrdersClient client;
     private final UsersClient usersClient;
     private final ServiceLocator serviceLocator;
 
-
-    public OrdersService(OrdersClient client, UsersClient usersClient, ServiceLocator serviceLocator) {
+    public OrdersService(OrdersClient client,
+                         UsersClient usersClient,
+                         ServiceLocator serviceLocator) {
         this.client = client;
         this.usersClient = usersClient;
         this.serviceLocator = serviceLocator;
@@ -58,7 +61,8 @@ public class OrdersService {
             tags = {"orders"}
     )
     @Get("/orders{?sort}")
-    Single<List<?>> getOrders(Authentication authentication, @Nullable @Parameter(description = "Sort orders", example = "createdDate,asc") String sort) {
+    Single<List<?>> getOrders(Authentication authentication,
+                              @Nullable @Parameter(description = "Sort orders", example = "createdDate,asc") String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
         return client.getOrders(customerId, sort)
                 .map(stringObjectMap -> {

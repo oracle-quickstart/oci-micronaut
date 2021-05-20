@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.Introspected;
  */
 @Introspected
 public class EventsReceived {
+
     private final boolean success;
     private final int events;
 

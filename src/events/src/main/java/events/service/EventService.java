@@ -13,7 +13,9 @@ import java.util.Arrays;
 
 @Singleton
 public class EventService {
+
     private static final Logger LOG = LoggerFactory.getLogger(EventService.class);
+
     private final EventProducer eventProducer;
 
     public EventService(EventProducer eventProducer) {
@@ -21,7 +23,9 @@ public class EventService {
     }
 
     @NewSpan("receive events")
-    public EventsReceived postEvents(@SpanTag String source, String track, Event...events) {
+    public EventsReceived postEvents(@SpanTag String source,
+                                     String track,
+                                     Event...events) {
         final int numEvents = events.length;
         try {
             LOG.debug("Posting Events (source: {}, track {}, length {})", source, track, numEvents);
@@ -36,9 +40,7 @@ public class EventService {
             eventProducer.send(eventRecords);
             return new EventsReceived(true, events.length);
         } catch (Exception e) {
-            if (LOG.isErrorEnabled()) {
-                LOG.error("Unable to process events: " + e.getMessage(), e);
-            }
+            LOG.error("Unable to process events: {}", e.getMessage(), e);
             return new EventsReceived(false, events.length);
         }
     }

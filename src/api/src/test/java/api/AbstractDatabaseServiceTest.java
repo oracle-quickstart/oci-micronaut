@@ -1,9 +1,8 @@
 package api;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.BasicAuth;
-import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.support.TestPropertyProvider;
@@ -13,12 +12,11 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.containers.OracleContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
-    static OracleContainer oracleContainer;
 
+    static OracleContainer oracleContainer;
     static GenericContainer<?> serviceContainer;
 
     @AfterAll
@@ -27,7 +25,7 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
         serviceContainer.stop();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<String, String> getProperties() {
         oracleContainer = new OracleContainer("registry.gitlab.com/micronaut-projects/micronaut-graal-tests/oracle-database:18.4.0-xe")

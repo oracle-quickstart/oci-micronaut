@@ -23,16 +23,16 @@ import java.util.Collections;
 import java.util.Map;
 
 @Controller
-public class SubscriptionController {
+class SubscriptionController {
 
     private final MailSender mailSender;
 
-    public SubscriptionController(MailSender mailSender) {
+    SubscriptionController(MailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     @Post("/subscribe")
-    public Map<String, String> subscribe(@Body SubscribeRequest subscribeRequest) {
+    Map<String, String> subscribe(@Body SubscribeRequest subscribeRequest) {
         final String messageID = mailSender.send(
                 subscribeRequest.getEmail(),
                 "Hello from Mushop",

@@ -5,6 +5,7 @@
 package  mushop;
 
 public class Shipment {
+
     private String id;
     private String name;
 

@@ -4,14 +4,15 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Item implements Serializable {
@@ -25,6 +26,7 @@ public class Item implements Serializable {
 
     @NotNull(message = "Item name must not be null")
     private String itemId;
+
     private int quantity;
     private float unitPrice;
 
@@ -32,14 +34,15 @@ public class Item implements Serializable {
         this(null, "", 1, 0F);
     }
 
-    public Item(String id, @NotNull(message = "Item Id must not be null") String itemId, int quantity, float unitPrice) {
-        super();
+    public Item(String id,
+                @NotNull(message = "Item Id must not be null") String itemId,
+                int quantity,
+                float unitPrice) {
         this.id = id;
         this.itemId = itemId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-
 
     /**
      * @return the sId
@@ -77,7 +80,7 @@ public class Item implements Serializable {
     }
 
     /**
-     * @param name the name to set
+     * @param itemId the itemId to set
      */
     public void setItemId(String itemId) {
         this.itemId = itemId;
@@ -112,44 +115,27 @@ public class Item implements Serializable {
     }
 
     public float getTotal() {
-        return this.unitPrice * this.quantity;
+        return unitPrice * quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Item item = (Item) o;
+        return quantity == item.quantity &&
+                Float.compare(item.unitPrice, unitPrice) == 0 &&
+                Objects.equals(id, item.id) &&
+                Objects.equals(itemId, item.itemId);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
-        result = prime * result + quantity;
-        result = prime * result + Float.floatToIntBits(unitPrice);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Item other = (Item) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (itemId == null) {
-            if (other.itemId != null)
-                return false;
-        } else if (!itemId.equals(other.itemId))
-            return false;
-        if (quantity != other.quantity)
-            return false;
-        if (Float.floatToIntBits(unitPrice) != Float.floatToIntBits(other.unitPrice))
-            return false;
-        return true;
+        return Objects.hash(id, itemId, quantity, unitPrice);
     }
 
     @Override

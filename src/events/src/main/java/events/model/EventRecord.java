@@ -9,20 +9,26 @@ import java.util.Objects;
 
 @Introspected
 public class EventRecord extends Event {
+
     private final String source;
     private final String track;
     private final Instant time;
 
-    public EventRecord(String source, String track, Event event) {
+    public EventRecord(String source,
+                       String track,
+                       Event event) {
         this(source, track, Objects.requireNonNull(event, "Event cannot be null").getType(), event.getDetail());
     }
 
     @Creator
-    public EventRecord(String source, String track, String type, Map<String, String> detail) {
+    public EventRecord(String source,
+                       String track,
+                       String type,
+                       Map<String, String> detail) {
         super(type, detail);
         this.source = source;
         this.track = track;
-        this.time = Instant.now();
+        time = Instant.now();
     }
 
     public String getSource() {

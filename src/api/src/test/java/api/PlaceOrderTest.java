@@ -8,6 +8,7 @@ import api.services.AuthClient;
 import api.services.OrdersService;
 import api.services.ServiceLocator;
 import api.services.UsersClient;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
@@ -24,7 +25,6 @@ import io.micronaut.test.support.TestPropertyProvider;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,7 +33,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -47,12 +46,14 @@ import static org.mockito.Mockito.when;
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PlaceOrderTest implements TestPropertyProvider {
+
     @Container
     static GenericContainer<?> cartsContainer = new GenericContainer<>(
             DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:" + getServiceVersion())
     ).withExposedPorts(8080);
 
     private static String sessionID;
+
     private final MockAuth mockAuth = new MockAuth();
     private OrdersService.OrderRequest lastOrder;
 
@@ -78,7 +79,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
         ));
 
         assertEquals(HttpStatus.CREATED, status);
-        Assertions.assertNotNull(sessionID);
+        assertNotNull(sessionID);
 
         final MuUserDetails userDetails = new MuUserDetails(mockAuth.userId, "testuser");
         final String cardId = UUID.randomUUID().toString();
@@ -109,7 +110,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
         return mockAuth;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<String, String> getProperties() {
         return Collections.singletonMap(

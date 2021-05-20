@@ -1,7 +1,6 @@
 package user.api.controllers;
 
 import io.micrometer.core.annotation.Counted;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.transaction.annotation.ReadOnly;
@@ -16,18 +15,21 @@ import user.model.UserRepository;
 
 import javax.transaction.Transactional;
 
+import static io.micronaut.http.HttpStatus.UNAUTHORIZED;
+
 /**
  * User login API controller.
  */
 @Controller
-public class LoginOperationsController implements LoginOperations {
+class LoginOperationsController implements LoginOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginOperationsController.class);
 
     private final UserRepository userRepository;
     private final DtoMapper dtoMapper;
 
-    public LoginOperationsController(UserRepository userRepository, DtoMapper dtoMapper) {
+    LoginOperationsController(UserRepository userRepository,
+                              DtoMapper dtoMapper) {
         this.userRepository = userRepository;
         this.dtoMapper = dtoMapper;
     }
@@ -47,7 +49,8 @@ public class LoginOperationsController implements LoginOperations {
     @Counted("login.invalid_password")
     protected UserDetailDto loginInvalidPassword(String username) {
         LOG.debug("Invalid password: {}", username);
-        throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "User with username: " + username + " doesn't match provided password");
+        throw new HttpStatusException(UNAUTHORIZED,
+                "User with username: " + username + " doesn't match provided password");
     }
 
     @Counted("login.success")
@@ -59,7 +62,8 @@ public class LoginOperationsController implements LoginOperations {
     @Counted("login.invalid_username")
     protected HttpStatusException userNotFoundException(String username) {
         LOG.debug("User not found: {}", username);
-        throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "User with username: " + username + " not found");
+        throw new HttpStatusException(UNAUTHORIZED,
+                "User with username: " + username + " not found");
     }
 
 }

@@ -4,14 +4,14 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Card implements Serializable {
@@ -27,20 +27,15 @@ public class Card implements Serializable {
     private String expires;
     private String ccv;
 
-
     public Card() {
-        super();
     }
 
-
     public Card(String id, String longNum, String expires, String ccv) {
-        super();
         this.id = id;
         this.longNum = longNum;
         this.expires = expires;
         this.ccv = ccv;
     }
-
 
     /**
      * @return the id
@@ -49,14 +44,12 @@ public class Card implements Serializable {
         return id;
     }
 
-
     /**
      * @param id the id to set
      */
     public void setId(String id) {
         this.id = id;
     }
-
 
     /**
      * @return the cardId
@@ -65,14 +58,12 @@ public class Card implements Serializable {
         return cardId;
     }
 
-
     /**
      * @param cardId the cardId to set
      */
     public void setCardId(Long cardId) {
         this.cardId = cardId;
     }
-
 
     /**
      * @return the longNum
@@ -81,14 +72,12 @@ public class Card implements Serializable {
         return longNum;
     }
 
-
     /**
      * @param longNum the longNum to set
      */
     public void setLongNum(String longNum) {
         this.longNum = longNum;
     }
-
 
     /**
      * @return the expires
@@ -97,14 +86,12 @@ public class Card implements Serializable {
         return expires;
     }
 
-
     /**
      * @param expires the expires to set
      */
     public void setExpires(String expires) {
         this.expires = expires;
     }
-
 
     /**
      * @return the ccv
@@ -113,7 +100,6 @@ public class Card implements Serializable {
         return ccv;
     }
 
-
     /**
      * @param ccv the ccv to set
      */
@@ -121,49 +107,24 @@ public class Card implements Serializable {
         this.ccv = ccv;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Card card = (Card) o;
+        return Objects.equals(id, card.id) &&
+                Objects.equals(longNum, card.longNum) &&
+                Objects.equals(expires, card.expires) &&
+                Objects.equals(ccv, card.ccv);
+    }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((ccv == null) ? 0 : ccv.hashCode());
-        result = prime * result + ((expires == null) ? 0 : expires.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((longNum == null) ? 0 : longNum.hashCode());
-        return result;
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Card other = (Card) obj;
-        if (ccv == null) {
-            if (other.ccv != null)
-                return false;
-        } else if (!ccv.equals(other.ccv))
-            return false;
-        if (expires == null) {
-            if (other.expires != null)
-                return false;
-        } else if (!expires.equals(other.expires))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (longNum == null) {
-            if (other.longNum != null)
-                return false;
-        } else if (!longNum.equals(other.longNum))
-            return false;
-        return true;
+        return Objects.hash(id, longNum, expires, ccv);
     }
 
     @Override

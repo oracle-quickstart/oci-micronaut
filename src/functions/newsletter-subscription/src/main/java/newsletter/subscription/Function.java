@@ -10,11 +10,12 @@ import java.util.Map;
 
 @Singleton
 public class Function extends OciFunction {
+
     @Inject
     MailSender mailSender;
 
     @ReflectiveAccess
-    public Map<String, String> handleRequest(String toEmail) throws Exception {
+    public Map<String, String> handleRequest(String toEmail) {
         final String messageID = mailSender.send(
                 toEmail,
                 "Hello from Mushop",

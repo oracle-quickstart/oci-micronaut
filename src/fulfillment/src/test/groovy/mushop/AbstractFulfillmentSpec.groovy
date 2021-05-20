@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package mushop;
+package mushop
 
+import io.micronaut.core.annotation.NonNull
 import io.micronaut.test.support.TestPropertyProvider
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import spock.lang.Specification
-
-import javax.annotation.Nonnull
 
 abstract class AbstractFulfillmentSpec extends Specification implements TestPropertyProvider {
 
@@ -33,7 +32,7 @@ abstract class AbstractFulfillmentSpec extends Specification implements TestProp
         natsContainer.start()
     }
 
-    @Nonnull
+    @NonNull
     Map<String, String> getProperties() {
         return ["nats.addresses": "nats://localhost:${natsContainer.getMappedPort(4222)}"]
     }

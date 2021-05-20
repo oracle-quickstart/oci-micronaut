@@ -1,10 +1,10 @@
 package mushop.orders.controllers.dto;
 
-
 import io.micronaut.core.annotation.Introspected;
 
 @Introspected
 public class ItemDto {
+
     private final String id;
     private final String itemId;
     private final int quantity;

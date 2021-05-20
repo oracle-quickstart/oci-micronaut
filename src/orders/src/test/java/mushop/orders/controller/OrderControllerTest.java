@@ -1,8 +1,6 @@
 package mushop.orders.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micronaut.core.type.Argument;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.Sort;
@@ -28,14 +26,13 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,9 +46,6 @@ public class OrderControllerTest extends AbstractTest {
     @Inject
     @Client("/")
     private RxHttpClient httpClient;
-
-    @Inject
-    private ObjectMapper objectMapper;
 
     Address address = new Address(
             "001",
@@ -70,17 +64,17 @@ public class OrderControllerTest extends AbstractTest {
             "firstname",
             "lastName",
             "username",
-            Arrays.asList(address),
-            Arrays.asList(card));
+            Collections.singletonList(address),
+            Collections.singletonList(card));
 
     URI customerURI = URI.create("http://user/customers/1");
     URI addressURI = URI.create("http://user/customers/1/addresses/1");
     URI cardURI = URI.create("http://user/customers/1/cards/1");
     URI itemsURI = URI.create("http://carts/carts/1/items");
-    CustomerOrder order = new CustomerOrder(001l, customer, address, card, null, null, null, 00f);
+    CustomerOrder order = new CustomerOrder(1L, customer, address, card, null, null, null, 00f);
 
     @Test
-    void orderPayload_returns_201() throws Exception {
+    void orderPayload_returns_201() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
@@ -91,7 +85,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void missingCustomer_returns_406(){
+    void missingCustomer_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(null, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
@@ -147,7 +141,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void paymentDeclined_returns_406(){
+    void paymentDeclined_returns_406() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
         when(ordersService.placeOrder(orderPayload))
                 .thenThrow(new OrdersController.PaymentDeclinedException("test"));
@@ -162,7 +156,7 @@ public class OrderControllerTest extends AbstractTest {
     @Test
     void illegalState_returns_503() {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
-        
+
         when(ordersService.placeOrder(orderPayload))
                 .thenThrow(new OrderFailedException("test"));
 
@@ -174,7 +168,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void customerOrdersWithoutSort_returns_200(){
+    void customerOrdersWithoutSort_returns_200() {
         Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
 
         when(ordersService.searchCustomerOrders(eq("123"), any(Pageable.class)))
@@ -185,7 +179,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @Test
-    void customerOrdersWithSort_returns_200(){
+    void customerOrdersWithSort_returns_200() {
         Page<CustomerOrder> p = Page.of(List.of(order), Pageable.UNPAGED, 1);
 
         when(ordersService.searchCustomerOrders(
@@ -202,7 +196,7 @@ public class OrderControllerTest extends AbstractTest {
     }
 
     @MockBean(OrdersService.class)
-    OrdersService ordersService(){
+    OrdersService ordersService() {
         return mock(OrdersService.class);
     }
 }

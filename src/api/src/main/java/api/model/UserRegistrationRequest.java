@@ -3,7 +3,6 @@ package api.model;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,7 +31,11 @@ public class UserRegistrationRequest {
     private final String email;
 
     @Creator
-    public UserRegistrationRequest(String username, String password, String firstName, String lastName, String email) {
+    public UserRegistrationRequest(String username,
+                                   String password,
+                                   String firstName,
+                                   String lastName,
+                                   String email) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

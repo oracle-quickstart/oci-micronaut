@@ -6,7 +6,6 @@ import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
@@ -17,14 +16,13 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
-import mushop.orders.resources.OrderUpdate;
 import mushop.orders.resources.PaymentRequest;
 import mushop.orders.resources.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,14 +36,12 @@ import static org.mockito.Mockito.when;
 
 @MicronautTest
 public class OrderServiceTest extends AbstractTest {
+
     @Inject
     private OrdersService ordersService;
 
     @Inject
     private PaymentClient paymentClient;
-
-    @Inject
-    private OrdersPublisher ordersPublisher;
 
     @Inject
     private CustomerOrderRepository customerOrderRepository;
@@ -78,9 +74,9 @@ public class OrderServiceTest extends AbstractTest {
             "firstname",
             "lastName",
             "username",
-            Arrays.asList(address),
-            Arrays.asList(card));
-    List<Item> items = Arrays.asList(new Item("001", "001", 1, 100f));
+            Collections.singletonList(address),
+            Collections.singletonList(card));
+    List<Item> items = Collections.singletonList(new Item("001", "001", 1, 100f));
     PaymentRequest paymentRequest = new PaymentRequest(address, card, customer, 104.99f);
     PaymentResponse payment_authorized = new PaymentResponse(true, "Payment authorized");
 
@@ -113,7 +109,7 @@ public class OrderServiceTest extends AbstractTest {
 
     @Test
     public void highValueOrdersDeclined() {
-        List<Item> expensiveItems = Arrays.asList(new Item("001", "001", 1, 200f));
+        List<Item> expensiveItems = Collections.singletonList(new Item("001", "001", 1, 200f));
         PaymentRequest priceyRequest = new PaymentRequest(address, card, customer, 204.99f);
         PaymentResponse payment_unauthorized = new PaymentResponse(false, "Payment unauthorized");
 
@@ -134,7 +130,6 @@ public class OrderServiceTest extends AbstractTest {
 
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
                 .thenReturn(Flowable.just(expensiveItems));
-
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
@@ -166,7 +161,6 @@ public class OrderServiceTest extends AbstractTest {
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
-
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
                 () -> ordersService.placeOrder(orderPayload).blockingGet());

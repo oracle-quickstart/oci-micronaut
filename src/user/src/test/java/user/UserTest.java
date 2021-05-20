@@ -3,9 +3,10 @@ package user;
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
 
 import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
 class UserTest {
@@ -15,7 +16,6 @@ class UserTest {
 
     @Test
     void testItWorks() {
-        Assertions.assertTrue(application.isRunning());
+        assertTrue(application.isRunning());
     }
-
 }

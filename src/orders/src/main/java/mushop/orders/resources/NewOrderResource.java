@@ -4,8 +4,6 @@
  **/
 package  mushop.orders.resources;
 
-
-
 import io.micronaut.core.annotation.Introspected;
 
 import java.net.URI;
@@ -14,15 +12,15 @@ import java.util.Objects;
 @Introspected
 public class NewOrderResource {
 
-    public URI customer;
+    private final URI customer;
+    private final URI address;
+    private final URI card;
+    private final URI items;
 
-    public URI address;
-
-    public URI card;
-
-    public URI items;
-
-    public NewOrderResource(URI customer, URI address, URI card, URI items) {
+    public NewOrderResource(URI customer,
+                            URI address,
+                            URI card,
+                            URI items) {
         this.customer = customer;
         this.address = address;
         this.card = card;

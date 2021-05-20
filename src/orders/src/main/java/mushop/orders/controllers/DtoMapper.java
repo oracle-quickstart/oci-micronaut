@@ -24,10 +24,7 @@ import mushop.orders.entities.Customer;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.entities.Item;
 import org.mapstruct.Mapper;
-import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

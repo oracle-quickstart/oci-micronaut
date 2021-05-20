@@ -14,7 +14,11 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import mushop.orders.OrdersConfiguration;
 import mushop.orders.client.PaymentClient;
-import mushop.orders.entities.*;
+import mushop.orders.entities.Address;
+import mushop.orders.entities.Card;
+import mushop.orders.entities.Customer;
+import mushop.orders.entities.CustomerOrder;
+import mushop.orders.entities.Item;
 import mushop.orders.repositories.CustomerOrderRepository;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.resources.OrderUpdate;
@@ -39,17 +43,11 @@ public class OrdersService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     private final CustomerOrderRepository customerOrderRepository;
-
     private final MeterRegistry meterRegistry;
-
     private final OrdersPublisher ordersPublisher;
-
     private final PaymentClient paymentClient;
-
     private final OrdersConfiguration ordersConfiguration;
-
     private final RxHttpClient userClient;
-
     private final RxHttpClient cartsClient;
 
     public OrdersService(CustomerOrderRepository customerOrderRepository,
@@ -72,10 +70,10 @@ public class OrdersService {
         Optional<CustomerOrder> customerOrder = customerOrderRepository.findById(id);
         if (customerOrder.isPresent()) {
             return customerOrder.get();
-        } else {
-            LOG.info("Order with id {} not found", id);
-            return null;
         }
+
+        LOG.info("Order with id {} not found", id);
+        return null;
     }
 
     public Page<CustomerOrder> searchCustomerOrders(String customerId, Pageable pagable){
@@ -98,16 +96,16 @@ public class OrdersService {
         return Flowable.just(new PaymentRequest())
                 .doOnNext((request) -> LOG.info("Placing new order {}", orderPayload))
                 .switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.address.getPath()), Address.class)
+                        userClient.retrieve(HttpRequest.GET(orderPayload.getAddress().getPath()), Address.class)
                                 .map(request::setAddress)
                 ).switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.customer.getPath()), Customer.class)
+                        userClient.retrieve(HttpRequest.GET(orderPayload.getCustomer().getPath()), Customer.class)
                                 .map(request::setCustomer)
                 ).switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.card.getPath()), Card.class)
+                        userClient.retrieve(HttpRequest.GET(orderPayload.getCard().getPath()), Card.class)
                                 .map(request::setCard)
                 ).switchMap((request) ->
-                        cartsClient.retrieve(HttpRequest.GET(orderPayload.items.getPath()), Argument.listOf(Item.class))
+                        cartsClient.retrieve(HttpRequest.GET(orderPayload.getItems().getPath()), Argument.listOf(Item.class))
                                 .map((orderItems) -> {
                                     //Calculate total
                                     float amount = calculateTotal(orderItems);

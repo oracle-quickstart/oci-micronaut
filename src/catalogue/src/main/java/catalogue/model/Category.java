@@ -10,10 +10,12 @@ import java.util.Objects;
 
 @MappedEntity("CATEGORIES")
 public class Category {
+
     @GeneratedValue(GeneratedValue.Type.IDENTITY)
     @Id
     @Nullable
     private final Long categoryId;
+
     @Size(max = 30)
     private final String name;
 

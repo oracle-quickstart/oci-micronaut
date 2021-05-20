@@ -1,4 +1,4 @@
-package mushop.carts.entitites;
+package mushop.carts.entities;
 
 import io.micronaut.core.annotation.Introspected;
 
@@ -17,8 +17,8 @@ public class Item {
     private BigDecimal unitPrice;
 
     public Item() {
-        this.id = UUID.randomUUID().toString();
-        this.quantity = 1;
+        id = UUID.randomUUID().toString();
+        quantity = 1;
     }
 
     public String getId() {
@@ -55,7 +55,10 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item [id=" + id + ", itemId=" + itemId + ", quantity=" + quantity + ", unitPrice=" + unitPrice + "]";
+        return "Item [id=" + id +
+                ", itemId=" + itemId +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                "]";
     }
-
 }

@@ -228,7 +228,7 @@ export const Services = {
     name: 'Media',
     type: ServiceType.NODE,
     tech: TechType.OKE,
-    desc: `Product media source, intgrating with Object Storage`,
+    desc: `Product media source, integrating with Object Storage`,
   },
   EVENTS: {
     name: 'Tracking',

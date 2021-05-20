@@ -58,10 +58,10 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers")
 }
 
-
 application {
     mainClass.set("catalogue.Application")
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -74,5 +74,3 @@ dockerBuild {
 dockerBuildNative {
   images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
-
-

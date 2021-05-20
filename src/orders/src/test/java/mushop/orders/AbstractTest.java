@@ -15,6 +15,7 @@
  */
 package mushop.orders;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.test.support.TestPropertyProvider;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.GenericContainer;
@@ -22,8 +23,6 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 @Testcontainers
@@ -31,12 +30,12 @@ import java.util.Map;
 public abstract class AbstractTest implements TestPropertyProvider {
 
     @Container
-    static GenericContainer natsContainer =
-            new GenericContainer("nats:latest")
+    static GenericContainer<?> natsContainer =
+            new GenericContainer<>("nats:latest")
                     .withExposedPorts(4222)
                     .waitingFor(new LogMessageWaitStrategy().withRegEx("(?s).*Server is ready.*"));
 
-    @Nonnull
+    @NonNull
     @Override
     public Map<String, String> getProperties() {
         natsContainer.start();

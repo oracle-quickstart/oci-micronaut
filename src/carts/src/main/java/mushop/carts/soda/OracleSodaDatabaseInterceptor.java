@@ -5,7 +5,6 @@ import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.context.BeanContext;
 import io.micronaut.context.Qualifier;
-import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.inject.ExecutableMethod;
@@ -29,8 +28,8 @@ final class OracleSodaDatabaseInterceptor implements MethodInterceptor<OracleDat
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     OracleSodaDatabaseInterceptor(BeanContext beanContext, Qualifier qualifier) {
-        this.dataSource = DelegatingDataSource.unwrapDataSource(beanContext.getBean(DataSource.class, qualifier));
-        this.client = beanContext.getBean(OracleRDBMSClient.class, qualifier);
+        dataSource = DelegatingDataSource.unwrapDataSource(beanContext.getBean(DataSource.class, qualifier));
+        client = beanContext.getBean(OracleRDBMSClient.class, qualifier);
     }
 
     @Override
@@ -41,10 +40,10 @@ final class OracleSodaDatabaseInterceptor implements MethodInterceptor<OracleDat
         } catch (CannotGetJdbcConnectionException e) {
             throw new NoTransactionException("No current transaction present. Consider declaring @Transactional on the surrounding method", e);
         }
-        final ExecutableMethod<OracleDatabase, Object> method = context.getExecutableMethod();
 
+        final ExecutableMethod<OracleDatabase, Object> method = context.getExecutableMethod();
         try {
-            final OracleDatabase database = this.client.getDatabase(connection);
+            final OracleDatabase database = client.getDatabase(connection);
             return method.invoke(database, context.getParameterValues());
         } catch (OracleException e) {
             throw new CannotGetJdbcConnectionException(e.getMessage(), e);

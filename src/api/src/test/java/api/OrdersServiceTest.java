@@ -10,7 +10,9 @@ import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
@@ -19,10 +21,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @Testcontainers
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrdersServiceTest extends AbstractDatabaseServiceTest {
+
     private static String sessionID;
 
     @Container
@@ -50,7 +55,7 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
     @Test
     void testListOrders(OrdersApiClient client) {
         final List<?> orders = client.getOrders(sessionID);
-        Assertions.assertEquals(0, orders.size());
+        assertEquals(0, orders.size());
     }
 
     @Override

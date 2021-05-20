@@ -2,13 +2,18 @@ package api.services;
 
 import api.model.MuUserDetails;
 import api.model.Product;
+import api.services.annotation.CartId;
 import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
-import api.services.annotation.CartId;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.Status;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
@@ -25,14 +30,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class CartsService {
+
     private static final String ITEM_ID = "itemId";
     private static final String UNIT_PRICE = "unitPrice";
     private static final String QUANTITY = "quantity";
+
     private final CartsClient client;
     private final CatalogueClient catalogueClient;
 
@@ -216,8 +226,8 @@ public class CartsService {
         private BigDecimal unitPrice;
 
         public CartItem() {
-            this.id = UUID.randomUUID().toString();
-            this.quantity = 1;
+            id = UUID.randomUUID().toString();
+            quantity = 1;
         }
 
         /**

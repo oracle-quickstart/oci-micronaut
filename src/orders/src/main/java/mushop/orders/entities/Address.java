@@ -4,14 +4,14 @@
  **/
 package mushop.orders.entities;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Address implements Serializable {
@@ -25,13 +25,18 @@ public class Address implements Serializable {
 
     @JsonProperty("number")
     private String street_number;
+
     private String street;
     private String city;
     private String postcode;
     private String country;
 
-    public Address(String id, String street_number, String street, String city, String postcode, String country) {
-        super();
+    public Address(String id,
+                   String street_number,
+                   String street,
+                   String city,
+                   String postcode,
+                   String country) {
         this.id = id;
         this.street_number = street_number;
         this.street = street;
@@ -41,7 +46,6 @@ public class Address implements Serializable {
     }
 
     public Address() {
-        super();
     }
 
     /**
@@ -142,60 +146,26 @@ public class Address implements Serializable {
         this.country = country;
     }
 
-
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((country == null) ? 0 : country.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((postcode == null) ? 0 : postcode.hashCode());
-        result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + ((street_number == null) ? 0 : street_number.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Address address = (Address) o;
+        return Objects.equals(id, address.id) &&
+                Objects.equals(street_number, address.street_number) &&
+                Objects.equals(street, address.street) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(postcode, address.postcode) &&
+                Objects.equals(country, address.country);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Address other = (Address) obj;
-        if (city == null) {
-            if (other.city != null)
-                return false;
-        } else if (!city.equals(other.city))
-            return false;
-        if (country == null) {
-            if (other.country != null)
-                return false;
-        } else if (!country.equals(other.country))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (postcode == null) {
-            if (other.postcode != null)
-                return false;
-        } else if (!postcode.equals(other.postcode))
-            return false;
-        if (street == null) {
-            if (other.street != null)
-                return false;
-        } else if (!street.equals(other.street))
-            return false;
-        if (street_number == null) {
-            if (other.street_number != null)
-                return false;
-        } else if (!street_number.equals(other.street_number))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, street_number, street, city, postcode, country);
     }
 
     @Override

@@ -5,8 +5,14 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
-import user.api.*;
-import user.api.dto.*;
+import user.api.LoginOperations;
+import user.api.UserOperations;
+import user.api.dto.UserAddressDetailDto;
+import user.api.dto.UserAddressDto;
+import user.api.dto.UserCardDetailDto;
+import user.api.dto.UserCardDto;
+import user.api.dto.UserDetailDto;
+import user.api.dto.UserDto;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -17,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @MicronautTest
 public class UserControllerTest {
+
     @Inject
     UserClient client;
 

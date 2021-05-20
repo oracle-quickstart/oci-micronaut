@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.Introspected;
  */
 @Introspected
 public class Authorization {
+
     private final boolean authorised;
     private final String message;
 

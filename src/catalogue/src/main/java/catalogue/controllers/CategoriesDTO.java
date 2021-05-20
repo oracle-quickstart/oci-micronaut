@@ -9,6 +9,7 @@ import java.util.List;
  */
 @Introspected
 public class CategoriesDTO {
+
     private final String[] categories;
 
     public CategoriesDTO(List<String> categories) {

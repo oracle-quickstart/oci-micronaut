@@ -1,36 +1,40 @@
 package api;
 
-import api.AbstractDatabaseServiceTest.LoginClient;
-import api.services.AuthClient;
 import api.model.Product;
-import api.services.ServiceLocator;
+import api.services.AuthClient;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.CookieValue;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.micronaut.test.support.TestPropertyProvider;
 import io.reactivex.Maybe;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
 @MicronautTest
@@ -154,7 +158,9 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
         public final int quantity;
 
         @JsonCreator
-        public ProductAndQuantity(@JsonProperty("id") String id, @JsonProperty("unitPrice") double price, @JsonProperty("quantity") int quantity) {
+        public ProductAndQuantity(@JsonProperty("id") String id,
+                                  @JsonProperty("unitPrice") double price,
+                                  @JsonProperty("quantity") int quantity) {
             super(id, price);
             this.quantity = quantity;
         }

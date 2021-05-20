@@ -45,7 +45,7 @@ dependencies {
     // Kubernetes service discovery
     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.2")
 
-    // Redis Http session store
+    // Redis HTTP session store
     implementation("io.micronaut.redis:micronaut-redis-lettuce")
 
     // Swagger
@@ -59,18 +59,16 @@ dependencies {
     testImplementation("com.oracle.database.jdbc:ojdbc8")
     testImplementation "org.mockito:mockito-core:3.9.0"
     testImplementation "com.github.kstyrc:embedded-redis:0.6"
-
 }
-
 
 application {
     mainClass.set("api.Application")
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
-
 
 dockerBuild {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
@@ -79,5 +77,3 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
-
-

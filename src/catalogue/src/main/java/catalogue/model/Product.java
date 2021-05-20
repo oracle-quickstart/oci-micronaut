@@ -1,6 +1,9 @@
 package catalogue.model;
 
-import io.micronaut.data.annotation.*;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.MappedProperty;
+import io.micronaut.data.annotation.Relation;
 import io.micronaut.data.jdbc.annotation.JoinTable;
 
 import javax.validation.constraints.Size;
@@ -9,28 +12,40 @@ import java.util.List;
 
 @MappedEntity("PRODUCTS")
 public class Product {
+
     @Id
     @Size(max = 20)
     private final String sku;
+
     @Size(max = 20)
     private final String brand;
+
     @Size(max = 40)
     private final String title;
+
     @Size(max = 500)
     private final String description;
+
     @Size(max = 10)
     private final String weight;
+
     @Size(max = 25)
     private final String productSize;
+
     @Size(max = 20)
     private final String colors;
+
     @MappedProperty("qty")
     private final int quantity;
+
     private final float price;
+
     @MappedProperty("image_url_1")
     private final String imageUrl1;
+
     @MappedProperty("image_url_2")
     private final String imageUrl2;
+
     @Relation(Relation.Kind.ONE_TO_MANY)
     @JoinTable(name = "PRODUCT_CATEGORY",
             joinColumns = {

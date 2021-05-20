@@ -32,7 +32,7 @@ import javax.transaction.Transactional;
 @NatsListener
 public class ShipmentsListener {
 
-    private static final Logger log = LoggerFactory.getLogger(ShipmentsListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShipmentsListener.class);
 
     private final CustomerOrderRepository customerOrderRepository;
 
@@ -44,11 +44,11 @@ public class ShipmentsListener {
     @Transactional
     @Counted("orders.fulfilled")
     public void handleMessage(OrderUpdate update) {
-        log.debug("Received order update {}", update);
+        LOG.debug("Received order update {}", update);
         CustomerOrder order = customerOrderRepository.findById(update.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("Order with id " + update.getOrderId() + "  doesn't exists"));
+                .orElseThrow(() -> new IllegalArgumentException("Order with id " + update.getOrderId() + "  doesn't exist"));
         order.setShipment(update.getShipment());
         customerOrderRepository.save(order);
-        log.debug("order {} is now {}", order.getId(), update.getShipment().getName());
+        LOG.debug("order {} is now {}", order.getId(), update.getShipment().getName());
     }
 }

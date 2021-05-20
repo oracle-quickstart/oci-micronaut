@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.Introspected;
  */
 @Introspected
 public class CatalogueItemDTO {
+
     private final String id;
     private final String brand;
     private final String title;

@@ -32,8 +32,8 @@ import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.hateoas.Link;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
-import mushop.carts.entitites.Cart;
-import mushop.carts.entitites.Item;
+import mushop.carts.entities.Cart;
+import mushop.carts.entities.Item;
 import mushop.carts.repositories.CartRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,58 +42,65 @@ import java.util.List;
 
 @Controller("/carts")
 @ExecuteOn(TaskExecutors.IO)
-public class CartsController {
-    public static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
+class CartsController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CartsController.class);
 
     private final CartRepository cartRepository;
 
-    public CartsController(CartRepository cartRepository) {
+    CartsController(CartRepository cartRepository) {
         this.cartRepository = cartRepository;
     }
 
     @Get("/{cartId}")
-    public Cart getCart(String cartId) {
+    Cart getCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
         return cart;
     }
 
     @Get("/{cartId}/items")
-    public List<Item> getCartItems(String cartId) {
+    List<Item> getCartItems(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
         return cart.getItems();
     }
 
     @Delete("/{cartId}")
-    public Cart deleteCart(String cartId) {
+    Cart deleteCart(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         if (cartRepository.deleteCart(cartId)) {
             LOG.info("Cart deleted: {}", cart);
             return cart;
         } else {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Failed to delete cart " + cartId);
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Failed to delete cart " + cartId);
         }
     }
 
     @Delete("/{cartId}/items/{itemId}")
     @Timed("carts.updated.timer")
-    public Cart deleteCartItem(String cartId, String itemId) {
+    Cart deleteCartItem(String cartId, String itemId) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         if (!cart.removeItem(itemId)) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart item with id " + itemId + " not found " + cart);
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart item with id " + itemId + " not found " + cart);
         }
 
         cartRepository.save(cart);
@@ -102,7 +109,8 @@ public class CartsController {
     }
 
     @Post("/{cartId}")
-    public HttpResponse<Cart> postCart(@PathVariable String cartId, @Body Cart newCart) {
+    HttpResponse<Cart> postCart(@PathVariable String cartId,
+                                @Body Cart newCart) {
 
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
@@ -119,10 +127,11 @@ public class CartsController {
     }
 
     @Put("/{cartId}/items")
-    public Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
+    Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND, "Cart with id " + cartId + " not found");
+            throw new HttpStatusException(HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found");
         }
 
         for (Item item : cart.getItems()) {

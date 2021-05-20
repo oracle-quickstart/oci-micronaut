@@ -8,6 +8,7 @@ import io.micronaut.core.annotation.Introspected;
 
 @Introspected
 public class PaymentResponse {
+
     private final boolean authorised;
     private final String  message;
 

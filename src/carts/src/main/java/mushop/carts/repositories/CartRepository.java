@@ -1,7 +1,6 @@
 package mushop.carts.repositories;
 
-import io.micrometer.core.annotation.Counted;
-import mushop.carts.entitites.Cart;
+import mushop.carts.entities.Cart;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface CartRepository {
     void update(Cart cart);
 
     /**
-     * Gets the cart with the specified cart id 
+     * Gets the cart with the specified cart id
      */
     Cart getById(String id);
 
@@ -28,16 +27,15 @@ public interface CartRepository {
      */
     boolean deleteCart(String id);
 
-    /** 
+    /**
      * Selects carts that have the same customer id
      */
     List<Cart> getByCustomerId(String custId);
 
     /**
      * Check the connection to the database
-     * @return boolean true if connected to a database, false if not. 
+     * @return boolean true if connected to a database, false if not.
      */
     boolean healthCheck();
-    
-}
 
+}

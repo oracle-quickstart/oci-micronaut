@@ -29,13 +29,9 @@ public class User {
     private Long version;
 
     private String username;
-
     private String password;
-
     private String salt;
-
     private String firstName;
-
     private String lastName;
 
     @Nullable
@@ -58,7 +54,13 @@ public class User {
     private OffsetDateTime updatedAt;
 
     @Default
-    public User(String username, String password, String firstName, String lastName, String email, @Nullable String phone, @Nullable List<UserAddress> addresses) {
+    public User(String username,
+                String password,
+                String firstName,
+                String lastName,
+                String email,
+                @Nullable String phone,
+                @Nullable List<UserAddress> addresses) {
         this.password = password;
         this.username = username;
         this.firstName = firstName;
@@ -69,15 +71,21 @@ public class User {
     }
 
     @Creator
-    public User(String username, String password, String firstName, String lastName, String email, @Nullable String phone, String salt) {
+    public User(String username,
+                String password,
+                String firstName,
+                String lastName,
+                String email,
+                @Nullable String phone,
+                String salt) {
         this(username, password, firstName, lastName, email, phone, Collections.emptyList());
         this.salt = salt;
     }
 
     @PrePersist
     void hashPassword() {
-        this.salt = PasswordUtils.generateSalt();
-        this.password = PasswordUtils.hash(password, salt);
+        salt = PasswordUtils.generateSalt();
+        password = PasswordUtils.hash(password, salt);
     }
 
     public UUID getId() {

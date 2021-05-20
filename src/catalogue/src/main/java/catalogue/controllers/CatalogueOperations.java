@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CatalogueOperations {
+
     @Get("/categories")
     CategoriesDTO listCategories();
 
@@ -19,6 +20,6 @@ public interface CatalogueOperations {
     Optional<CatalogueItemDTO> find(String id);
 
     @Get("/catalogue{?categories}")
-    List<CatalogueItemDTO> list(@Nullable @QueryValue List<String> categories, Pageable pageable);
-
+    List<CatalogueItemDTO> list(@Nullable @QueryValue List<String> categories,
+                                Pageable pageable);
 }

@@ -5,15 +5,16 @@
 package  mushop;
 
 public class OrderUpdate {
+
     private Long orderId;
-    private Shipment Shipment;
+    private Shipment shipment;
 
     public OrderUpdate() {
     }
 
     public OrderUpdate(Long orderId, Shipment shipment) {
         this.orderId = orderId;
-        Shipment = shipment;
+        this.shipment = shipment;
     }
 
     public Long getOrderId() {
@@ -25,18 +26,18 @@ public class OrderUpdate {
     }
 
     public Shipment getShipment() {
-        return Shipment;
+        return shipment;
     }
 
     public void setShipment(Shipment shipment) {
-        Shipment = shipment;
+        this.shipment = shipment;
     }
 
     @Override
     public String toString() {
         return "OrderUpdate{" +
                 "orderId='" + orderId + '\'' +
-                ", Shipment=" + Shipment +
+                ", shipment=" + shipment +
                 '}';
     }
 }

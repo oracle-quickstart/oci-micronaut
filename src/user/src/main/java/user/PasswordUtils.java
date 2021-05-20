@@ -43,8 +43,6 @@ public class PasswordUtils {
      * @return the hashed password
      */
     public static String hash(String passwordString, String saltBase64) {
-        System.out.println("passwordString " + passwordString);
-        System.out.println("saltBase64 " + saltBase64);
         char[] password = passwordString.toCharArray();
         byte[] salt = Base64.getDecoder().decode(saltBase64);
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
@@ -52,7 +50,6 @@ public class PasswordUtils {
         try {
             byte[] encoded = SECRET_KEY_FACTORY.generateSecret(spec).getEncoded();
             String hashedPassword = Base64.getEncoder().encodeToString(encoded);
-            System.out.println("hashedPassword " + saltBase64);
             return hashedPassword;
         } catch (InvalidKeySpecException e) {
             throw new IllegalStateException("Error while hashing a password: " + e.getMessage(), e);
@@ -69,7 +66,9 @@ public class PasswordUtils {
      * @param hashedPasswordBase64 the expected hashed value of the password
      * @return true if the given password and salt match the hashed value, false otherwise
      */
-    public static boolean isExpectedPassword(String passwordString, String saltBase64, String hashedPasswordBase64) {
+    public static boolean isExpectedPassword(String passwordString,
+                                             String saltBase64,
+                                             String hashedPasswordBase64) {
         return hashedPasswordBase64.equals(hash(passwordString, saltBase64));
     }
 }

@@ -1,4 +1,4 @@
-package mushop.carts.entitites;
+package mushop.carts.entities;
 
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
@@ -54,7 +54,7 @@ public class Cart {
     }
 
     public void merge(Cart cart) {
-        this.customerId = cart.getCustomerId();
+        customerId = cart.getCustomerId();
         for (Item item : cart.items) {
             mergeItem(item);
         }
@@ -72,7 +72,9 @@ public class Cart {
 
     @Override
     public String toString() {
-        return "Cart [customerId=" + customerId + ", id=" + id + ", items=" + items + "]";
+        return "Cart [customerId=" + customerId +
+                ", id=" + id +
+                ", items=" + items +
+                "]";
     }
-
 }

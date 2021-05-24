@@ -52,6 +52,8 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations")
 
     // Testing
+    // https://github.com/micronaut-projects/micronaut-test/issues/423
+    testImplementation enforcedPlatform("io.micronaut.test:micronaut-test-bom:2.3.3")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:oracle-xe")

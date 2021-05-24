@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>2.5.0</version>
+        <version>2.5.4</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -24,7 +24,7 @@
         <packaging>jar</packaging>
         <jdk.version>11</jdk.version>
         <release.version>11</release.version>
-        <micronaut.version>2.5.0</micronaut.version>
+        <micronaut.version>2.5.4</micronaut.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
         <micronaut.oraclecloud.version>1.3.4</micronaut.oraclecloud.version>

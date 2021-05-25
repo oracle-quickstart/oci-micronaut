@@ -32,6 +32,7 @@
         <micronaut.testcontainers.version>1.15.3</micronaut.testcontainers.version>
         <jdbc.version>21.1.0.0</jdbc.version>
         <soda.version>1.1.4</soda.version>
+        <docker.image.suffix>openjdk</docker.image.suffix>
 <!--        <libs.classpath.prefix>libs</libs.classpath.prefix>-->
 <!--        <copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>-->
 <!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
@@ -213,9 +214,10 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
                     <to>
-                        <image>iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.artifactId}:${project.version}</image>
+                        <image>iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
                     </to>
                 </configuration>
             </plugin>

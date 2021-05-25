@@ -81,8 +81,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {

@@ -103,7 +103,7 @@ public class CartsService {
                 new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.id)
             )).flatMapCompletable((product ->
                     client.postCart(cartId, Map.of(
-                           "customerId", MuUserDetails.resolveIdSafe(authentication),
+                           "customerId", authentication == null ? "" : MuUserDetails.resolveId(authentication),
                            "items", Collections.singletonList(Map.of(
                                     ITEM_ID, product.id,
                                     UNIT_PRICE, product.price,

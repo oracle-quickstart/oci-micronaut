@@ -45,16 +45,4 @@ public class MuUserDetails extends UserDetails {
         return Objects.requireNonNull(auth.getAttributes().get(ID), "User ID should never be null")
                 .toString();
     }
-
-    /**
-     * Resolves user id from authentication. If user is not authenticated then returns null.
-     * @param auth the authentication
-     * @return user id or empty string
-     */
-    public static String resolveIdSafe(@Nullable Authentication auth) {
-        if (auth == null || !auth.getAttributes().containsKey(ID)) {
-            return "";
-        }
-        return resolveId(auth);
-    }
 }

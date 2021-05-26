@@ -6,6 +6,7 @@ import api.services.annotation.CartId;
 import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -33,10 +34,11 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @MuService
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class CartsService {
 
     private static final String ITEM_ID = "itemId";
@@ -93,7 +95,7 @@ public class CartsService {
     @Post(value = "/cart")
     @TrackEvent("cart:addItem")
     Completable addItem(
-            Authentication authentication,
+            @Nullable Authentication authentication,
             @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
         return catalogueClient.getItem(addItem.id)
@@ -101,7 +103,7 @@ public class CartsService {
                 new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.id)
             )).flatMapCompletable((product ->
                     client.postCart(cartId, Map.of(
-                           "customerId", MuUserDetails.resolveId(authentication),
+                           "customerId", MuUserDetails.resolveIdSafe(authentication),
                            "items", Collections.singletonList(Map.of(
                                     ITEM_ID, product.id,
                                     UNIT_PRICE, product.price,

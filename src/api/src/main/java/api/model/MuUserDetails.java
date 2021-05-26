@@ -2,6 +2,7 @@ package api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.UserDetails;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,8 +34,27 @@ public class MuUserDetails extends UserDetails {
         return super.getUserDetails();
     }
 
+    /**
+     * Resolves user id from authentication.
+     *
+     * @param auth the authentication
+     * @return user id
+     * @throws NullPointerException when user is not authenticated
+     */
     public static String resolveId(Authentication auth) {
         return Objects.requireNonNull(auth.getAttributes().get(ID), "User ID should never be null")
                 .toString();
+    }
+
+    /**
+     * Resolves user id from authentication. If user is not authenticated then returns null.
+     * @param auth the authentication
+     * @return user id or empty string
+     */
+    public static String resolveIdSafe(@Nullable Authentication auth) {
+        if (auth == null || !auth.getAttributes().containsKey(ID)) {
+            return "";
+        }
+        return resolveId(auth);
     }
 }

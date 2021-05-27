@@ -3,7 +3,8 @@
 A microservice demo that stores the MuShop shopping carts. The service is a Micronaut application written in Java and makes use of the following components:
 
   * **Autonomous Database JSON** - Each shopping cart is stored in the autonomous database as a JSON document using [SODA (Simple Oracle Document Access)](https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/).  The microservice stores cart data using simple create, read, update, and delete operations over a collection of JSON documents.  For example:
-    ```Java
+    
+    ```java
     OracleCollection col = db.openCollection("carts");
     // insert a cart
     OracleDocument doc = db.createDocumentFromString("{\"customerId\" : 123, \"items\" : [...] }")
@@ -62,3 +63,19 @@ A microservice demo that stores the MuShop shopping carts. The service is a Micr
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
 [/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+
+# Running Locally
+
+This application uses Oracle Autonomous Database when running in Oracle Cloud. To run the application locally you can use a local Oracle database and modify the `datasources` configuration found in `src/main/resources/application.yml` accordingly.
+
+Alternatively you can run Oracle in a container with the following command:
+
+```bash
+$ docker run -p 1521:1521 -e ORACLE_PASSWORD=oracle gvenzl/oracle-xe
+```
+
+Then start the application with:
+
+```bash
+./mvnw mn:run
+```

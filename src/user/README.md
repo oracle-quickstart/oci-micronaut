@@ -38,7 +38,7 @@ This application uses Oracle Autonomous Database when running in Oracle Cloud. T
 Alternatively you can run Oracle in a container with the following command:
 
 ```bash
-$ docker run -p 1521:1521 -e ORACLE_PASSWORD=MuShop2021 gvenzl/oracle-xe
+$ docker run -p 1521:1521 -e ORACLE_PASSWORD=oracle gvenzl/oracle-xe
 ```
 
 Then start the application with:

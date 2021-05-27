@@ -32,7 +32,7 @@ datasources:
     url: jdbc:oracle:thin:@localhost:1521/xe
     driverClassName: oracle.jdbc.OracleDriver
     username: system
-    password: MuShop2021
+    password: oracle
 flyway:
   datasources:
     default:

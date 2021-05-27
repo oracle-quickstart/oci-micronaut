@@ -13,6 +13,9 @@ micronaut:
         enabled: true
         mapping: "/catalogue/images/**"
         paths: "classpath:images"
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
   metrics:
     export:
       prometheus:
@@ -34,7 +37,13 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-
+datasources:
+  default:
+    dialect: oracle
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    driverClassName: oracle.jdbc.OracleDriver
+    username: system
+    password: oracle
 flyway:
   datasources:
     default:

@@ -10,7 +10,11 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
-
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
 datasources:
   default:
     url: jdbc:oracle:thin:@localhost:1521/xe

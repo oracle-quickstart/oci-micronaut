@@ -95,6 +95,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- ATP db access -->
         <dependency>
             <groupId>io.micronaut.oraclecloud</groupId>
@@ -233,6 +239,11 @@
                             <groupId>io.micronaut.data</groupId>
                             <artifactId>micronaut-data-processor</artifactId>
                             <version>${micronaut.data.version}</version>
+                        </annotationProcessorPath>
+                        <annotationProcessorPath>
+                            <groupId>io.micronaut.openapi</groupId>
+                            <artifactId>micronaut-openapi</artifactId>
+                            <version>${micronaut.openapi.version}</version>
                         </annotationProcessorPath>
                         <annotationProcessorPath>
                             <groupId>io.micronaut.micrometer</groupId>

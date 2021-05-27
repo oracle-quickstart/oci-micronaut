@@ -79,3 +79,5 @@ Then start the application with:
 ```bash
 ./mvnw mn:run
 ```
+
+The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui

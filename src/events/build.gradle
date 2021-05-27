@@ -39,7 +39,7 @@ dependencies {
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
     // Streaming
-    implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("io.micronaut.kafka:micronaut-kafka:3.3.3")
 
     testImplementation "org.testcontainers:testcontainers:1.15.2"
     testImplementation "org.testcontainers:kafka:1.15.2"

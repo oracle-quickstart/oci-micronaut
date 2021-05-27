@@ -1,5 +1,6 @@
 package catalogue.controllers;
 
+import catalogue.model.Category;
 import catalogue.model.Product;
 import catalogue.repositories.CategoryRepository;
 import catalogue.repositories.ProductRepository;
@@ -63,7 +64,7 @@ class CatalogueController implements CatalogueOperations {
         if (categories == null || categories.isEmpty()) {
             return new CatalogueSizeDTO(productRepository.countDistinct());
         } else {
-            return new CatalogueSizeDTO(productRepository.countDistinctByCategoriesCategoryNameInList(categories));
+            return new CatalogueSizeDTO(productRepository.countDistinctByCategoriesNameInList(categories));
         }
     }
 
@@ -160,7 +161,7 @@ class CatalogueController implements CatalogueOperations {
 
     private String[] getCategories(Product product) {
         return product.getCategories().stream()
-                .map((productCategory -> productCategory.getCategory().getName()))
+                .map((Category::getName))
                 .toArray(String[]::new);
     }
 }

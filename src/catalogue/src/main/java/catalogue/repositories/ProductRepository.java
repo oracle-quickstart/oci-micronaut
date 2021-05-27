@@ -16,20 +16,20 @@ import java.util.Optional;
 public interface ProductRepository extends PageableRepository<Product, String> {
 
     @NonNull
-    @Join("categories.category")
+    @Join("categories")
     List<Product> list(@NonNull Pageable pageable);
 
     @NonNull
     @Override
-    @Join("categories.category")
+    @Join("categories")
     List<Product> findAll();
 
     @NonNull
     @Override
-    @Join("categories.category")
+    @Join("categories")
     Optional<Product> findById(@NonNull @NotNull String id);
 
     int countDistinct();
 
-    int countDistinctByCategoriesCategoryNameInList(List<String> categories);
+    int countDistinctByCategoriesNameInList(List<String> categories);
 }

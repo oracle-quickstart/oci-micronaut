@@ -20,3 +20,19 @@ The messaging system used is [nats.io](https://nats.io). NATS is a production re
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
 [/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+
+# Running Locally
+
+To run the application locally first start a NATS server:
+
+```bash
+docker run -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
+```
+
+Then start the application with:
+
+```bash
+./gradlew run
+```
+
+The available endpoints can be browsed at http://localhost:8082/swagger/views/swagger-ui

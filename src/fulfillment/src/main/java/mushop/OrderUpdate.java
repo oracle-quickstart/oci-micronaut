@@ -4,25 +4,22 @@
  **/
 package  mushop;
 
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
+
+@Introspected
 public class OrderUpdate {
 
-    private Long orderId;
+    private final Long orderId;
     private Shipment shipment;
 
-    public OrderUpdate() {
-    }
-
-    public OrderUpdate(Long orderId, Shipment shipment) {
+    public OrderUpdate(Long orderId, @Nullable Shipment shipment) {
         this.orderId = orderId;
         this.shipment = shipment;
     }
 
     public Long getOrderId() {
         return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public Shipment getShipment() {

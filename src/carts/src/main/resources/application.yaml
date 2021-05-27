@@ -13,6 +13,10 @@ micronaut:
 
 datasources:
   default:
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    driverClassName: oracle.jdbc.OracleDriver
+    username: system
+    password: oracle
     data-source-properties:
       oracle:
         jdbc:
@@ -22,7 +26,7 @@ datasources:
     soda:
       properties:
         sharedMetadataCache: true
-      create-soda-user: ${SODA_CREATE_USERNAME:false}
+      create-soda-user: ${SODA_CREATE_USERNAME:true}
       create-collections:
         - ${carts.collection}
 

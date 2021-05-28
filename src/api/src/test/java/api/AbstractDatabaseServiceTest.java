@@ -19,6 +19,8 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     static OracleContainer oracleContainer;
     static GenericContainer<?> serviceContainer;
 
+    protected DockerImageServiceType defaultDockerImageServiceType = DockerImageServiceType.GRAALVM;
+
     @AfterAll
     static void cleanup() {
         oracleContainer.stop();
@@ -40,15 +42,18 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     }
 
     protected GenericContainer<?> initService() {
-        return new GenericContainer<>(
-                DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/" + getServiceId() + ":" + getServiceVersion())
-        ).withExposedPorts(getServiceExposedPort())
+        return new GenericContainer<>(composeServiceDockerImage())
+                .withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
                         "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
                         "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
                         "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword()
                 ));
+    }
+
+    protected DockerImageName composeServiceDockerImage(){
+        return DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/" + getServiceId() + "-" + defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion());
     }
 
     protected int getServiceExposedPort() {
@@ -63,5 +68,11 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     interface LoginClient {
         @Post("/login")
         HttpResponse<?> login(BasicAuth basicAuth);
+    }
+
+    enum DockerImageServiceType{
+        GRAALVM,
+        OPENJDK,
+        NATIVE
     }
 }

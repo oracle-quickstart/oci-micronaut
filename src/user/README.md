@@ -81,6 +81,19 @@ Or the native version with:
 ./gradlew dockerPushNative
 ```
 
+The Docker image names to push can be altered by editing the following lines in [build.gradle](./build.gradle#L84-L90):
+
+```groovy
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+}
+
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}
+```
+
 When running the container image on a VM or via OKE the following environment variables need to be set:
 
 

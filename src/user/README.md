@@ -81,7 +81,7 @@ Or the native version with:
 ./gradlew dockerPushNative
 ```
 
-The Docker image names to push can be altered by editing the following lines in [build.gradle](./build.gradle#L84-L90):
+The Docker image names to push to can be altered by editing the following lines in [build.gradle](./build.gradle#L84-L90):
 
 ```groovy
 dockerBuild {
@@ -94,7 +94,7 @@ dockerBuildNative {
 }
 ```
 
-When running the container image on a VM or via OKE the following environment variables need to be set:
+When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](src/main/resources/application-oraclecloud.yml) configuration file:
 
 
 | Env Var | Description |
@@ -109,3 +109,4 @@ When running the container image on a VM or via OKE the following environment va
 | `ORACLECLOUD_ATP_USERNAME` | The database username |
 | `ORACLECLOUD_ATP_PASSWORD` | The database password |
 
+In addition [instance principal needs to be configured](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm) to ensure the VM or container has access to the necessary Oracle Cloud resources.

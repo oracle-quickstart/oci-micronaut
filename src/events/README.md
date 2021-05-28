@@ -44,3 +44,62 @@ Then start the application with:
 ```
 
 The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui
+
+# Building and Running a GraalVM Native Image
+
+To build the application into a GraalVM native image you can run:
+
+```bash
+./gradlew nativeImage
+```
+
+Once the native image is built you can run it with:
+
+```bash
+./build/native-image/application
+```
+
+# Deployment to Oracle Cloud
+
+The entire MuShop application can be deployed with the [Helm Chart](../../deploy/complete/helm-chart).
+
+However, if you wish to deploy the events service manually you can do so.
+
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm) then you can deploy the container image with:
+
+```bash
+./gradlew dockerPush
+```
+
+Or the native version with:
+
+```bash
+./gradlew dockerPushNative
+```
+
+The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/pgressa/oraclecloud-cloudnative/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/events/build.gradle#L66-L72):
+
+```groovy
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+}
+
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}
+```
+
+When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](src/main/resources/application-oraclecloud.yml) configuration file:
+
+
+
+| Env Var | Description |
+| --- | --- |
+| `ORACLECLOUD_METRICS_NAMESPACE` | The Oracle Cloud Monitoring Namespace. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_RESOURCEGROUP` | [The Oracle Cloud Monitoring Resource Group. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_COMPARTMENT_ID` | The Oracle Cloud Monitoring Compartment ID. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL` | The Oracle Cloud Application Performance Monitoring Zipkin URL. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH` | The Oracle Cloud Application Performance Monitoring Zipkin HTTP Path. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `ORACLECLOUD_KAFKA_BOOTSTRAP_SERVERS` | The Kafka bootstrap servers config to connect to OCI Streaming. See the [this blog post](https://blogs.oracle.com/developers/easy-messaging-with-micronauts-kafka-support-and-oracle-streaming-service) for an example.  |
+| `ORACLECLOUD_KAFKA_SASL_JAAS_CONFIG` | he Kafka SASL JAAS config to connect to OCI Streaming. See the [this blog post](https://blogs.oracle.com/developers/easy-messaging-with-micronauts-kafka-support-and-oracle-streaming-service) for an example. |

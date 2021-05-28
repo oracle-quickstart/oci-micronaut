@@ -77,3 +77,63 @@ The following table lists the service IDs the API application uses to discover s
 | `mushop-catalogue` | [The Catalogue Application](../catalogue) |
 | `mushop-events` | [The Catalogue Application](../events) |
 | `mushop-newsletter` | [The NewsLetter Function](../functions/newsletter-subscription) |
+
+
+# Building and Running a GraalVM Native Image
+
+To build the application into a GraalVM native image you can run:
+
+```bash
+./gradlew nativeImage
+```
+
+Once the native image is built you can run it with:
+
+```bash
+./build/native-image/application
+```
+
+# Deployment to Oracle Cloud
+
+The entire MuShop application can be deployed with the [Helm Chart](../../deploy/complete/helm-chart).
+
+However, if you wish to deploy the catalogue service manually you can do so.
+
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm) then you can deploy the container image with:
+
+```bash
+./gradlew dockerPush
+```
+
+Or the native version with:
+
+```bash
+./gradlew dockerPushNative
+```
+
+The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/pgressa/oraclecloud-cloudnative/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/api/build.gradle#L81-L87):
+
+```groovy
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+}
+
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}
+```
+
+When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](src/main/resources/application-oraclecloud.yml) configuration file:
+
+
+| Env Var | Description |
+| --- | --- |
+| `ORACLECLOUD_METRICS_NAMESPACE` | The Oracle Cloud Monitoring Namespace. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_RESOURCEGROUP` | [The Oracle Cloud Monitoring Resource Group. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_COMPARTMENT_ID` | The Oracle Cloud Monitoring Compartment ID. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL` | The Oracle Cloud Application Performance Monitoring Zipkin URL. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH` | The Oracle Cloud Application Performance Monitoring Zipkin HTTP Path. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `REDIS_URI` | The URI of the Redis instance used to manage HTTP sessions |
+
+In addition [instance principal needs to be configured](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm) to ensure the VM or container has access to the necessary Oracle Cloud resources.

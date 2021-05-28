@@ -1,10 +1,9 @@
-version: "3"
-
 services:
 #  # Edge router application entrypoint
   edge-router:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/edge-router:1.1.0
     hostname: edge-router
+    pull_policy: always
     restart: always
     ports:
       - "81:8080"
@@ -18,9 +17,10 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.0.0-SNAPSHOT
     hostname: api
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -40,6 +40,7 @@ services:
   assets:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/assets:1.0.0
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -55,6 +56,7 @@ services:
   session-db:
     image: redis:alpine
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -73,6 +75,7 @@ services:
   storefront:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/storefront:2.1.2
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -90,10 +93,12 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:1.0.0-SNAPSHOT
     restart: always
+    pull_policy: always
     depends_on:
-      - oracledbcatalogue
+      oracledbcatalogue:
+        condition: service_healthy
     cap_drop:
       - all
     cap_add:
@@ -112,10 +117,12 @@ services:
 
   # OCI Carts service
   carts:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:1.0.3-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-graalvm:1.0.3-SNAPSHOT
     restart: always
+    pull_policy: always
     depends_on:
-      - oracledbcarts
+      oracledbcarts:
+        condition: service_healthy
     cap_drop:
       - all
     cap_add:
@@ -137,8 +144,9 @@ services:
 
   # OCI Orders service
   orders:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:1.0.0-SNAPSHOT
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -147,7 +155,8 @@ services:
     tmpfs:
       - /tmp:rw,noexec,nosuid
     depends_on:
-      - oracledborders
+      oracledborders:
+        condition: service_healthy
     environment:
       - NATS_HOST=nats
       - NATS_PORT=4222
@@ -168,15 +177,18 @@ services:
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:1.0.0-SNAPSHOT
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
     depends_on:
-      - oracledbuser
+      oracledbuser:
+        condition: service_healthy
+
     environment:
       - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledbuser:1521:xe
@@ -190,8 +202,9 @@ services:
 
   # Payment service
   payment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:1.0.0-SNAPSHOT
     restart: always
+    pull_policy: always
     cap_drop:
       - all
     cap_add:
@@ -205,13 +218,15 @@ services:
 
   # Fulfillment service
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:1.0.0-SNAPSHOT
     restart: always
+    pull_policy: always
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid
     depends_on:
-      - nats
+      nats:
+        condition: service_started
     environment:
       - NATS_HOST=nats
       - NATS_PORT=4222
@@ -248,7 +263,3 @@ services:
   oracledborders:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
     restart: always
-
-# system : oracle
-
-

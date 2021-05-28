@@ -29,7 +29,7 @@ by this service.
 # Usage
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
-[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+[/deploy/complete/helm-chart/](../../deploy/complete/helm-chart)).
 
 # Running Locally
 
@@ -48,3 +48,51 @@ Then start the application with:
 ```
 
 The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui
+
+# Building and Running a GraalVM Native Image
+
+To build the application into a GraalVM native image you can run:
+
+```bash
+./gradlew nativeImage
+```
+
+Once the native image is built you can run it with:
+
+```bash
+./build/native-image/application
+```
+
+# Deployment to Oracle Cloud
+
+The entire MuShop application can be deployed with the [Helm Chart](../../deploy/complete/helm-chart).
+
+However, if you wish to deploy the user service manually you can do so.
+
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm) then you can deploy the container image with:
+
+```bash
+./gradlew dockerPush
+```
+
+Or the native version with:
+
+```bash
+./gradlew dockerPushNative
+```
+
+When running the container image on a VM or via OKE the following environment variables need to be set:
+
+
+| Env Var | Description |
+| --- | --- |
+| `ORACLECLOUD_METRICS_NAMESPACE` | The Oracle Cloud Monitoring Namespace. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_RESOURCEGROUP` | [The Oracle Cloud Monitoring Resource Group. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_METRICS_COMPARTMENT_ID` | The Oracle Cloud Monitoring Compartment ID. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#micrometer). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL` | The Oracle Cloud Application Performance Monitoring Zipkin URL. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH` | The Oracle Cloud Application Performance Monitoring Zipkin HTTP Path. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing). |
+| `ORACLECLOUD_ATP_OCID` | The Oracle Autonomous Database OCID. See the [documentation for more info](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#autonomousDatabase).  |
+| `ORACLECLOUD_ATP_WALLET_PASSWORD` | password to encrypt the keys inside the wallet, that must be at least 8 characters long and must include at least 1 letter and either 1 numeric character or 1 special character |
+| `ORACLECLOUD_ATP_USERNAME` | The database username |
+| `ORACLECLOUD_ATP_PASSWORD` | The database password |
+

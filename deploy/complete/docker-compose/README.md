@@ -1,6 +1,6 @@
-# MuShop Docker
+# Micronaut MuShop Docker
 
-The complete **MuShop** application can be run using `docker-compose` locally.
+The complete **Micronaut MuShop** application can be run using `docker-compose` locally.
 
 ## Default Configuration
 
@@ -28,7 +28,9 @@ docker-compose up -d
 docker-compose -f deploy/docker-compose/docker-compose.yml up -d
 ```
 
-Open [http://localhost:81](http://localhost:81) in your browser.
+Note that it may take a little while to download all the images and spin up the containers (in particular the Oracle Database image is 2GB to download).
+
+You can track the progress of services starting up with `docker-compose ps` and once all services have a status of `Up` then open [http://localhost:81](http://localhost:81) in your browser to access MuShop.
 
 ## Shutdown
 

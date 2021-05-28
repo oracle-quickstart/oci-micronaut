@@ -17,7 +17,7 @@ To deploy locally with Docker, follow [these instructions](https://github.com/pg
 
 ### Helm + Terraform
 
-MuShop Complete is a polyglot microservices application built to showcase a cloud-native approach to application development on Oracle Cloud Infrastructure using Oracle's [cloud native](https://www.oracle.com/cloud/cloud-native/) services. MuShop Complete uses a Kubernetes cluster, and can be deployed using the provided `helm` charts. It is recommended to use an Oracle Container Engine for Kubernetes cluster, however other Kubernetes distributions will also work.
+Micronaut MuShop Complete is a Microservices application built to showcase a cloud-native approach to application development on Oracle Cloud Infrastructure with Micronaut & GraalVM using Oracle's [cloud native](https://www.oracle.com/cloud/cloud-native/) services. MuShop Complete uses a Kubernetes cluster, and can be deployed using the provided `helm` charts. It is recommended to use an Oracle Container Engine for Kubernetes cluster, however other Kubernetes distributions will also work.
 
 The [helm chart documentation](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart#setup) walks through the deployment process and various options for customizing the deployment.
 

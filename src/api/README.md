@@ -67,7 +67,7 @@ kubernetes:
 
 ```
 
-The following table lists the service IDs the API application uses to discovery services:
+The following table lists the service IDs the API application uses to discover services:
 
 | Service ID | Description |
 | --- | --- |

@@ -6,21 +6,7 @@
     <description>Recent content in Setup on MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Mar 2020 15:49:36 -0600</lastBuildDate>
-    
-	<atom:link href="/tags/setup/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Setup</title>
-      <link>/cloud/setup/</link>
-      <pubDate>Mon, 09 Mar 2020 15:49:36 -0600</pubDate>
-      
-      <guid>/cloud/setup/</guid>
-      <description>MuShop provides an umbrella helm chart called setup, which includes several recommended installations on the cluster. These represent common 3rd party services, which integrate with Oracle Cloud Infrastructure or enable certain application features.
-   Chart Purpose Option Default     Prometheus Service metrics aggregation prometheus.enabled true   Grafana Infrastructure/service visualization dashboards grafana.enabled true   Metrics Server Support for Horizontal Pod Autoscaling metrics-server.enabled true   Ingress Nginx Ingress controller and public Load Balancer ingress-nginx.</description>
-    </item>
-    
+    <lastBuildDate>Fri, 06 Mar 2020 12:27:43 -0700</lastBuildDate><atom:link href="/tags/setup/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kubernetes Deployment</title>
       <link>/quickstart/kubernetes/</link>

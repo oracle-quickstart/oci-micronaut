@@ -6,191 +6,7 @@
     <description>Recent content in Tags on MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 24 Jun 2020 16:48:49 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Automation</title>
-      <link>/tags/automation/</link>
-      <pubDate>Wed, 24 Jun 2020 16:48:49 -0700</pubDate>
-      
-      <guid>/tags/automation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jenkins</title>
-      <link>/tags/jenkins/</link>
-      <pubDate>Wed, 24 Jun 2020 16:48:49 -0700</pubDate>
-      
-      <guid>/tags/jenkins/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Patching</title>
-      <link>/tags/patching/</link>
-      <pubDate>Wed, 24 Jun 2020 16:48:49 -0700</pubDate>
-      
-      <guid>/tags/patching/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>alarms</title>
-      <link>/tags/alarms/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/alarms/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Canary</title>
-      <link>/tags/canary/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/canary/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Custom Logging</title>
-      <link>/tags/custom-logging/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/custom-logging/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Deploy MuShop</title>
-      <link>/tags/deploy-mushop/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/deploy-mushop/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>fluentd</title>
-      <link>/tags/fluentd/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/fluentd/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Istio</title>
-      <link>/tags/istio/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/istio/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Kiali</title>
-      <link>/tags/kiali/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/kiali/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>logging</title>
-      <link>/tags/logging/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/logging/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Metrics Explorer</title>
-      <link>/tags/metrics-explorer/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/metrics-explorer/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Monitoring</title>
-      <link>/tags/monitoring/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/monitoring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>notifications</title>
-      <link>/tags/notifications/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/notifications/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>observability</title>
-      <link>/tags/observability/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/observability/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI</title>
-      <link>/tags/oci/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/oci/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Logging</title>
-      <link>/tags/oci-logging/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/oci-logging/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Notifications</title>
-      <link>/tags/oci-notifications/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/oci-notifications/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Service Connector Hub</title>
-      <link>/tags/oci-service-connector-hub/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/oci-service-connector-hub/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Service Mesh</title>
-      <link>/tags/service-mesh/</link>
-      <pubDate>Tue, 10 Mar 2020 13:29:23 -0600</pubDate>
-      
-      <guid>/tags/service-mesh/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Mon, 09 Mar 2020 16:06:00 -0600</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Cleanup</title>
       <link>/tags/cleanup/</link>
@@ -215,123 +31,6 @@
       <pubDate>Mon, 09 Mar 2020 16:06:00 -0600</pubDate>
       
       <guid>/tags/uninstall/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Helm</title>
-      <link>/tags/helm/</link>
-      <pubDate>Mon, 09 Mar 2020 15:49:36 -0600</pubDate>
-      
-      <guid>/tags/helm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Kubernetes</title>
-      <link>/tags/kubernetes/</link>
-      <pubDate>Mon, 09 Mar 2020 15:49:36 -0600</pubDate>
-      
-      <guid>/tags/kubernetes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Setup</title>
-      <link>/tags/setup/</link>
-      <pubDate>Mon, 09 Mar 2020 15:49:36 -0600</pubDate>
-      
-      <guid>/tags/setup/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>API Key</title>
-      <link>/tags/api-key/</link>
-      <pubDate>Mon, 09 Mar 2020 14:51:01 -0600</pubDate>
-      
-      <guid>/tags/api-key/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Compartment</title>
-      <link>/tags/compartment/</link>
-      <pubDate>Mon, 09 Mar 2020 14:51:01 -0600</pubDate>
-      
-      <guid>/tags/compartment/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Policies</title>
-      <link>/tags/policies/</link>
-      <pubDate>Mon, 09 Mar 2020 14:51:01 -0600</pubDate>
-      
-      <guid>/tags/policies/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Region</title>
-      <link>/tags/region/</link>
-      <pubDate>Mon, 09 Mar 2020 14:51:01 -0600</pubDate>
-      
-      <guid>/tags/region/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cloud Services</title>
-      <link>/tags/cloud-services/</link>
-      <pubDate>Mon, 09 Mar 2020 13:33:46 -0600</pubDate>
-      
-      <guid>/tags/cloud-services/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Deployment</title>
-      <link>/tags/deployment/</link>
-      <pubDate>Mon, 09 Mar 2020 13:33:46 -0600</pubDate>
-      
-      <guid>/tags/deployment/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Provision</title>
-      <link>/tags/provision/</link>
-      <pubDate>Mon, 09 Mar 2020 13:32:46 -0600</pubDate>
-      
-      <guid>/tags/provision/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Secrets</title>
-      <link>/tags/secrets/</link>
-      <pubDate>Mon, 09 Mar 2020 13:32:46 -0600</pubDate>
-      
-      <guid>/tags/secrets/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Serverless</title>
-      <link>/tags/serverless/</link>
-      <pubDate>Mon, 09 Mar 2020 13:32:46 -0600</pubDate>
-      
-      <guid>/tags/serverless/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Service Broker</title>
-      <link>/tags/service-broker/</link>
-      <pubDate>Mon, 09 Mar 2020 13:32:46 -0600</pubDate>
-      
-      <guid>/tags/service-broker/</guid>
       <description></description>
     </item>
     
@@ -372,6 +71,15 @@
     </item>
     
     <item>
+      <title>Kubernetes</title>
+      <link>/tags/kubernetes/</link>
+      <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
+      
+      <guid>/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Mock Mode</title>
       <link>/tags/mock-mode/</link>
       <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
@@ -390,6 +98,15 @@
     </item>
     
     <item>
+      <title>Setup</title>
+      <link>/tags/setup/</link>
+      <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
+      
+      <guid>/tags/setup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Quickstart</title>
       <link>/tags/quickstart/</link>
       <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
@@ -404,42 +121,6 @@
       <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
       
       <guid>/tags/source-code/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>CI/CD</title>
-      <link>/tags/ci/cd/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ci/cd/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Health Checks</title>
-      <link>/tags/oci-health-checks/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/oci-health-checks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Monitoring</title>
-      <link>/tags/oci-monitoring/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/oci-monitoring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OCI Observability</title>
-      <link>/tags/oci-observability/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/oci-observability/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>Service Discovery :: MuShop</title>
+  
+  <meta name="application-name" content="MuShop"/>
+<meta name="description" content="Oracle Cloud Native Workshop">
+<meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
+
+<meta property="og:title" content="MuShop - Service Discovery" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/micronaut/service-discovery/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
+  <link rel="manifest" href="../../icons/site.webmanifest">
+  <link rel="mask-icon" href="../../icons/safari-pinned-tab.svg" color="#41727e">
+  <meta name="msapplication-TileColor" content="#c74634">
+  <meta name="theme-color" content="#fcfbfa">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.06f0b677f54f1474c0555ec1f793edae4d8034da1715d1fd15ba100516cc3791.css" integrity="sha256-BvC2d/VPFHTAVV7B95Ptrk2ANNoXFdH9FboQBRbMN5E=">
+  <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
+  <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
+</head>
+
+  <body class="" data-url="../../micronaut/service-discovery/">
+    
+<div class="uk-navbar-container uk-hidden@s">
+  <div class="">
+    <nav role="navigation" class="uk-light uk-navbar" uk-navbar>
+      <div class="uk-navbar-left">
+        <a href="../../index.html" class="uk-navbar-item uk-logo">
+          <img
+            alt="MuShop"
+            class="uk-width-small"
+            src="../../images/logo.dark.png">
+        </a>
+      </div>
+      <div class="uk-navbar-right">
+        <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #navigation"></a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<div class="uk-grid">
+  
+  
+  <aside
+    id="navigation"
+    class="rw-sidebar uk-offcanvas uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-light uk-padding-remove"
+    uk-offcanvas="overlay: true;">
+    <div class="uk-offcanvas-bar uk-padding-small">
+      
+      
+      <section>
+        <div class="uk-margin-bottom uk-visible@s">
+          <a href="../../index.html" class="uk-logo">
+            <img src="../../images/logo.dark.png" alt="MuShop">
+          </a>
+        </div>
+        <div class="uk-margin-bottom">
+          <form class="uk-search uk-search-default uk-width-expand">
+  <span class="uk-search-icon-flip" uk-search-icon></span>
+  <input id="search" class="uk-search-input uk-width-expand" type="search" placeholder="Search...">
+</form>
+<div id="search-results" class="uk-background-primary uk-text-small"></div>
+        </div>
+        <ul class="uk-nav uk-nav-primary" uk-nav="multiple: true; toggle: > a .uk-icon">
+          <li class="uk-nav-divider"></li>
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/introduction/" title="Introduction" class="">
+    <a href="../../introduction/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Introduction</div>
+      </div>
+    </a>
+    
+    
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent">
+    <a href="../../quickstart/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Getting Started</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/basic/" title="Always Free" class="">
+      <a href="../../quickstart/basic/" class="uk-text-truncate">
+        Always Free
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/kubernetes/" title="Kubernetes Deployment" class="">
+      <a href="../../quickstart/kubernetes/" class="uk-text-truncate">
+        Kubernetes Deployment
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/micronaut/" title="Advantages of Micronaut" class=" uk-parent uk-open">
+    <a href="../../micronaut/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Advantages of Micronaut</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/cloudnative/" title="Cloud Native Configuration" class="">
+      <a href="../../micronaut/cloudnative/" class="uk-text-truncate">
+        Cloud Native Configuration
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/service-discovery/" title="Service Discovery" class="uk-active">
+      <a href="../../micronaut/service-discovery/" class="uk-text-truncate">
+        Service Discovery
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/tracing/" title="Distributed Tracing" class="">
+      <a href="../../micronaut/tracing/" class="uk-text-truncate">
+        Distributed Tracing
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/management/" title="Health Checks &amp; Observability" class="">
+      <a href="../../micronaut/management/" class="uk-text-truncate">
+        Health Checks &amp; Observability
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/metrics/" title="Application Metrics and Monitoring" class="">
+      <a href="../../micronaut/metrics/" class="uk-text-truncate">
+        Application Metrics and Monitoring
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/atp/" title="Connecting Autonomous Database" class="">
+      <a href="../../micronaut/atp/" class="uk-text-truncate">
+        Connecting Autonomous Database
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/data/" title="Database Access" class="">
+      <a href="../../micronaut/data/" class="uk-text-truncate">
+        Database Access
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/openapi/" title="OpenAPI / Swagger" class="">
+      <a href="../../micronaut/openapi/" class="uk-text-truncate">
+        OpenAPI / Swagger
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/gateway/" title="Gateway Service" class="">
+      <a href="../../micronaut/gateway/" class="uk-text-truncate">
+        Gateway Service
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/security/" title="Security" class="">
+      <a href="../../micronaut/security/" class="uk-text-truncate">
+        Security
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/messaging/" title="" class="">
+      <a href="../../micronaut/messaging/" class="uk-text-truncate">
+        
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/native/" title="" class="">
+      <a href="../../micronaut/native/" class="uk-text-truncate">
+        
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/testing/" title="" class="">
+      <a href="../../micronaut/testing/" class="uk-text-truncate">
+        
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/cleanup/" title="Cleanup" class="">
+    <a href="../../cleanup/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Cleanup</div>
+      </div>
+    </a>
+    
+    
+  </li>
+  
+
+ 
+
+          
+          <li class="uk-nav-divider"></li>
+        </ul>
+      </section>
+      
+      <section>
+        <ul class="uk-nav uk-nav-default" uk-nav>
+          
+          
+          <li>
+            <a title="More Information" href="../../resources" class="uk-text-truncate">
+              <span uk-icon='icon: info; ratio: 1.25'></span>
+              <span class="uk-text-middle">More Information</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Acknowledgements" href="../../acknowledgements" class="uk-text-truncate">
+              <span uk-icon='icon: users; ratio: 1.25'></span>
+              <span class="uk-text-middle">Acknowledgements</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Tags" href="../../tags" class="uk-text-truncate">
+              <span uk-icon='icon: tag; ratio: 1.25'></span>
+              <span class="uk-text-middle">Tags</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="GitHub Source" href="https://github.com/oracle-quickstart/oci-cloudnative" class="uk-text-truncate">
+              <span uk-icon='icon: github; ratio: 1.25'></span>
+              <span class="uk-text-middle">GitHub Source</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Report Issue" href="https://github.com/oracle-quickstart/oci-cloudnative/issues" class="uk-text-truncate">
+              <span uk-icon='icon: warning; ratio: 1.25'></span>
+              <span class="uk-text-middle">Report Issue</span>
+              
+            </a>
+          </li>
+            <li>
+              <a title='Edit this page' href="https://github.com/oracle-quickstart/oci-cloudnative/tree/master/docs/content/micronaut/service-discovery.md" target="blank">
+                <span uk-icon="pencil"></span>
+                <span class="uk-text-middle">Edit this page</span>
+              </a>
+            </li>
+            
+          
+        </ul>
+      </section>
+      <section class="uk-margin-top">
+        <hr>
+        <ul id="rw-settings" class="uk-nav uk-nav-default" uk-nav>
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>Theme</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="theme"
+    target="html, .content-container" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="uk-background-default" >
+      Light
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="uk-light uk-background-secondary" >
+      Dark
+    </button></div>
+</li>
+
+
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>OS</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="platform"
+    target="html" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="stg-os-macos" >
+      Mac
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-linux" >
+      Linux
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-windows" >
+      Windows
+    </button></div>
+</li>
+<li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>Helm</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="helm"
+    target="html" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="stg-helm-3" >
+      3.x
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-helm-2" >
+      2.x
+    </button></div>
+</li>
+</ul>
+
+
+
+      </section>
+      <section class="uk-text-small uk-text-lighter uk-margin-top">
+        <hr>
+        <div class="uk-text-muted">
+  <div class="uk-margin-small">
+    Made with <span uk-icon="icon: heart; ratio: 0.75"></span> by Oracle Developers
+  </div>
+  Copyright © 2021 Oracle and/or its affiliates. All rights reserved.
+</div>
+      </section>
+    </div>
+  </aside>
+  
+  <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+
+
+
+    <div class="content-container uk-width-expand">
+      <div class="uk-position-relative">
+        <div id="content" class="uk-grid uk-container-xlarge" uk-grid>
+          
+
+<div class="uk-flex-last uk-width-1-4 uk-visible@l">
+  <aside id="toc-nav" uk-sticky="offset: 40">
+    <nav id="TableOfContents"></nav>
+    <hr/>
+    
+  </aside>
+</div>
+
+
+          <main class="uk-width-expand">
+            <header>
+  
+  </header>
+
+
+
+            <h1 class="rw-accent">Service Discovery</h1>
+              
+  <p>In a Microservice architecture services need to discovery each other in a decoupled manner that is independent of the service discovery mechanism.</p>
+<p>Micronaut features a <a href="https://docs.micronaut.io/latest/guide/#serviceDiscovery">Service Discovery abstraction</a> that allows service discovery to be backed onto different implementations including Kubernetes, HashiCorp Consul, Eureka and more.</p>
+<p>The original MuShop application featured extensive handcrafted service discovery code in both the Spring application:</p>
+<ul>
+<li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/config/OrdersConfigurationProperties.java">OrdersConfigurationProperties</a> &amp; <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/config/RestProxyTemplate.java">RestProxyTemplate</a> - hand crafted Spring service discovery configuration handling</li>
+<li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/config/OrdersConfigurationProperties.java">OrdersConfigurationProperties</a> &amp; <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/config/RestProxyTemplate.java">RestProxyTemplate</a> - hand crafted Spring service discovery configuration handling</li>
+</ul>
+<p>And Node/Express JavaScript API:</p>
+<ul>
+<li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/api/common/index.js">common/index.js</a> - Manual service discovery implementation</li>
+<li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/api/endpoints.js">endpoints.js</a> - Manual service discovery configuration</li>
+<li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/helpers/index.js#L145-L174">helpers/index.js</a> - More manual service discovery routines</li>
+</ul>
+<p>By migrating the code to Micronaut all this code could be deleted and instead encapsulated by the defining of a simple <a href="https://github.com/pgressa/oraclecloud-cloudnative/blob/97faa619b4f297e72ec6de8e9d4dfe81ffee6493/src/api/src/main/java/api/services/CartsService.java#L166-L170">service ID</a> and declarative client interfaces:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Client</span><span class="o">(</span><span class="n">id</span> <span class="o">=</span> <span class="s">&#34;mushop-catalogue&#34;</span><span class="o">,</span> <span class="n">path</span> <span class="o">=</span> <span class="s">&#34;/catalogue&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CatalogueClient</span> <span class="o">{</span>
+    <span class="nd">@Get</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>
+    <span class="n">Maybe</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="nf">getItem</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>Using the service ID Micronaut provides client side lookup and load balancing and the target service to invoke is abstracted such that it can be found via explicit declaration in configuration (for example when working locally):</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">micronaut</span><span class="p">:</span><span class="w">
+</span><span class="w">	</span><span class="nt">http</span><span class="p">:</span><span class="w">
+</span><span class="w">		</span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span><span class="w">			</span><span class="nt">mushop-catalogue</span><span class="p">:</span><span class="w">
+</span><span class="w">				</span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">http://localhost:8082</span><span class="w">
+</span></code></pre></div><p>Or automatically via <a href="https://micronaut-projects.github.io/micronaut-kubernetes/snapshot/guide/#service-discovery">Micronaut&rsquo;s integration with Kubernetes</a> when deployed to a cluster.</p>
+
+
+            </main>
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+    
+<footer class="uk-position-fixed uk-position-bottom">
+  <div class="uk-grid">
+    
+    
+    <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+    <div class="uk-width-expand">
+      <div>
+      
+      
+      
+      
+
+
+  
+    
+    
+  
+
+  
+  
+  
+    
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+        <div class="uk-flex uk-flex-between uk-margin-top">
+          <a href="../../micronaut/cloudnative/" title="Cloud Native Configuration" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+            <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
+            <label class="uk-visible@m">Cloud Native Configuration</label>
+          </a><span></span>
+          <a href="../../micronaut/tracing/" title="Distributed Tracing" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">Distributed Tracing</label>
+            <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
+          </a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script type="text/javascript">
+  (function(w, s) {
+    Object.assign(s, {
+      BaseURL: '',
+      RelURL: '\/',
+      cssConfig: {
+        table: 'uk-table uk-table-small uk-table-striped',
+        '#TableOfContents > ul': 'uk-nav uk-nav-default uk-nav-parent-icon',
+        '#TableOfContents > ul ul': 'uk-nav-sub',
+      },
+      uikit: {
+        '#TableOfContents > ul': ['scrollspyNav', { closest: 'li', offset: 10 }],
+        
+      }
+    });
+  })(window, window.Site = window.Site || {});
+</script>
+
+<script src="../../js/vendor.min.e005c93e1a94928260d72859a61ad84fa0324ea594a8fb4318c00381a451a8c3.js" ></script><script src="../../js/extras.min.88dc65673919eb6e8151f4f309d54cecb7ba304c48d378ff4d9b858b6b1d2742.js"  async></script><script src="../../js/site.min.d7973f1560bba2270850ebebf4e3a2a2e58e84e1f993191030325ddaef76a81c.js"  async></script>
+  </body>
+</html>

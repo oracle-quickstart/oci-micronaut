@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "mushop.css",
-	"sourceRoot": "/home/runner/work/oci-cloudnative/oci-cloudnative/src/docs",
+	"sourceRoot": "/Users/graemerocher/dev/micronaut/demos/oraclecloud-cloudnative/src/docs",
 	"sources": [
 		"assets/sass/mushop.scss",
 		"assets/sass/_config.scss",

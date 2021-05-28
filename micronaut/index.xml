@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Advantages of Micronaut on MuShop</title>
+    <link>/micronaut/</link>
+    <description>Recent content in Advantages of Micronaut on MuShop</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="/micronaut/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud Native Configuration</title>
+      <link>/micronaut/cloudnative/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/cloudnative/</guid>
+      <description>A significant advantage of Micronaut is the ability to use Cloud Native configuration.
+Each Micronaut application is able to define a application-oraclecloud.yml file that is automatically activated when deployed into the Oracle Cloud environment.
+This allows the Micronaut applications to adapt to run on any Cloud and simplifies deployment.
+Decoupling distributed configuration and service discovery responsibilities leads to significant simplifications in the code.
+Each Micronaut application has no direct references to Oracle Cloud and can easily be migrated from one Cloud to another simplify by providing the appropriate configuration for the Cloud platform being used.</description>
+    </item>
+    
+    <item>
+      <title>Service Discovery</title>
+      <link>/micronaut/service-discovery/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/service-discovery/</guid>
+      <description>In a Microservice architecture services need to discovery each other in a decoupled manner that is independent of the service discovery mechanism.
+Micronaut features a Service Discovery abstraction that allows service discovery to be backed onto different implementations including Kubernetes, HashiCorp Consul, Eureka and more.
+The original MuShop application featured extensive handcrafted service discovery code in both the Spring application:
+ OrdersConfigurationProperties &amp;amp; RestProxyTemplate - hand crafted Spring service discovery configuration handling OrdersConfigurationProperties &amp;amp; RestProxyTemplate - hand crafted Spring service discovery configuration handling  And Node/Express JavaScript API:</description>
+    </item>
+    
+    <item>
+      <title>Distributed Tracing</title>
+      <link>/micronaut/tracing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/tracing/</guid>
+      <description>The original MuShop application featured hand crafted logic to wrap each endpoint in distributed tracing logic that can be exported to Zipkin, for example in the Go lang code which manually wraps logic in calls to opentracing.TraceServer(..):
+func MakeEndpoints(s Service, tracer stdopentracing.Tracer) Endpoints { return Endpoints{ ListEndpoint: opentracing.TraceServer(tracer, &amp;#34;GET /catalogue&amp;#34;)(MakeListEndpoint(s)), CountEndpoint: opentracing.TraceServer(tracer, &amp;#34;GET /catalogue/size&amp;#34;)(MakeCountEndpoint(s)), GetEndpoint: opentracing.TraceServer(tracer, &amp;#34;GET /catalogue/{id}&amp;#34;)(MakeGetEndpoint(s)), CategoriesEndpoint: opentracing.TraceServer(tracer, &amp;#34;GET /categories&amp;#34;)(MakeCategoriesEndpoint(s)), HealthEndpoint: opentracing.TraceServer(tracer, &amp;#34;GET /health&amp;#34;)(MakeHealthEndpoint(s)), } } Micronaut has built-in support for distributed tracing that only requires the addition of the micronaut-tracing module and then configuring the target Zipkin or Jaeger service to send traces to, for example in the micronaut-oraclecloud.</description>
+    </item>
+    
+    <item>
+      <title>Health Checks &amp; Observability</title>
+      <link>/micronaut/management/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/management/</guid>
+      <description>The original MuShop application features extensive code to define application health observability endpoints.
+For example the original Go lang code features manual definition of the /health endpoint in endpoints.go:
+func MakeHealthEndpoint(s Service) endpoint.Endpoint { return func(ctx context.Context, request interface{}) (response interface{}, err error) { health := s.Health() return healthResponse{Health: health}, nil } } As well as a manually implemented health check routine in services.go:
+func (s *catalogueService) Health() []Health { var health []Health dbstatus := &amp;#34;OK&amp;#34; err := s.</description>
+    </item>
+    
+    <item>
+      <title>Application Metrics and Monitoring</title>
+      <link>/micronaut/metrics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/metrics/</guid>
+      <description>The original MuShop applications implemented exposing metrics inconsistently with some applications exporting metrics and others no. The applications that did export metrics provided support only for Prometheus, for example in the Go code:
+r.Handle(&amp;#34;/metrics&amp;#34;, promhttp.Handler()) Micronaut builds on Micrometer and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.
+Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</description>
+    </item>
+    
+    <item>
+      <title>Connecting Autonomous Database</title>
+      <link>/micronaut/atp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/atp/</guid>
+      <description>The original MuShop reference applications contained significant logic in order to download and configure the Oracle Wallet definition to connect to autonomous database.
+The details of this requirement are described in Application Configuration section of the original MuShop.
+Developers have to enhance their CI pipeline to ensure the client credentials contained with the Oracle Wallet are packaged within the file system of the Docker container before uploading. The downside of this approach is that every time the Oracle Wallet is rotated a new container image needs to be built.</description>
+    </item>
+    
+    <item>
+      <title>Database Access</title>
+      <link>/micronaut/data/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/data/</guid>
+      <description>The original MuShop application includes a lot of handwritten SQL logic that is greatly simplified by the use of Micronaut Data.
+In the Go version of the following code, SQL is appended together manually and executed in order to perform a count:
+func (s *catalogueService) Count(categories []string) (int, error) { query := &amp;#34;SELECT COUNT(DISTINCT products.sku) FROM products JOIN product_category ON products.sku=product_category.sku JOIN categories ON product_category.category_id=categories.category_id&amp;#34; var args []interface{} for i, t := range categories { if i == 0 { query += &amp;#34; WHERE categories.</description>
+    </item>
+    
+    <item>
+      <title>OpenAPI / Swagger</title>
+      <link>/micronaut/openapi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/openapi/</guid>
+      <description>In the original MuShop sample application most of the applications defined manually crafted OpenAPI definitions that in fact were in some cases out-of-date with the actual state of the code.
+Keeping the OpenAPI documentation for a service aligned with the actual code can be a real challenge.
+With the Micronaut MuShop every single applications defines an accessible OpenAPI definition available via Swagger UI.
+For example you can cd into the api service and run the application with:</description>
+    </item>
+    
+    <item>
+      <title>Gateway Service</title>
+      <link>/micronaut/gateway/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/gateway/</guid>
+      <description>The original MuShop api service is written in Node/Express and services as a Gateway service to access other services.
+Apart from the already mentioned manual service discovery implementation the Node Gateway service implements all routing logic manually:
+app.get(&amp;#34;/catalogue*&amp;#34;, function (req, res, next) { req.svcClient() .get(endpoints.catalogueUrl + req.url.toString()) .then(({ data }) =&amp;gt; res.json(data)) .catch(next); }); In Micronaut this is simplified through the use of service discovery combined with the declarative client to allow requests to be easily proxied:</description>
+    </item>
+    
+    <item>
+      <title>Security</title>
+      <link>/micronaut/security/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/security/</guid>
+      <description>The original MuShop api service includes a lot of error prone logic to assert security rules at the API gateway layer, for example:
+router.get(&amp;#39;/orders&amp;#39;, (req, res) =&amp;gt; { if (!helpers.isLoggedIn(req)) { return next(helpers.createError(&amp;#34;User not logged in.&amp;#34;, 401)); } const custId = helpers.getCustomerId(req); res.json(this.orders.find(row =&amp;gt; custId === row.customer.id)); }) If is very easy to forget an isLoggedIn call causing a security vulnerability in your application.
+The Micronaut version of the Gateway includes the Micronaut Security module which is locked down by default with every request to the API service by default returning a 401 unless the user is logged in.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/micronaut/messaging/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/messaging/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/micronaut/native/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/native/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/micronaut/testing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/testing/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

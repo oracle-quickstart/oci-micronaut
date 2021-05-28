@@ -13,10 +13,7 @@ micronaut:
   security:
     authentication: session
     intercept-url-map:
-      - pattern: /api/swagger/*
-        access:
-          - isAnonymous()
-      - pattern: /api/swagger-ui/*
+      - pattern: /swagger/**
         access:
           - isAnonymous()
     endpoints:
@@ -34,10 +31,5 @@ micronaut:
   router:
     static-resources:
       swagger:
-        enabled: true
         paths: classpath:META-INF/swagger
-        mapping: /api/swagger/**
-      swagger-ui:
-        enabled: true
-        paths: classpath:META-INF/swagger/views/swagger-ui
-        mapping: /api/swagger-ui/**
+        mapping: /swagger/**

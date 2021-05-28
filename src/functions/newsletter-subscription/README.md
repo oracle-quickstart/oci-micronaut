@@ -12,3 +12,13 @@ The function is written as a Micronaut Function (Serverless) application in Java
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
 [/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+
+# Running Locally
+
+The functions tests can be executed with:
+
+```bash
+./gradlew test
+```
+
+This will run the `src/test/java/newsletter/subscription/FunctionTest.java` file with a mocked mail configuration.

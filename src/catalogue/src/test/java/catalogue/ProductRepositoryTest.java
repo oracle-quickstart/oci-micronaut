@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
@@ -28,6 +29,14 @@ public class ProductRepositoryTest {
 
         assertFalse(products.isEmpty());
 
+        Product product1 = products.stream().filter(product -> product.getSku().equals("MU-US-001")).findFirst().get();
+
+        assertNotNull(product1.getCategories());
+        assertEquals(
+                1,
+                product1.getCategories().size()
+        );
+
         final Page<Product> paged = repository.findAll(
                 Pageable.from(2, 5).order(Sort.Order.asc("brand"))
         );
@@ -36,6 +45,7 @@ public class ProductRepositoryTest {
                 5,
                 paged.getContent().size()
         );
+
     }
 
     @Test
@@ -44,4 +54,5 @@ public class ProductRepositoryTest {
 
         assertTrue(product.isPresent());
     }
+
 }

@@ -1,6 +1,10 @@
 # ![MuShop Logo](./images/logo.png)
 
-MuShop is a showcase of several [Oracle Cloud Infrastructure](https://cloud.oracle.com/en_US/cloud-infrastructure) services in a unified reference application. The sample application implements an e-commerce platform built as a set of microservices. The accompanying content can be used to get started with cloud native application development on Oracle Cloud Infrastructure.
+The Micronaut MuShop is a showcase of several [Oracle Cloud Infrastructure](https://cloud.oracle.com/en_US/cloud-infrastructure) services in a unified reference application, written entirely in Micronaut. 
+
+This project is a fork of the [original MuShop implementation](https://github.com/oracle-quickstart/oci-cloudnative) which used different technologies for each individual Microservice applicationµ and is designed as a demonstration of how to use Micronaut to build applications for Oracle Cloud.
+
+The sample application implements an e-commerce platform built as a set of microservices. The accompanying content can be used to get started with cloud native application development on Oracle Cloud Infrastructure.
 
 | ![home](./images/screenshot/mushop.home.png) | ![browse](./images/screenshot/mushop.browse.png) | ![cart](./images/screenshot/mushop.cart.png) | ![about](./images/screenshot/mushop.about.png) |
 |---|---|---|---|
@@ -9,7 +13,7 @@ MuShop can be deployed to Oracle Cloud Infrastructure on [Kubernetes](https://ku
 
 ### Docker
 
-To deploy locally with Docker, follow [these instructions](https://github.com/oracle-quickstart/oci-cloudnative/blob/master/deploy/complete/docker-compose). Note that you will need to have installed the [Oracle Cloud CLI](https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm), with local access to Oracle Cloud configured by running `oci setup config`.
+To deploy locally with Docker, follow [these instructions](https://github.com/pgressa/oci-cloudnative/blob/master/deploy/complete/docker-compose). 
 
 ### Helm + Terraform
 

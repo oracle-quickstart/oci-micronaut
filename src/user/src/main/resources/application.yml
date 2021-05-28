@@ -16,7 +16,11 @@ micronaut:
       oraclecloud:
         enabled: false
     enabled: true
-
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
 endpoints:
   prometheus:
     sensitive: false
@@ -29,7 +33,10 @@ endpoints:
 datasources:
   default:
     dialect: oracle
-
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    driverClassName: oracle.jdbc.OracleDriver
+    username: system
+    password: oracle
 flyway:
   datasources:
     default:

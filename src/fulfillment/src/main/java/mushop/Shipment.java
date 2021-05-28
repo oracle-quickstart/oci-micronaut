@@ -4,13 +4,13 @@
  **/
 package  mushop;
 
+import io.micronaut.core.annotation.Introspected;
+
+@Introspected
 public class Shipment {
 
-    private String id;
-    private String name;
-
-    public Shipment() {
-    }
+    private final String id;
+    private final String name;
 
     public Shipment(String id, String name) {
         this.id = id;
@@ -21,16 +21,8 @@ public class Shipment {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

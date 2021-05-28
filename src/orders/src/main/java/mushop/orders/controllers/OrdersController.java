@@ -20,8 +20,6 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
 
-import javax.transaction.Transactional;
-
 /**
  * Orders controller.
  */
@@ -49,14 +47,12 @@ public class OrdersController {
         return ordersService.placeOrder(newOrderResource);
     }
 
-    @Transactional
     @ReadOnly
     @Get("/{orderId}")
     CustomerOrder getOrder(Long orderId) {
         return ordersService.getById(orderId);
     }
 
-    @Transactional
     @ReadOnly
     @Get("/search/customer")
     CustomerOrdersDto searchCustomerOrders(@QueryValue String custId, Pageable pageable) {

@@ -19,3 +19,21 @@ Checkout the API Spec [here](https://mushop.docs.apiary.io)
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
 [/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+
+# Running Locally
+
+This application uses Oracle Autonomous Database when running in Oracle Cloud. To run the application locally you can use a local Oracle database and modify the `datasources` configuration found in `src/main/resources/application.yml` accordingly.
+
+Alternatively you can run Oracle in a container with the following command:
+
+```bash
+$ docker run -p 1521:1521 -e ORACLE_PASSWORD=oracle gvenzl/oracle-xe
+```
+
+Then start the application with:
+
+```bash
+./gradlew run
+```
+
+The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui

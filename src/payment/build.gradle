@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "1.5.0"
 }
 
@@ -28,7 +28,7 @@ dependencies {
 
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-    runtime("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
     implementation("io.opentracing.brave:brave-opentracing")
     implementation("io.swagger.core.v3:swagger-annotations")

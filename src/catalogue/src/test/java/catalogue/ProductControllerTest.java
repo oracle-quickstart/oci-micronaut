@@ -52,7 +52,7 @@ public class ProductControllerTest {
 
         size = client.size(Collections.singletonList("Deodorizers"));
         assertEquals(
-                4,
+                2,
                 size.getSize()
         );
     }

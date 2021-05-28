@@ -4,6 +4,7 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.annotation.Relation;
+import io.micronaut.data.jdbc.annotation.JoinColumn;
 import io.micronaut.data.jdbc.annotation.JoinTable;
 
 import javax.validation.constraints.Size;
@@ -46,13 +47,12 @@ public class Product {
     @MappedProperty("image_url_2")
     private final String imageUrl2;
 
-    @Relation(Relation.Kind.ONE_TO_MANY)
-    @JoinTable(name = "PRODUCT_CATEGORY",
-            joinColumns = {
-                @MappedProperty("sku"),
-                @MappedProperty("category_id")
-            })
-    private List<ProductCategory> categories = Collections.emptyList();
+    @Relation(Relation.Kind.MANY_TO_MANY)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "sku", referencedColumnName = "sku"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    )
+    private List<Category> categories = Collections.emptyList();
 
     public Product(
             String sku,
@@ -123,11 +123,11 @@ public class Product {
         return imageUrl2;
     }
 
-    public List<ProductCategory> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<ProductCategory> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 }

@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title> :: MuShop</title>
+  <title>GraalVM Native Image :: Micronaut MuShop</title>
   
-  <meta name="application-name" content="MuShop"/>
+  <meta name="application-name" content="Micronaut MuShop"/>
 <meta name="description" content="Oracle Cloud Native Workshop">
 <meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
 
-<meta property="og:title" content="MuShop - " />
+<meta property="og:title" content="Micronaut MuShop - GraalVM Native Image" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/micronaut/native/" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
@@ -32,7 +32,7 @@
       <div class="uk-navbar-left">
         <a href="../../index.html" class="uk-navbar-item uk-logo">
           <img
-            alt="MuShop"
+            alt="Micronaut MuShop"
             class="uk-width-small"
             src="../../images/logo.dark.png">
         </a>
@@ -58,7 +58,7 @@
       <section>
         <div class="uk-margin-bottom uk-visible@s">
           <a href="../../index.html" class="uk-logo">
-            <img src="../../images/logo.dark.png" alt="MuShop">
+            <img src="../../images/logo.dark.png" alt="Micronaut MuShop">
           </a>
         </div>
         <div class="uk-margin-bottom">
@@ -161,10 +161,10 @@
   
   
   
-  <li data-nav-id="/micronaut/" title="Advantages of Micronaut" class=" uk-parent uk-open">
+  <li data-nav-id="/micronaut/" title="Micronaut Advantages" class=" uk-parent uk-open">
     <a href="../../micronaut/">
       <div class="uk-flex uk-flex-between uk-flex-middle">
-        <div class="uk-text-truncate">Advantages of Micronaut</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+        <div class="uk-text-truncate">Micronaut Advantages</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
       </div>
     </a>
     
@@ -361,9 +361,9 @@
 
   
     
-    <li data-nav-id="/micronaut/messaging/" title="" class="">
+    <li data-nav-id="/micronaut/messaging/" title="Messaging" class="">
       <a href="../../micronaut/messaging/" class="uk-text-truncate">
-        
+        Messaging
       </a>
     </li>
     
@@ -379,27 +379,45 @@
 
   
     
-    <li data-nav-id="/micronaut/native/" title="" class="uk-active">
+    <li data-nav-id="/micronaut/httpclient/" title="HTTP Client" class="">
+      <a href="../../micronaut/httpclient/" class="uk-text-truncate">
+        HTTP Client
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="">
+      <a href="../../micronaut/deployment/" class="uk-text-truncate">
+        Deployment
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/native/" title="GraalVM Native Image" class="uk-active">
       <a href="../../micronaut/native/" class="uk-text-truncate">
-        
-      </a>
-    </li>
-    
-  
-
- 
-
-        
-      
-        
-        
-
-
-  
-    
-    <li data-nav-id="/micronaut/testing/" title="" class="">
-      <a href="../../micronaut/testing/" class="uk-text-truncate">
-        
+        GraalVM Native Image
       </a>
     </li>
     
@@ -467,21 +485,21 @@
             </a>
           </li>
           <li>
-            <a title="GitHub Source" href="https://github.com/oracle-quickstart/oci-cloudnative" class="uk-text-truncate">
+            <a title="GitHub Source" href="https://github.com/pgressa/oci-cloudnative" class="uk-text-truncate">
               <span uk-icon='icon: github; ratio: 1.25'></span>
               <span class="uk-text-middle">GitHub Source</span>
               
             </a>
           </li>
           <li>
-            <a title="Report Issue" href="https://github.com/oracle-quickstart/oci-cloudnative/issues" class="uk-text-truncate">
+            <a title="Report Issue" href="https://github.com/pgressa/oci-cloudnative/issues" class="uk-text-truncate">
               <span uk-icon='icon: warning; ratio: 1.25'></span>
               <span class="uk-text-middle">Report Issue</span>
               
             </a>
           </li>
             <li>
-              <a title='Edit this page' href="https://github.com/oracle-quickstart/oci-cloudnative/tree/master/docs/content/micronaut/native.md" target="blank">
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/micronaut/native.md" target="blank">
                 <span uk-icon="pencil"></span>
                 <span class="uk-text-middle">Edit this page</span>
               </a>
@@ -581,18 +599,18 @@
           <main class="uk-width-expand">
             <header>
   
-  
-    <ul class="uk-breadcrumb uk-margin-top uk-text-small">
-    
-  
-  <li><a href='../../'>Home</a></li> <li><a href='../../micronaut/'>Advantages of Micronaut</a></li> <li></li>
-    </ul></header>
+  </header>
 
 
 
-            <h1 class="rw-accent"></h1>
+            <h1 class="rw-accent">GraalVM Native Image</h1>
               
-  
+  <p>Every single application in the Micronaut MuShop can be built into a GraalVM native image and deployed natively as well as in JIT mode allowing the developer to flexibly choose their preferred deployment model and benefit from massive reductions in memory usage and startup time when choosing native.</p>
+<p>To build any of the services into a native image simply navigate to the to the project directory and if using Gradle run:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./gradlew nativeImage
+</code></pre></div><p>Or if the project is using Maven run:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./mvnw package -Dpackaging<span class="o">=</span>native-image
+</code></pre></div>
 
             </main>
           </div> 
@@ -891,6 +909,21 @@
 
   
     
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
     
   
 
@@ -899,6 +932,26 @@
   
 
   
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
   
 
 
@@ -910,25 +963,6 @@
     
       
       
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-
-
-  
-    
-
-
-  
     
   
 
@@ -944,12 +978,12 @@
 
 
         <div class="uk-flex uk-flex-between uk-margin-top">
-          <a href="../../micronaut/messaging/" title="" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+          <a href="../../micronaut/deployment/" title="Deployment" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
             <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
-            <label class="uk-visible@m"></label>
+            <label class="uk-visible@m">Deployment</label>
           </a><span></span>
-          <a href="../../micronaut/testing/" title="" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
-            <label class="uk-visible@m"></label>
+          <a href="../../cleanup/" title="Cleanup" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">Cleanup</label>
             <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
           </a></div>
       </div>

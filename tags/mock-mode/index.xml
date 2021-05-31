@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Mock Mode on MuShop</title>
+    <title>Mock Mode on Micronaut MuShop</title>
     <link>/tags/mock-mode/</link>
-    <description>Recent content in Mock Mode on MuShop</description>
+    <description>Recent content in Mock Mode on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 06 Mar 2020 12:27:43 -0700</lastBuildDate><atom:link href="/tags/mock-mode/index.xml" rel="self" type="application/rss+xml" />

@@ -57,6 +57,22 @@
   </url>
   
   <url>
+    <loc>/micronaut/messaging/</loc>
+  </url>
+  
+  <url>
+    <loc>/micronaut/httpclient/</loc>
+  </url>
+  
+  <url>
+    <loc>/micronaut/deployment/</loc>
+  </url>
+  
+  <url>
+    <loc>/micronaut/native/</loc>
+  </url>
+  
+  <url>
     <loc>/quickstart/kubernetes/</loc>
     <lastmod>2020-03-06T12:27:43-07:00</lastmod>
   </url>
@@ -153,18 +169,6 @@
   <url>
     <loc>/</loc>
     <lastmod>2020-02-28T08:19:07-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/micronaut/messaging/</loc>
-  </url>
-  
-  <url>
-    <loc>/micronaut/native/</loc>
-  </url>
-  
-  <url>
-    <loc>/micronaut/testing/</loc>
   </url>
   
   <url>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Advantages of Micronaut on MuShop</title>
+    <title>Micronaut Advantages on Micronaut MuShop</title>
     <link>/micronaut/</link>
-    <description>Recent content in Advantages of Micronaut on MuShop</description>
+    <description>Recent content in Micronaut Advantages on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/micronaut/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -13,7 +13,7 @@
       
       <guid>/micronaut/cloudnative/</guid>
       <description>A significant advantage of Micronaut is the ability to use Cloud Native configuration.
-Each Micronaut application is able to define a application-oraclecloud.yml file that is automatically activated when deployed into the Oracle Cloud environment.
+Each Micronaut application is able to define an application-oraclecloud.yml file that is automatically activated when deployed into the Oracle Cloud environment.
 This allows the Micronaut applications to adapt to run on any Cloud and simplifies deployment.
 Decoupling distributed configuration and service discovery responsibilities leads to significant simplifications in the code.
 Each Micronaut application has no direct references to Oracle Cloud and can easily be migrated from one Cloud to another simplify by providing the appropriate configuration for the Cloud platform being used.</description>
@@ -25,7 +25,7 @@ Each Micronaut application has no direct references to Oracle Cloud and can easi
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/micronaut/service-discovery/</guid>
-      <description>In a Microservice architecture services need to discovery each other in a decoupled manner that is independent of the service discovery mechanism.
+      <description>In a Microservice architecture services need to discover each other in a decoupled manner that is independent of the service discovery mechanism.
 Micronaut features a Service Discovery abstraction that allows service discovery to be backed onto different implementations including Kubernetes, HashiCorp Consul, Eureka and more.
 The original MuShop application featured extensive handcrafted service discovery code in both the Spring application:
  OrdersConfigurationProperties &amp;amp; RestProxyTemplate - hand crafted Spring service discovery configuration handling OrdersConfigurationProperties &amp;amp; RestProxyTemplate - hand crafted Spring service discovery configuration handling  And Node/Express JavaScript API:</description>
@@ -59,7 +59,7 @@ func (s *catalogueService) Health() []Health { var health []Health dbstatus := &
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/micronaut/metrics/</guid>
-      <description>The original MuShop applications implemented exposing metrics inconsistently with some applications exporting metrics and others no. The applications that did export metrics provided support only for Prometheus, for example in the Go code:
+      <description>The original MuShop applications implemented exposing metrics inconsistently with some applications exporting metrics and others not. The applications that did export metrics provided support only for Prometheus, for example in the Go code:
 r.Handle(&amp;#34;/metrics&amp;#34;, promhttp.Handler()) Micronaut builds on Micrometer and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.
 Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</description>
     </item>
@@ -116,35 +116,52 @@ app.get(&amp;#34;/catalogue*&amp;#34;, function (req, res, next) { req.svcClient
       
       <guid>/micronaut/security/</guid>
       <description>The original MuShop api service includes a lot of error prone logic to assert security rules at the API gateway layer, for example:
-router.get(&amp;#39;/orders&amp;#39;, (req, res) =&amp;gt; { if (!helpers.isLoggedIn(req)) { return next(helpers.createError(&amp;#34;User not logged in.&amp;#34;, 401)); } const custId = helpers.getCustomerId(req); res.json(this.orders.find(row =&amp;gt; custId === row.customer.id)); }) If is very easy to forget an isLoggedIn call causing a security vulnerability in your application.
+router.get(&amp;#39;/orders&amp;#39;, (req, res) =&amp;gt; { if (!helpers.isLoggedIn(req)) { return next(helpers.createError(&amp;#34;User not logged in.&amp;#34;, 401)); } const custId = helpers.getCustomerId(req); res.json(this.orders.find(row =&amp;gt; custId === row.customer.id)); }) It is very easy to forget an isLoggedIn call causing a security vulnerability in your application.
 The Micronaut version of the Gateway includes the Micronaut Security module which is locked down by default with every request to the API service by default returning a 401 unless the user is logged in.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>Messaging</title>
       <link>/micronaut/messaging/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/micronaut/messaging/</guid>
-      <description></description>
+      <description>The original Spring-based application includes extensive logic to send NATs messages.
+This is greatly simplified in Micronaut with the Micronaut NATS module:
+@NatsClient public interface OrdersPublisher { @Subject(&amp;#34;mushop-orders&amp;#34;) void dispatchToFulfillment(OrderUpdate orderUpdate); } In the above example Micronaut automatically implements the logic to send a message and handle any errors, avoiding 115 lines of additional code.
+To Go application that sends events via OCI streaming again features over a 100 lines of code to send messages with the OCI SDK.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>HTTP Client</title>
+      <link>/micronaut/httpclient/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/httpclient/</guid>
+      <description>Micronaut features an HTTP client that is included by default and automatically instrumented for distributed tracing, service discovery and metrics. The Spring application in the original MuShop features many manually written HTTP calls that amount to another 100 lines of additional code.
+This HTTP client logic was completely removed in the Micronaut application as the existing HTTP client was simply injected via service discovery:
+public OrdersService(CustomerOrderRepository customerOrderRepository, MeterRegistry meterRegistry, OrdersPublisher ordersPublisher, PaymentClient paymentClient, OrdersConfiguration ordersConfiguration, @Client(&amp;#34;users&amp;#34;) RxHttpClient userClient, // HTTP clients injected here  @Client(&amp;#34;carts&amp;#34;) RxHttpClient cartsClient) { .</description>
+    </item>
+    
+    <item>
+      <title>Deployment</title>
+      <link>/micronaut/deployment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/micronaut/deployment/</guid>
+      <description>Each example application in the original MuShop features a hand-crafted Dockerfile that the developer has to write and maintain including ensuring all images used in the Dockerfile are kept up-to-date to avoid security vulnerabilities.
+None of the Micronaut applications feature a Dockerfile which is provided automatically and maintained by the framework across releases, making deploying an image a simple matter of executing:
+./gradlew dockerPush for Gradle, or alternatively for Maven:</description>
+    </item>
+    
+    <item>
+      <title>GraalVM Native Image</title>
       <link>/micronaut/native/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/micronaut/native/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/micronaut/testing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/micronaut/testing/</guid>
-      <description></description>
+      <description>Every single application in the Micronaut MuShop can be built into a GraalVM native image and deployed natively as well as in JIT mode allowing the developer to flexibly choose their preferred deployment model and benefit from massive reductions in memory usage and startup time when choosing native.
+To build any of the services into a native image simply navigate to the to the project directory and if using Gradle run:</description>
     </item>
     
   </channel>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Quickstart on MuShop</title>
+    <title>Quickstart on Micronaut MuShop</title>
     <link>/tags/quickstart/</link>
-    <description>Recent content in Quickstart on MuShop</description>
+    <description>Recent content in Quickstart on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 05 Mar 2020 15:34:14 -0700</lastBuildDate><atom:link href="/tags/quickstart/index.xml" rel="self" type="application/rss+xml" />

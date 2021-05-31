@@ -2,15 +2,15 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title>Health Checks &amp; Observability :: Micronaut MuShop</title>
+  <title>Deployment :: Micronaut MuShop</title>
   
   <meta name="application-name" content="Micronaut MuShop"/>
 <meta name="description" content="Oracle Cloud Native Workshop">
 <meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
 
-<meta property="og:title" content="Micronaut MuShop - Health Checks &amp; Observability" />
+<meta property="og:title" content="Micronaut MuShop - Deployment" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/micronaut/management/" />
+<meta property="og:url" content="/micronaut/deployment/" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
 </head>
 
-  <body class="" data-url="../../micronaut/management/">
+  <body class="" data-url="../../micronaut/deployment/">
     
 <div class="uk-navbar-container uk-hidden@s">
   <div class="">
@@ -235,7 +235,7 @@
 
   
     
-    <li data-nav-id="/micronaut/management/" title="Health Checks &amp; Observability" class="uk-active">
+    <li data-nav-id="/micronaut/management/" title="Health Checks &amp; Observability" class="">
       <a href="../../micronaut/management/" class="uk-text-truncate">
         Health Checks &amp; Observability
       </a>
@@ -397,7 +397,7 @@
 
   
     
-    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="">
+    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="uk-active">
       <a href="../../micronaut/deployment/" class="uk-text-truncate">
         Deployment
       </a>
@@ -499,7 +499,7 @@
             </a>
           </li>
             <li>
-              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/micronaut/management.md" target="blank">
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/micronaut/deployment.md" target="blank">
                 <span uk-icon="pencil"></span>
                 <span class="uk-text-middle">Edit this page</span>
               </a>
@@ -603,73 +603,18 @@
 
 
 
-            <h1 class="rw-accent">Health Checks &amp; Observability</h1>
+            <h1 class="rw-accent">Deployment</h1>
               
-  <p>The original MuShop application features extensive code to define application health observability endpoints.</p>
-<p>For example the original Go lang code features manual definition of the <code>/health</code> endpoint in <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/catalogue/endpoints.go#L76-L82">endpoints.go</a>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="kd">func</span> <span class="nf">MakeHealthEndpoint</span><span class="p">(</span><span class="nx">s</span> <span class="nx">Service</span><span class="p">)</span> <span class="nx">endpoint</span><span class="p">.</span><span class="nx">Endpoint</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">request</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="nx">response</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">health</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nf">Health</span><span class="p">()</span>
-		<span class="k">return</span> <span class="nx">healthResponse</span><span class="p">{</span><span class="nx">Health</span><span class="p">:</span> <span class="nx">health</span><span class="p">},</span> <span class="kc">nil</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>As well as a manually implemented health check routine in <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/catalogue/service.go#L171-L187">services.go</a>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">catalogueService</span><span class="p">)</span> <span class="nf">Health</span><span class="p">()</span> <span class="p">[]</span><span class="nx">Health</span> <span class="p">{</span>
-	<span class="kd">var</span> <span class="nx">health</span> <span class="p">[]</span><span class="nx">Health</span>
-	<span class="nx">dbstatus</span> <span class="o">:=</span> <span class="s">&#34;OK&#34;</span>
-
-
-	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nf">Ping</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">dbstatus</span> <span class="p">=</span> <span class="s">&#34;err&#34;</span>
-	<span class="p">}</span>
-
-
-	<span class="nx">app</span> <span class="o">:=</span> <span class="nx">Health</span><span class="p">{</span><span class="s">&#34;catalogue&#34;</span><span class="p">,</span> <span class="s">&#34;OK&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">String</span><span class="p">()}</span>
-	<span class="nx">db</span> <span class="o">:=</span> <span class="nx">Health</span><span class="p">{</span><span class="s">&#34;atp:catalogue-data&#34;</span><span class="p">,</span> <span class="nx">dbstatus</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">String</span><span class="p">()}</span>
-
-
-	<span class="nx">health</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">health</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span>
-	<span class="nx">health</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">health</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span>
-
-
-	<span class="k">return</span> <span class="nx">health</span>
-<span class="p">}</span>
-</code></pre></div><p>The existing Spring application code also features <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/controllers/HealthCheckController.java">manually implemented application health logic</a>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HealthCheckController</span> <span class="o">{</span>
-
-
-    <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">)</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">,</span> <span class="n">path</span> <span class="o">=</span> <span class="s">&#34;/health&#34;</span><span class="o">)</span>
-    <span class="kd">public</span>
-    <span class="nd">@ResponseBody</span>
-    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">HealthCheck</span><span class="o">&gt;&gt;</span> <span class="nf">getHealth</span><span class="o">()</span> <span class="o">{</span>
-      <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">HealthCheck</span><span class="o">&gt;&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">HealthCheck</span><span class="o">&gt;&gt;();</span>
-      <span class="n">List</span><span class="o">&lt;</span><span class="n">HealthCheck</span><span class="o">&gt;</span> <span class="n">healthChecks</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">HealthCheck</span><span class="o">&gt;();</span>
-      <span class="n">Date</span> <span class="n">dateNow</span> <span class="o">=</span> <span class="n">Calendar</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">getTime</span><span class="o">();</span>
-
-      <span class="n">HealthCheck</span> <span class="n">app</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HealthCheck</span><span class="o">(</span><span class="s">&#34;orders&#34;</span><span class="o">,</span> <span class="s">&#34;OK&#34;</span><span class="o">,</span> <span class="n">dateNow</span><span class="o">);</span>
-      <span class="n">HealthCheck</span> <span class="n">database</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HealthCheck</span><span class="o">(</span><span class="s">&#34;orders-db&#34;</span><span class="o">,</span> <span class="s">&#34;OK&#34;</span><span class="o">,</span> <span class="n">dateNow</span><span class="o">);</span>
-
-      
-
-      <span class="n">healthChecks</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
-      <span class="n">healthChecks</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">database</span><span class="o">);</span>
-
-      <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;health&#34;</span><span class="o">,</span> <span class="n">healthChecks</span><span class="o">);</span>
-      <span class="k">return</span> <span class="n">map</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><p>All of these manually crafted implementations of application health could be eliminated in the Micronaut application by adding a dependency on the <code>micronaut-management</code> module and adding the following definition to <code>application.yml</code> to expose the health information:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">endpoints</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">health</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">sensitive</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-</span><span class="w">    </span><span class="nt">details-visible</span><span class="p">:</span><span class="w"> </span><span class="l">ANONYMOUS</span><span class="w">
-</span></code></pre></div><p>Micronaut then <a href="https://docs.micronaut.io/latest/guide/#healthEndpoint">exposes health readiness and liveness checks</a> via <code>/health/readiness</code> and <code>/health/liveness</code> automatically with many built in health indicators to check that the database and messaging resources remain healthy.</p>
-<p>The developer can tweak the configuration to expose the health endpoint on a different port, require authentication to access the details and more.</p>
-
+  <p><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/master/src/api/Dockerfile">Each</a> <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/carts/Dockerfile">example</a> <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/catalogue/Dockerfile">application</a> in the original MuShop features a <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/events/Dockerfile">hand-crafted</a> <code>Dockerfile</code> that the developer has to <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/fulfillment/Dockerfile">write</a> and <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/Dockerfile">maintain</a> including ensuring all images used in the <code>Dockerfile</code> are kept up-to-date to avoid security vulnerabilities.</p>
+<p>None of the Micronaut applications feature a <code>Dockerfile</code> which is provided automatically and maintained by the framework across releases, making deploying an image a simple matter of executing:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./gradlew dockerPush
+</code></pre></div><p>for Gradle, or alternatively for Maven:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./mvnw deploy -Dpackaging<span class="o">=</span>docker
+</code></pre></div><p>Deploying a native version of the application with GraalVM is equally simple:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./gradlew dockerPushNative
+</code></pre></div><p>for Gradle, or alternatively for Maven:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">./mvnw deploy -Dpackaging<span class="o">=</span>docker-native
+</code></pre></div>
 
             </main>
           </div> 
@@ -840,6 +785,150 @@
 
   
     
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
     
   
 
@@ -859,150 +948,6 @@
     
       
       
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
-  
-
-
-  
-    
-
-
-  
     
   
 
@@ -1037,12 +982,12 @@
 
 
         <div class="uk-flex uk-flex-between uk-margin-top">
-          <a href="../../micronaut/tracing/" title="Distributed Tracing" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+          <a href="../../micronaut/httpclient/" title="HTTP Client" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
             <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
-            <label class="uk-visible@m">Distributed Tracing</label>
+            <label class="uk-visible@m">HTTP Client</label>
           </a><span></span>
-          <a href="../../micronaut/metrics/" title="Application Metrics and Monitoring" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
-            <label class="uk-visible@m">Application Metrics and Monitoring</label>
+          <a href="../../micronaut/native/" title="GraalVM Native Image" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">GraalVM Native Image</label>
             <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
           </a></div>
       </div>

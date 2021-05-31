@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Terraform on MuShop</title>
+    <title>Terraform on Micronaut MuShop</title>
     <link>/tags/terraform/</link>
-    <description>Recent content in Terraform on MuShop</description>
+    <description>Recent content in Terraform on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 06 Mar 2020 12:28:12 -0700</lastBuildDate><atom:link href="/tags/terraform/index.xml" rel="self" type="application/rss+xml" />

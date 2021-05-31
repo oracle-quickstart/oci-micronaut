@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title> :: MuShop</title>
+  <title>Messaging :: Micronaut MuShop</title>
   
-  <meta name="application-name" content="MuShop"/>
+  <meta name="application-name" content="Micronaut MuShop"/>
 <meta name="description" content="Oracle Cloud Native Workshop">
 <meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
 
-<meta property="og:title" content="MuShop - " />
+<meta property="og:title" content="Micronaut MuShop - Messaging" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/micronaut/messaging/" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
@@ -32,7 +32,7 @@
       <div class="uk-navbar-left">
         <a href="../../index.html" class="uk-navbar-item uk-logo">
           <img
-            alt="MuShop"
+            alt="Micronaut MuShop"
             class="uk-width-small"
             src="../../images/logo.dark.png">
         </a>
@@ -58,7 +58,7 @@
       <section>
         <div class="uk-margin-bottom uk-visible@s">
           <a href="../../index.html" class="uk-logo">
-            <img src="../../images/logo.dark.png" alt="MuShop">
+            <img src="../../images/logo.dark.png" alt="Micronaut MuShop">
           </a>
         </div>
         <div class="uk-margin-bottom">
@@ -161,10 +161,10 @@
   
   
   
-  <li data-nav-id="/micronaut/" title="Advantages of Micronaut" class=" uk-parent uk-open">
+  <li data-nav-id="/micronaut/" title="Micronaut Advantages" class=" uk-parent uk-open">
     <a href="../../micronaut/">
       <div class="uk-flex uk-flex-between uk-flex-middle">
-        <div class="uk-text-truncate">Advantages of Micronaut</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+        <div class="uk-text-truncate">Micronaut Advantages</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
       </div>
     </a>
     
@@ -361,9 +361,9 @@
 
   
     
-    <li data-nav-id="/micronaut/messaging/" title="" class="uk-active">
+    <li data-nav-id="/micronaut/messaging/" title="Messaging" class="uk-active">
       <a href="../../micronaut/messaging/" class="uk-text-truncate">
-        
+        Messaging
       </a>
     </li>
     
@@ -379,27 +379,45 @@
 
   
     
-    <li data-nav-id="/micronaut/native/" title="" class="">
+    <li data-nav-id="/micronaut/httpclient/" title="HTTP Client" class="">
+      <a href="../../micronaut/httpclient/" class="uk-text-truncate">
+        HTTP Client
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="">
+      <a href="../../micronaut/deployment/" class="uk-text-truncate">
+        Deployment
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/native/" title="GraalVM Native Image" class="">
       <a href="../../micronaut/native/" class="uk-text-truncate">
-        
-      </a>
-    </li>
-    
-  
-
- 
-
-        
-      
-        
-        
-
-
-  
-    
-    <li data-nav-id="/micronaut/testing/" title="" class="">
-      <a href="../../micronaut/testing/" class="uk-text-truncate">
-        
+        GraalVM Native Image
       </a>
     </li>
     
@@ -467,21 +485,21 @@
             </a>
           </li>
           <li>
-            <a title="GitHub Source" href="https://github.com/oracle-quickstart/oci-cloudnative" class="uk-text-truncate">
+            <a title="GitHub Source" href="https://github.com/pgressa/oci-cloudnative" class="uk-text-truncate">
               <span uk-icon='icon: github; ratio: 1.25'></span>
               <span class="uk-text-middle">GitHub Source</span>
               
             </a>
           </li>
           <li>
-            <a title="Report Issue" href="https://github.com/oracle-quickstart/oci-cloudnative/issues" class="uk-text-truncate">
+            <a title="Report Issue" href="https://github.com/pgressa/oci-cloudnative/issues" class="uk-text-truncate">
               <span uk-icon='icon: warning; ratio: 1.25'></span>
               <span class="uk-text-middle">Report Issue</span>
               
             </a>
           </li>
             <li>
-              <a title='Edit this page' href="https://github.com/oracle-quickstart/oci-cloudnative/tree/master/docs/content/micronaut/messaging.md" target="blank">
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/micronaut/messaging.md" target="blank">
                 <span uk-icon="pencil"></span>
                 <span class="uk-text-middle">Edit this page</span>
               </a>
@@ -581,18 +599,31 @@
           <main class="uk-width-expand">
             <header>
   
-  
-    <ul class="uk-breadcrumb uk-margin-top uk-text-small">
-    
-  
-  <li><a href='../../'>Home</a></li> <li><a href='../../micronaut/'>Advantages of Micronaut</a></li> <li></li>
-    </ul></header>
+  </header>
 
 
 
-            <h1 class="rw-accent"></h1>
+            <h1 class="rw-accent">Messaging</h1>
               
-  
+  <p>The original Spring-based application includes <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/orders/src/main/java/mushop/orders/services/MessagingService.java">extensive logic to send NATs messages</a>.</p>
+<p>This is greatly simplified in Micronaut with the Micronaut NATS module:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@NatsClient</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">OrdersPublisher</span> <span class="o">{</span>
+
+    <span class="nd">@Subject</span><span class="o">(</span><span class="s">&#34;mushop-orders&#34;</span><span class="o">)</span>
+    <span class="kt">void</span> <span class="nf">dispatchToFulfillment</span><span class="o">(</span><span class="n">OrderUpdate</span> <span class="n">orderUpdate</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>In the above example Micronaut automatically implements the logic to send a message and handle any errors, avoiding 115 lines of additional code.</p>
+<p>To Go application that sends events via OCI streaming again features over a <a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/events/service.go">100 lines of code to send messages with the OCI SDK</a>. This logic is coupled to OCI and not portable across Clouds.</p>
+<p>The Micronaut version is simplified through the use of the Micronaut Kafka module which encapsulates the logic needed to define Kafka producers.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@KafkaClient</span><span class="o">(</span><span class="n">batch</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">EventProducer</span> <span class="o">{</span>
+    <span class="nd">@Topic</span><span class="o">(</span><span class="s">&#34;events&#34;</span><span class="o">)</span>
+    <span class="kt">void</span> <span class="nf">send</span><span class="o">(</span><span class="n">EventRecord</span><span class="o">...</span> <span class="n">eventRecords</span><span class="o">);</span>
+<span class="o">}</span>
+
+</code></pre></div><p>Since the Kafka API is used to send the message internally, the application can be moved to any Cloud infrastructure that features a Kafka compatible API.</p>
+
 
             </main>
           </div> 
@@ -922,6 +953,22 @@
 
 
   
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
 
 
   
@@ -948,8 +995,8 @@
             <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
             <label class="uk-visible@m">Security</label>
           </a><span></span>
-          <a href="../../micronaut/native/" title="" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
-            <label class="uk-visible@m"></label>
+          <a href="../../micronaut/httpclient/" title="HTTP Client" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">HTTP Client</label>
             <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
           </a></div>
       </div>

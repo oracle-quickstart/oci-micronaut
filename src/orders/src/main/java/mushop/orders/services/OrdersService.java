@@ -66,14 +66,8 @@ public class OrdersService {
         this.cartsClient = cartsClient;
     }
 
-    public CustomerOrder getById(Long id) {
-        Optional<CustomerOrder> customerOrder = customerOrderRepository.findById(id);
-        if (customerOrder.isPresent()) {
-            return customerOrder.get();
-        }
-
-        LOG.info("Order with id {} not found", id);
-        return null;
+    public Optional<CustomerOrder> getById(Long id) {
+        return customerOrderRepository.findById(id);
     }
 
     public Page<CustomerOrder> searchCustomerOrders(String customerId, Pageable pagable){

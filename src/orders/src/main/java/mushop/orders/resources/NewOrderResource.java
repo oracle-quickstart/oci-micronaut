@@ -8,13 +8,18 @@ import io.micronaut.core.annotation.Introspected;
 
 import java.net.URI;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 @Introspected
 public class NewOrderResource {
 
+    @NotNull
     private final URI customer;
+    @NotNull
     private final URI address;
+    @NotNull
     private final URI card;
+    @NotNull
     private final URI items;
 
     public NewOrderResource(URI customer,

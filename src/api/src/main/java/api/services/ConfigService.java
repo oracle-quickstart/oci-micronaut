@@ -7,22 +7,19 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.session.Session;
 import io.reactivex.Single;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @MuService
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class ConfigService {
 
-    @Operation(
-            summary = "User session configuration",
-            description = "Returns user session configuration..",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Returns configuration."),
-            },
-            tags = {"user"}
-    )
+    /**
+     * Returns user session configuration.
+     *
+     * @return The user session configuration
+     */
+    @Tag(name="user")
     @Get("/config")
     Single<Configuration> getConfig(Session session) {
         String trackId = "";

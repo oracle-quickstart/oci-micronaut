@@ -24,7 +24,7 @@ public class NewsLetterService {
 
     private final NewsLetterClient client;
 
-    public NewsLetterService(NewsLetterClient client) {
+    NewsLetterService(NewsLetterClient client) {
         this.client = client;
     }
 

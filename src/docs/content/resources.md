@@ -8,7 +8,7 @@ disablePrevNext: true
 
 ## Oracle Cloud Infrastructure
 
-- [Sign Up](https://myservices.us.oraclecloud.com/mycloud/signup)
+- [Sign Up](https://signup.cloud.oracle.com)
 - [Console](https://console.us-phoenix-1.oraclecloud.com/)
 - [REST APIs](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/usingapi.htm)
 - [SDKs](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm)

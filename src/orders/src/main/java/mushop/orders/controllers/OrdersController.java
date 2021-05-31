@@ -5,16 +5,24 @@
 package mushop.orders.controllers;
 
 import io.micronaut.data.model.Pageable;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Error;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.annotation.Status;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.hateoas.JsonError;
+import io.micronaut.http.hateoas.Link;
 import io.micronaut.transaction.annotation.ReadOnly;
 import io.reactivex.Single;
+import java.util.Optional;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
@@ -37,19 +45,13 @@ public class OrdersController {
 
     @Status(HttpStatus.CREATED)
     @Post
-    Single<CustomerOrder> newOrder(@Body NewOrderResource newOrderResource) {
-        if (newOrderResource.getAddress() == null ||
-                newOrderResource.getCustomer() == null ||
-                newOrderResource.getCard() == null ||
-                newOrderResource.getItems() == null) {
-            throw new InvalidOrderException("Invalid order request. Order requires customer, address, card and items.");
-        }
+    Single<CustomerOrder> newOrder(@Body @Valid NewOrderResource newOrderResource) {
         return ordersService.placeOrder(newOrderResource);
     }
 
     @ReadOnly
     @Get("/{orderId}")
-    CustomerOrder getOrder(Long orderId) {
+    Optional<CustomerOrder> getOrder(Long orderId) {
         return ordersService.getById(orderId);
     }
 
@@ -61,14 +63,16 @@ public class OrdersController {
         );
     }
 
-    public static class PaymentDeclinedException extends HttpStatusException {
-        public PaymentDeclinedException(String s) {
-            super(HttpStatus.NOT_ACCEPTABLE, s);
-        }
+    @Error(ConstraintViolationException.class)
+    public HttpResponse<JsonError> constraintError(HttpRequest request, ConstraintViolationException e) {
+        JsonError error = new JsonError(e.getMessage())
+            .link(Link.SELF, Link.of(request.getUri()));
+        return HttpResponse.status(HttpStatus.NOT_ACCEPTABLE)
+            .body(error);
     }
 
-    public static class InvalidOrderException extends HttpStatusException {
-        public InvalidOrderException(String s) {
+    public static class PaymentDeclinedException extends HttpStatusException {
+        public PaymentDeclinedException(String s) {
             super(HttpStatus.NOT_ACCEPTABLE, s);
         }
     }

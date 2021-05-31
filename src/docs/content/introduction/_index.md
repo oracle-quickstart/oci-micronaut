@@ -4,12 +4,12 @@ draft: false
 weight: -100
 ---
 
-## Goals
+## Goals of the Micronaut MuShop
 
-- Explore [cloud native](https://www.oracle.com/cloud/cloud-native/) services offered by Oracle Cloud Infrastructure
+- Explore the integration of [Micronaut](https://micronaut.io) with [cloud native](https://www.oracle.com/cloud/cloud-native/) services offered by Oracle Cloud Infrastructure
 - Build and deploy microservices with [Container Engine for Kubernetes](https://www.oracle.com/cloud/compute/container-engine-kubernetes.html) (OKE)
 - Experience Oracle Cloud services integrated within a single microservices project
-- Provide reference implementations and sample code for _real-world_ application development
+- Provide reference implementations and sample code for _real-world_ application development with Micronaut and Oracle Cloud
 
 ## Cloud Services
 
@@ -23,8 +23,8 @@ development with Oracle Cloud Infrastructure.
 | [Container Registry](https://www.oracle.com/cloud/compute/container-registry.html) | Highly available service to distribute container images |
 | [Email Delivery](https://www.oracle.com/cloud/networking/email-delivery.html) | Enables sending emails | 
 | [Functions](https://www.oracle.com/cloud-native/functions/) | Scalable, multitenant serverless functions |
-| [Monitoring](https://www.oracle.com/cloud/systems-management/monitoring/) | Integrated metrics from all resources and services |
-| [Open Service Broker](https://github.com/oracle/oci-service-broker) | Provisioning cloud resources within Kubernetes |
+| [Monitoring](https://www.oracle.com/devops/monitoring/) | Integrated metrics from all resources and services |
+| [Application Performance Monitoring](https://www.oracle.com/manageability/application-performance-monitoring/) | Integrated distributed tracing and performance analysis |
 | [Resource Manager](https://www.oracle.com/cloud/systems-management/resource-manager/) | Infrastructure as code with Terraform |
 | [Streaming](https://www.oracle.com/big-data/streaming/) | Large scale data collection and processing |
 | _Others coming soon_ | - |
@@ -39,7 +39,6 @@ In addition to these Cloud Native topics, MuShop demonstrates the use of several
 - [Object Storage](https://www.oracle.com/cloud/storage/object-storage.html)
 - [Web Application Firewall](https://www.oracle.com/cloud/security/cloud-services/web-application-firewall.html)
 
-<!-- - [Health Checks](https://www.oracle.com/cloud/networking/health-checks.html) -->
 
 ### MuShop Services
 
@@ -48,17 +47,17 @@ In addition to these Cloud Native topics, MuShop demonstrates the use of several
 {{% overflow %}}
 | Service | Technology  | Cloud Services | Description |
 | --- | --- | --- | --- |
-| `src/api` | Node.js   | | Storefront API |
+| `src/api` | Micronaut   | | Storefront API |
 | `src/assets` | Node.js   | Object Storage | Product images |
-| `src/carts` | Java | Autonomous DB (ATP) | Shopping cart |
-| `src/catalogue` | Go | Autonomous DB (ATP) | Product catalogue |
+| `src/carts` | Micronaut | Autonomous DB (ATP) | Shopping cart |
+| `src/catalogue` | Micronaut | Autonomous DB (ATP) | Product catalogue |
 | `src/dbtools` | Linux | Autonomous DB (ATP) | Database schema initializations |
 | `src/edge-router` | traefik  |  | Request routing |
-| `src/events` | Go | Streaming | Application event data collection |
-| `src/fulfillment` | Java |  | Order processing |
-| `src/functions/newsletter-subscription` | Node.js | Functions | Newsletter subscription |
-| `src/orders` | Java | Autonomous DB (ATP)   | Customer orders |
-| `src/payments` | Go | | Payment processing |
+| `src/events` | Micronaut | Streaming | Application event data collection |
+| `src/fulfillment` | Micronaut |  | Order processing |
+| `src/functions/newsletter-subscription` | Micronaut | Functions | Newsletter subscription |
+| `src/orders` | Micronaut | Autonomous DB (ATP)   | Customer orders |
+| `src/payments` | Micronaut | | Payment processing |
 | `src/storefront` | JavaScript  |  | Store UI |
-| `src/user` | TypeScript | Autonomous DB (ATP)  | Customer accounts, AuthN |
+| `src/user` | Micronaut | Autonomous DB (ATP)  | Customer accounts, AuthN |
 {{% /overflow %}}

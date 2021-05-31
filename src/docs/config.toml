@@ -4,18 +4,18 @@
 #
 baseURL = ""
 languageCode = "en-us"
-title = "MuShop"
+title = "Micronaut MuShop"
 theme = "redwood"
 relativeURLs = true
 
 [params]
-editURL = "https://github.com/oracle-quickstart/oci-cloudnative/tree/master/docs/content/"
+editURL = "https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/"
 showVisitedLinks = false
 author = "Oracle Developers"
 organization = "Oracle"
 description = "Oracle Cloud Native Workshop"
-keywords = ["Kubernetes", "OCI", "OKE", "Microservices"]
-ghrepo = "https://github.com/oracle-quickstart/oci-cloudnative"
+keywords = ["Kubernetes", "OCI", "OKE", "Microservices", "Micronaut"]
+ghrepo = "https://github.com/pgressa/oci-cloudnative"
 branch = "master"
 logo = "images/logo.dark.png"
 
@@ -56,13 +56,13 @@ weight = 30
 [[menu.shortcuts]]
 name = "GitHub Source"
 pre = "<span uk-icon='icon: github; ratio: 1.25'></span>"
-url = "https://github.com/oracle-quickstart/oci-cloudnative"
+url = "https://github.com/pgressa/oci-cloudnative"
 weight = 40
 
 [[menu.shortcuts]]
 name = "Report Issue"
 pre = "<span uk-icon='icon: warning; ratio: 1.25'></span>"
-url = "https://github.com/oracle-quickstart/oci-cloudnative/issues"
+url = "https://github.com/pgressa/oci-cloudnative/issues"
 weight = 50
 
 [outputs]

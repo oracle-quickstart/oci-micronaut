@@ -96,8 +96,8 @@ public class CartsService {
                     client.postCart(cartId, Map.of(
                            "customerId", authentication == null ? "" : MuUserDetails.resolveId(authentication),
                            "items", Collections.singletonList(Map.of(
-                                    ITEM_ID, product.id,
-                                    UNIT_PRICE, product.price,
+                                    ITEM_ID, product.getId(),
+                                    UNIT_PRICE, product.getUnitPrice(),
                                     QUANTITY, addItem.quantity
                             ))
                     )).flatMapCompletable(httpStatus -> {
@@ -125,8 +125,8 @@ public class CartsService {
                         new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.id)
                 )).flatMapCompletable((product ->
                         client.updateCartItem(cartId, Map.of(
-                                ITEM_ID, product.id,
-                                UNIT_PRICE, product.price,
+                                ITEM_ID, product.getId(),
+                                UNIT_PRICE, product.getUnitPrice(),
                                 QUANTITY, addItem.quantity
                         )).flatMapCompletable(httpStatus -> {
                             if (httpStatus.getCode() > 201) {

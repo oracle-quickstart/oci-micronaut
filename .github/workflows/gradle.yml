@@ -48,7 +48,7 @@ jobs:
       - name: Build with Gradle
         working-directory: src/${{ matrix.project-path }}
         run: |
-          ./gradlew check --no-daemon --parallel --continue
+          ./gradlew check --no-daemon  --continue
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
   push-docker-images:

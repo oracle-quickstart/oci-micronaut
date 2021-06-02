@@ -2,14 +2,12 @@ package mushop.carts.test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.micronaut.core.type.Argument;
-import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.micronaut.test.support.TestPropertyProvider;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import org.hamcrest.Matchers;
@@ -19,12 +17,10 @@ import org.testcontainers.containers.OracleContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -34,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Testcontainers
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TestCartService implements TestPropertyProvider {
+public class TestCartService implements OracleSodaTest {
 
     @Container
     static OracleContainer oracleContainer = new OracleContainer("registry.gitlab.com/micronaut-projects/micronaut-graal-tests/oracle-database:18.4.0-xe");
@@ -85,18 +81,8 @@ public class TestCartService implements TestPropertyProvider {
         assertEquals(0, items.body().size());
     }
 
-    @Nonnull
     @Override
-    public Map<String, String> getProperties() {
-        oracleContainer.start();
-        return Map.of(
-                "datasources.default.url", oracleContainer.getJdbcUrl(),
-                "datasources.default.driverClassName", oracleContainer.getDriverClassName(),
-                "datasources.default.username", oracleContainer.getUsername(),
-                "datasources.default.password", oracleContainer.getPassword(),
-                "datasources.default.soda.create-soda-user", StringUtils.TRUE,
-                "datasources.default.soda.properties.sharedMetadataCache", StringUtils.TRUE,
-                "datasources.default.soda.create-collections[0]", "cart"
-        );
+    public OracleContainer getOracleContainer() {
+        return oracleContainer;
     }
 }

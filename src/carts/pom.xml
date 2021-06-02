@@ -27,11 +27,11 @@
         <micronaut.version>2.5.4</micronaut.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.oraclecloud.version>1.3.4</micronaut.oraclecloud.version>
+        <micronaut.oraclecloud.version>1.3.5</micronaut.oraclecloud.version>
         <micronaut.micrometer.version>3.4.0</micronaut.micrometer.version>
         <micronaut.testcontainers.version>1.15.3</micronaut.testcontainers.version>
         <jdbc.version>21.1.0.0</jdbc.version>
-        <soda.version>1.1.4</soda.version>
+        <soda.version>1.1.7.1</soda.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
 <!--        <libs.classpath.prefix>libs</libs.classpath.prefix>-->
 <!--        <copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>-->
@@ -120,7 +120,7 @@
         </dependency>
         <dependency>
             <groupId>io.micronaut.sql</groupId>
-            <artifactId>micronaut-jdbc-ucp</artifactId>
+            <artifactId>micronaut-jdbc-hikari</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

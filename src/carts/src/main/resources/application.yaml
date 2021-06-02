@@ -30,7 +30,7 @@ datasources:
     soda:
       properties:
         sharedMetadataCache: true
-      create-soda-user: ${SODA_CREATE_USERNAME:true}
+#      create-soda-user: ${SODA_CREATE_USERNAME:true}
       create-collections:
         - ${carts.collection}
 

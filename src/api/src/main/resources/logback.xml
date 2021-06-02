@@ -14,4 +14,5 @@
     </root>
 
     <logger name="api" level="trace" />
+    <logger name="io.micronaut.http" level="debug"/>
 </configuration>

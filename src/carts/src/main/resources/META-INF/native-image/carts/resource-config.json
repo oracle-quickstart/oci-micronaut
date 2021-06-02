@@ -1,0 +1,9 @@
+{
+  "bundles": [
+    {"name":"oracle.json.impl.binary.Messages"},
+    {"name":"oracle.json.rdbms.Messages"},
+    {"name":"oracle.json.parser.Messages"},
+    {"name":"oracle.json.common.Messages"},
+    {"name":"oracle.soda.rdbms.exceptions.Messages"}
+  ]
+}

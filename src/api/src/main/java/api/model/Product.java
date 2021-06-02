@@ -7,13 +7,19 @@ import io.micronaut.core.annotation.Introspected;
 @Introspected
 public class Product {
 
-    public final String id;
-    public final double price;
+    private final String id;
+    private final double unitPrice;
 
-    @JsonCreator
-    public Product(@JsonProperty("id") String id,
-                   @JsonProperty("unitPrice") double price) {
+    public Product(String id, double unitPrice) {
         this.id = id;
-        this.price = price;
+        this.unitPrice = unitPrice;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
     }
 }

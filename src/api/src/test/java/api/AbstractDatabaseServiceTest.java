@@ -6,6 +6,9 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.support.TestPropertyProvider;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.junit.jupiter.api.AfterAll;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
@@ -34,6 +37,13 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
                 .withNetwork(Network.SHARED)
                 .withNetworkAliases("oracledb");
         oracleContainer.start();
+        try (Connection connection = oracleContainer.createConnection("")) {
+            try (final PreparedStatement ps = connection.prepareStatement("GRANT SODA_APP TO " + oracleContainer.getUsername())) {
+                ps.execute();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to setup SODA: " + e.getMessage(), e);
+        }        
         serviceContainer = initService();
         serviceContainer.start();
         return Map.of(

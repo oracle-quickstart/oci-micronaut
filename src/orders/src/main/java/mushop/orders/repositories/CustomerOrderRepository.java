@@ -18,6 +18,7 @@ import mushop.orders.entities.CustomerOrder;
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
 
     @Join(value = "customer", type = Join.Type.FETCH)
+    @Join(value = "customer.addresses", type = Join.Type.FETCH)
     Page<CustomerOrder> findByCustomerId(String name, Pageable p);
 }
 

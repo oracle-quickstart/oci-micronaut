@@ -10,11 +10,11 @@ tags:
   - Setup
 ---
 
-The terraform configuration scrips can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.
+The terraform configuration scripts can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.
 
 ## Prerequisites
 
-You need to install `terraform` locally.
+You need to [install `terraform`](https://www.terraform.io/downloads.html) locally.
 
 ## Configuration
 
@@ -27,7 +27,7 @@ cp terraform.tfvars.example mushop.tfvars
 Then edit the `mushop.tfvars`:
 
 
-1. Configure the OCI authentication and deployment variables:
+1. Configure the OCI authentication and deployment variables. [Follow the guidelines](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm) on how to obtain authentication details and configure the provider.:
     ```yaml
     # OCI authentication
     tenancy_ocid     = "ocid1.tenancy....."
@@ -41,6 +41,10 @@ Then edit the `mushop.tfvars`:
     # region
     region = "us-ashburn-1"
     ```
+
+   {{% alert icon="info" %}}
+   {{% /alert %}}
+
 
 1. Enable streaming service (*optional*):
     ```yaml
@@ -62,7 +66,7 @@ Then edit the `mushop.tfvars`:
     ```
 
    {{% alert icon="info" %}}
-   Note that by configuring this option the terraforem will configure Oracle Functions, Oracle API Gateway and Oracle Email Delivery Service.
+   Note that by configuring this option the terraform will configure Oracle Functions, Oracle API Gateway and Oracle Email Delivery Service.
    The default quota allows the account to have 1 API Gateway configured.
    In case you're out of the quota keep this option disabled, the MuShop application won't be affected.
    {{% /alert %}}

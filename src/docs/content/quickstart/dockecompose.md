@@ -18,7 +18,7 @@ When using `docker-compose` some services are not available, such as publishing 
 
 ## Prerequisites
 
-You need Docker and Docker Composed installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.
+You need Docker and Docker Compose installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.
 
 ## Quick Start
 
@@ -36,7 +36,7 @@ docker-compose pull
 ```
 
 ### Run stack
-After the images are downloaded start the stack in the detached state `-d` option.
+After the images are downloaded start the stack with the detached state `-d` option.
 
 ```shell
 docker-compose up -d

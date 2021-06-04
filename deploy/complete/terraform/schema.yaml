@@ -73,6 +73,7 @@ variableGroups:
   - title: "Newsletter subscription using Oracle Functions"
     variables:
     - create_oracle_function_newsletter
+    - newsletter_function_display_name
     - newsletter_function_approved_email_address
     - newsletter_function_docker_image_repository
     - newsletter_function_docker_image_version

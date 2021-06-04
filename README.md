@@ -22,7 +22,7 @@ The [helm chart documentation](https://github.com/pgressa/oraclecloud-cloudnativ
 
 If you do not have an Oracle Cloud account yet, you can create a [free trial account](https://signup.oraclecloud.com).
 
-Note that you will have to create and configure needed Oracle Cloud services manually. For complete automated deployment use the next option [Helm + Terraform](helm--terraform). 
+Note that you will have to create and configure the needed Oracle Cloud services manually. For complete automated deployment use the following option [Helm + Terraform](helm--terraform). 
 
 ### Helm + Terraform
 Deploy the complete MuShop with all Oracle Cloud services automatically using the Terraform scripts. The [terraform documentation](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/terraform) walks through the configuration process and various options for customizing the deployment.

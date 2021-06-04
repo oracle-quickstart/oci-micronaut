@@ -3,7 +3,9 @@ package api.services.support;
 import api.model.Event;
 import api.services.EventsService;
 import api.services.annotation.TrackEvent;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpAttributes;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -20,6 +22,7 @@ import org.reactivestreams.Publisher;
 
 import java.util.Collections;
 
+@Requires(property = "tracking.enabled", notEquals = StringUtils.FALSE, defaultValue = StringUtils.TRUE)
 @Filter(Filter.MATCH_ALL_PATTERN)
 public class TrackEventFilter implements HttpServerFilter {
     private final EventsService eventsService;

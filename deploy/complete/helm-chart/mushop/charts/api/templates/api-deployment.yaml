@@ -29,18 +29,16 @@ spec:
             - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/liveness
               port: 8080
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/readiness
               port: 8080
           env:
             {{- include "api.oapm.connection" . | nindent 12 }}
             {{- include "api.oims.config" . | nindent 12 }}
+            {{- include "api.streaming" . | nindent 12 }}
             - name: REDIS_URI
               value: redis://mushop-session:6379
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+

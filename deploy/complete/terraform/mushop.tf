@@ -49,6 +49,10 @@ resource "helm_release" "mushop" {
     name  = "global.test"
     value = var.oci_deployment
   }
+  set {
+    name  = "api.env.trackingEnabled"
+    value = var.create_oracle_streaming_service_stream ? true : false
+  }
   # set {
   #   name  = "global.oosBucketSecret" # Commented until come with solution to gracefull removal of objects when terraform destroy
   #   value = var.oos_bucket_name

@@ -24,6 +24,8 @@ ingress:
 
 api:
   enabled: true
+  env:
+    trackingEnabled: true
 
 assets:
   enabled: true

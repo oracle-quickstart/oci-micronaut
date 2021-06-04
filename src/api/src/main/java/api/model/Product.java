@@ -1,25 +1,23 @@
 package api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 
 @Introspected
 public class Product {
 
     private final String id;
-    private final double unitPrice;
+    private final double price;
 
-    public Product(String id, double unitPrice) {
+    public Product(String id, double price) {
         this.id = id;
-        this.unitPrice = unitPrice;
+        this.price = price;
     }
 
     public String getId() {
         return id;
     }
 
-    public double getUnitPrice() {
-        return unitPrice;
+    public double getPrice() {
+        return price;
     }
 }

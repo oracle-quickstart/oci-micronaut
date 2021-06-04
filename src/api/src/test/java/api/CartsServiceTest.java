@@ -81,7 +81,7 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
         assertEquals(1, cart.size());
 
         final ProductAndQuantity product = cart.iterator().next();
-        assertEquals(10.00, product.getUnitPrice());
+        assertEquals(10.00, product.getPrice());
         assertEquals(2, product.quantity);
 
     }
@@ -100,7 +100,7 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
         assertEquals(1, cart.size());
 
         final ProductAndQuantity product = cart.iterator().next();
-        assertEquals(10.00, product.getUnitPrice());
+        assertEquals(10.00, product.getPrice());
         assertEquals(3, product.quantity);
     }
 

@@ -89,15 +89,15 @@ public class CartsService {
             @Nullable Authentication authentication,
             @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
-        return catalogueClient.getItem(addItem.id)
+        return catalogueClient.getItem(addItem.getId())
             .switchIfEmpty(Single.error(() ->
-                new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.id)
+                new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.getId())
             )).flatMapCompletable((product ->
                     client.postCart(cartId, Map.of(
                            "customerId", authentication == null ? "" : MuUserDetails.resolveId(authentication),
                            "items", Collections.singletonList(Map.of(
                                     ITEM_ID, product.getId(),
-                                    UNIT_PRICE, product.getUnitPrice(),
+                                    UNIT_PRICE, product.getPrice(),
                                     QUANTITY, addItem.quantity
                             ))
                     )).flatMapCompletable(httpStatus -> {
@@ -126,8 +126,8 @@ public class CartsService {
                 )).flatMapCompletable((product ->
                         client.updateCartItem(cartId, Map.of(
                                 ITEM_ID, product.getId(),
-                                UNIT_PRICE, product.getUnitPrice(),
-                                QUANTITY, addItem.quantity
+                                UNIT_PRICE, product.getPrice(),
+                                QUANTITY, addItem.getQuantity()
                         )).flatMapCompletable(httpStatus -> {
                             if (httpStatus.getCode() > 201) {
                                 return Completable.error(new HttpStatusException(httpStatus, "Unable to update to cart"));

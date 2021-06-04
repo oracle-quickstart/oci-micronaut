@@ -66,33 +66,6 @@
     </item>
     
     <item>
-      <title>Cleanup</title>
-      <link>/tags/cleanup/</link>
-      <pubDate>Mon, 09 Mar 2020 16:06:00 -0600</pubDate>
-      
-      <guid>/tags/cleanup/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Deprovision</title>
-      <link>/tags/deprovision/</link>
-      <pubDate>Mon, 09 Mar 2020 16:06:00 -0600</pubDate>
-      
-      <guid>/tags/deprovision/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Uninstall</title>
-      <link>/tags/uninstall/</link>
-      <pubDate>Mon, 09 Mar 2020 16:06:00 -0600</pubDate>
-      
-      <guid>/tags/uninstall/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Kubernetes</title>
       <link>/tags/kubernetes/</link>
       <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>

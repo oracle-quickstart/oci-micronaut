@@ -20,7 +20,7 @@
       <description>The complete Micronaut MuShop application can be run using docker-compose locally.
 Default Configuration The default configuration that the docker-compose file uses is to be offline.
 When using docker-compose some services are not available, such as publishing the newsletter which uses an Oracle Cloud Function, however the remaining services are functional.
-Prerequisites You need Docker and Docker Composed installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</description>
+Prerequisites You need Docker and Docker Compose installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</description>
     </item>
     
   </channel>

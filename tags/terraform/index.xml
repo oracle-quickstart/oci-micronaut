@@ -17,12 +17,12 @@
       <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
       
       <guid>/quickstart/terraform/</guid>
-      <description>The terraform configuration scrips can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.
+      <description>The terraform configuration scripts can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.
 Prerequisites You need to install terraform locally.
 Configuration Create copy of terraform variables file terraform.tfvars.example.
 cp terraform.tfvars.example mushop.tfvars Then edit the mushop.tfvars:
-  Configure the OCI authentication and deployment variables:
-# OCI authenticationtenancy_ocid=&amp;#34;ocid1.tenancy.....&amp;#34;fingerprint=&amp;#34;&amp;#34;# e.g.: &amp;#34;5f:53:...&amp;#34; or leave blank if using CloudShelluser_ocid=&amp;#34;&amp;#34;# e.g.: &amp;#34;ocid1.user...&amp;#34; or leave blank if using CloudShellprivate_key_path=&amp;#34;&amp;#34;# e.</description>
+  Configure the OCI authentication and deployment variables. Follow the guidelines on how to obtain authentication details and configure the provider.:
+# OCI authenticationtenancy_ocid=&amp;#34;ocid1.tenancy.....&amp;#34;fingerprint=&amp;#34;&amp;#34;# e.g.: &amp;#34;5f:53:...&amp;#34; or leave blank if using CloudShelluser_ocid=&amp;#34;&amp;#34;# e.</description>
     </item>
     
   </channel>

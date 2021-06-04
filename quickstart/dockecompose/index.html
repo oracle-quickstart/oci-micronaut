@@ -453,26 +453,6 @@
  
 
           
-            
-
-
-  
-  
-  
-  <li data-nav-id="/cleanup/" title="Cleanup" class="">
-    <a href="../../cleanup/">
-      <div class="uk-flex uk-flex-between uk-flex-middle">
-        <div class="uk-text-truncate">Cleanup</div>
-      </div>
-    </a>
-    
-    
-  </li>
-  
-
- 
-
-          
           <li class="uk-nav-divider"></li>
         </ul>
       </section>
@@ -648,7 +628,7 @@
 <p>The default configuration that the <code>docker-compose</code> file uses is to be offline.</p>
 <p>When using <code>docker-compose</code> some services are not available, such as publishing the newsletter which uses an Oracle Cloud Function, however the remaining services are functional.</p>
 <h2 id="prerequisites">Prerequisites</h2>
-<p>You need Docker and Docker Composed installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</p>
+<p>You need Docker and Docker Compose installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</p>
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="pull-images">Pull images</h3>
 <p>Start by pulling all necessary images. Note that it may take a little while to download all the images (in particular the Oracle Database image is 2GB to download).</p>
@@ -657,7 +637,7 @@ docker-compose pull
 </code></pre><pre><code class="language-shell--win" data-lang="shell--win">dir deploy/complete/docker-compose
 docker-compose pull
 </code></pre><h3 id="run-stack">Run stack</h3>
-<p>After the images are downloaded start the stack in the detached state <code>-d</code> option.</p>
+<p>After the images are downloaded start the stack with the detached state <code>-d</code> option.</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker-compose up -d
 </code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
 <p>Note that it may take a little while to spin up the containers.</p>
@@ -1023,22 +1003,6 @@ docker-compose pull
   
 
 
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
   
 
 

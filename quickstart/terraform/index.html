@@ -453,26 +453,6 @@
  
 
           
-            
-
-
-  
-  
-  
-  <li data-nav-id="/cleanup/" title="Cleanup" class="">
-    <a href="../../cleanup/">
-      <div class="uk-flex uk-flex-between uk-flex-middle">
-        <div class="uk-text-truncate">Cleanup</div>
-      </div>
-    </a>
-    
-    
-  </li>
-  
-
- 
-
-          
           <li class="uk-nav-divider"></li>
         </ul>
       </section>
@@ -648,16 +628,16 @@
 
             <h1 class="rw-accent">[Oracle Cloud] Terraform &#43; Helm</h1>
               
-  <p>The terraform configuration scrips can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.</p>
+  <p>The terraform configuration scripts can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.</p>
 <h2 id="prerequisites">Prerequisites</h2>
-<p>You need to install <code>terraform</code> locally.</p>
+<p>You need to <a href="https://www.terraform.io/downloads.html">install <code>terraform</code></a> locally.</p>
 <h2 id="configuration">Configuration</h2>
 <p>Create copy of terraform variables file <code>terraform.tfvars.example</code>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cp terraform.tfvars.example mushop.tfvars
 </code></pre></div><p>Then edit the <code>mushop.tfvars</code>:</p>
 <ol>
 <li>
-<p>Configure the OCI authentication and deployment variables:</p>
+<p>Configure the OCI authentication and deployment variables. <a href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm">Follow the guidelines</a> on how to obtain authentication details and configure the provider.:</p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># OCI authentication</span><span class="w">
 </span><span class="w"></span>tenancy_ocid<span class="w">     </span>=<span class="w"> </span><span class="s2">&#34;ocid1.tenancy.....&#34;</span><span class="w">
 </span><span class="w"></span>fingerprint<span class="w">      </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># e.g.: &#34;5f:53:...&#34; or leave blank if using CloudShell</span><span class="w">
@@ -669,7 +649,9 @@
 </span><span class="w">
 </span><span class="w"></span><span class="c"># region</span><span class="w">
 </span><span class="w"></span>region<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;us-ashburn-1&#34;</span><span class="w">
-</span></code></pre></div></li>
+</span></code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+</div></div>
+</li>
 <li>
 <p>Enable streaming service (<em>optional</em>):</p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># Streaming</span><span class="w">
@@ -686,7 +668,7 @@ In case you&rsquo;re out of the quota keep this option disabled, the MuShop appl
 </span><span class="w"></span>create_oracle_function_newsletter<span class="w"> </span>=<span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="w"></span>newsletter_function_approved_email_address<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;micronaut-newsletter@mushop.com&#34;</span><span class="w">
 </span></code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
-<p>Note that by configuring this option the terraforem will configure Oracle Functions, Oracle API Gateway and Oracle Email Delivery Service.
+<p>Note that by configuring this option the terraform will configure Oracle Functions, Oracle API Gateway and Oracle Email Delivery Service.
 The default quota allows the account to have 1 API Gateway configured.
 In case you&rsquo;re out of the quota keep this option disabled, the MuShop application won&rsquo;t be affected.</p>
 </div></div>
@@ -1113,22 +1095,6 @@ terraform destroy
   
 
 
-  
-
-
-  
-    
-
-
-  
-    
-  
-
-  
-  
-  
-
-  
   
 
 

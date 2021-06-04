@@ -11,12 +11,12 @@ BEGIN
 		SELECT COUNT(*) 
 		INTO profileExists 
 		FROM DBA_PROFILES 
-		WHERE PROFILE = 'MUSHOP_SERVICES';
-		DBMS_OUTPUT.PUT_LINE ('** Profile creationg steps - &_DATE');
+		WHERE PROFILE = 'MUSHOP_USER_SERVICES';
+		DBMS_OUTPUT.PUT_LINE ('** Profile creation steps - &_DATE');
 		IF profileExists = 0 THEN
-			DBMS_OUTPUT.PUT_LINE ('Creating Profile = MUSHOP_SERVICES ...');
+			DBMS_OUTPUT.PUT_LINE ('Creating Profile = MUSHOP_USER_SERVICES ...');
 			EXECUTE IMMEDIATE
-				'CREATE PROFILE MUSHOP_SERVICES
+				'CREATE PROFILE MUSHOP_USER_SERVICES
 					LIMIT	PASSWORD_LIFE_TIME UNLIMITED
 							PASSWORD_GRACE_TIME 0
 							PASSWORD_REUSE_TIME UNLIMITED
@@ -25,7 +25,7 @@ BEGIN
 							PASSWORD_LOCK_TIME UNLIMITED
 							INACTIVE_ACCOUNT_TIME UNLIMITED';
 		ELSE
-			DBMS_OUTPUT.PUT_LINE ('Profile = MUSHOP_SERVICES exists, steps ignored');
+			DBMS_OUTPUT.PUT_LINE ('Profile = MUSHOP_USER_SERVICES exists, steps ignored');
 		END IF;
 	END;
 
@@ -37,10 +37,10 @@ BEGIN
 		INTO schemaUserExists 
 		FROM ALL_USERS 
 		WHERE username = '&1';
-		DBMS_OUTPUT.PUT_LINE ('** Schema creationg steps - &_DATE');
+		DBMS_OUTPUT.PUT_LINE ('** Schema creation steps - &_DATE');
 		IF schemaUserExists = 0 THEN
 			DBMS_OUTPUT.PUT_LINE ('Creating schema = &1 ...');
-			EXECUTE IMMEDIATE 'CREATE USER &1 IDENTIFIED BY &2 PROFILE mushop_services';
+			EXECUTE IMMEDIATE 'CREATE USER &1 IDENTIFIED BY &2 PROFILE mushop_user_services';
 			EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO &1';
 			EXECUTE IMMEDIATE 'GRANT UNLIMITED TABLESPACE TO &1';
 		ELSE
@@ -58,7 +58,7 @@ BEGIN
 		INTO roleExists 
 		FROM DBA_ROLES 
 		WHERE role = roleName;
-		DBMS_OUTPUT.PUT_LINE ('** Role creationg steps - &_DATE');
+		DBMS_OUTPUT.PUT_LINE ('** Role creation steps - &_DATE');
 		IF roleExists = 0 THEN
 			DBMS_OUTPUT.PUT_LINE ('Creating Role ' || roleName || '...' );
 			EXECUTE IMMEDIATE 'CREATE ROLE ' || roleName;

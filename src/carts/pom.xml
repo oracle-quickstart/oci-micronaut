@@ -13,7 +13,7 @@
 
     <groupId>micronaut.mushop</groupId>
     <artifactId>carts</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
 
     <name>carts</name>
     <description>Cart service</description>

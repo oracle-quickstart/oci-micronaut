@@ -17,7 +17,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.0.0
     hostname: api
     restart: always
     pull_policy: always
@@ -93,7 +93,7 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:1.0.0
     restart: always
     pull_policy: always
     depends_on:
@@ -117,7 +117,7 @@ services:
 
   # OCI Carts service
   carts:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-graalvm:1.0.3-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-graalvm:1.0.3
     restart: always
     pull_policy: always
     depends_on:
@@ -144,7 +144,7 @@ services:
 
   # OCI Orders service
   orders:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:1.0.0
     restart: always
     pull_policy: always
     cap_drop:
@@ -177,7 +177,7 @@ services:
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:1.0.0
     restart: always
     pull_policy: always
     cap_drop:
@@ -202,7 +202,7 @@ services:
 
   # Payment service
   payment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:1.0.0
     restart: always
     pull_policy: always
     cap_drop:
@@ -218,7 +218,7 @@ services:
 
   # Fulfillment service
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:1.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:1.0.0
     restart: always
     pull_policy: always
     read_only: true

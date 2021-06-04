@@ -3,7 +3,7 @@ plugins {
     id("io.micronaut.application") version "1.5.0"
 }
 
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 group = "mushop.events"
 
 repositories {

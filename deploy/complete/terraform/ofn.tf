@@ -7,7 +7,17 @@ data "oci_identity_compartment" "mushop_compartment" {
 }
 
 locals {
+  function_endpoint = var.create_oracle_function_newsletter ? oci_apigateway_deployment.fn_newsletter_deployment[0].endpoint : ""
+  function_url = regex("^(?:(?P<scheme>[^:/?#]+):)?(?://(?P<authority>[^/?#]*))?", local.function_endpoint)
   smtp_endpoint="smtp.email.${var.region}.oci.oraclecloud.com"
+
+  #
+  # We re-push newsletter image into these regions. In case the user uses different region he has to manually re-push and
+  # specify the image
+  supported_regions = ["us-phoenix-1", "us-ashburn-1", "eu-frankfurt-1", "uk-london-1"]
+  is_supported_region =  contains(local.supported_regions, var.region)
+  fallback_image = local.is_supported_region ? var.newsletter_function_docker_image_repo_mapping[var.region] : var.newsletter_function_docker_image_repo_mapping["us-phoenix-1"]
+  fn_image = var.newsletter_function_docker_image_repository != "" ? var.newsletter_function_docker_image_repository : local.fallback_image
 }
 
 resource "oci_identity_user" "fn_email_user" {
@@ -293,7 +303,7 @@ resource "oci_functions_function" "fn_newsletter_function" {
   #Required
   application_id = data.oci_functions_application.fn_mushop_application[0].id
   display_name = var.newsletter_function_display_name
-  image = "${var.newsletter_function_docker_image_repository}:${var.newsletter_function_docker_image_version}"
+  image = "${local.fn_image}:${var.newsletter_function_docker_image_version}"
   memory_in_mbs = var.newsletter_function_memory
 
   #Optional
@@ -393,3 +403,5 @@ resource "oci_apigateway_deployment" "fn_newsletter_deployment" {
 
   count = var.create_oracle_function_newsletter ? 1 : 0
 }
+
+

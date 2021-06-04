@@ -9,11 +9,9 @@ tags:
 ---
 
 This project supports deployment modes for the purposes of demonstrating
-different functionality on Oracle Cloud Infrastructure. While the source code
-is identical across these options, certain services are omitted in the `basic`
-deployment.
+different functionality of Micronaut and Oracle Cloud Infrastructure.
 
-| [Basic: `deploy/basic`](basic) | [Cloud Native: `deploy/complete`](kubernetes) |
+| [Basic: `deploy/basic`](basic) **Not supported yet** | [Cloud Native: `deploy/complete`](kubernetes) |
 |--|--|
 | Simplified runtime utilizing **only** [Always Free](https://www.oracle.com/cloud/free/) resources deployed with [Resource Manager](https://www.oracle.com/cloud/systems-management/resource-manager/) | Full-featured [Kubernetes](https://kubernetes.io/) microservices deployment showcasing Oracle [Cloud Native](https://www.oracle.com/cloud/cloud-native/) technologies and backing services |
 
@@ -23,6 +21,9 @@ mushop
 └── deploy
     ├── basic
     └── complete
+        └── docker-compose
+        └── helm-chart
+        └── terraform
 ```
 
 ## Clone Repository
@@ -51,7 +52,7 @@ The source code will look something like the following:
 │   └── complete
 │       ├── docker-compose
 │       ├── helm-chart
-│       └── kubernetes
+│       └── terraform
 └── src
     ├── api
     ├── assets

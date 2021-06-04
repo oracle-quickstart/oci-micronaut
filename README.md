@@ -15,13 +15,18 @@ MuShop can be deployed to Oracle Cloud Infrastructure on [Kubernetes](https://ku
 
 To deploy locally with Docker, follow [these instructions](https://github.com/pgressa/oci-cloudnative/blob/master/deploy/complete/docker-compose). 
 
-### Helm + Terraform
-
+### Helm
 Micronaut MuShop Complete is a Microservices application built to showcase a cloud-native approach to application development on Oracle Cloud Infrastructure with Micronaut & GraalVM using Oracle's [cloud native](https://www.oracle.com/cloud/cloud-native/) services. MuShop Complete uses a Kubernetes cluster, and can be deployed using the provided `helm` charts. It is recommended to use an Oracle Container Engine for Kubernetes cluster, however other Kubernetes distributions will also work.
 
 The [helm chart documentation](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart#setup) walks through the deployment process and various options for customizing the deployment.
 
 If you do not have an Oracle Cloud account yet, you can create a [free trial account](https://signup.oraclecloud.com).
+
+Note that you will have to create and configure needed Oracle Cloud services manually. For complete automated deployment use the next option [Helm + Terraform](helm--terraform). 
+
+### Helm + Terraform
+Deploy the complete MuShop with all Oracle Cloud services automatically using the Terraform scripts. The [terraform documentation](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/terraform) walks through the configuration process and various options for customizing the deployment.
+
 
 #### Topology
 

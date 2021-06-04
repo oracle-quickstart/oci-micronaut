@@ -84,6 +84,18 @@ variable "autonomous_database_data_safe_status" {
   }
 }
 
+variable "apm_zipkin_enabled" {
+  default = true
+}
+
+variable "apm_zipkin_url" {
+  default = ""
+}
+
+variable "apm_zipkin_path" {
+  default = ""
+}
+
 variable "autonomous_database_db_version" {
   default = "19c"
 }

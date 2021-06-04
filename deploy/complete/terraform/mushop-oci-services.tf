@@ -60,8 +60,9 @@ resource "kubernetes_secret" "oapm-connection" {
     namespace = kubernetes_namespace.mushop_namespace.id
   }
   data = {
-    zipkin_url        = "https://aaaac6gzqsj7waaaaaaaaaafse.apm-agt.us-ashburn-1.oci.oraclecloud.com"
-    zipkin_path       = "/20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=ISTRJC2G5SMYXA72VPLX6CM4IGWP76J"
+    zipkin_url        = var.apm_zipkin_url
+    zipkin_path       = var.apm_zipkin_path
+    zipkin_enabled    = var.apm_zipkin_enabled
   }
 }
 
@@ -251,13 +252,6 @@ resource "kubernetes_secret" "oos_bucket" {
 
 ## OCI Functions
 
-module "newsletter_url" {
-  source  = "matti/urlparse/external"
-  version = "0.2.0"
-  url = oci_apigateway_deployment.fn_newsletter_deployment[0].endpoint
-  count = var.create_oracle_function_newsletter ? 1 : 0
-}
-
 resource "kubernetes_service" "newsletter_svc" {
   metadata {
     name = var.newsletter_service_name
@@ -265,7 +259,7 @@ resource "kubernetes_service" "newsletter_svc" {
   }
   spec {
     type = "ExternalName"
-    external_name = module.newsletter_url[0].host
+    external_name = local.function_url["authority"]
     port {
       target_port = "443"
       port = 443

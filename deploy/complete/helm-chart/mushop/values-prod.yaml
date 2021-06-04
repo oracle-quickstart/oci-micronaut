@@ -1,9 +1,10 @@
 global:
   ociAuthSecret: oci-credentials        # OCI authentication credentials secret name
-  ossStreamSecret: oss-connection       # Name of Stream Connection secret
+  ossConnectionSecret: oss-connection   # Name of Stream Connection secret
   oadbAdminSecret: oadb-admin           # Name of DB Admin secret created earlier
   oadbWalletSecret: oadb-wallet         # Name of wallet secret created earlier
   oadbConnectionSecret: oadb-connection # Name of connection secret created earlier
+  oapmConnectionSecret: oapm-connection # Name of application monitoring secret created earlier
 
 ingress:
   enabled: true
@@ -24,6 +25,5 @@ ingress:
 
 api:
   env:
-    trackingEnabled:          # Flag that enables sending of tracking events to events service. If event service is not deployed set to "false".
     mediaUrl:                 # Object Storage URL for catalog image assets
-    newsletterSubscribeUrl:   # Newsletter subscription endpoint (https://[API_GATEWAY_URL]/newsletter/subscribe)
+    trackingEnabled:          # Flag that enables sending of tracking events to events service. If event service is not deployed set to "false".

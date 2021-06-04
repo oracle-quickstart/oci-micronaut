@@ -56,8 +56,17 @@ ingress_load_balancer_shape = "100Mbps"
 
 # MuShop
 
-## Enable Mock Mode
-mushop_mock_mode_all = false # Set to true if do not want to provision ATP, ObjectStorage and mock all services
+# Newsletter
+create_oracle_function_newsletter = false
+newsletter_function_approved_email_address = "" # e.g. "micronaut-newsletter@mushop.com"
+
+# Streaming
+create_oracle_streaming_service_stream = false
+
+# Tracing
+apm_zipkin_enabled = false
+apm_zipkin_url = "" # Copy here the APM domain Data Upload Endpoint.
+apm_zipkin_path = "" # The format is: /20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=<APM DOMAIN PUBLIC DATA KEY>
 
 ## Common Services (MuShop Utilities)
 grafana_enabled        = true

@@ -15,13 +15,3 @@ toggles:
         toggle: stg-os-linux
       - label: Windows
         toggle: stg-os-windows
-
-  - setting: helm
-    target: html
-    label: Helm
-    options:
-      - label: 3.x
-        toggle: stg-helm-3
-        active: true
-      - label: 2.x
-        toggle: stg-helm-2

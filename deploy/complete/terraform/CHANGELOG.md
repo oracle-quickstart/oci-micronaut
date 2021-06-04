@@ -1,5 +1,11 @@
 # CHANGELOG
 
+2021-05-21 (v3.0.0)
+
+- Migrate services to Micronaut
+- Support deploy of newsletter function
+- Support deploy of streaming service
+
 2021-04-08 (v2.2.0)
 
 - OKE Cluster Autoscaler support

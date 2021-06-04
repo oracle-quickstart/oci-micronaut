@@ -61,7 +61,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/* OAPM Connection url */}}
 {{- define "events.oapm.connection" -}}
-{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Chart.Name)) -}}
+{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Release.Name)) -}}
 - name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
   valueFrom:
     secretKeyRef:
@@ -72,6 +72,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     secretKeyRef:
       name: {{ $oapmConnection }}
       key: zipkin_path
+- name: TRACING_ZIPKIN_ENABLED
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_enabled
 {{- end -}}
 
 {{/* OIMS configuration */}}

@@ -1,10 +1,11 @@
 global:
   ociAuthSecret: oci-credentials        # OCI authentication credentials secret name
-  ossStreamSecret: oss-connection       # Previously created streaming secret name
+  ossConnectionSecret: oss-connection   # Previously created streaming secret name
   oadbAdminSecret: oadb-admin           # Name of DB Admin secret created separately
   oadbWalletSecret: oadb-wallet         # Name of wallet secret created separately
   oadbConnectionSecret: oadb-connection # Name of connection secret created separately
   oosBucketSecret: oos-bucket           # Object storage bucket secret name (optional)
+  oapmConnectionSecret: oapm-connection # Name of application monitoring secret created separately
 
 ingress:
   hosts: # Configure ingress to support host-specific routing
@@ -14,7 +15,6 @@ api:
   env:
     trackingEnabled:          # Flag that enables sending of tracking events to events service. If event service is not deployed set to "false".
     mediaUrl:                 # URL for catalog image assets (https://objectstorage.[REGION].oraclecloud.com/n/[NAMESPACE]/b/[BUCKET_NAME]/o/)
-    newsletterSubscribeUrl:   # Newsletter subscription endpoint (https://[API_GATEWAY_URL]/newsletter/subscribe)
 
 carts:
   secrets:
@@ -48,5 +48,5 @@ user:
  
 secrets:
   streams:
-    streamId:             # Stream OCID
-    messageEndpoint:      # Stream messages endpoint URL 
+    bootstrapServers:     # Stream pool bootstrap servers
+    jaasConfig:           # Stream pool jaas config

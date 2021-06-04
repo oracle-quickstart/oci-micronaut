@@ -1,14 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api
+  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm
   tag: 1.0.0-SNAPSHOT
   pullPolicy: Always
 
 env:
   trackingEnabled: false
   mediaUrl: /assets
-  newsletterSubscribeUrl:
 
 hpa:
   enabled: true

@@ -2,15 +2,15 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title>ATP :: Micronaut MuShop</title>
+  <title>[Oracle Cloud] Terraform &#43; Helm :: Micronaut MuShop</title>
   
   <meta name="application-name" content="Micronaut MuShop"/>
 <meta name="description" content="Oracle Cloud Native Workshop">
 <meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
 
-<meta property="og:title" content="Micronaut MuShop - ATP" />
+<meta property="og:title" content="Micronaut MuShop - [Oracle Cloud] Terraform &#43; Helm" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/tags/atp/" />
+<meta property="og:url" content="/quickstart/terraform/" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
@@ -19,12 +19,12 @@
   <meta name="msapplication-TileColor" content="#c74634">
   <meta name="theme-color" content="#fcfbfa">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="../../sass/main.min.06f0b677f54f1474c0555ec1f793edae4d8034da1715d1fd15ba100516cc3791.css" integrity="sha256-BvC2d/VPFHTAVV7B95Ptrk2ANNoXFdH9FboQBRbMN5E=">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
   <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
   <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
 </head>
 
-  <body class="" data-url="../../tags/atp/">
+  <body class="" data-url="/quickstart/terraform/">
     
 <div class="uk-navbar-container uk-hidden@s">
   <div class="">
@@ -97,7 +97,7 @@
   
   
   
-  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent">
+  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent uk-open">
     <a href="../../quickstart/">
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <div class="uk-text-truncate">Getting Started</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
@@ -117,9 +117,9 @@
 
   
     
-    <li data-nav-id="/quickstart/basic/" title="Always Free" class="">
-      <a href="../../quickstart/basic/" class="uk-text-truncate">
-        Always Free
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
       </a>
     </li>
     
@@ -135,9 +135,27 @@
 
   
     
-    <li data-nav-id="/quickstart/kubernetes/" title="Kubernetes Deployment" class="">
-      <a href="../../quickstart/kubernetes/" class="uk-text-truncate">
-        Kubernetes Deployment
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="uk-active">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
       </a>
     </li>
     
@@ -498,6 +516,14 @@
               
             </a>
           </li>
+            <li>
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/quickstart/terraform.md" target="blank">
+                <span uk-icon="pencil"></span>
+                <span class="uk-text-middle">Edit this page</span>
+              </a>
+            </li>
+            
+          
         </ul>
       </section>
       <section class="uk-margin-top">
@@ -538,21 +564,6 @@
       Windows
     </button></div>
 </li>
-<li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
-  <div class="uk-width-1-4">
-    
-    <span>Helm</span>
-  </div>
-  <div class="uk-button-group rw-setting"
-    setting="helm"
-    target="html" ><button class="uk-button uk-button-small uk-button-secondary
-    uk-active" toggle="stg-helm-3" >
-      3.x
-    </button><button class="uk-button uk-button-small uk-button-secondary
-    " toggle="stg-helm-2" >
-      2.x
-    </button></div>
-</li>
 </ul>
 
 
@@ -581,9 +592,44 @@
 
 <div class="uk-flex-last uk-width-1-4 uk-visible@l">
   <aside id="toc-nav" uk-sticky="offset: 40">
-    
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#cleanup">Cleanup</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     <hr/>
     
+  <div>
+    
+    <a class="uk-label" href="../../tags/terraform">
+      <span uk-icon="tag"></span>
+      Terraform
+    </a>
+    
+    <a class="uk-label" href="../../tags/oke">
+      <span uk-icon="tag"></span>
+      OKE
+    </a>
+    
+    <a class="uk-label" href="../../tags/helm">
+      <span uk-icon="tag"></span>
+      Helm
+    </a>
+    
+    <a class="uk-label" href="../../tags/setup">
+      <span uk-icon="tag"></span>
+      Setup
+    </a>
+    
+  </div>
+
   </aside>
 </div>
 
@@ -595,16 +641,118 @@
     <ul class="uk-breadcrumb uk-margin-top uk-text-small">
     
   
-  <li><a href='../../'>Home</a></li> <li><a href='../../tags/'>Tags</a></li> <li>ATP</li>
+  <li><a href='../../'>Home</a></li> <li><a href='../../quickstart/'>Getting Started</a></li> <li>[Oracle Cloud] Terraform + Helm</li>
     </ul></header>
 
 
 
-            <h1 class="rw-accent">ATP</h1>
+            <h1 class="rw-accent">[Oracle Cloud] Terraform &#43; Helm</h1>
               
-  
+  <p>The terraform configuration scrips can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>You need to install <code>terraform</code> locally.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Create copy of terraform variables file <code>terraform.tfvars.example</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">cp terraform.tfvars.example mushop.tfvars
+</code></pre></div><p>Then edit the <code>mushop.tfvars</code>:</p>
+<ol>
+<li>
+<p>Configure the OCI authentication and deployment variables:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># OCI authentication</span><span class="w">
+</span><span class="w"></span>tenancy_ocid<span class="w">     </span>=<span class="w"> </span><span class="s2">&#34;ocid1.tenancy.....&#34;</span><span class="w">
+</span><span class="w"></span>fingerprint<span class="w">      </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># e.g.: &#34;5f:53:...&#34; or leave blank if using CloudShell</span><span class="w">
+</span><span class="w"></span>user_ocid<span class="w">        </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># e.g.: &#34;ocid1.user...&#34; or leave blank if using CloudShell</span><span class="w">
+</span><span class="w"></span>private_key_path<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># e.g.: &#34;/users/user/.oci/oci_api_key.pem&#34; or leave blank if using CloudShell</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># Deployment compartment</span><span class="w">
+</span><span class="w"></span>compartment_ocid<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;ocid1.compartment....&#34;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># region</span><span class="w">
+</span><span class="w"></span>region<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;us-ashburn-1&#34;</span><span class="w">
+</span></code></pre></div></li>
+<li>
+<p>Enable streaming service (<em>optional</em>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># Streaming</span><span class="w">
+</span><span class="w"></span>create_oracle_streaming_service_stream<span class="w"> </span>=<span class="w"> </span><span class="kc">true</span><span class="w">
+</span></code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note that by configuring this option the terraform will configure Oracle Cloud Streaming service.
+The default quota allows the account to have 1 stream.
+In case you&rsquo;re out of the quota keep this option disabled, the MuShop application won&rsquo;t be affected.</p>
+</div></div>
+</li>
+<li>
+<p>Enable newsletter service (<em>optional</em>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># Newsletter</span><span class="w">
+</span><span class="w"></span>create_oracle_function_newsletter<span class="w"> </span>=<span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w"></span>newsletter_function_approved_email_address<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;micronaut-newsletter@mushop.com&#34;</span><span class="w">
+</span></code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note that by configuring this option the terraforem will configure Oracle Functions, Oracle API Gateway and Oracle Email Delivery Service.
+The default quota allows the account to have 1 API Gateway configured.
+In case you&rsquo;re out of the quota keep this option disabled, the MuShop application won&rsquo;t be affected.</p>
+</div></div>
+</li>
+<li>
+<p>Enable Application Performance Monitoring:
+The Oracle Cloud Application Performance Monitoring service doesn&rsquo;t provide the Terraform provider so it needs to be created manually before running the terraform:</p>
+<ol>
+<li>Navigate to Observability &amp; Management -&gt; Application Performance Monitoring -&gt; Administration.</li>
+<li>Hit the button Create APM domain and enter the domain name.</li>
+<li>Once created make a note of <code>Data Upload Endpoint</code> and <code>auto_generated_public_key</code>.</li>
+<li>Edit the <code>mushop.tfvars</code>:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># Tracing</span><span class="w">
+</span><span class="w"></span>apm_zipkin_enabled<span class="w"> </span>=<span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w"></span>apm_zipkin_url<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># Copy here the APM domain Data Upload Endpoint.</span><span class="w">
+</span><span class="w"></span>apm_zipkin_path<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w"> </span><span class="c"># The format is: /20200101/observations/public-span?dataFormat=zipkin&amp;dataFormatVersion=2&amp;dataKey=&lt;auto_generated_public_key&gt;</span><span class="w">
+</span></code></pre></div></li>
+</ol>
+<h2 id="installation">Installation</h2>
+<p>From the directory <code>deploy/complete/terraform</code>:</p>
+<ol>
+<li>
+<p>Init the providers:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">terraform init
+</code></pre></div></li>
+<li>
+<p>Plan the execution (<em>Optional</em>):</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">terraform plan --var-file mushop.tfvars
+</code></pre></div></li>
+<li>
+<p>Execute the plan:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">terraform apply --var-file mushop.tfvars
+</code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note the deployment of all resources may take a while (~20 minutes).</p>
+</div></div>
+<p>After successful deployment you should see output variables like below:</p>
+<pre><code>Outputs:
 
-  
+autonomous_database_password = &quot;....&quot;
+comments = &quot;The application URL will be unavailable for a few minutes after provisioning while the application is configured and deployed to Kubernetes&quot;
+deploy_id = &quot;R8Mm&quot;
+deployed_oke_kubernetes_version = &quot;v1.19.7&quot;
+deployed_to_region = &quot;us-ashburn-1&quot;
+dev = &quot;Made with ❤ by Oracle Developers&quot;
+external_ip = &quot;129.159.91.46&quot;
+generated_private_key_pem = &lt;&lt;EOT
+...
+-----END RSA PRIVATE KEY-----
+
+EOT
+grafana_admin_password = &quot;.....&quot;
+grafana_url = &quot;http://129.159.91.46/grafana&quot;
+kubeconfig_for_kubectl = &quot;export KUBECONFIG=./generated/kubeconfig&quot;
+mushop_source_code = &quot;https://github.com/pgressa/oraclecloud-cloudnative&quot;
+mushop_url = &quot;http://129.159.91.46&quot;
+mushop_url_button = &quot;http://129.159.91.46&quot;
+mushop_url_https = &quot;https://129.159.91.46&quot;
+</code></pre><p>To access MuShop use the <code>mushop_url_https</code> output variable.</p>
+</li>
+</ol>
+<h2 id="cleanup">Cleanup</h2>
+<p>From the directory <code>deploy/complete/terraform</code> destroy the stack:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># From this directory</span>
+terraform destroy
+</code></pre></div>
 
             </main>
           </div> 
@@ -623,6 +771,379 @@
       
       
       
+
+
+  
+    
+    
+  
+
+  
+  
+  
+    
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+        <div class="uk-flex uk-flex-between uk-margin-top">
+          <a href="../../quickstart/dockecompose/" title="[Local] Docker compose" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+            <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
+            <label class="uk-visible@m">[Local] Docker compose</label>
+          </a><span></span>
+          <a href="../../quickstart/helm/" title="[Oracle Cloud] Helm" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">[Oracle Cloud] Helm</label>
+            <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
+          </a></div>
       </div>
     </div>
   </div>

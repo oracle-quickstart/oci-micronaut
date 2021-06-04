@@ -2,15 +2,15 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title>Mock Mode :: Micronaut MuShop</title>
+  <title>[Local] Docker compose :: Micronaut MuShop</title>
   
   <meta name="application-name" content="Micronaut MuShop"/>
 <meta name="description" content="Oracle Cloud Native Workshop">
 <meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
 
-<meta property="og:title" content="Micronaut MuShop - Mock Mode" />
+<meta property="og:title" content="Micronaut MuShop - [Local] Docker compose" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/tags/mock-mode/" />
+<meta property="og:url" content="/quickstart/dockecompose/" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
@@ -19,12 +19,12 @@
   <meta name="msapplication-TileColor" content="#c74634">
   <meta name="theme-color" content="#fcfbfa">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="../../sass/main.min.06f0b677f54f1474c0555ec1f793edae4d8034da1715d1fd15ba100516cc3791.css" integrity="sha256-BvC2d/VPFHTAVV7B95Ptrk2ANNoXFdH9FboQBRbMN5E=">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
   <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
   <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
 </head>
 
-  <body class="" data-url="../../tags/mock-mode/">
+  <body class="" data-url="/quickstart/dockecompose/">
     
 <div class="uk-navbar-container uk-hidden@s">
   <div class="">
@@ -97,7 +97,7 @@
   
   
   
-  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent">
+  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent uk-open">
     <a href="../../quickstart/">
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <div class="uk-text-truncate">Getting Started</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
@@ -117,9 +117,9 @@
 
   
     
-    <li data-nav-id="/quickstart/basic/" title="Always Free" class="">
-      <a href="../../quickstart/basic/" class="uk-text-truncate">
-        Always Free
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="uk-active">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
       </a>
     </li>
     
@@ -135,9 +135,27 @@
 
   
     
-    <li data-nav-id="/quickstart/kubernetes/" title="Kubernetes Deployment" class="">
-      <a href="../../quickstart/kubernetes/" class="uk-text-truncate">
-        Kubernetes Deployment
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
       </a>
     </li>
     
@@ -498,6 +516,14 @@
               
             </a>
           </li>
+            <li>
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/quickstart/dockecompose.md" target="blank">
+                <span uk-icon="pencil"></span>
+                <span class="uk-text-middle">Edit this page</span>
+              </a>
+            </li>
+            
+          
         </ul>
       </section>
       <section class="uk-margin-top">
@@ -538,21 +564,6 @@
       Windows
     </button></div>
 </li>
-<li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
-  <div class="uk-width-1-4">
-    
-    <span>Helm</span>
-  </div>
-  <div class="uk-button-group rw-setting"
-    setting="helm"
-    target="html" ><button class="uk-button uk-button-small uk-button-secondary
-    uk-active" toggle="stg-helm-3" >
-      3.x
-    </button><button class="uk-button uk-button-small uk-button-secondary
-    " toggle="stg-helm-2" >
-      2.x
-    </button></div>
-</li>
 </ul>
 
 
@@ -581,9 +592,39 @@
 
 <div class="uk-flex-last uk-width-1-4 uk-visible@l">
   <aside id="toc-nav" uk-sticky="offset: 40">
-    
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#default-configuration">Default Configuration</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#quick-start">Quick Start</a>
+          <ul>
+            <li><a href="#pull-images">Pull images</a></li>
+            <li><a href="#run-stack">Run stack</a></li>
+          </ul>
+        </li>
+        <li><a href="#shutdown">Shutdown</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     <hr/>
     
+  <div>
+    
+    <a class="uk-label" href="../../tags/docker">
+      <span uk-icon="tag"></span>
+      Docker
+    </a>
+    
+    <a class="uk-label" href="../../tags/docker-compose">
+      <span uk-icon="tag"></span>
+      Docker Compose
+    </a>
+    
+  </div>
+
   </aside>
 </div>
 
@@ -595,16 +636,36 @@
     <ul class="uk-breadcrumb uk-margin-top uk-text-small">
     
   
-  <li><a href='../../'>Home</a></li> <li><a href='../../tags/'>Tags</a></li> <li>Mock Mode</li>
+  <li><a href='../../'>Home</a></li> <li><a href='../../quickstart/'>Getting Started</a></li> <li>[Local] Docker compose</li>
     </ul></header>
 
 
 
-            <h1 class="rw-accent">Mock Mode</h1>
+            <h1 class="rw-accent">[Local] Docker compose</h1>
               
-  
-
-  
+  <p>The complete <strong>Micronaut MuShop</strong> application can be run using <code>docker-compose</code> locally.</p>
+<h2 id="default-configuration">Default Configuration</h2>
+<p>The default configuration that the <code>docker-compose</code> file uses is to be offline.</p>
+<p>When using <code>docker-compose</code> some services are not available, such as publishing the newsletter which uses an Oracle Cloud Function, however the remaining services are functional.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>You need Docker and Docker Composed installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="pull-images">Pull images</h3>
+<p>Start by pulling all necessary images. Note that it may take a little while to download all the images (in particular the Oracle Database image is 2GB to download).</p>
+<pre><code class="language-shell--linux-macos" data-lang="shell--linux-macos">cd deploy/complete/docker-compose
+docker-compose pull
+</code></pre><pre><code class="language-shell--win" data-lang="shell--win">dir deploy/complete/docker-compose
+docker-compose pull
+</code></pre><h3 id="run-stack">Run stack</h3>
+<p>After the images are downloaded start the stack in the detached state <code>-d</code> option.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker-compose up -d
+</code></pre></div><div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note that it may take a little while to spin up the containers.</p>
+</div></div>
+<p>You can track the progress of services starting up with <code>docker-compose ps</code> and once all services have a status of <code>Up</code> then open <a href="http://localhost:81">http://localhost:81</a> in your browser to access MuShop.</p>
+<h2 id="shutdown">Shutdown</h2>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">docker-compose down
+</code></pre></div>
 
             </main>
           </div> 
@@ -623,6 +684,376 @@
       
       
       
+
+
+  
+    
+    
+  
+
+  
+  
+  
+    
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+        <div class="uk-flex uk-flex-between uk-margin-top">
+          <a href="../../quickstart/" title="Getting Started" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+            <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
+            <label class="uk-visible@m">Getting Started</label>
+          </a><span></span>
+          <a href="../../quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">[Oracle Cloud] Terraform &#43; Helm</label>
+            <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
+          </a></div>
       </div>
     </div>
   </div>

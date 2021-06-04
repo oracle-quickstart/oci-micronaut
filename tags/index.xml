@@ -6,7 +6,65 @@
     <description>Recent content in Tags on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Mar 2020 16:06:00 -0600</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jun 2020 12:28:12 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker</title>
+      <link>/tags/docker/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker Compose</title>
+      <link>/tags/docker-compose/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/docker-compose/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Helm</title>
+      <link>/tags/helm/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/helm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OKE</title>
+      <link>/tags/oke/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/oke/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Setup</title>
+      <link>/tags/setup/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/setup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Terraform</title>
+      <link>/tags/terraform/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/tags/terraform/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Cleanup</title>
       <link>/tags/cleanup/</link>
@@ -35,74 +93,11 @@
     </item>
     
     <item>
-      <title>ATP</title>
-      <link>/tags/atp/</link>
-      <pubDate>Fri, 06 Mar 2020 12:28:12 -0700</pubDate>
-      
-      <guid>/tags/atp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Free</title>
-      <link>/tags/free/</link>
-      <pubDate>Fri, 06 Mar 2020 12:28:12 -0700</pubDate>
-      
-      <guid>/tags/free/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Resource Manager</title>
-      <link>/tags/resource-manager/</link>
-      <pubDate>Fri, 06 Mar 2020 12:28:12 -0700</pubDate>
-      
-      <guid>/tags/resource-manager/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Terraform</title>
-      <link>/tags/terraform/</link>
-      <pubDate>Fri, 06 Mar 2020 12:28:12 -0700</pubDate>
-      
-      <guid>/tags/terraform/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Kubernetes</title>
       <link>/tags/kubernetes/</link>
       <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
       
       <guid>/tags/kubernetes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mock Mode</title>
-      <link>/tags/mock-mode/</link>
-      <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
-      
-      <guid>/tags/mock-mode/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OKE</title>
-      <link>/tags/oke/</link>
-      <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
-      
-      <guid>/tags/oke/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Setup</title>
-      <link>/tags/setup/</link>
-      <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>
-      
-      <guid>/tags/setup/</guid>
       <description></description>
     </item>
     

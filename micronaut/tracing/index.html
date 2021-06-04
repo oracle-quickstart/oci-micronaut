@@ -19,12 +19,12 @@
   <meta name="msapplication-TileColor" content="#c74634">
   <meta name="theme-color" content="#fcfbfa">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="../../sass/main.min.06f0b677f54f1474c0555ec1f793edae4d8034da1715d1fd15ba100516cc3791.css" integrity="sha256-BvC2d/VPFHTAVV7B95Ptrk2ANNoXFdH9FboQBRbMN5E=">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
   <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
   <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
 </head>
 
-  <body class="" data-url="../../micronaut/tracing/">
+  <body class="" data-url="/micronaut/tracing/">
     
 <div class="uk-navbar-container uk-hidden@s">
   <div class="">
@@ -117,9 +117,9 @@
 
   
     
-    <li data-nav-id="/quickstart/basic/" title="Always Free" class="">
-      <a href="../../quickstart/basic/" class="uk-text-truncate">
-        Always Free
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
       </a>
     </li>
     
@@ -135,9 +135,27 @@
 
   
     
-    <li data-nav-id="/quickstart/kubernetes/" title="Kubernetes Deployment" class="">
-      <a href="../../quickstart/kubernetes/" class="uk-text-truncate">
-        Kubernetes Deployment
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
       </a>
     </li>
     
@@ -546,21 +564,6 @@
       Windows
     </button></div>
 </li>
-<li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
-  <div class="uk-width-1-4">
-    
-    <span>Helm</span>
-  </div>
-  <div class="uk-button-group rw-setting"
-    setting="helm"
-    target="html" ><button class="uk-button uk-button-small uk-button-secondary
-    uk-active" toggle="stg-helm-3" >
-      3.x
-    </button><button class="uk-button uk-button-small uk-button-secondary
-    " toggle="stg-helm-2" >
-      2.x
-    </button></div>
-</li>
 </ul>
 
 
@@ -619,15 +622,15 @@
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># Configures Micronaut to Export application level trace information to </span><span class="w">
 </span><span class="w"></span><span class="c"># Oracle Cloud Application Performance Monitoring.</span><span class="w">
 </span><span class="w"></span><span class="c"># See https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/#tracing</span><span class="w">
-</span><span class="w"></span><span class="nt">tracing</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">zipkin</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">sampler</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">probability</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
-</span><span class="w">    </span><span class="nt">http</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}</span><span class="w">
-</span><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}</span><span class="w">
-</span><span class="w">    </span><span class="nt">supportsJoin</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w"></span><span class="k">tracing</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">zipkin</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="k">sampler</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">probability</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">    </span><span class="k">http</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">url</span><span class="p">:</span><span class="w"> </span>${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}<span class="w">
+</span><span class="w">      </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}<span class="w">
+</span><span class="w">    </span><span class="k">supportsJoin</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="w">
 </span></code></pre></div><p>Once enabled Micronaut will automatically publish traces received from the service and also automatically instrument any outgoing HTTP client or Kafka producers to include trace information such that trace information can be propagated from one service to another.</p>
 <p>This is universally enabled across all applications without the developer having to do anything additional, whilst the original MuShop requires explicit declarations of all incoming and outgoing traced endpoints.</p>
@@ -696,6 +699,22 @@
   
 
   
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
   
     
 

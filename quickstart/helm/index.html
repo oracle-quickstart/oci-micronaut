@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>[Oracle Cloud] Helm :: Micronaut MuShop</title>
+  
+  <meta name="application-name" content="Micronaut MuShop"/>
+<meta name="description" content="Oracle Cloud Native Workshop">
+<meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
+
+<meta property="og:title" content="Micronaut MuShop - [Oracle Cloud] Helm" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/quickstart/helm/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
+  <link rel="manifest" href="../../icons/site.webmanifest">
+  <link rel="mask-icon" href="../../icons/safari-pinned-tab.svg" color="#41727e">
+  <meta name="msapplication-TileColor" content="#c74634">
+  <meta name="theme-color" content="#fcfbfa">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
+  <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
+  <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
+</head>
+
+  <body class="" data-url="/quickstart/helm/">
+    
+<div class="uk-navbar-container uk-hidden@s">
+  <div class="">
+    <nav role="navigation" class="uk-light uk-navbar" uk-navbar>
+      <div class="uk-navbar-left">
+        <a href="../../index.html" class="uk-navbar-item uk-logo">
+          <img
+            alt="Micronaut MuShop"
+            class="uk-width-small"
+            src="../../images/logo.dark.png">
+        </a>
+      </div>
+      <div class="uk-navbar-right">
+        <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #navigation"></a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<div class="uk-grid">
+  
+  
+  <aside
+    id="navigation"
+    class="rw-sidebar uk-offcanvas uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-light uk-padding-remove"
+    uk-offcanvas="overlay: true;">
+    <div class="uk-offcanvas-bar uk-padding-small">
+      
+      
+      <section>
+        <div class="uk-margin-bottom uk-visible@s">
+          <a href="../../index.html" class="uk-logo">
+            <img src="../../images/logo.dark.png" alt="Micronaut MuShop">
+          </a>
+        </div>
+        <div class="uk-margin-bottom">
+          <form class="uk-search uk-search-default uk-width-expand">
+  <span class="uk-search-icon-flip" uk-search-icon></span>
+  <input id="search" class="uk-search-input uk-width-expand" type="search" placeholder="Search...">
+</form>
+<div id="search-results" class="uk-background-primary uk-text-small"></div>
+        </div>
+        <ul class="uk-nav uk-nav-primary" uk-nav="multiple: true; toggle: > a .uk-icon">
+          <li class="uk-nav-divider"></li>
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/introduction/" title="Introduction" class="">
+    <a href="../../introduction/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Introduction</div>
+      </div>
+    </a>
+    
+    
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent uk-open">
+    <a href="../../quickstart/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Getting Started</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="uk-active">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/micronaut/" title="Micronaut Advantages" class=" uk-parent">
+    <a href="../../micronaut/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Micronaut Advantages</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/cloudnative/" title="Cloud Native Configuration" class="">
+      <a href="../../micronaut/cloudnative/" class="uk-text-truncate">
+        Cloud Native Configuration
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/service-discovery/" title="Service Discovery" class="">
+      <a href="../../micronaut/service-discovery/" class="uk-text-truncate">
+        Service Discovery
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/tracing/" title="Distributed Tracing" class="">
+      <a href="../../micronaut/tracing/" class="uk-text-truncate">
+        Distributed Tracing
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/management/" title="Health Checks &amp; Observability" class="">
+      <a href="../../micronaut/management/" class="uk-text-truncate">
+        Health Checks &amp; Observability
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/metrics/" title="Application Metrics and Monitoring" class="">
+      <a href="../../micronaut/metrics/" class="uk-text-truncate">
+        Application Metrics and Monitoring
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/atp/" title="Connecting Autonomous Database" class="">
+      <a href="../../micronaut/atp/" class="uk-text-truncate">
+        Connecting Autonomous Database
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/data/" title="Database Access" class="">
+      <a href="../../micronaut/data/" class="uk-text-truncate">
+        Database Access
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/openapi/" title="OpenAPI / Swagger" class="">
+      <a href="../../micronaut/openapi/" class="uk-text-truncate">
+        OpenAPI / Swagger
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/gateway/" title="Gateway Service" class="">
+      <a href="../../micronaut/gateway/" class="uk-text-truncate">
+        Gateway Service
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/security/" title="Security" class="">
+      <a href="../../micronaut/security/" class="uk-text-truncate">
+        Security
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/messaging/" title="Messaging" class="">
+      <a href="../../micronaut/messaging/" class="uk-text-truncate">
+        Messaging
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/httpclient/" title="HTTP Client" class="">
+      <a href="../../micronaut/httpclient/" class="uk-text-truncate">
+        HTTP Client
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="">
+      <a href="../../micronaut/deployment/" class="uk-text-truncate">
+        Deployment
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/native/" title="GraalVM Native Image" class="">
+      <a href="../../micronaut/native/" class="uk-text-truncate">
+        GraalVM Native Image
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/cleanup/" title="Cleanup" class="">
+    <a href="../../cleanup/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Cleanup</div>
+      </div>
+    </a>
+    
+    
+  </li>
+  
+
+ 
+
+          
+          <li class="uk-nav-divider"></li>
+        </ul>
+      </section>
+      
+      <section>
+        <ul class="uk-nav uk-nav-default" uk-nav>
+          
+          
+          <li>
+            <a title="More Information" href="../../resources" class="uk-text-truncate">
+              <span uk-icon='icon: info; ratio: 1.25'></span>
+              <span class="uk-text-middle">More Information</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Acknowledgements" href="../../acknowledgements" class="uk-text-truncate">
+              <span uk-icon='icon: users; ratio: 1.25'></span>
+              <span class="uk-text-middle">Acknowledgements</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Tags" href="../../tags" class="uk-text-truncate">
+              <span uk-icon='icon: tag; ratio: 1.25'></span>
+              <span class="uk-text-middle">Tags</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="GitHub Source" href="https://github.com/pgressa/oci-cloudnative" class="uk-text-truncate">
+              <span uk-icon='icon: github; ratio: 1.25'></span>
+              <span class="uk-text-middle">GitHub Source</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Report Issue" href="https://github.com/pgressa/oci-cloudnative/issues" class="uk-text-truncate">
+              <span uk-icon='icon: warning; ratio: 1.25'></span>
+              <span class="uk-text-middle">Report Issue</span>
+              
+            </a>
+          </li>
+            <li>
+              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/quickstart/helm.md" target="blank">
+                <span uk-icon="pencil"></span>
+                <span class="uk-text-middle">Edit this page</span>
+              </a>
+            </li>
+            
+          
+        </ul>
+      </section>
+      <section class="uk-margin-top">
+        <hr>
+        <ul id="rw-settings" class="uk-nav uk-nav-default" uk-nav>
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>Theme</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="theme"
+    target="html, .content-container" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="uk-background-default" >
+      Light
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="uk-light uk-background-secondary" >
+      Dark
+    </button></div>
+</li>
+
+
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>OS</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="platform"
+    target="html" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="stg-os-macos" >
+      Mac
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-linux" >
+      Linux
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-windows" >
+      Windows
+    </button></div>
+</li>
+</ul>
+
+
+
+      </section>
+      <section class="uk-text-small uk-text-lighter uk-margin-top">
+        <hr>
+        <div class="uk-text-muted">
+  <div class="uk-margin-small">
+    Made with <span uk-icon="icon: heart; ratio: 0.75"></span> by Oracle Developers
+  </div>
+  Copyright © 2021 Oracle and/or its affiliates. All rights reserved.
+</div>
+      </section>
+    </div>
+  </aside>
+  
+  <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+
+
+
+    <div class="content-container uk-width-expand">
+      <div class="uk-position-relative">
+        <div id="content" class="uk-grid uk-container-xlarge" uk-grid>
+          
+
+<div class="uk-flex-last uk-width-1-4 uk-visible@l">
+  <aside id="toc-nav" uk-sticky="offset: 40">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#deploy-mushop">Deploy MuShop</a>
+              <ul>
+                <li><a href="#configure">Configure</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    <hr/>
+    
+  <div>
+    
+    <a class="uk-label" href="../../tags/kubernetes">
+      <span uk-icon="tag"></span>
+      Kubernetes
+    </a>
+    
+    <a class="uk-label" href="../../tags/oke">
+      <span uk-icon="tag"></span>
+      OKE
+    </a>
+    
+    <a class="uk-label" href="../../tags/setup">
+      <span uk-icon="tag"></span>
+      Setup
+    </a>
+    
+    <a class="uk-label" href="../../tags/helm">
+      <span uk-icon="tag"></span>
+      Helm
+    </a>
+    
+  </div>
+
+  </aside>
+</div>
+
+
+          <main class="uk-width-expand">
+            <header>
+  
+  
+    <ul class="uk-breadcrumb uk-margin-top uk-text-small">
+    
+  
+  <li><a href='../../'>Home</a></li> <li><a href='../../quickstart/'>Getting Started</a></li> <li>[Oracle Cloud] Helm</li>
+    </ul></header>
+
+
+
+            <h1 class="rw-accent">[Oracle Cloud] Helm</h1>
+              
+  <p>This deployment option utilizes <a href="https://github.com/helm/helm"><code>helm</code></a> for
+configuration and installation onto a <a href="https://kubernetes.io/">Kubernetes</a>
+cluster. It is <em>recommended</em> to use an
+<a href="https://docs.cloud.oracle.com/iaas/Content/ContEng/Concepts/contengoverview.htm">Oracle Container Engine for Kubernetes</a>
+cluster, however other <strong>standard</strong> Kubernetes clusters will also work.</p>
+<pre><code class="language-shell--linux-macos" data-lang="shell--linux-macos">cd deploy/complete/helm-chart
+</code></pre><pre><code class="language-shell--win" data-lang="shell--win">dir deploy/complete/helm-chart
+</code></pre><blockquote>
+<p>Path for Cloud Native deployment configurations using <code>helm</code></p>
+</blockquote>
+<p>Deploying the complete MuShop application with backing services from Oracle Cloud
+Infrastructure involves the use of the following helm charts:</p>
+<ol>
+<li><a href="#setup"><code>setup</code></a>: Installs umbrella chart dependencies on the cluster <em>(optional)</em></li>
+<li><strong>Not supported yet</strong> <a href="#provision"><code>provision</code></a>: Provisions OCI resources integrated with Service Broker <em>(optional)</em></li>
+<li><a href="#deploy-mushop"><code>mushop</code></a>: Deploys the MuShop application runtime</li>
+</ol>
+<p>To get started, create a namespace for the application and its associative deployments:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create ns mushop
+</code></pre></div><hr>
+<h3 id="setup">Setup</h3>
+<p>MuShop provides an umbrella helm chart called <code>setup</code>, which includes several
+<em>recommended</em> installations on the cluster. These represent common 3rd party
+services, which integrate with Oracle Cloud Infrastructure or enable certain
+application features.</p>
+<table>
+<thead>
+<tr>
+<th>Chart</th>
+<th>Purpose</th>
+<th>Option</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/helm/charts/blob/master/stable/prometheus/README.md">Prometheus</a></td>
+<td>Service metrics aggregation</td>
+<td><code>prometheus.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://github.com/helm/charts/blob/master/stable/grafana/README.md">Grafana</a></td>
+<td>Infrastructure/service visualization dashboards</td>
+<td><code>grafana.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://github.com/helm/charts/blob/master/stable/metrics-server/README.md">Metrics Server</a></td>
+<td>Support for Horizontal Pod Autoscaling</td>
+<td><code>metrics-server.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://kubernetes.github.io/ingress-nginx/">Ingress Nginx</a></td>
+<td>Ingress controller and public Load Balancer</td>
+<td><code>ingress-nginx.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kubernetes-sigs/service-catalog/blob/master/charts/catalog/README.md">Service Catalog</a></td>
+<td>Service Catalog chart utilized by Oracle Service Broker</td>
+<td><code>catalog.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jetstack/cert-manager/blob/master/README.md">Cert Manager</a></td>
+<td>x509 certificate management for Kubernetes</td>
+<td><code>cert-manager.enabled</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><a href="https://github.com/helm/charts/blob/master/stable/jenkins/README.md">Jenkins</a></td>
+<td>Jenkins automation server on Kubernetes</td>
+<td><code>jenkins.enabled</code></td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Dependencies installed with <code>setup</code> chart. <strong>NOTE</strong> as these are very common installations, each may be disabled as needed to resolve conflicts.</p>
+</blockquote>
+<p>From <code>deploy/complete/helm-chart</code> directory:</p>
+<ol>
+<li>
+<p>Install chart dependencies:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">helm dependency update setup
+</code></pre></div></li>
+<li>
+<p>Install <code>setup</code> chart:</p>
+<pre><code class="language-shell--helm2" data-lang="shell--helm2">helm install setup \
+  --name mushop-utils \
+  --namespace mushop-utilities
+</code></pre><pre><code class="language-shell--helm3" data-lang="shell--helm3">kubectl create ns mushop-utilities
+</code></pre><pre><code class="language-shell--helm3" data-lang="shell--helm3">helm install mushop-utils setup \
+  --namespace mushop-utilities
+</code></pre></li>
+</ol>
+<blockquote>
+<p><strong>OPTIONAL</strong> The Jenkins automation server can be enabled by setting <code>jenkins.enabled</code> to <code>true</code> in <code>values.yaml</code> or by adding the command line flag <code>--set jenkins.enabled=true</code> in the <code>helm install</code> command above.</p>
+</blockquote>
+<pre><code class="language-shell--helm3" data-lang="shell--helm3">helm install mushop-utils setup \
+  --namespace mushop-utilities \
+  --set jenkins.enabled=true
+</code></pre><ol>
+<li>
+<p><strong>NOTE</strong> the public <code>EXTERNAL-IP</code> assigned to the ingress controller load balancer:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get svc mushop-utils-ingress-nginx-controller <span class="se">\
+</span><span class="se"></span>  --namespace mushop-utilities
+</code></pre></div></li>
+</ol>
+<h3 id="deploy-mushop">Deploy MuShop</h3>
+<p>Deploying the full application requires cloud backing services from Oracle Cloud Infrastructure.
+These services must be provisioned manually and are configured using kubernetes secrets.</p>
+<h4 id="configure">Configure</h4>
+<ol>
+<li>
+<p>Provision an Autonomous Transaction Processing (ATP) database. Once <strong>RUNNING</strong> download the DB Connection Wallet and configure secrets as follows:</p>
+<ul>
+<li>
+<p>Create <code>oadb-admin</code> secret containing the database administrator password. Used once for schema initializations.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oadb-admin <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_admin_pw</span><span class="o">=</span><span class="s1">&#39;&lt;DB_ADMIN_PASSWORD&gt;&#39;</span>
+</code></pre></div></li>
+<li>
+<p>Create <code>oadb-wallet</code> secret with the Wallet <em>contents</em> using the downloaded <code>Wallet_*.zip</code>. The extracted <code>Wallet_*</code> directory is specified as the secret contents.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oadb-wallet <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-file<span class="o">=</span>&lt;PATH_TO_EXTRACTED_WALLET_FOLDER&gt;
+</code></pre></div></li>
+<li>
+<p>Create <code>oadb-connection</code> secret with the Wallet <strong>password</strong> and the service <strong>TNS name</strong> to use for connections.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oadb-connection <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_wallet_pw</span><span class="o">=</span><span class="s1">&#39;&lt;DB_WALLET_PASSWORD&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_service</span><span class="o">=</span><span class="s1">&#39;&lt;DB_TNS_NAME&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_ocid</span><span class="o">=</span><span class="s1">&#39;&lt;DB_OCID&gt;&#39;</span> <span class="se">\
+</span></code></pre></div><blockquote>
+<p>Each database has 5 unique TNS Names displayed when the Wallet is downloaded an example would be <code>mushopdb_TP</code>.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Optional</strong>: Instead of creating a shared database for the entire application, you may establish full separation of services by provisioning <em>individual</em> ATP instances for each service that requires a database. To do so, repeat the previous steps for each database,and give each secret a unique name, for example: <code>carts-oadb-admin</code>, <code>carts-oadb-connection</code>, <code>carts-oadb-wallet</code>.</p>
+<ul>
+<li><code>carts</code></li>
+<li><code>catalogue</code></li>
+<li><code>orders</code></li>
+<li><code>user</code></li>
+</ul>
+</li>
+<li>
+<p>Provision a Streaming instance from the <a href="https://console.us-phoenix-1.oraclecloud.com/storage/streaming">Oracle Cloud Infrastructure Console</a>, and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.</p>
+<ul>
+<li>
+<p>Create <code>oss-connection</code> secret containing the Stream connection details.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oss-connection <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">bootstrapServers</span><span class="o">=</span><span class="s1">&#39;&lt;OSS STREAM BOOTSTRAP SERVERS&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">jaasConfig</span><span class="o">=</span><span class="s1">&#39;&lt;JAAS CONFIG&gt;&#39;</span>
+</code></pre></div></li>
+</ul>
+<p>Note that <code>&lt;OSS STREAM BOOTSTRAP SERVERS&gt;</code> and <code>&lt;JAAS CONFIG&gt;</code> values can can be found in the <code>Stream Pool -&gt; Kafka Connection Setting</code>. In case you want to connect under different user then the <code>&lt;JAAS CONFIG&gt;</code> format is:</p>
+<pre><code>jaasConfig=&quot;org.apache.kafka.common.security.plain.PlainLoginModule required username=\&quot;&lt;USER_COMPARTMENT_NAME&gt;/&lt;USER_NAME&gt;/&lt;OSS_POOL_ID&gt;\&quot; password=\&quot;&lt;USER_TOKEN&gt;\&quot;;&quot;
+</code></pre><p>Make sure the user has permission to write to the given stream.</p>
+</li>
+<li>
+<p>Configure a config map with deployment details:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create cm oci-deployment <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">compartment_id</span><span class="o">=</span><span class="s1">&#39;&lt;COMPARTMENT ID&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">region</span><span class="o">=</span><span class="s1">&#39;&lt;OCI REGION&gt;&#39;</span>
+</code></pre></div></li>
+<li>
+<p><strong>Optional</strong>: If you want to configure and use Oracle Application Monitoring service, make sure you create the APM domain and create K8s secret with connection details.</p>
+<ol>
+<li>Navigate to Observability &amp; Management -&gt; Application Performance Monitoring -&gt; Administration.</li>
+<li>Hit the button Create APM domain and enter the domain name.</li>
+<li>Once created make a note of <code>Data Upload Endpoint</code> and <code>auto_generated_public_key</code>.</li>
+<li>Edit the <code>mushop.tfvars</code>:</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">  kubectl create secret generic oss-connection <span class="se">\
+</span><span class="se"></span>    --namespace mushop <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">zipkin_enabled</span><span class="o">=</span><span class="nb">true</span> <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">zipkin_path</span><span class="o">=</span><span class="s1">&#39;&lt;APM DOMAIN DATA UPLOAD ENDPOINT&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">zipkin_url</span><span class="o">=</span><span class="s1">&#39;/20200101/observations/public-span?dataFormat=zipkin&amp;dataFormatVersion=2&amp;dataKey=&lt;AUTO_GENERATED_PUBLIC_KEY&gt;&#39;</span>
+</code></pre></div></li>
+<li>
+<p><strong>Optional</strong>: If you want to configure and use the functions/API Gateway functionality, make sure you create and deploy the function and the API Gateway by following the instructions in the <code>src/functions/newsletter-subscription</code> folder.</p>
+<p>To configure the <code>api</code> chart to use the newsletter subscribe function, create K8s external service:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt;EOF | kubectl apply -f -
+</span><span class="s">piVersion: v1
+</span><span class="s">kind: Service
+</span><span class="s">metadata:
+</span><span class="s">  name: mushop-newsletter
+</span><span class="s">  namespace: mushop
+</span><span class="s">spec:
+</span><span class="s">  externalName: &lt;API_GATEWAY_URL&gt;
+</span><span class="s">  ports:
+</span><span class="s">  - port: 443
+</span><span class="s">    protocol: TCP
+</span><span class="s">    targetPort: 443
+</span><span class="s">  type: ExternalName
+</span><span class="s">status:
+</span><span class="s">  loadBalancer: {}
+</span><span class="s">EOF</span>
+</code></pre></div><p>Replace the <code>API_GATEWAY_URL</code> with an actual <strong>hostname</strong> URL you got when you deployed your API gateway instance. For example: <code>jbwyanwkmxqweq.apigateway.us-ashburn-1.oci.customer-oci.com</code></p>
+</li>
+<li>
+<p>Make a copy of the <a href="./mushop/values-dev.yaml"><code>values-dev.yaml</code></a> file in this directory. Then complete the missing values (e.g. secrets) like the following:</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">global</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">ossConnectionSecret</span><span class="p">:</span><span class="w"> </span>oss-connection<span class="w">     </span><span class="c"># Name of Stream connection secret</span><span class="w">
+</span><span class="w">  </span><span class="k">oadbAdminSecret</span><span class="p">:</span><span class="w"> </span>oadb-admin<span class="w">             </span><span class="c"># Name of DB Admin secret</span><span class="w">
+</span><span class="w">  </span><span class="k">oadbWalletSecret</span><span class="p">:</span><span class="w"> </span>oadb-wallet<span class="w">           </span><span class="c"># Name of Wallet secret</span><span class="w">
+</span><span class="w">  </span><span class="k">oadbConnectionSecret</span><span class="p">:</span><span class="w"> </span>oadb-connection<span class="w">   </span><span class="c"># Name of DB Connection secret</span><span class="w">
+</span><span class="w">  </span><span class="k">ociDeploymentConfigMap</span><span class="p">:</span><span class="w"> </span>oci-deployment<span class="w">  </span><span class="c"># Name of Deployment details config map</span><span class="w">
+</span><span class="w"></span><span class="k">tags</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">atp</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">                               </span><span class="c"># General flag to use Oracle Autonomous Database</span><span class="w">
+</span><span class="w">  </span><span class="k">streaming</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">                         </span><span class="c"># General flag to use Oracle Streaming Service</span><span class="w">
+</span></code></pre></div><blockquote>
+<p><strong>NOTE:</strong> If it&rsquo;s desired to connect a separate databases for a given service, you can specify values specific for each service, such as <code>carts.oadbAdminSecret</code>, <code>carts.oadbWalletSecret</code>&hellip;</p>
+</blockquote>
+</li>
+<li>
+<p>From <code>deploy/complete/helm-chart</code> directory:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">helm install mushop mushop <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  -f &lt;edited values-dev.yaml&gt;
+</code></pre></div></li>
+<li>
+<p>Wait for services to be <em>Ready</em>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get pod --watch --namespace mushop
+</code></pre></div></li>
+<li>
+<p>Open a browser with the <code>EXTERNAL-IP</code> created during setup, <strong>OR</strong> <code>port-forward</code>
+directly to the <code>edge</code> service resource:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl port-forward <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  svc/edge 8000:80
+</code></pre></div><blockquote>
+<p>Using <code>port-forward</code> connecting <a href="http://localhost:8000">localhost:8000</a> to the <code>edge</code> service</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get svc mushop-utils-ingress-nginx-controller <span class="se">\
+</span><span class="se"></span>  --namespace mushop-utilities
+</code></pre></div><blockquote>
+<p>Locating <code>EXTERNAL-IP</code> for Ingress Controller. <strong>NOTE</strong> this will be
+<a href="https://localhost">localhost</a> on local clusters.</p>
+</blockquote>
+</li>
+</ol>
+<aside class="warning">
+  It may take a few moments to download all the application images.
+  It is also normal for some pods to show errors in mock mode.
+</aside>
+
+
+            </main>
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+    
+<footer class="uk-position-fixed uk-position-bottom">
+  <div class="uk-grid">
+    
+    
+    <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+    <div class="uk-width-expand">
+      <div>
+      
+      
+      
+      
+
+
+  
+    
+    
+  
+
+  
+  
+  
+    
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+        <div class="uk-flex uk-flex-between uk-margin-top">
+          <a href="../../quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+            <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
+            <label class="uk-visible@m">[Oracle Cloud] Terraform &#43; Helm</label>
+          </a><span></span>
+          <a href="../../micronaut/" title="Micronaut Advantages" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">Micronaut Advantages</label>
+            <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
+          </a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script type="text/javascript">
+  (function(w, s) {
+    Object.assign(s, {
+      BaseURL: '',
+      RelURL: '\/',
+      cssConfig: {
+        table: 'uk-table uk-table-small uk-table-striped',
+        '#TableOfContents > ul': 'uk-nav uk-nav-default uk-nav-parent-icon',
+        '#TableOfContents > ul ul': 'uk-nav-sub',
+      },
+      uikit: {
+        '#TableOfContents > ul': ['scrollspyNav', { closest: 'li', offset: 10 }],
+        
+      }
+    });
+  })(window, window.Site = window.Site || {});
+</script>
+
+<script src="../../js/vendor.min.e005c93e1a94928260d72859a61ad84fa0324ea594a8fb4318c00381a451a8c3.js" ></script><script src="../../js/extras.min.88dc65673919eb6e8151f4f309d54cecb7ba304c48d378ff4d9b858b6b1d2742.js"  async></script><script src="../../js/site.min.d7973f1560bba2270850ebebf4e3a2a2e58e84e1f993191030325ddaef76a81c.js"  async></script>
+  </body>
+</html>

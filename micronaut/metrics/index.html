@@ -19,12 +19,12 @@
   <meta name="msapplication-TileColor" content="#c74634">
   <meta name="theme-color" content="#fcfbfa">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="../../sass/main.min.06f0b677f54f1474c0555ec1f793edae4d8034da1715d1fd15ba100516cc3791.css" integrity="sha256-BvC2d/VPFHTAVV7B95Ptrk2ANNoXFdH9FboQBRbMN5E=">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
   <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
   <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
 </head>
 
-  <body class="" data-url="../../micronaut/metrics/">
+  <body class="" data-url="/micronaut/metrics/">
     
 <div class="uk-navbar-container uk-hidden@s">
   <div class="">
@@ -117,9 +117,9 @@
 
   
     
-    <li data-nav-id="/quickstart/basic/" title="Always Free" class="">
-      <a href="../../quickstart/basic/" class="uk-text-truncate">
-        Always Free
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
       </a>
     </li>
     
@@ -135,9 +135,27 @@
 
   
     
-    <li data-nav-id="/quickstart/kubernetes/" title="Kubernetes Deployment" class="">
-      <a href="../../quickstart/kubernetes/" class="uk-text-truncate">
-        Kubernetes Deployment
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
       </a>
     </li>
     
@@ -546,21 +564,6 @@
       Windows
     </button></div>
 </li>
-<li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
-  <div class="uk-width-1-4">
-    
-    <span>Helm</span>
-  </div>
-  <div class="uk-button-group rw-setting"
-    setting="helm"
-    target="html" ><button class="uk-button uk-button-small uk-button-secondary
-    uk-active" toggle="stg-helm-3" >
-      3.x
-    </button><button class="uk-button uk-button-small uk-button-secondary
-    " toggle="stg-helm-2" >
-      2.x
-    </button></div>
-</li>
 </ul>
 
 
@@ -609,18 +612,18 @@
 <div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">r</span><span class="p">.</span><span class="nf">Handle</span><span class="p">(</span><span class="s">&#34;/metrics&#34;</span><span class="p">,</span> <span class="nx">promhttp</span><span class="p">.</span><span class="nf">Handler</span><span class="p">())</span>
 </code></pre></div><p>Micronaut builds on <a href="https://micrometer.io">Micrometer</a> and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.</p>
 <p>Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">micronaut</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">export</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="nt">prometheus</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">        </span><span class="nt">descriptions</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">        </span><span class="nt">step</span><span class="p">:</span><span class="w"> </span><span class="l">PT1M    	</span><span class="w">
-</span><span class="w">      </span><span class="nt">oraclecloud</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}</span><span class="w">
-</span><span class="w">        </span><span class="nt">resourceGroup</span><span class="p">:</span><span class="w"> </span><span class="l">${ORACLECLOUD_METRICS_RESOURCEGROUP:user}</span><span class="w">
-</span><span class="w">        </span><span class="nt">compartmentId</span><span class="p">:</span><span class="w"> </span><span class="l">${ORACLECLOUD_METRICS_COMPARTMENT_ID}</span><span class="w">
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">micronaut</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">metrics</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">export</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">prometheus</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span><span class="k">descriptions</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span><span class="k">step</span><span class="p">:</span><span class="w"> </span>PT1M<span class="w">    	
+</span><span class="w">      </span><span class="k">oraclecloud</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span><span class="k">namespace</span><span class="p">:</span><span class="w"> </span>${ORACLECLOUD_METRICS_NAMESPACE<span class="p">:</span>micronaut_mushop}<span class="w">
+</span><span class="w">        </span><span class="k">resourceGroup</span><span class="p">:</span><span class="w"> </span>${ORACLECLOUD_METRICS_RESOURCEGROUP<span class="p">:</span>user}<span class="w">
+</span><span class="w">        </span><span class="k">compartmentId</span><span class="p">:</span><span class="w"> </span>${ORACLECLOUD_METRICS_COMPARTMENT_ID}<span class="w">
 </span><span class="w">
 </span></code></pre></div><p>In addition, timers and counters can easily be added to any code in the Micronaut application simply by annotating a method with <code>@Timed</code> or <code>@Counted</code>, for example the original Helidon/Java code was written with explicit calls to add timings and meters:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteCartItem</span><span class="o">(</span><span class="n">ServerRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServerResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
@@ -720,6 +723,22 @@
   
 
   
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
   
     
 

@@ -52,8 +52,13 @@
   </url>
   
   <url>
-    <loc>/quickstart/basic/</loc>
-    <lastmod>2020-03-06T12:28:12-07:00</lastmod>
+    <loc>/quickstart/dockecompose/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/quickstart/terraform/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
   </url>
   
   <url>
@@ -73,7 +78,7 @@
   </url>
   
   <url>
-    <loc>/quickstart/kubernetes/</loc>
+    <loc>/quickstart/helm/</loc>
     <lastmod>2020-03-06T12:27:43-07:00</lastmod>
   </url>
   
@@ -84,6 +89,41 @@
   <url>
     <loc>/cleanup/</loc>
     <lastmod>2020-03-09T16:06:00-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/docker/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/docker-compose/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/helm/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/oke/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/setup/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/terraform/</loc>
+    <lastmod>2020-06-02T12:28:12-07:00</lastmod>
   </url>
   
   <url>
@@ -102,52 +142,12 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2020-03-09T16:06:00-06:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/uninstall/</loc>
     <lastmod>2020-03-09T16:06:00-06:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/atp/</loc>
-    <lastmod>2020-03-06T12:28:12-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/free/</loc>
-    <lastmod>2020-03-06T12:28:12-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/resource-manager/</loc>
-    <lastmod>2020-03-06T12:28:12-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/terraform/</loc>
-    <lastmod>2020-03-06T12:28:12-07:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/kubernetes/</loc>
-    <lastmod>2020-03-06T12:27:43-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/mock-mode/</loc>
-    <lastmod>2020-03-06T12:27:43-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/oke/</loc>
-    <lastmod>2020-03-06T12:27:43-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/setup/</loc>
     <lastmod>2020-03-06T12:27:43-07:00</lastmod>
   </url>
   

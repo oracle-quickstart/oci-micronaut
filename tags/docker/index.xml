@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Micronaut MuShop</title>
+    <link>/tags/docker/</link>
+    <description>Recent content in Docker on Micronaut MuShop</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 Jun 2020 12:28:12 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Local] Docker compose</title>
+      <link>/quickstart/dockecompose/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
+      
+      <guid>/quickstart/dockecompose/</guid>
+      <description>The complete Micronaut MuShop application can be run using docker-compose locally.
+Default Configuration The default configuration that the docker-compose file uses is to be offline.
+When using docker-compose some services are not available, such as publishing the newsletter which uses an Oracle Cloud Function, however the remaining services are functional.
+Prerequisites You need Docker and Docker Composed installed locally and at least 8GB of resources assigned to Docker in order to run instances of Oracle database within containers.</description>
+    </item>
+    
+  </channel>
+</rss>

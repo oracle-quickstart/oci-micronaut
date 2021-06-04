@@ -6,15 +6,19 @@
     <description>Recent content in Source code on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Mar 2020 15:34:14 -0700</lastBuildDate><atom:link href="/tags/source-code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Mar 2020 15:34:14 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/source-code/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Getting Started</title>
       <link>/quickstart/</link>
       <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
       
       <guid>/quickstart/</guid>
-      <description>This project supports deployment modes for the purposes of demonstrating different functionality on Oracle Cloud Infrastructure. While the source code is identical across these options, certain services are omitted in the basic deployment.
-   Basic: deploy/basic Cloud Native: deploy/complete     Simplified runtime utilizing only Always Free resources deployed with Resource Manager Full-featured Kubernetes microservices deployment showcasing Oracle Cloud Native technologies and backing services    mushop └── deploy ├── basic └── complete Clone Repository Each topic in this material references the source code, which should be cloned to a personal workspace.</description>
+      <description>This project supports deployment modes for the purposes of demonstrating different functionality of Micronaut and Oracle Cloud Infrastructure.
+   Basic: deploy/basic Not supported yet Cloud Native: deploy/complete     Simplified runtime utilizing only Always Free resources deployed with Resource Manager Full-featured Kubernetes microservices deployment showcasing Oracle Cloud Native technologies and backing services    mushop └── deploy ├── basic └── complete └── docker-compose └── helm-chart └── terraform Clone Repository Each topic in this material references the source code, which should be cloned to a personal workspace.</description>
     </item>
     
   </channel>

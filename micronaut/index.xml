@@ -5,7 +5,11 @@
     <link>/micronaut/</link>
     <description>Recent content in Micronaut Advantages on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/micronaut/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    
+	<atom:link href="/micronaut/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Cloud Native Configuration</title>
       <link>/micronaut/cloudnative/</link>

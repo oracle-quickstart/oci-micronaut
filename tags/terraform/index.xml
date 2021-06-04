@@ -6,17 +6,23 @@
     <description>Recent content in Terraform on Micronaut MuShop</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Mar 2020 12:28:12 -0700</lastBuildDate><atom:link href="/tags/terraform/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jun 2020 12:28:12 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/terraform/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
-      <title>Always Free</title>
-      <link>/quickstart/basic/</link>
-      <pubDate>Fri, 06 Mar 2020 12:28:12 -0700</pubDate>
+      <title>[Oracle Cloud] Terraform &#43; Helm</title>
+      <link>/quickstart/terraform/</link>
+      <pubDate>Tue, 02 Jun 2020 12:28:12 -0700</pubDate>
       
-      <guid>/quickstart/basic/</guid>
-      <description>Basic Deployment This deployment is designed to run on Oracle Cloud Infrastructure using only Always Free resources. It uses MuShop source code and the Oracle Cloud Infrastructure Terraform Provider to produce a Resource Manager stack, that provisions all required resources and configures the application on those resources.
-cd deploy/basic dir deploy/basic  Source directory for basic deployment build/configuration
- These steps outline the Basic deployment using Resource Manager:
- Download the latest mushop-basic-stack-latest.</description>
+      <guid>/quickstart/terraform/</guid>
+      <description>The terraform configuration scrips can be used to completely install MuShop to Oracle Cloud along with necessary Oracle Cloud Infrastructure services.
+Prerequisites You need to install terraform locally.
+Configuration Create copy of terraform variables file terraform.tfvars.example.
+cp terraform.tfvars.example mushop.tfvars Then edit the mushop.tfvars:
+  Configure the OCI authentication and deployment variables:
+# OCI authenticationtenancy_ocid=&amp;#34;ocid1.tenancy.....&amp;#34;fingerprint=&amp;#34;&amp;#34;# e.g.: &amp;#34;5f:53:...&amp;#34; or leave blank if using CloudShelluser_ocid=&amp;#34;&amp;#34;# e.g.: &amp;#34;ocid1.user...&amp;#34; or leave blank if using CloudShellprivate_key_path=&amp;#34;&amp;#34;# e.</description>
     </item>
     
   </channel>

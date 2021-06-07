@@ -12,6 +12,8 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
+      cloudwatch:
+        enabled: false
   router:
     static-resources:
       swagger:

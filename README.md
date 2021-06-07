@@ -11,6 +11,13 @@ The sample application implements an e-commerce platform built as a set of micro
 
 MuShop can be deployed to Oracle Cloud Infrastructure on [Kubernetes](https://kubernetes.io/) with [Helm](https://helm.sh) and [Terraform](https://www.terraform.io), or run locally in [Docker](https://www.docker.com/).
 
+### Oracle Cloud
+
+Use the following Deploy to Oracle Cloud button to use Oracle Cloud Resource Manager to deploy and configure MuShop on OKE. 
+#### [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/pgressa/oraclecloud-cloudnative/releases/latest/download/mushop-stack-latest.zip)
+
+Alternatively you can manually upload the Oracle Cloud Resource Manager [zip file](https://github.com/pgressa/oraclecloud-cloudnative/releases/latest/download/mushop-stack-latest.zip).
+
 ### Docker
 
 To deploy locally with Docker, follow [these instructions](https://github.com/pgressa/oci-cloudnative/blob/master/deploy/complete/docker-compose). 
@@ -33,8 +40,6 @@ Deploy the complete MuShop with all Oracle Cloud services automatically using th
 The following diagram shows the topology created by this stack.
 
 ![MuShop Complete Infra](./images/complete/00-Topology.png)
-
-#### [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/pgressa/oraclecloud-cloudnative/releases/latest/download/mushop-stack-latest.zip)
 
 ## Questions
 

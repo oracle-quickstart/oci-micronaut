@@ -18,7 +18,7 @@
       
       <guid>/quickstart/</guid>
       <description>This project supports deployment modes for the purposes of demonstrating different functionality of Micronaut and Oracle Cloud Infrastructure.
-   Basic: deploy/basic Not supported yet Cloud Native: deploy/complete     Simplified runtime utilizing only Always Free resources deployed with Resource Manager Full-featured Kubernetes microservices deployment showcasing Oracle Cloud Native technologies and backing services    mushop └── deploy ├── basic └── complete └── docker-compose └── helm-chart └── terraform Clone Repository Each topic in this material references the source code, which should be cloned to a personal workspace.</description>
+   Basic: deploy/basic Not supported yet Cloud Native: deploy/complete     Simplified runtime utilizing only Always Free resources deployed with Resource Manager Full-featured Kubernetes microservices deployment showcasing Oracle Cloud Native technologies and backing services           mushop └── deploy ├── basic └── complete └── docker-compose └── helm-chart └── terraform Clone Repository Each topic in this material references the source code, which should be cloned to a personal workspace.</description>
     </item>
     
   </channel>

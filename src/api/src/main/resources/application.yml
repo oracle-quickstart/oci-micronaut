@@ -9,6 +9,8 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
+      cloudwatch:
+        enabled: false
     enabled: true
   security:
     authentication: session

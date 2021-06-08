@@ -1,0 +1,4 @@
+alter session set "_ORACLE_SCRIPT"=true;
+CREATE USER carts IDENTIFIED BY "micronaut";
+GRANT SODA_APP, CONNECT, RESOURCE TO carts;
+GRANT UNLIMITED TABLESPACE TO carts;

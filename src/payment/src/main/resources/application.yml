@@ -17,7 +17,7 @@ micronaut:
         mapping: /swagger/**
 payment:
   decline:
-    amount: 100
+    amount: 200
 
 endpoints:
   health:

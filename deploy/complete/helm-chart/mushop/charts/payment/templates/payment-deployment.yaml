@@ -43,6 +43,8 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
           env:
+            - name: PAYMENT_DECLINE_AMOUNT
+              value: {{ .Values.decline.amount }}
           {{- include "payment.oapm.connection" . | nindent 12 }}
           {{- include "payment.oims.config" . | nindent 12 }}
       nodeSelector:

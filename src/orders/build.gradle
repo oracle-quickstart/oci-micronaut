@@ -35,11 +35,16 @@ dependencies {
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
-    // Metrics
+    // Metrics - Core
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Metrics - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Metrics - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")
@@ -58,6 +63,9 @@ dependencies {
     runtimeOnly("com.oracle.database.security:osdt_core")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.data:micronaut-data-model")
+
+    // RDS db access
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
     // Nats.io support
     implementation("io.micronaut.nats:micronaut-nats")

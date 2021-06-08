@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-@JdbcRepository(dialect = Dialect.ORACLE)
 public interface ProductRepository extends PageableRepository<Product, String> {
 
     @NonNull

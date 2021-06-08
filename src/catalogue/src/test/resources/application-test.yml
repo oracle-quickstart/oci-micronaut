@@ -2,3 +2,9 @@ datasources:
   default:
     url: jdbc:tc:oracle:thin:@/xe
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: classpath:db/oracle

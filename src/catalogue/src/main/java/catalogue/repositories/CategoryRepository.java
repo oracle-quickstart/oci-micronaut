@@ -7,7 +7,6 @@ import io.micronaut.data.repository.CrudRepository;
 
 import java.util.List;
 
-@JdbcRepository(dialect = Dialect.ORACLE)
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     /**
      * @return Lists the category names

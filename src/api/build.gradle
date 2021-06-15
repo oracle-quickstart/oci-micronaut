@@ -46,7 +46,7 @@ dependencies {
     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.2")
 
     // Redis HTTP session store
-    implementation("io.micronaut.redis:micronaut-redis-lettuce")
+    implementation("io.micronaut.redis:micronaut-redis-lettuce:4.0.2")
 
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")

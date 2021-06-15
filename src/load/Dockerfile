@@ -1,7 +1,4 @@
-FROM python:3.7
-
-# Install locust
-RUN pip install pyzmq locust faker
+FROM locustio/locust
 
 ADD locustfile.py /config/locustfile.py
 ADD runLocust.sh /usr/local/bin/runLocust.sh

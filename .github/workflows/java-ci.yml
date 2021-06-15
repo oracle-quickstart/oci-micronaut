@@ -1,0 +1,207 @@
+name: Java CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+env:
+  JAVA: '11'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project-path: [
+            'api',
+            'carts',
+            'catalogue',
+            'events',
+            'fulfillment',
+            'functions/newsletter-subscription',
+            'orders',
+            'payment',
+            'user'
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: ${{ env.JAVA }}
+      - name: Build and test
+        working-directory: src/${{ matrix.project-path }}
+        run: |
+          if [ -f "mvnw" ]; then
+              ./mvnw test --no-transfer-progress
+          elif [ -f "gradlew" ]; then
+              ./gradlew check --no-daemon --parallel --continue
+          fi
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+  build-docker-compose-test-images:
+    if: success()
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project-path: [
+            'api',
+            'carts',
+            'catalogue',
+            'fulfillment',
+            'orders',
+            'payment',
+            'user'
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: ${{ env.JAVA }}
+      - name: Login to OCIR
+        uses: docker/login-action@v1
+        with:
+          registry: iad.ocir.io
+          username: ${{ secrets.OCI_USERNAME }}
+          password: ${{ secrets.OCI_TOKEN }}
+      #
+      # Build GraalVM docker image with SHA as tag for later use in docker-compose test job
+      - name: Build docker & push image - GraalVM
+        working-directory: src/${{ matrix.project-path }}
+        run: |
+          if [ -f "mvnw" ]; then
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress
+          elif [ -f "gradlew" ]; then
+            ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon
+          fi
+  docker-compose-test:
+    if: success()
+    needs: build-docker-compose-test-images
+    runs-on: self-hosted
+    steps:
+      - uses: AutoModality/action-clean@v1
+      - uses: actions/checkout@v2
+      - name: Login to OCIR
+        uses: docker/login-action@v1
+        with:
+          registry: iad.ocir.io
+          username: ${{ secrets.OCI_USERNAME }}
+          password: ${{ secrets.OCI_TOKEN }}
+          logout: false
+      - name: Setup stack
+        working-directory: deploy/complete/docker-compose
+        run: |
+          #
+          # Configure higher timeouts
+          export DOCKER_CLIENT_TIMEOUT=120
+          export COMPOSE_HTTP_TIMEOUT=120
+
+          #
+          # Generate override docker compose so we use latest build docker images
+          grep -B 1 -e "services:" -e 'graalvm' docker-compose.yml | sed -E "s/(.*):(.*):(.*)/\1:\2:$GITHUB_SHA/g" | grep -v -e '--' > docker-compose.override.yml
+          cat docker-compose.override.yml
+
+          docker-compose pull
+          docker-compose up -d --renew-anon-volumes --force-recreate
+          docker-compose ps
+
+          #
+          # wait 10 seconds to let the containers initalize
+          sleep 10
+          docker-compose logs
+      - name: Run test
+        working-directory: src/load
+        run: |
+          docker build -t mushop/load:latest .
+          docker run --net=host mushop/load:latest -h localhost:81 -c 5 -r 60
+      - name: Cleanup stack
+        if: ${{ always() }}
+        working-directory: deploy/complete/docker-compose
+        run: |
+          docker-compose down -t 300
+          docker volume prune -f
+          docker image prune -f
+  push-docker-images:
+    if: success() && github.event_name == 'push'
+    needs: docker-compose-test
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix:
+        project-path: [
+            'api',
+            'carts',
+            'catalogue',
+            'events',
+            'fulfillment',
+            'functions/newsletter-subscription',
+            'orders',
+            'payment',
+            'user'
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: ${{ env.JAVA }}
+      - name: Login to OCIR
+        uses: docker/login-action@v1
+        with:
+          registry: iad.ocir.io
+          username: ${{ secrets.OCI_USERNAME }}
+          password: ${{ secrets.OCI_TOKEN }}
+          logout: false
+
+      - name: Build docker image - GraalVM
+        working-directory: src/${{ matrix.project-path }}
+        run: |
+          if [ -f "mvnw" ]; then
+            ./mvnw package -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+          elif [ -f "gradlew" ]; then
+            ./gradlew dockerBuild --no-daemon
+          fi
+
+      - name: Build - docker image OpenJdk
+        working-directory: src/${{ matrix.project-path }}
+        run: |
+          if [ -f "mvnw" ]; then
+            ./mvnw package -Dpackaging=docker --no-transfer-progress
+          elif [ -f "gradlew" ]; then
+            ./gradlew dockerPush -PjavaBaseImage=openjdk --no-daemon
+          fi
+
+      - name: Build - docker image GraalVM Native Image
+        working-directory: src/${{ matrix.project-path }}
+        run: |
+          if [ -f "mvnw" ]; then
+            ./mvnw package -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
+          elif [ -f "gradlew" ]; then
+            ./gradlew dockerBuildNative --no-daemon
+          fi

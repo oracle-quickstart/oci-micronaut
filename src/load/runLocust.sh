@@ -46,7 +46,11 @@ do_exec() {
   fi
 
   echo "Will run $LOCUST_FILE against $TARGET_HOST. Spawning $CLIENTS clients and $RUNTIME total run time."
-  locust --host=http://$TARGET_HOST -f $LOCUST_FILE --users=$CLIENTS --hatch-rate=5 --run-time=$RUNTIME --headless --only-summary 
+  locust --host=http://$TARGET_HOST -f $LOCUST_FILE --users=$CLIENTS --spawn-rate=5 --run-time=$RUNTIME --headless --only-summary --exit-code-on-error 1
+  if [[ $? -ne 0 ]] ; then
+    echo "done with failure"
+    exit 1
+  fi
   echo "done"
 }
 

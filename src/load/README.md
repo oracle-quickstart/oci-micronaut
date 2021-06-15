@@ -42,3 +42,7 @@ kubectl delete -f load-dep.yaml
 
 * Build `docker build -t mushop/load .`
 * Run `docker run mushop/load -h [host] -c [number of clients] -r [total run time]`
+
+In case you want to test MuShop that is running locally:
+- Mac OS users use as host `host.docker.internal:[port]`, for MuShop from docker-compose use `host.docker.internal:81`
+- Linux users, start the mushop/load docker image with `--net=host` 

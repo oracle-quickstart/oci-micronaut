@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
 #  # Edge router application entrypoint
   edge-router:
@@ -27,6 +29,7 @@ services:
       - NET_BIND_SERVICE
     read_only: true
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - MICRONAUT_HTTP_SERVICES_MUSHOP-CATALOGUE_URL=http://catalogue:8080
       - MICRONAUT_HTTP_SERVICES_MUSHOP-CARTS_URL=http://carts:8080
       - MICRONAUT_HTTP_SERVICES_MUSHOP-ORDERS_URL=http://orders:8082
@@ -103,6 +106,7 @@ services:
       - NET_BIND_SERVICE
     read_only: true
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
       - DATASOURCES_DEFAULT_USERNAME=catalogue
@@ -129,6 +133,7 @@ services:
     tmpfs:
       - /tmp:rw,noexec,nosuid
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
       - DATASOURCES_DEFAULT_USERNAME=carts
@@ -156,6 +161,7 @@ services:
       oracledb:
         condition: service_healthy
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - NATS_HOST=nats
       - NATS_PORT=4222
       - ORDERS_NEW=mushop-orders
@@ -187,6 +193,7 @@ services:
       oracledb:
         condition: service_healthy
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
       - DATASOURCES_DEFAULT_USERNAME=muser
@@ -207,6 +214,9 @@ services:
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
+    environment:
+      - MICRONAUT_ENV_DEDUCTION=false
+      - PAYMENT_DECLINE_AMOUNT=1000
     logging:
       driver: "json-file"
       options:
@@ -225,6 +235,7 @@ services:
       nats:
         condition: service_started
     environment:
+      - MICRONAUT_ENV_DEDUCTION=false
       - NATS_HOST=nats
       - NATS_PORT=4222
       - ORDERS_NEW=mushop-orders

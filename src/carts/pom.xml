@@ -13,7 +13,7 @@
 
     <groupId>micronaut.mushop</groupId>
     <artifactId>carts</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>${project.version}</version>
 
     <name>carts</name>
     <description>Cart service</description>
@@ -22,6 +22,7 @@
 
     <properties>
         <packaging>jar</packaging>
+        <project.version>1.0.4-SNAPSHOT</project.version>
         <jdk.version>11</jdk.version>
         <release.version>11</release.version>
         <micronaut.version>2.5.4</micronaut.version>

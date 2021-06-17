@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -82,6 +83,14 @@ public class OrderControllerTest extends AbstractTest {
 
         assertEquals(HttpStatus.CREATED, httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class)
                         .body(orderPayload)).blockingSingle().getStatus());
+    }
+
+    @Test
+    void loadPayload_returns_200() {
+        when(ordersService.getById(eq(123L))).thenReturn(Optional.of(order));
+
+        HttpResponse<JsonNode> response = httpClient.exchange(HttpRequest.GET("/orders/123"), JsonNode.class).blockingSingle();
+        assertEquals(HttpStatus.OK, response.getStatus());
     }
 
     @Test

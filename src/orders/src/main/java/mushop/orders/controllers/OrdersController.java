@@ -20,9 +20,12 @@ import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.hateoas.Link;
 import io.micronaut.transaction.annotation.ReadOnly;
 import io.reactivex.Single;
+
 import java.util.Optional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+
+import mushop.orders.controllers.dto.CustomerOrderDto;
 import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
@@ -45,14 +48,20 @@ public class OrdersController {
 
     @Status(HttpStatus.CREATED)
     @Post
-    Single<CustomerOrder> newOrder(@Body @Valid NewOrderResource newOrderResource) {
-        return ordersService.placeOrder(newOrderResource);
+    Single<CustomerOrderDto> newOrder(@Body @Valid NewOrderResource newOrderResource) {
+        return ordersService.placeOrder(newOrderResource)
+                .map(dtoMapper::toCustomerOrderDto);
     }
 
     @ReadOnly
     @Get("/{orderId}")
-    Optional<CustomerOrder> getOrder(Long orderId) {
-        return ordersService.getById(orderId);
+    Optional<CustomerOrderDto> getOrder(Long orderId) {
+        Optional<CustomerOrder> order = ordersService.getById(orderId);
+        CustomerOrderDto ordersDto = null;
+        if (order.isPresent()) {
+            ordersDto = dtoMapper.toCustomerOrderDto(order.get());
+        }
+        return Optional.ofNullable(ordersDto);
     }
 
     @ReadOnly
@@ -66,9 +75,9 @@ public class OrdersController {
     @Error(ConstraintViolationException.class)
     public HttpResponse<JsonError> constraintError(HttpRequest request, ConstraintViolationException e) {
         JsonError error = new JsonError(e.getMessage())
-            .link(Link.SELF, Link.of(request.getUri()));
+                .link(Link.SELF, Link.of(request.getUri()));
         return HttpResponse.status(HttpStatus.NOT_ACCEPTABLE)
-            .body(error);
+                .body(error);
     }
 
     public static class PaymentDeclinedException extends HttpStatusException {

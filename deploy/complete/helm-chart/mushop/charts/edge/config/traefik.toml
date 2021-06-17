@@ -32,6 +32,11 @@ entryPoint = "http"
         url = "http://{{ .Release.Name }}-assets"
 
   [frontends]
+    [frontends.api-swagger]
+      backend = "api"
+      entrypoints = ["http"]
+      [frontends.api-swagger.routes.test1]
+        rule = "PathPrefix:/swagger/"
     [frontends.api]
       backend = "api"
       entrypoints = ["http"]

@@ -30,7 +30,7 @@ public class CartIdBinder implements AnnotatedRequestArgumentBinder<CartId, UUID
             final Session session = attribute.get();
             final UUID uuid = session.get(CART_ID, UUID.class).orElseGet(() -> {
                 final UUID newUUID = UUID.randomUUID();
-                LOG.info("Generating new session ID " + newUUID);
+                LOG.info("Generating new cart ID " + newUUID);
                 session.put(CART_ID, newUUID);
                 return newUUID;
             });

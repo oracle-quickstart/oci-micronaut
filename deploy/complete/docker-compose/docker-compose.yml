@@ -19,7 +19,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.0.0
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.0.1-SNAPSHOT
     hostname: api
     restart: always
     pull_policy: always
@@ -27,14 +27,13 @@ services:
       - all
     cap_add:
       - NET_BIND_SERVICE
-    read_only: true
     environment:
+      - MICRONAUT_SESSION_HTTP_REDIS_ENABLED=true
       - MICRONAUT_ENV_DEDUCTION=false
       - MICRONAUT_HTTP_SERVICES_MUSHOP-CATALOGUE_URL=http://catalogue:8080
       - MICRONAUT_HTTP_SERVICES_MUSHOP-CARTS_URL=http://carts:8080
       - MICRONAUT_HTTP_SERVICES_MUSHOP-ORDERS_URL=http://orders:8082
       - MICRONAUT_HTTP_SERVICES_MUSHOP-USER_URL=http://user:8080
-#      - MICRONAUT_HTTP_SERVICES_MUSHOP_NEWSLETTER_URL=
       - REDIS_URI=redis://session-db:6379
 
   # Static media assets

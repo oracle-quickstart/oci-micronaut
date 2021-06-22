@@ -33,3 +33,10 @@ micronaut:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
+  session:
+    http:
+      redis:
+        enabled: false
+        namespace: 'mushop:sessions'
+        write-mode: BACKGROUND
+        enable-keyspace-events: false

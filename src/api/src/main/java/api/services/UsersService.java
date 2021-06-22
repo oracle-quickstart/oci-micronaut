@@ -28,10 +28,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class UsersService {
+
+    public static final Logger LOG = LoggerFactory.getLogger(UsersService.class);
 
     private final UsersClient client;
     private final AuthClient authClient;
@@ -60,10 +64,12 @@ public class UsersService {
     public Single<MuUserDetails> register(HttpRequest<?> request,
                                           UserRegistrationRequest registrationRequest) {
         return authClient.register(registrationRequest)
+                .doOnError(throwable -> LOG.error("Failed to register user: " + throwable.getMessage(), throwable))
                 .map((userDTO -> {
                     sessionLoginHandler.loginSuccess(userDTO, request);
                     return userDTO;
-                }));
+                }))
+                .doOnError(throwable -> LOG.error("Failed to create user session: " + throwable.getMessage(), throwable));
     }
 
     @Get("/profile")

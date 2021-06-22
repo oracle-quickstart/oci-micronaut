@@ -5,6 +5,7 @@ import api.model.Product;
 import api.services.annotation.CartId;
 import api.services.annotation.MuService;
 import api.services.annotation.TrackEvent;
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpStatus;
@@ -27,10 +28,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,8 @@ import java.util.UUID;
 @MuService
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class CartsService {
+
+    public static final Logger LOG = LoggerFactory.getLogger(CartsService.class);
 
     private static final String ITEM_ID = "itemId";
     private static final String UNIT_PRICE = "unitPrice";
@@ -61,6 +67,7 @@ public class CartsService {
     @Get(value = "/cart", produces = MediaType.APPLICATION_JSON)
     Single<List<CartItem>> getCart(@Parameter(hidden = true) @CartId UUID cartID) {
         return client.getCartItems(cartID)
+                .doOnSuccess(cartItems -> LOG.info("Found cart " + cartItems))
                 .onErrorReturnItem(Collections.emptyList());
     }
 
@@ -209,15 +216,22 @@ public class CartsService {
 
         private final String id;
 
-        private String itemId;
+        private final String itemId;
 
         private final int quantity;
 
-        private BigDecimal unitPrice;
+        private final BigDecimal unitPrice;
 
         public CartItem() {
-            id = UUID.randomUUID().toString();
-            quantity = 1;
+            this(UUID.randomUUID().toString(), null, 1, null);
+        }
+
+        @Creator
+        public CartItem(String id, String itemId, int quantity, BigDecimal unitPrice) {
+            this.id = id;
+            this.itemId = itemId;
+            this.quantity = quantity;
+            this.unitPrice = unitPrice;
         }
 
         /**

@@ -1,0 +1,609 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Deploys an EKS cluster in a new VPC (qs-1p7nknoht)
+Metadata:
+  AutoInstance:
+    NodeInstanceType:
+      InstanceFilters:
+        - [['PV'], "!=", "SupportedVirtualizationTypes"]
+  QuickStartDocumentation:
+    EntrypointName: "Launch into a new VPC"
+    Order: Index a
+  LintSpellExclude:
+    - Kubernetes
+    - ARNs
+    - Resource Names
+    - autoscaler
+    - IOPS
+    - EfsStorageClass
+    - Lambda
+    - maxIO
+    - Resource Name
+    - Enabled
+    - Disabled
+    - Prometheus
+    - Encrypt
+    - Fargate
+    - namespace
+    - Security
+    - APN
+    - '"No"'
+    - Windows
+    - '"Config '
+    - '(Optional)'
+    - Unmanaged
+    - Node
+    - Integration
+    - Auto Scaling
+    - Partner
+    - yaml
+    - DomainName
+    - Hosted
+    - Domain Name
+    - Domain name
+    - Grafana
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Micronaut MuShop CloudFormation Version
+        Parameters:
+          - CloudFormationVersion
+          - MMSS3BucketName
+          - MMSS3BucketRegion
+      - Label:
+          default: Basic configuration
+        Parameters:
+          - AvailabilityZones
+          - RemoteAccessCIDR
+          - KeyPairName
+          - ConfigSetName
+          - PerAccountSharedResources
+          - PerRegionSharedResources
+      - Label:
+          default: VPC network configuration
+        Parameters:
+          - NumberOfAZs
+          - VPCCIDR
+          - PrivateSubnet1CIDR
+          - PrivateSubnet2CIDR
+          - PrivateSubnet3CIDR
+          - PublicSubnet1CIDR
+          - PublicSubnet2CIDR
+          - PublicSubnet3CIDR
+      - Label:
+          default: Amazon EC2 configuration
+        Parameters:
+          - ProvisionBastionHost
+      - Label:
+          default: Amazon EKS configuration
+        Parameters:
+          - EKSClusterName
+          - EKSPublicAccessEndpoint
+          - AdditionalEKSAdminUserArn
+          - AdditionalEKSAdminRoleArn
+          - FargateNamespaces
+          - FargateLabels
+      - Label:
+          default: Default EKS node group configuration
+        Parameters:
+          - NodeInstanceType
+          - NumberOfNodes
+          - MaxNumberOfNodes
+          - NodeGroupOS
+          - NodeGroupType
+          - NodeInstanceFamily
+      - Label:
+          default: Kubernetes add-ins
+        Parameters:
+          - ALBIngressController
+          - ClusterAutoScaler
+          - EfsStorageClass
+          - PrometheusIntegration
+          - GrafanaIntegration
+          - MonitoringStack
+      - Label:
+          default: AWS EKS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+          - QSS3BucketRegion
+          - TestSuite
+      - Label:
+          default: RDS configuration
+        Parameters:
+          - DBName
+          - DBInstanceClass
+          - DBAllocatedStorage
+          - DBUsername
+          - DBPassword
+    ParameterLabels:
+      # Default
+      CloudFormationVersion:
+        default: Deployment Version
+      # EKS stack labels
+      AvailabilityZones:
+        default: Availability Zones
+      KeyPairName:
+        default: SSH key name
+      PrivateSubnet1CIDR:
+        default: Private subnet 1 CIDR
+      PrivateSubnet2CIDR:
+        default: Private subnet 2 CIDR
+      PrivateSubnet3CIDR:
+        default: Private subnet 3 CIDR
+      PublicSubnet1CIDR:
+        default: Public subnet 1 CIDR
+      PublicSubnet2CIDR:
+        default: Public subnet 2 CIDR
+      PublicSubnet3CIDR:
+        default: Public subnet 3 CIDR
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket Region
+      MMSS3BucketName:
+        default: Micronaut MuShop CloudFormation configuration bucket
+      MMSS3BucketRegion:
+        default: Micronaut MuShop CloudFormation configuration region
+      RemoteAccessCIDR:
+        default: Allowed external access CIDR
+      VPCCIDR:
+        default: VPC CIDR
+      NodeInstanceType:
+        default: Instance type
+      NumberOfNodes:
+        default: Number of nodes
+      MaxNumberOfNodes:
+        default: Maximum number of nodes
+      AdditionalEKSAdminUserArn:
+        default: Additional EKS admin ARN (IAM user)
+      AdditionalEKSAdminRoleArn:
+        default: Additional EKS admin ARN (IAM role)
+      ClusterAutoScaler:
+        default: Cluster autoscaler
+      EfsStorageClass:
+        default: EFS storage class
+      MonitoringStack:
+        default: Monitoring stack
+      NumberOfAZs:
+        default: Number of Availability Zones
+      ProvisionBastionHost:
+        default: Provision bastion host
+      EKSPublicAccessEndpoint:
+        default: EKS public access endpoint
+      ALBIngressController:
+        default: AWS load balancer controller
+      FargateNamespaces:
+        default: Fargate namespaces
+      FargateLabels:
+        default: Fargate labels
+      EKSClusterName:
+        default: EKS cluster name
+      PerAccountSharedResources:
+        default: Per-account shared resources
+      PerRegionSharedResources:
+        default: Per-Region shared resources
+      ConfigSetName:
+        default: Config set name
+      TestSuite:
+        default: Test suite
+      NodeGroupType:
+        default: Node group type
+      NodeInstanceFamily:
+        default: Node instance family
+      NodeGroupOS:
+        default: Node group OS
+      PrometheusIntegration:
+        default: Prometheus integration
+      GrafanaIntegration:
+        default: Grafana integration
+
+      # RDS Stack labels
+      DBName:
+        default: Database name
+      DBInstanceClass:
+        default: Database instance class
+      DBAllocatedStorage:
+        default: The size of the database (GiB)
+      DBUsername:
+        default: Username for database access
+      DBPassword:
+        default: Password MySQL database access
+Parameters:
+  CloudFormationVersion:
+    Type: String
+    AllowedValues: [ "3.0.0" ]
+    Default: "3.0.0"
+    Description: Choose deployment version.
+  AvailabilityZones:
+    Description: List of Availability Zones to use for the subNumberOfAZsnets in the VPC. Three
+      Availability Zones are used for this deployment.
+    Type: List<AWS::EC2::AvailabilityZone::Name>
+  KeyPairName:
+    Description: Name of an existing key pair, which allows you
+      to securely connect to your instance after it launches.
+    Type: AWS::EC2::KeyPair::KeyName
+  PrivateSubnet1CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.0.0/19
+    Description: CIDR block for private subnet 1, located in Availability Zone 1.
+    Type: String
+  PrivateSubnet2CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.32.0/19
+    Description: CIDR block for private subnet 2, located in Availability Zone 2.
+    Type: String
+  PrivateSubnet3CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.64.0/19
+    Description: CIDR block for private subnet 3, located in Availability Zone 3.
+    Type: String
+  PublicSubnet1CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.128.0/20
+    Description: CIDR block for the public (DMZ) subnet 1, located in Availability
+      Zone 1.
+    Type: String
+  PublicSubnet2CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.144.0/20
+    Description: CIDR block for the public (DMZ) subnet 2, located in Availability
+      Zone 2.
+    Type: String
+  PublicSubnet3CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.160.0/20
+    Description: CIDR block for the public (DMZ) subnet 3, located in Availability
+      Zone 3.
+    Type: String
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start assets. This string can include
+      numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
+      or end with a hyphen (-).
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/.]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), periods (.) and forward slash (/).
+    Default: quickstart-amazon-eks/
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), periods (.) and
+      forward slash (/).
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: Region where the Quick Start S3 bucket (QSS3BucketName) is
+      hosted. When using your own bucket, you must specify this value.
+    Type: String
+  MMSS3BucketName:
+    Description: Micronaut MuShop CloudFormation configuration bucket
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Micronaut MuShop start bucket name can include numbers, lowercase
+        letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+        (-).
+    Default: micronaut-mushop-aws
+    Type: String
+  MMSS3BucketRegion:
+    Description: Micronaut MuShop CloudFormation configuration region
+    Type: String
+    Default: 'us-west-2'
+  RemoteAccessCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
+    Description: CIDR IP range that is permitted to access the instances. We recommend
+      that you set this value to a trusted IP range.
+    Type: String
+  EKSPublicAccessEndpoint:
+    Type: String
+    AllowedValues: [Enabled, Disabled]
+    Default: Disabled
+    Description: Configure access to the Kubernetes API server endpoint from outside of your VPC.
+  VPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.0.0/16
+    Description: CIDR block for the VPC.
+    Type: String
+  AdditionalEKSAdminUserArn:
+    Default: ""
+    Description: "(Optional) IAM user ARN to be granted administrative access to the EKS cluster."
+    Type: String
+  AdditionalEKSAdminRoleArn:
+    Default: ""
+    Description: "(Optional) IAM role ARN to be granted administrative access to the EKS cluster."
+    Type: String
+  NodeInstanceType:
+    Default: t3.medium
+    AllowedValues: ["t3a.nano", "t3.nano", "t2.nano", "t3a.micro", "t3.micro", "t2.micro", "t3a.small", "t1.micro", "t3.small", "t2.small", "a1.medium", "c6g.medium", "t3a.medium", "c6gd.medium", "m6g.medium", "t3.medium", "m1.small", "m6gd.medium", "t2.medium", "r6g.medium", "a1.large", "r6gd.medium", "m3.medium", "c6g.large", "t3a.large", "c6gd.large", "m6g.large", "c5a.large", "t3.large", "c5.large", "c5ad.large", "m5a.large", "m1.medium", "m6gd.large", "t2.large", "c5d.large", "m5.large", "m4.large", "c4.large", "r6g.large", "a1.xlarge", "m5ad.large", "c3.large", "c5n.large", "r5a.large", "m5d.large", "r6gd.large", "m5n.large", "r5.large", "c1.medium", "r5ad.large", "r4.large", "m3.large", "c6g.xlarge", "m5dn.large", "r5d.large", "r5n.large", "t3a.xlarge", "c6gd.xlarge", "m6g.xlarge", "c5a.xlarge", "i3.large", "r3.large", "t3.xlarge", "r5dn.large", "c5.xlarge", "c5ad.xlarge", "m5a.xlarge", "m1.large", "m6gd.xlarge", "t2.xlarge", "z1d.large", "m5.xlarge", "c5d.xlarge", "c4.xlarge", "m4.xlarge", "r6g.xlarge", "a1.2xlarge", "m5ad.xlarge", "c3.xlarge", "c5n.xlarge", "m5d.xlarge", "r5a.xlarge", "i3en.large", "r6gd.xlarge", "m5n.xlarge", "m2.xlarge", "r5.xlarge", "r5ad.xlarge", "m3.xlarge", "r4.xlarge", "m5dn.xlarge", "c6g.2xlarge", "r5d.xlarge", "r5n.xlarge", "t3a.2xlarge", "c6gd.2xlarge", "c5a.2xlarge", "m6g.2xlarge", "i3.xlarge", "t3.2xlarge", "r3.xlarge", "r5dn.xlarge", "c5.2xlarge", "m5a.2xlarge", "c5ad.2xlarge", "m1.xlarge", "m6gd.2xlarge", "inf1.xlarge", "t2.2xlarge", "z1d.xlarge", "c5d.2xlarge", "m5.2xlarge", "c4.2xlarge", "m4.2xlarge", "r6g.2xlarge", "a1.metal", "a1.4xlarge", "m5ad.2xlarge", "c3.2xlarge", "c5n.2xlarge", "r5a.2xlarge", "i3en.xlarge", "m5d.2xlarge", "r6gd.2xlarge", "h1.2xlarge", "m5n.2xlarge", "m2.2xlarge", "r5.2xlarge", "c1.xlarge", "r5ad.2xlarge", "g4dn.xlarge", "r4.2xlarge", "m3.2xlarge", "m5dn.2xlarge", "c6g.4xlarge", "r5d.2xlarge", "inf1.2xlarge", "r5n.2xlarge", "c6gd.4xlarge", "c5a.4xlarge", "m6g.4xlarge", "i3.2xlarge", "g2.2xlarge", "r3.2xlarge", "r5dn.2xlarge", "c5.4xlarge", "c5ad.4xlarge", "m5a.4xlarge", "d2.xlarge", "m6gd.4xlarge", "z1d.2xlarge", "g3s.xlarge", "g4dn.2xlarge", "m5.4xlarge", "c5d.4xlarge", "c4.4xlarge", "m4.4xlarge", "r6g.4xlarge", "m5ad.4xlarge", "x1e.xlarge", "c3.4xlarge", "i2.xlarge", "c5n.4xlarge", "p2.xlarge", "r5a.4xlarge", "i3en.2xlarge", "m5d.4xlarge", "r6gd.4xlarge", "h1.4xlarge", "m5n.4xlarge", "m2.4xlarge", "r5.4xlarge", "r5ad.4xlarge", "r4.4xlarge", "c6g.8xlarge", "m5dn.4xlarge", "z1d.3xlarge", "g3.4xlarge", "r5d.4xlarge", "r5n.4xlarge", "g4dn.4xlarge", "c6gd.8xlarge", "m6g.8xlarge", "c5a.8xlarge", "i3.4xlarge", "r3.4xlarge", "r5dn.4xlarge", "i3en.3xlarge", "m5a.8xlarge", "c5ad.8xlarge", "d2.2xlarge", "m6gd.8xlarge", "c5.9xlarge", "m5.8xlarge", "c4.8xlarge", "r6g.8xlarge", "c6g.12xlarge", "m5ad.8xlarge", "f1.2xlarge", "x1e.2xlarge", "c3.8xlarge", "i2.2xlarge", "c5d.9xlarge", "m5d.8xlarge", "r5a.8xlarge", "r6gd.8xlarge", "c6gd.12xlarge", "c5a.12xlarge", "m6g.12xlarge", "h1.8xlarge", "m5n.8xlarge", "inf1.6xlarge", "c5n.9xlarge", "i3en.24xlarge", "i3en.metal", "p3.8xlarge", "f1.16xlarge", "x1.32xlarge", "x1e.16xlarge", "p2.16xlarge", "m4.10xlarge", "cc2.8xlarge", "r5.8xlarge", "c5.12xlarge", "c5ad.12xlarge", "m5a.12xlarge", "r5ad.8xlarge", "r4.8xlarge", "m6gd.12xlarge", "m5dn.8xlarge", "c6g.16xlarge", "g4dn.8xlarge", "c6g.metal", "z1d.6xlarge", "g3.8xlarge", "m5.12xlarge", "c5d.12xlarge", "r5d.8xlarge", "r5n.8xlarge", "r6g.12xlarge", "c6gd.metal", "c6gd.16xlarge", "m6g.metal", "c5a.16xlarge", "m6g.16xlarge", "m5ad.12xlarge", "i3.8xlarge", "g2.8xlarge", "r3.8xlarge", "r5dn.8xlarge", "r5a.12xlarge", "m5d.12xlarge", "i3en.6xlarge", "c5ad.16xlarge", "m5a.16xlarge", "d2.4xlarge", "r6gd.12xlarge", "m5n.12xlarge", "m6gd.metal", "m6gd.16xlarge", "p3.16xlarge", "x1e.32xlarge", "r5.12xlarge", "p3.2xlarge", "c5.18xlarge", "m5.16xlarge", "r5ad.12xlarge", "m4.16xlarge", "r6g.16xlarge", "r6g.metal", "m5dn.12xlarge", "m5ad.16xlarge", "f1.4xlarge", "x1e.4xlarge", "i2.4xlarge", "c5d.18xlarge", "r5d.12xlarge", "r5n.12xlarge", "m5d.16xlarge", "r5a.16xlarge", "r6gd.metal", "r6gd.16xlarge", "c5a.24xlarge", "h1.16xlarge", "m5n.16xlarge", "c5n.18xlarge", "c5n.metal", "g4dn.12xlarge", "p3dn.24xlarge", "r5dn.12xlarge", "r5.16xlarge", "c5.metal", "c5.24xlarge", "c5ad.24xlarge", "m5a.24xlarge", "r5ad.16xlarge", "r4.16xlarge", "m5dn.16xlarge", "g4dn.16xlarge", "z1d.metal", "z1d.12xlarge", "g3.16xlarge", "m5.24xlarge", "m5.metal", "c5d.24xlarge", "r5d.16xlarge", "c5d.metal", "r5n.16xlarge", "m5ad.24xlarge", "i3.metal", "i3.16xlarge", "r5dn.16xlarge", "m5d.metal", "i3en.12xlarge", "m5d.24xlarge", "r5a.24xlarge", "d2.8xlarge", "m5n.24xlarge", "r5.24xlarge", "r5.metal", "r5ad.24xlarge", "m5dn.24xlarge", "x1.16xlarge", "x1e.8xlarge", "i2.8xlarge", "r5d.24xlarge", "r5d.metal", "r5n.24xlarge", "p2.8xlarge", "inf1.24xlarge", "g4dn.metal", "r5dn.24xlarge", "t4g.nano", "t4g.medium", "t4g.large", "t4g.micro", "t4g.small", "t4g.2xlarge", "t4g.xlarge"]
+    ConstraintDescription: Must be a valid EC2 instance type
+    Description: EC2 instance type.
+    Type: String
+  NumberOfNodes:
+    Default: 3
+    Description: Number of Amazon EKS node instances. The default is one for each of the three Availability Zones.
+    Type: Number
+  MaxNumberOfNodes:
+    Default: 3
+    Description: Maximum number of Amazon EKS node instances. The default is three.
+    Type: Number
+  ClusterAutoScaler:
+    Type: String
+    AllowedValues: [ Enabled, Disabled ]
+    Default: Disabled
+    Description: 'Choose "Enabled" to enable Kubernetes cluster autoscaler.'
+  EfsStorageClass:
+    Type: String
+    AllowedValues: [ Enabled, Disabled ]
+    Default: Disabled
+    Description: 'Choose "Enabled" to enable EFS storage class.'
+  MonitoringStack:
+    Type: String
+    AllowedValues: [ "Prometheus + Grafana", "None" ]
+    Default: "None"
+    Description: 'Enable monitoring stack with "Prometheus+Grafana." Warning: this is a legacy parameter and will be dropped from the next version of this Quick Start. Please use the "Grafana integration" and "Prometheus integration" parameters instead.'
+  GrafanaIntegration:
+    Type: String
+    AllowedValues: [ Enabled, Disabled ]
+    Default: Disabled
+    Description: 'Grafana requires "Prometheus integration" to be enabled. For more information see https://www.grafana.com/ .'
+  PrometheusIntegration:
+    Type: String
+    AllowedValues: [ Enabled, Disabled ]
+    Default: Disabled
+    Description: 'For more information see https://prometheus.io/ .'
+  NumberOfAZs:
+    Type: String
+    AllowedValues: ["2", "3"]
+    Default: "3"
+    Description: Number of Availability Zones to use in the VPC. This must match the value entered for the AvailabilityZones parameter.
+  ProvisionBastionHost:
+    Type: String
+    AllowedValues: [ "Enabled", "Disabled" ]
+    Default: "Enabled"
+    Description: Skip creating a bastion host by choosing "Disabled."
+  # This parameter name is inaccurate to preserve backward compatibility, and will be changed to ALBIngressController in the next release
+  ALBIngressController:
+    Type: String
+    AllowedValues: [ "Enabled", "Disabled" ]
+    Default: "Enabled"
+    Description: Choose "Disabled" to skip deploying the AWS load balancer controller.
+  FargateNamespaces:
+    Type: String
+    Default: ""
+    Description: "(Optional) Comma-separated list of namespaces for which Fargate should be enabled."
+  FargateLabels:
+    Type: String
+    Default: ""
+    Description: >-
+      Requires at least one Fargate namespace to be specified. This is a comma-separated list of key-value pod labels.
+      For a pod to run on Fargate, all of the labels must match, and it must run in a namespace defined by
+      "Fargate namespaces."
+  EKSClusterName:
+    Type: String
+    Default: ""
+    Description: "(Optional) Name for the EKS cluster. If left blank, one is auto-generated. This must be unique within the Region."
+  PerAccountSharedResources:
+    Type: String
+    AllowedValues: ['AutoDetect', 'Yes', 'No']
+    Default: 'AutoDetect'
+    Description: Choose "No" if you already deployed another EKS Quick Start stack in your AWS account.
+  PerRegionSharedResources:
+    Type: String
+    AllowedValues: ['AutoDetect', 'Yes', 'No']
+    Default: 'AutoDetect'
+    Description: Choose "No" if you already deployed another EKS Quick Start stack in your Region.
+  ConfigSetName:
+    Type: String
+    Default: ""
+    Description: >-
+      (Optional) Name used to map advanced parameters to an EKS cluster. If you launched an advanced
+      configuration stack and want to apply its values to this cluster, this name must match the ConfigSetName parameter
+      for the stack. If left blank, a new config set is created using default values.
+  TestSuite:
+    Type: String
+    AllowedValues: [Enabled, Disabled]
+    Default: Disabled
+    Description: Deploys a test stack that tests Quick Start components.
+  NodeInstanceFamily:
+    Default: Standard
+    AllowedValues: ['Standard', 'ARM', 'GPU']
+    Type: String
+    Description: Choose the instance family to match the value of "Node instance type."
+  NodeGroupType:
+    Type: String
+    AllowedValues: [ Managed, Unmanaged ]
+    Default: Managed
+    Description: Choose "Unmanaged" to create an Auto Scaling group without using the EKS-managed node groups feature.
+  NodeGroupOS:
+    AllowedValues:
+      - 'Amazon Linux 2'
+      - 'Bottlerocket'
+      - 'Windows'
+    Default: 'Amazon Linux 2'
+    Description: Operating system to use for node instances. Choose "Bottlerocket" for the Amazon purpose-built container OS
+      (unmanaged node groups only). Note that if you choose "Windows," an additional Amazon Linux node group is created.
+    Type: String
+  # RDS stack parameters
+  DBName:
+    Default: dbname
+    Description: Database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
+  DBInstanceClass:
+    Default: db.m5.large
+    Description: DB instance class
+    Type: String
+    ConstraintDescription: Must select a valid DB instance type.
+  DBAllocatedStorage:
+    Default: '50'
+    Description: The size of the database (GiB)
+    Type: Number
+    MinValue: '5'
+    MaxValue: '1024'
+    ConstraintDescription: must be between 20 and 65536 GiB.
+  DBUsername:
+    Default: 'ADMIN'
+    NoEcho: 'true'
+    Description: Username for database access
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+  DBPassword:
+    Default: 'micronaut'
+    NoEcho: 'true'
+    Description: Password MySQL database access
+    Type: String
+    MinLength: '8'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: must contain only alphanumeric characters.
+Conditions:
+  EnablePrometheus: !Or
+    - !Equals [!Ref PrometheusIntegration, "Enabled"]
+    - !Equals [!Ref MonitoringStack, "Prometheus + Grafana"]
+  EnableGrafana: !Or
+    - !Equals [!Ref GrafanaIntegration, "Enabled"]
+    - !Equals [!Ref MonitoringStack, "Prometheus + Grafana"]
+  DetectSharedStacks: !And
+    - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
+    - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
+  CreateAdvancedConfigWithDefaults: !Equals [!Ref ConfigSetName, '']
+  CreatePerAccountSharedResources: !Equals [!Ref PerAccountSharedResources, 'Yes']
+  CreatePerRegionSharedResources: !Equals [!Ref PerRegionSharedResources, 'Yes']
+  3AZDeployment: !Equals [!Ref NumberOfAZs, "3"]
+  2AZDeployment: !Or
+    - !Equals [!Ref NumberOfAZs, "2"]
+    - !Equals [!Ref NumberOfAZs, "3"]
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  WindowsNodes: !Equals [!Ref NodeGroupOS, 'Windows']
+Mappings:
+  Config:
+    Prefix: { Value: 'eks-quickstart' }
+Resources:
+  RDSStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/rds.yaml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Parameters:
+        DBName: !Ref DBName
+        DBUsername: !Ref DBUsername
+        DBPassword: !Ref DBPassword
+        DBInstanceClass: !Ref DBInstanceClass
+        DBAllocatedStorage: !Ref DBAllocatedStorage
+        CidrIp: !Ref VPCCIDR
+
+  EKSStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/eks.yaml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Parameters:
+        # Basic configuration
+        AvailabilityZones: !Join [",", !Ref AvailabilityZones]
+        RemoteAccessCIDR: !Ref RemoteAccessCIDR
+        KeyPairName: !Ref KeyPairName
+        ConfigSetName: !Ref ConfigSetName
+        PerAccountSharedResources: !Ref PerAccountSharedResources
+        PerRegionSharedResources: !Ref PerRegionSharedResources
+
+        # VPC network configuration
+        NumberOfAZs: !Ref NumberOfAZs
+        VPCCIDR: !Ref VPCCIDR
+        PrivateSubnet1CIDR: !Ref PrivateSubnet1CIDR
+        PrivateSubnet2CIDR: !Ref PrivateSubnet2CIDR
+        PrivateSubnet3CIDR: !Ref PrivateSubnet3CIDR
+        PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
+        PublicSubnet2CIDR: !Ref PublicSubnet2CIDR
+        PublicSubnet3CIDR: !Ref PublicSubnet3CIDR
+        ProvisionBastionHost: !Ref ProvisionBastionHost
+
+        # Amazon EKS configuration
+        EKSClusterName: !Ref EKSClusterName
+        EKSPublicAccessEndpoint: !Ref EKSPublicAccessEndpoint
+        AdditionalEKSAdminUserArn: !Ref AdditionalEKSAdminUserArn
+        AdditionalEKSAdminRoleArn: !Ref AdditionalEKSAdminRoleArn
+        FargateNamespaces: !Ref FargateNamespaces
+        FargateLabels: !Ref FargateLabels
+
+        # Default EKS node group configuration
+        NodeInstanceType: !Ref NodeInstanceType
+        NumberOfNodes: !Ref NumberOfNodes
+        MaxNumberOfNodes: !Ref MaxNumberOfNodes
+        NodeGroupOS: !Ref NodeGroupOS
+        NodeGroupType: !Ref NodeGroupType
+        NodeInstanceFamily: !Ref NodeInstanceFamily
+
+        # Kubernetes add-ins
+        ALBIngressController: !Ref ALBIngressController
+        ClusterAutoScaler: !Ref ClusterAutoScaler
+        EfsStorageClass: !Ref EfsStorageClass
+        PrometheusIntegration: !Ref PrometheusIntegration
+        GrafanaIntegration: !Ref GrafanaIntegration
+        MonitoringStack: !Ref MonitoringStack
+
+        # AWS Quick Start configuration
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        TestSuite: !Ref TestSuite
+
+
+
+
+Outputs:
+  EKSClusterName:
+    Value: !GetAtt EKSStack.Outputs.EKSClusterName
+  BastionIP:
+    Value: !GetAtt EKSStack.Outputs.BastionIP
+  BastionSecurityGroup:
+    Value: !GetAtt EKSStack.Outputs.BastionSecurityGroup
+  NodeGroupSecurityGroup:
+    Value: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
+Rules:
+  AutoDetectSharedParams:
+    RuleCondition: !Or
+      - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
+      - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
+    Assertions:
+      - Assert: !And
+          - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
+          - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
+        AssertDescription: "AutDetect must be set/unset for both PerRegionSharedResources and PerAccountSharedResources"
+  WindowsUnmanaged:
+    Assertions:
+      - Assert: !Not [!Equals [NodeGroupOS, 'Windows']]
+        AssertDescription: "Managed nodegroups do not support Windows nodes."
+    RuleCondition: !Equals
+      - !Ref NodeGroupType
+      - Managed
+  LablesNeedNamespaces:
+    RuleCondition: !Not
+      - !Equals [ !Ref FargateLabels, "" ]
+    Assertions:
+      - AssertDescription: You must specify at least one Fargate namespace to enable Fargate.
+        Assert: !Not
+          - !Equals [ !Ref FargateNamespaces, "" ]

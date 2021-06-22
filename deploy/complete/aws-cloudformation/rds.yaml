@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Deploys an RDS instance
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Basic configuration
+        Parameters:
+          - DBName
+          - DBInstanceClass
+          - DBAllocatedStorage
+          - DBUsername
+          - DBPassword
+          - CidrIp
+    ParameterLabels:
+      DBName:
+        default: Database name
+      DBInstanceClass:
+        default: Database instance class
+      DBAllocatedStorage:
+        default: The size of the database (GiB)
+      DBUsername:
+        default: Username for database access
+      DBPassword:
+        default: Password MySQL database access
+      CidrIp:
+        default: CIDR block for the ingress security group
+Parameters:
+  DBName:
+    Default: dbname
+    Description: Database name
+    Type: String
+    MinLength: '1'
+    MaxLength: '64'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
+  DBInstanceClass:
+    Default: db.m5.large
+    Description: DB instance class
+    Type: String
+    ConstraintDescription: Must select a valid DB instance type.
+  DBAllocatedStorage:
+    Default: '50'
+    Description: The size of the database (GiB)
+    Type: Number
+    MinValue: '5'
+    MaxValue: '1024'
+    ConstraintDescription: must be between 20 and 65536 GiB.
+  DBUsername:
+    Default: 'ADMIN'
+    NoEcho: 'true'
+    Description: Username for database access
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+  DBPassword:
+    Default: 'micronaut'
+    NoEcho: 'true'
+    Description: Password MySQL database access
+    Type: String
+    MinLength: '8'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: must contain only alphanumeric characters.
+  CidrIp:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
+    Default: 10.0.0.0/16
+    Description: CIDR block for the ingress security group.
+    Type: String
+
+Resources:
+  DBEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open database for access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          CidrIp:
+            Ref: CidrIp
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName:
+        Ref: DBName
+      Engine: MySQL
+      MasterUsername:
+        Ref: DBUsername
+      MasterUserPassword:
+        Ref: DBPassword
+      DBInstanceClass:
+        Ref: DBInstanceClass
+      AllocatedStorage:
+        Ref: DBAllocatedStorage
+Outputs:
+  DbPort:
+    Value: !GetAtt DBInstance.Endpoint.Port
+  DbAddress:
+    Value: !GetAtt DBInstance.Endpoint.Address

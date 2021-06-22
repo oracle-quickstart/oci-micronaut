@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "deploy an example workload into an existing kubernetes cluster"
+Parameters:
+  MushopHelmChart:
+    Type: String
+  MushopHelmChartNamespace:
+    Type: String
+    Default: mushop
+  KubeClusterName:
+    Type: String
+  NodeInstanceProfile:
+    Type: String
+  RdsAdminUsername:
+    Type: String
+  RdsAdminPassword:
+    Type: String
+  RdsDbName:
+    Type: String
+  RdsConnectionEndpoint:
+    Type: String
+  RdsConnectionPort:
+    Type: String
+  RdsConnectionPassword:
+    Type: String
+    Default: micronautshowcase
+
+Resources:
+  RdsAdminSecret:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopHelmChartNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: rds-admin-secret
+        data:
+          rds_admin_user: { "Fn::Base64": "${RdsAdminUsername}" }
+          rds_admin_password: { "Fn::Base64": "${RdsAdminPassword}" }
+
+  # TODO: Generovani db uzivatelu
+  RdsConnectionSecret:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopHelmChartNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: rds-connection-secret
+        data:
+          rds_connection_endpoint: { "Fn::Base64": "${RdsConnectionEndpoint}" }
+          rds_connection_port: { "Fn::Base64": "${RdsConnectionPort}" }
+          rds_connection_password: { "Fn::Base64": "${RdsConnectionPassword}" }
+
+  # TODO: cluster role + cluster role binding
+
+  MushopHelm:
+    Type: "AWSQS::Kubernetes::Helm"
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopHelmChartNamespace
+      Chart: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop-0.1.1.tgz'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Name: mushop
+      ValueYaml: |
+        global:
+          mock:
+            service: "none"
+          rdsAdminSecret: rds-admin-secret
+          rdsConnectionSecret: rds-connection-secret
+
+Outputs:
+  # Examples for using the outputs of the KubeManifestExample resource
+  ExampleUid:
+    Value: !GetAtt KubeManifestExample.uid
+  ExampleSelfLink:
+    Value: !Ref KubeManifestExample

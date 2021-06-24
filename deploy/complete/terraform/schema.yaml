@@ -28,6 +28,10 @@ variableGroups:
     - show_advanced
     # - mushop_atp
     # - mushop_oss
+
+  - title: "Micronaut MuShop"
+    variables:
+    - mushop_micronaut_service_version
     
   - title: "OKE Cluster Configuration"
     variables:
@@ -163,6 +167,17 @@ variables:
     visible:
       and:
         - create_new_oke_cluster
+
+  mushop_micronaut_service_version:
+    type: enum
+    enum:
+      - "native"
+      - "graalvm"
+      - "openjdk"
+    title: "Micronaut MuShop service version"
+    default: "native"
+    description: "Every Micronaut MuShop service has one of three version: using GraalVM for java runtime, using openjdk for java runtime and GraalVM native image."
+    required: true
 
   show_advanced:
     type: boolean

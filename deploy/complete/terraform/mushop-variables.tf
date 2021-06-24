@@ -14,6 +14,17 @@ variable "mushop_mock_mode_all" {
   description = "If enabled, will not provision ATP Database, Object Storage, or Streaming. The services will run in mock mode and will connect to an in-memory database, and the data will not persist"
 }
 
+variable "mushop_micronaut_service_version" {
+  default = "native"
+  type = string
+  description = "Every Micronaut MuShop service has one of three version: using GraalVM for java runtime, using openjdk for java runtime and GraalVM native image."
+
+  validation {
+    condition     = contains(["native", "graalvm", "openjdk"], var.mushop_micronaut_service_version)
+    error_message = "Allowed values for mushop_micronaut_service_version are \"native\", \"graalvm\", or \"openjdk\"."
+  }
+}
+
 ## Common Services (MuShop Utilities)
 variable "grafana_enabled" {
   default     = true

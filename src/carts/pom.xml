@@ -22,7 +22,7 @@
 
     <properties>
         <packaging>jar</packaging>
-        <project.version>1.0.4-SNAPSHOT</project.version>
+        <project.version>1.1.0</project.version>
         <jdk.version>11</jdk.version>
         <release.version>11</release.version>
         <micronaut.version>2.5.4</micronaut.version>

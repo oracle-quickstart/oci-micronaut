@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user
   suffix: native
-  tag: 1.0.1-SNAPSHOT
+  tag: 1.1.0
   pullPolicy: Always
 
 dbtools:

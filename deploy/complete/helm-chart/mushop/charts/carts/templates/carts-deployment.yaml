@@ -31,9 +31,12 @@ spec:
           ports:
             - containerPort: 8080
           env:
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
             {{- include "carts.oadb.connection" . | nindent 12 }}
             {{- include "carts.oapm.connection" . | nindent 12 }}
             {{- include "carts.oims.config" . | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               port: 8080

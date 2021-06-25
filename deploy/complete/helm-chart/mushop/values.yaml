@@ -1,4 +1,6 @@
 global:
+  # cloud - aws | oci
+  cloud: aws
   mock:
     service: "false"
   osb:

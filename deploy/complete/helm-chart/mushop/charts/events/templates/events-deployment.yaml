@@ -28,9 +28,12 @@ spec:
           env:
             - name: KAFKA_HEALTH_ENABLED
               value: "false"
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
             {{- include "events.env.stream" . | nindent 12 }}
             {{- include "events.oapm.connection" . | nindent 12 }}
             {{- include "events.oims.config" . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8080
           livenessProbe:

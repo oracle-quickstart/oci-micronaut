@@ -54,8 +54,11 @@ spec:
               value: "{{ .Values.env.newOrdersSubject }}"
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
             {{- include "orders.oadb.connection" . | nindent 12 }}
             {{- include "orders.oapm.connection" . | nindent 12 }}
             {{- include "orders.oims.config" . | nindent 12 }}
+          {{- end }}
       nodeSelector:
           beta.kubernetes.io/os: linux

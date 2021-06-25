@@ -32,9 +32,12 @@ spec:
             - name: http
               containerPort: 8080
           env:
-          {{- include "user.oadb.connection" . | nindent 12 }}
-          {{- include "user.oapm.connection" . | nindent 12 }}
-          {{- include "user.oims.config" . | nindent 12 }}
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
+            {{- include "user.oadb.connection" . | nindent 12 }}
+            {{- include "user.oapm.connection" . | nindent 12 }}
+            {{- include "user.oims.config" . | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /health/liveness

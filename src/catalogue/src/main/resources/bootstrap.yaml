@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: catalogue
+  config-client:
+    enabled: true
+aws:
+  client:
+    system-manager:
+      parameterstore:
+        enabled: true

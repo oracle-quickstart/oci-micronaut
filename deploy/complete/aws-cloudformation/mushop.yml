@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploy an MuShop Helm chart kubernetes cluster"
+Parameters:
+  MushopHelmChart:
+    Type: String
+  MushopHelmChartNamespace:
+    Type: String
+    Default: mushop
+  KubeClusterName:
+    Type: String
+  NodeInstanceProfile:
+    Type: String
+  RdsAdminUsername:
+    Type: String
+  RdsAdminPassword:
+    Type: String
+  RdsDbName:
+    Type: String
+  RdsConnectionEndpoint:
+    Type: String
+  RdsConnectionPort:
+    Type: String
+  RdsConnectionPassword:
+    Type: String
+    Default: micronautshowcase
+
+Resources:
+
+  MushopHelm:
+    Type: "AWSQS::Kubernetes::Helm"
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopHelmChartNamespace
+      Chart: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop-0.1.1.tgz'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Name: mushop
+      ValueYaml: |
+        global:
+          cloud: aws
+          mock:
+            service: "none"
+
+Outputs:
+  # Examples for using the outputs of the KubeManifestExample resource
+  ExampleUid:
+    Value: !GetAtt KubeManifestExample.uid
+  ExampleSelfLink:
+    Value: !Ref KubeManifestExample

@@ -1,3 +1,6 @@
+{{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+{{- if eq "oci" $cloud }}
+
 {{- $usesOsb := (index (.Values.global | default .Values) "osb").atp | default .Values.osb.atp -}}
 {{- if or $usesOsb .Values.oadbAdminSecret .Values.global.oadbAdminSecret .Values.secrets.oadbAdminPassword  }}
 apiVersion: batch/v1
@@ -32,4 +35,6 @@ spec:
             {{- include "catalogue.mount.wallet" . | nindent 12 }}
             {{- include "catalogue.mount.initdb" . | nindent 12 }}
       volumes: {{- include "catalogue.volumes" . | nindent 8 }}
+{{- end }}
+
 {{- end }}

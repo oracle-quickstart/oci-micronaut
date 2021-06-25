@@ -7,9 +7,6 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
     driverClassName: com.mysql.cj.jdbc.Driver
 
 flyway:
@@ -17,3 +14,5 @@ flyway:
     default:
       enabled: true
       locations: classpath:db/mysql
+      create-schemas: true
+

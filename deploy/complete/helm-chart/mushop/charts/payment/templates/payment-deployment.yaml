@@ -45,7 +45,10 @@ spec:
           env:
             - name: PAYMENT_DECLINE_AMOUNT
               value: {{ .Values.decline.amount | quote }}
-          {{- include "payment.oapm.connection" . | nindent 12 }}
-          {{- include "payment.oims.config" . | nindent 12 }}
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
+            {{- include "payment.oapm.connection" . | nindent 12 }}
+            {{- include "payment.oims.config" . | nindent 12 }}
+          {{- end }}
       nodeSelector:
           beta.kubernetes.io/os: linux

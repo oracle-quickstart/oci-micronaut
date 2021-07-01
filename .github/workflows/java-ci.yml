@@ -179,29 +179,29 @@ jobs:
           password: ${{ secrets.OCI_TOKEN }}
           logout: false
 
-      - name: Build docker image - GraalVM
+      - name: Push docker image - GraalVM
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw package -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
           elif [ -f "gradlew" ]; then
-            ./gradlew dockerBuild --no-daemon
+            ./gradlew dockerPush --no-daemon
           fi
 
-      - name: Build - docker image OpenJdk
+      - name: Push - docker image OpenJdk
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw package -Dpackaging=docker --no-transfer-progress
+            ./mvnw deploy -Dpackaging=docker --no-transfer-progress
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPush -PjavaBaseImage=openjdk --no-daemon
           fi
 
-      - name: Build - docker image GraalVM Native Image
+      - name: Push - docker image GraalVM Native Image
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw package -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
           elif [ -f "gradlew" ]; then
-            ./gradlew dockerBuildNative --no-daemon
+            ./gradlew dockerPushNative --no-daemon
           fi

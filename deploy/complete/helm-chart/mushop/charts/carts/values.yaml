@@ -3,12 +3,12 @@ replicaCount: 1
 image:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts
   suffix: native
-  tag: 1.1.0
+  tag: 1.2.0-SNAPSHOT
   pullPolicy: Always
 
 dbtools:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/dbtools
-  tag: 21.0.0
+  tag: 1.2.0-SNAPSHOT
   pullPolicy: IfNotPresent
 
 osb: {}

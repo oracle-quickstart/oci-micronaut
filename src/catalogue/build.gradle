@@ -56,6 +56,9 @@ dependencies {
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts")
+
     // Tracing
     implementation("io.opentracing.brave:brave-opentracing")
     implementation("io.swagger.core.v3:swagger-annotations")

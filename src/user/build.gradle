@@ -41,6 +41,13 @@ dependencies {
     // AWS - RDS db access
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
     runtimeOnly("com.oracle.database.security:oraclepki")
@@ -57,10 +64,6 @@ dependencies {
 
     // Monitoring - AWS
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
-
-    // AWS - Configuration discovery
-    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
-    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

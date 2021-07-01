@@ -25,6 +25,7 @@ spec:
         prometheus.io/port: "8080"
 
     spec:
+      serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       terminationGracePeriodSeconds: 5
       containers:
         - name: {{ .Chart.Name }}

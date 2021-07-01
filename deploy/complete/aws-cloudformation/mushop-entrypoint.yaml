@@ -213,8 +213,8 @@ Metadata:
 Parameters:
   CloudFormationVersion:
     Type: String
-    AllowedValues: [ "3.0.0" ]
-    Default: "3.0.0"
+    AllowedValues: [ "3.1.0" ]
+    Default: "3.1.0"
     Description: Choose deployment version.
   AvailabilityZones:
     Description: List of Availability Zones to use for the subNumberOfAZsnets in the VPC. Three
@@ -492,6 +492,24 @@ Resources:
         DBInstanceClass: !Ref DBInstanceClass
         DBAllocatedStorage: !Ref DBAllocatedStorage
         CidrIp: !Ref VPCCIDR
+
+  MuShop:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop.yml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Parameters:
+        KubeClusterName: !GetAtt EKSStack.Outputs.EKSClusterName
+        MushopNamespace: 'mushop'
+        HelmRepository: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/charts'
+          - S3Region: !Ref MMSS3BucketRegion
+            S3Bucket: !Ref MMSS3BucketName
+            Version: !Ref CloudFormationVersion
+        OIDCIssuerURLWithoutProtocol:  !Join [ '', !Split [ 'https://', !GetAtt EKSStack.Outputs.OIDCIssuerURL ]]
 
   EKSStack:
     Type: AWS::CloudFormation::Stack

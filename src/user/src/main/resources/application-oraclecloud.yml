@@ -1,10 +1,4 @@
 micronaut:
-  server:
-    thread-selection: io
-  executors:
-    io:
-      n-threads: 75
-      type: fixed
   metrics:
     export:
       oraclecloud:

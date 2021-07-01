@@ -22,8 +22,10 @@ oraclecloud-artefacts:
 #
 # AWS
 aws-publish:
-	helm package -d ./aws-cloudformation ./helm-chart/mushop
-	helm package -d ./aws-cloudformation ./helm-chart/provision
+	mkdir -p ./aws-cloudformation/charts
+	helm package -d ./aws-cloudformation/charts ./helm-chart/mushop
+	helm package -d ./aws-cloudformation/charts ./helm-chart/provision
+	helm repo index ./aws-cloudformation/charts
 	aws s3 --recursive cp ./aws-cloudformation s3://$(AWS_S3_BUCKET)/$(VERSION)
 
 

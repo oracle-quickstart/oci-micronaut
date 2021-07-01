@@ -1,41 +1,95 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Deploy an MuShop Helm chart kubernetes cluster"
 Parameters:
-  MushopHelmChart:
+  HelmRepository:
     Type: String
-  MushopHelmChartNamespace:
+  MushopNamespace:
     Type: String
     Default: mushop
   KubeClusterName:
     Type: String
-  NodeInstanceProfile:
+  OIDCIssuerURLWithoutProtocol:
     Type: String
-  RdsAdminUsername:
-    Type: String
-  RdsAdminPassword:
-    Type: String
-  RdsDbName:
-    Type: String
-  RdsConnectionEndpoint:
-    Type: String
-  RdsConnectionPort:
-    Type: String
-  RdsConnectionPassword:
-    Type: String
-    Default: micronautshowcase
-
 Resources:
+  # This creates policy and role for the ServiceAccount the MuShop services will run with.
+  MuShopServiceIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: MuShopServiceIamRole
+      AssumeRolePolicyDocument: !Sub |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/${OIDCIssuerURLWithoutProtocol}"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "${OIDCIssuerURLWithoutProtocol}:sub": "system:serviceaccount:${MushopNamespace}:MushopServiceAccount"
+                }
+              }
+            }
+          ]
+        }
+      Policies:
+        - PolicyName: mushop-service-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # Allow to read all secret manager keys
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetResourcePolicy"
+                  - "secretsmanager:GetSecretValue"
+                  - "secretsmanager:DescribeSecret"
+                  - "secretsmanager:ListSecretVersionIds"
+                  - "secretsmanager:ListSecrets"
+                Resource: '*'
+              # Allow to read all param store keys
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameter"
+                  - "ssm:GetParameters"
+                Resource: '*'
 
-  MushopHelm:
+  # This creates namespace for MuShop deployment
+  MushopNamespaceKubernetesResource:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ${MushopNamespace}
+
+  # This creates Service Account with policy that allows services to access the AWS resources.
+  MushopServiceAccountKubernetesResource:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          annotations:
+            eks.amazonaws.com/role-arn: ${MuShopServiceIamRole.Arn}
+          name: mushop-service
+
+  # This deploys helm chart
+  MushopHelmChart:
     Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: MushopNamespaceKubernetesResource
     Properties:
       ClusterID: !Ref KubeClusterName
-      Namespace: !Ref MushopHelmChartNamespace
-      Chart: !Sub
-        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop-0.1.1.tgz'
-        - S3Region: !Ref MMSS3BucketRegion
-          S3Bucket: !Ref MMSS3BucketName
-          Version: !Ref CloudFormationVersion
+      Namespace: !Ref MushopNamespace
+      Repository: !Ref HelmRepository
+      Chart: mushop
       Name: mushop
       ValueYaml: |
         global:
@@ -43,9 +97,9 @@ Resources:
           mock:
             service: "none"
 
-Outputs:
+#Outputs:
   # Examples for using the outputs of the KubeManifestExample resource
-  ExampleUid:
-    Value: !GetAtt KubeManifestExample.uid
-  ExampleSelfLink:
-    Value: !Ref KubeManifestExample
+#  ExampleUid:
+#    Value: !GetAtt KubeManifestExample.uid
+#  ExampleSelfLink:
+#    Value: !Ref KubeManifestExample

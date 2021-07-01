@@ -102,8 +102,8 @@ Resources:
   # This is a Secret resource with a randomly generated password in its SecretString JSON.
   RDSInstanceSecret:
     Type: AWS::SecretsManager::Secret
-    Name: /config/application
     Properties:
+      Name: /config/application
       GenerateSecretString:
         SecretStringTemplate: '{"datasources.default.username": "admin"}'
         GenerateStringKey: 'datasources.default.password'

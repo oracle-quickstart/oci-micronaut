@@ -4,3 +4,7 @@ micronaut:
       cloudwatch:
         enabled: true
         namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
+  session:
+    http:
+      redis:
+        enabled: true

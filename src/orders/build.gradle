@@ -32,6 +32,10 @@ dependencies {
     // Kubernetes service discovery
     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
@@ -46,13 +50,12 @@ dependencies {
     // Metrics - AWS
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
-    // Tracing
     implementation("io.micronaut:micronaut-tracing")
     implementation("io.opentracing.brave:brave-opentracing")
     runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
-    // ATP db access
+    // OCI - ATP db access
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")

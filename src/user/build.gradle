@@ -33,12 +33,12 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
 
-    // ATP db access
+    // OCI - ATP db access
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
 
-    // RDS db access
+    // AWS - RDS db access
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
@@ -57,6 +57,10 @@ dependencies {
 
     // Monitoring - AWS
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

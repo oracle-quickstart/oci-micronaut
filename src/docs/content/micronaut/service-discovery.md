@@ -20,7 +20,7 @@ And Node/Express JavaScript API:
 * [endpoints.js](https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/api/endpoints.js) - Manual service discovery configuration
 * [helpers/index.js](https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/helpers/index.js#L145-L174) - More manual service discovery routines
 
-By migrating the code to Micronaut all this code could be deleted and instead encapsulated by the defining of a simple [service ID](https://github.com/pgressa/oraclecloud-cloudnative/blob/97faa619b4f297e72ec6de8e9d4dfe81ffee6493/src/api/src/main/java/api/services/CartsService.java#L166-L170) and declarative client interfaces:
+By migrating the code to Micronaut all this code could be deleted and instead encapsulated by the defining of a simple [service ID](https://github.com/oracle-quickstart/oci-micronaut/blob/97faa619b4f297e72ec6de8e9d4dfe81ffee6493/src/api/src/main/java/api/services/CartsService.java#L166-L170) and declarative client interfaces:
 
 ```java
 @Client(id = "mushop-catalogue", path = "/catalogue")

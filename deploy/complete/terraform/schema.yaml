@@ -8,7 +8,7 @@ informationalText: "This stack provision a new OKE cluster (optionally can re-us
 schemaVersion: 1.1.0
 version: "20190304"
 
-logoUrl: https://raw.githubusercontent.com/pgressa/oraclecloud-cloudnative/a71b197556b75e0b2bffc98e3f4e698f6908797c/images/icon/mushop-zip-file.svg
+logoUrl: https://raw.githubusercontent.com/oracle-quickstart/oci-micronaut/a71b197556b75e0b2bffc98e3f4e698f6908797c/images/icon/mushop-zip-file.svg
 
 source:
   type: quickstart

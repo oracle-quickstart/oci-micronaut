@@ -21,7 +21,7 @@ Oracle Autonomous Database is a family of products with each member of the famil
 # Usage
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
-[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+[/deploy/complete/helm-chart/](https://github.com/oracle-quickstart/oci-micronaut/tree/master/deploy/complete/helm-chart)).
 
 # Running Locally
 
@@ -78,7 +78,7 @@ Or the native version with:
 ./gradlew dockerPushNative
 ```
 
-The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/pgressa/oraclecloud-cloudnative/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/orders/build.gradle#L90-L96):
+The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/orders/build.gradle#L90-L96):
 
 ```groovy
 dockerBuild {

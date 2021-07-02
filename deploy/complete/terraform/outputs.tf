@@ -40,7 +40,7 @@ output "grafana_admin_password" {
   sensitive = false
 }
 output "mushop_source_code" {
-  value = "https://github.com/pgressa/oraclecloud-cloudnative"
+  value = "https://github.com/oracle-quickstart/oci-micronaut"
 }
 locals {
   mushop_ingress_ip       = data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].ip

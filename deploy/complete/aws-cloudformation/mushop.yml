@@ -95,7 +95,12 @@ Resources:
         global:
           cloud: aws
           mock:
-            service: "none"
+            service: "false"
+          imageSuffix: openjdk-aws
+          serviceAccount: mushop-service
+        tags:
+          streaming: false
+          atp: true
 
 #Outputs:
   # Examples for using the outputs of the KubeManifestExample resource

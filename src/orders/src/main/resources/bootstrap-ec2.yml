@@ -1,4 +1,6 @@
 micronaut:
+  application:
+    name: orders
   config-client:
     enabled: true
 aws:

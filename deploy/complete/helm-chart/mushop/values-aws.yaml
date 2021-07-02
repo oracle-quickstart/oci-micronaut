@@ -1,35 +1,23 @@
 global:
-  # cloud - aws | oci
   cloud: aws
   mock:
     service: "false"
-  osb:
-    instanceName: mushop
-  ociAuthSecret:
-  oadbAdminSecret:
-  oadbWalletSecret:
-  oadbConnectionSecret:
-  oosBucketSecret:
-  oapmConnectionSecret:
-  ociDeploymentConfigMap:
-  ossConnectionSecret:
-  imageSuffix:
+  imageSuffix: openjdk-aws
+  serviceAccount: mushop-service
 
 # Depending on the scenario, certain resources might need to be skipped.
 # For example, --set tags.streaming=false to disable required streaming manifests
 tags:
-  streaming: true
+  streaming: false
   atp: true
 
 ingress:
   enabled: true
-  grafana:
-    enabled: true
 
 api:
   enabled: true
   env:
-    trackingEnabled: true
+    trackingEnabled: false
 
 assets:
   enabled: true

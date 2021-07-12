@@ -1,52 +1,33 @@
-# MuShop CI
+# Micronaut MuShop CI
 
-## Wercker Setup
+Project uses GitHub Actions for CI/CD.
 
-When setting up a new Wercker workflow, keep in mind the following environment variables and pipelines that need to be configured beforehand.
+## Java CI Workflow (`.github/workflows/java-ci.yml`)
 
-The following global variables need to be set on the Wercker application (the Environment tab):
-
-| Environment variable name | Description | Example |
-| --- | --- | --- |
-| DOCKER_REPOSITORY | Docker repository name | `phx.ocir.io/{tenancyName}/mushop` |
-
-### Build (`build`)
-
-Build pipeline uses the `internal/docker-build` step to build Docker images for all services.
-
-### Push to Registry (`push-to-registry`)
-
-This pipeline pushes the build Docker images to the registry. The following environment variables need to be set on the pipeline.
+This workflow contains step that pushes the build Docker images to the registry. The following environment variables need to be set on the pipeline.
 
 | Environment variable name | Description | Example |
 | --- | --- | --- |
-| DOCKER_USERNAME | Docker registry username | `{tenancyName}/{myUserName}` |
-| DOCKER_PASSWORD | Docker registry password | `{myUserPassword}` |
+| OCI_USERNAME | Docker registry username | `{tenancyName}/{myUserName}` |
+| OCI_TOKEN | Docker registry password | `{myUserAuthToken}` |
 
-### Testing
+### Build Job (`build`)
 
-Because we have services in multiple languages, we had to separate the pipelines per-language (each pipeline uses a language specific box (e.g. `node`, `golang`)). Another reason we had to do this is because Wercker isn't really set up for a multi-repo - it would work better if we had a separate repo for each component.
+The build job runs test for all Micronaut services. The `docker` needs to be installed to successfully pass the tests.
 
-We have the following pipelines to run tests - these could be run in parallel after build pipeline completes.
+### Build Docker Images For Docker Compose Test (`build-docker-compose-test-images`)
 
-- `test-node-services` - runs unit tests for all NodeJS services
-- `test-go-services` - runs unit tests for all Go services
-- `test-java-services` - runs unit tests for all Java services
+This job pushes the build Docker images tagged by `$GITHUB_SHA` to the registry for further docker compose test.
 
-The test pipelines don't require any additional environment variables.
+### Docker Compose Test (`docker-compose-test`)
 
-### Deployments
+This job starts the MuShop stack using the Docker compose with docker images from previous job.
 
-There are two deployment (upgrade) pipelines defined in Wercker
+### Push Docker Images (`push-docker-images`)
 
-- Test Deployment (`upgrade-test-deployment`)
-- Production Deployment (`upgrade-production-deployment`)
+_Note: runs only for push events._
 
-Both deployment pipelines are equivalent, the difference is in the environment variables that are set on the pipelines. The variables define which cluster is used for deployment as well as the Helm release name.
+This job pushes the docker images to the registry.
 
-| Environment variable name | Description | Example |
-| --- | --- | --- |
-| HELM_RELEASE_NAME | Helm release name to be upgraded | `mymushop` |
-| HELM_TIMEOUT | Helm timeout value | `600` |
-| KUBERNETES_SERVER | URL of the Kubernetes server | `https://mykubernetescluster.com:6443` |
-| KUBERNETES_TOKEN | User token for the Kubernetes cluster (from `.kube/config`) | `eyJoZWFkZXIiOnsiQXV0a...` |
+### Deployment
+There are no test deployment configured yet.

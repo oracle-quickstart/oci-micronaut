@@ -52,6 +52,9 @@ dependencies {
 
     runtimeOnly("ch.qos.logback:logback-classic")
 
+    // Caching
+    implementation("io.micronaut.cache:micronaut-cache-caffeine:2.4.0")
+
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:oracle-xe")
     testImplementation("org.testcontainers:testcontainers")

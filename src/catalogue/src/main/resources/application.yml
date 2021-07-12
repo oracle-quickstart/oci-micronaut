@@ -16,6 +16,9 @@ micronaut:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
+  caches:
+    categories:
+      initial-capacity: 20
   metrics:
     export:
       prometheus:
@@ -24,6 +27,9 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
+    binders:
+      cache:
+        enabled: true
     enabled: true
   data:
     pageable:

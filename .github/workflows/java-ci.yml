@@ -2,10 +2,10 @@ name: Java CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 env:
   JAVA: '11'
 jobs:

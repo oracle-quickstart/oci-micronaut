@@ -483,21 +483,21 @@
             </a>
           </li>
           <li>
-            <a title="GitHub Source" href="https://github.com/pgressa/oci-cloudnative" class="uk-text-truncate">
+            <a title="GitHub Source" href="https://github.com/oracle-quickstart/oci-micronaut" class="uk-text-truncate">
               <span uk-icon='icon: github; ratio: 1.25'></span>
               <span class="uk-text-middle">GitHub Source</span>
               
             </a>
           </li>
           <li>
-            <a title="Report Issue" href="https://github.com/pgressa/oci-cloudnative/issues" class="uk-text-truncate">
+            <a title="Report Issue" href="https://github.com/oracle-quickstart/oci-micronaut/issues" class="uk-text-truncate">
               <span uk-icon='icon: warning; ratio: 1.25'></span>
               <span class="uk-text-middle">Report Issue</span>
               
             </a>
           </li>
             <li>
-              <a title='Edit this page' href="https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/micronaut/service-discovery.md" target="blank">
+              <a title='Edit this page' href="https://github.com/oracle-quickstart/oci-micronaut/tree/main/src/docs/contentmicronaut/service-discovery.md" target="blank">
                 <span uk-icon="pencil"></span>
                 <span class="uk-text-middle">Edit this page</span>
               </a>
@@ -601,7 +601,7 @@
 <li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/api/endpoints.js">endpoints.js</a> - Manual service discovery configuration</li>
 <li><a href="https://github.com/oracle-quickstart/oci-cloudnative/blob/39d80e5e91a2d5b1e48b0d8cf3516a2acd8c258e/src/api/helpers/index.js#L145-L174">helpers/index.js</a> - More manual service discovery routines</li>
 </ul>
-<p>By migrating the code to Micronaut all this code could be deleted and instead encapsulated by the defining of a simple <a href="https://github.com/pgressa/oraclecloud-cloudnative/blob/97faa619b4f297e72ec6de8e9d4dfe81ffee6493/src/api/src/main/java/api/services/CartsService.java#L166-L170">service ID</a> and declarative client interfaces:</p>
+<p>By migrating the code to Micronaut all this code could be deleted and instead encapsulated by the defining of a simple <a href="https://github.com/oracle-quickstart/oci-micronaut/blob/97faa619b4f297e72ec6de8e9d4dfe81ffee6493/src/api/src/main/java/api/services/CartsService.java#L166-L170">service ID</a> and declarative client interfaces:</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Client</span><span class="o">(</span><span class="n">id</span> <span class="o">=</span> <span class="s">&#34;mushop-catalogue&#34;</span><span class="o">,</span> <span class="n">path</span> <span class="o">=</span> <span class="s">&#34;/catalogue&#34;</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CatalogueClient</span> <span class="o">{</span>
     <span class="nd">@Get</span><span class="o">(</span><span class="s">&#34;/{id}&#34;</span><span class="o">)</span>

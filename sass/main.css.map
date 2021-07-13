@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "/home/runner/work/oraclecloud-cloudnative/oraclecloud-cloudnative/src/docs",
+	"sourceRoot": "/home/runner/work/oci-micronaut/oci-micronaut/src/docs",
 	"sources": [
 		"themes/redwood/assets/sass/main.scss",
 		"themes/redwood/assets/sass/uk/_uikit.scss",

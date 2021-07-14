@@ -9,16 +9,16 @@ const dist = path.join(__dirname, config.dist);
 
 
 const optimize = async dir => await imagemin([`${dir}/*`], {
-  destination: dist,
-  plugins: [
-    pngquant(),
-    jpegtran({progressive: true}),
-    mozjpeg({quality: 85}),
-  ],
+    destination: dist,
+    plugins: [
+        pngquant({quality: [0.3, 0.5]}),
+        jpegtran({progressive: true}),
+        mozjpeg({progressive: true, quality: 45}),
+    ],
 }).then(files => console.log(`Optimized ${files.length} images in ./${dir}`));
 
 Promise.all(['hero', 'products'].map(optimize))
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  });
+    .catch(e => {
+        console.error(e);
+        process.exit(1);
+    });

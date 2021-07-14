@@ -28,7 +28,7 @@ Resources:
               "Action": "sts:AssumeRoleWithWebIdentity",
               "Condition": {
                 "StringEquals": {
-                  "${OIDCIssuerURLWithoutProtocol}:sub": "system:serviceaccount:${MushopNamespace}:MushopServiceAccount"
+                  "${OIDCIssuerURLWithoutProtocol}:sub": "system:serviceaccount:${MushopNamespace}:mushop-service"
                 }
               }
             }
@@ -53,6 +53,7 @@ Resources:
                 Action:
                   - "ssm:GetParameter"
                   - "ssm:GetParameters"
+                  - "ssm:GetParametersByPath"
                 Resource: '*'
 
   # This creates namespace for MuShop deployment
@@ -60,6 +61,7 @@ Resources:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
       ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
       Manifest: !Sub |
         apiVersion: v1
         kind: Namespace

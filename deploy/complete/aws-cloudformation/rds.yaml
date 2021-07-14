@@ -53,49 +53,34 @@ Resources:
   # Inspiration https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_cloudformation.html
 
   # RDS VPC
-  RdsVpc:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsHostnames: true
-      EnableDnsSupport: true
-
-  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-  RdsSubnet01:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.96.0/19
-      AvailabilityZone:
-        Fn::Select:
-          - '0'
-          - Fn::GetAZs: { Ref: 'AWS::Region' }
-      VpcId:
-        Ref: RdsVpc
-
-  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-  RdsSubnet02:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.128.0/19
-      AvailabilityZone:
-        Fn::Select:
-          - '1'
-          - Fn::GetAZs: {Ref: 'AWS::Region'}
-      VpcId:
-        Ref: RdsVpc
-
-  # VPC endpoint that will enable the rotation Lambda function to make api calls to Secrets Manager
-#  SecretsManagerVPCEndpoint:
-#    Type: AWS::EC2::VPCEndpoint
+#  RdsVpc:
+#    Type: AWS::EC2::VPC
 #    Properties:
-#      SubnetIds:
-#        - Ref: RdsSubnet01
-#        - Ref: RdsSubnet02
-#      SecurityGroupIds:
-#        - !GetAtt RdsVpc.DefaultSecurityGroup
-#      VpcEndpointType: 'Interface'
-#      ServiceName: !Sub "com.amazonaws.${AWS::Region}.secretsmanager"
-#      PrivateDnsEnabled: true
+#      CidrBlock: 10.0.0.0/16
+#      EnableDnsHostnames: true
+#      EnableDnsSupport: true
+
+  # Subnet that the rotation Lambda function and the RDS instance will be placed in
+#  RdsSubnet01:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      CidrBlock: 10.0.96.0/19
+#      AvailabilityZone:
+#        Fn::Select:
+#          - '0'
+#          - Fn::GetAZs: { Ref: 'AWS::Region' }
+#      VpcId:
+#        Ref: RdsVpc
+
+  # Subnet that the rotation Lambda function and the RDS instance will be placed in
+#  RdsSubnet02:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      CidrBlock: 10.0.128.0/19
+#      AvailabilityZone:
+#        Fn::Select:
+#          - '1'
+#          - Fn::GetAZs: {Ref: 'AWS::Region'}
 #      VpcId:
 #        Ref: RdsVpc
 
@@ -139,36 +124,6 @@ Resources:
         - Ref: RdsSubnet01
         - Ref: RdsSubnet02
 
-  # This is a SecretTargetAttachment resource which updates the referenced Secret resource with properties about
-  # the referenced RDS instance
-#  SecretRDSInstanceAttachment:
-#    Type: AWS::SecretsManager::SecretTargetAttachment
-#    Properties:
-#      SecretId: !Ref RDSInstanceRotationSecret
-#      TargetId: !Ref DBInstance
-#      TargetType: AWS::RDS::DBInstance
-
-  # This is a RotationSchedule resource. It configures rotation of password for the referenced secret using a rotation lambda function
-  # The first rotation happens at resource creation time, with subsequent rotations scheduled according to the rotation rules
-  # We explicitly depend on the SecretTargetAttachment resource being created to ensure that the secret contains all the
-  # information necessary for rotation to succeed
-#  SecretRotationSchedule:
-#    Type: AWS::SecretsManager::RotationSchedule
-#    DependsOn: SecretRDSInstanceAttachment
-#    Properties:
-#      SecretId: !Ref RDSInstanceRotationSecret
-#      HostedRotationLambda:
-#        RotationType: MySQLSingleUser
-#        RotationLambdaName: SecretsManagerRotation
-#        VpcSecurityGroupIds: !GetAtt RdsVpc.DefaultSecurityGroup
-#        VpcSubnetIds:
-#          Fn::Join:
-#            - ","
-#            - - Ref: RdsSubnet01
-#              - Ref: RdsSubnet02
-#      RotationRules:
-#        AutomaticallyAfterDays: 2
-
   # This opens the port for ingress traffic from the specified IP cidr.
   EksSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -189,7 +144,7 @@ Resources:
       Name: /config/application/datasources/default/url
       Type: String
       Value: !Sub
-        - 'jdbc:mysql:///${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}'
+        - 'jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}'
         - RDS_HOSTNAME: !GetAtt DBInstance.Endpoint.Address
           RDS_PORT: !GetAtt DBInstance.Endpoint.Port
           RDS_DB_NAME: !Ref DBName

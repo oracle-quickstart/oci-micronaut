@@ -53,12 +53,17 @@ dependencies {
     // Metrics - AWS
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
+    // Tracing
     implementation("io.micronaut:micronaut-tracing")
     implementation("io.opentracing.brave:brave-opentracing")
     runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
-    // OCI - ATP db access
+    // DB - Core
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.data:micronaut-data-model")
+
+    // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
@@ -67,10 +72,8 @@ dependencies {
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    implementation("io.micronaut.data:micronaut-data-model")
 
-    // RDS db access
+    // DB - AWS RDS
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
     // Nats.io support

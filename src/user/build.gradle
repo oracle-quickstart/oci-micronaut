@@ -29,14 +29,20 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-validation")
 
-    // JDBC core
+    // DB - Core
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
 
-    // OCI - ATP db access
+    // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+    runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+    runtimeOnly("com.oracle.database.security:oraclepki")
+    runtimeOnly("com.oracle.database.security:osdt_cert")
+    runtimeOnly("com.oracle.database.security:osdt_core")
 
     // AWS - RDS db access
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
@@ -47,13 +53,6 @@ dependencies {
     // AWS - Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
-
-    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-    runtimeOnly("com.oracle.database.jdbc:ojdbc8")
-    runtimeOnly("com.oracle.database.security:oraclepki")
-    runtimeOnly("com.oracle.database.security:osdt_cert")
-    runtimeOnly("com.oracle.database.security:osdt_core")
-    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
 
     // Monitoring - Core
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")

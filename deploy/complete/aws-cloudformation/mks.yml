@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  SubnetId1:
+    Description: Subnet1
+    Type: 'AWS::EC2::Subnet'
+  SubnetId2:
+    Descripion: Subnet2
+    Type: 'AWS::EC2::Subnet'
+  SubnetId3:
+    Description: Subnet3
+    Type: 'AWS::EC2::Subnet'
+
+Resources:
+  TestCluster:
+    Type: 'AWS::MSK::Cluster'
+    Properties:
+      ClusterName: EventsServiceKafkaCluster
+      KafkaVersion: 2.2.1
+      NumberOfBrokerNodes: 2
+      ClientAuthentication:
+        Tls:
+          CertificateAuthorityArnList:
+            - ReplaceWithCAArn
+      Tags:
+        Environment: Test
+        Owner: QATeam
+      BrokerNodeGroupInfo:
+        BrokerAZDistribution: DEFAULT
+        InstanceType: kafka.m5.large
+        SecurityGroups:
+          - ReplaceWithSecurityGroupId
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: 100
+        ClientSubnets:
+          - SubnetId1
+          - SubnetId2
+          - SubnetId3
+Outputs:
+  VPCId:
+    Description: The ID of the VPC created
+    Value: !Ref VPC
+  PublicSubnetOne:
+    Description: The name of the public subnet created
+    Value: !Ref PublicSubnetOne
+  PrivateSubnetOne:
+    Description: The ID of private subnet one created
+    Value: !Ref PrivateSubnetOne
+  PrivateSubnetTwo:
+    Description: The ID of private subnet two created
+    Value: !Ref PrivateSubnetTwo
+  PrivateSubnetThree:
+    Description: The ID of private subnet three created
+    Value: !Ref PrivateSubnetThree
+  MSKSecurityGroupID:
+    Description: The ID of the security group created for the MSK clusters
+    Value: !GetAtt
+      - MSKSecurityGroup
+      - GroupId
+  KafkaClientEC2InstancePublicDNS:
+    Description: The Public DNS for the MirrorMaker EC2 instance
+    Value: !GetAtt
+      - KafkaClientEC2Instance
+      - PublicDnsName
+  MSKClusterArn:
+    Description: The Arn for the MSKMMCluster1 MSK cluster
+    Value: !Ref MSKCluster

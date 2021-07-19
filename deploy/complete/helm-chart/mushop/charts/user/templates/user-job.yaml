@@ -36,6 +36,76 @@ spec:
             {{- include "user.mount.wallet" . | nindent 12 }}
             {{- include "user.mount.initdb" . | nindent 12 }}
       volumes: {{- include "user.volumes" . | nindent 8 }}
-{{ end }}
+{{- end }}
+{{- else }}
 
-{{ end }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "user.fullname" . }}-init-{{ .Release.Revision }}
+  labels: {{ include "user.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 120
+  backoffLimit: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app.kubernetes.io/name: {{ include "user.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        # create schema
+        - name: init
+          image: "{{ .Values.dbtools.repository }}:{{ .Values.dbtools.tag }}"
+          imagePullPolicy: {{ .Values.dbtools.pullPolicy }}
+          command: ["/bin/sh","mysql.init.sh"]
+          env:
+          - name: AWS_RDS_ADMIN_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: adminUsername
+          - name: AWS_RDS_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: adminPassword
+          - name: AWS_RDS_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: dbHost
+          - name: AWS_RDS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: dbPort
+          - name: SERVICE_DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: serviceDbName
+          - name: SERVICE_DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: serviceDbUsername
+          - name: SERVICE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: user-rds-init-job-secrets
+                key: serviceDbPassword
+          volumeMounts:
+            - name: initdb
+              mountPath: /work/
+      volumes:
+        - name: initdb
+          configMap:
+            name: {{ include (printf "%s.fullname" .Chart.Name) . }}-init
+            items:
+              - key: mysql.init.sh
+                path: mysql.init.sh
+{{- end }}

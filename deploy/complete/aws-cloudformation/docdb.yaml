@@ -1,0 +1,92 @@
+Description: "Create AWS DocumentDB"
+
+Parameters:
+  DBClusterName:
+    Default: "MuShopDocumentDb"
+    Description : "MuShop Document DB Cluster name"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "64"
+    AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  DBInstanceName:
+    Default: "MuShopDocumentDbInstance01"
+    Description : "MuShop Document Db Instance name"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "64"
+    AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  MasterUser:
+    Default: "master"
+    NoEcho: "true"
+    Description : "The database admin account username"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "16"
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  DBInstanceClass:
+    Description : "Instance class. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+    Type: "String"
+    Default: db.t3.medium
+    AllowedValues:
+      - db.t3.medium
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.12xlarge
+      - db.r5.24xlarge
+    ConstraintDescription : "Instance type must be of the ones supported for the region. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+
+  RandomStringLambdaFunctionArn:
+    Type: "String"
+    Description: "Random String Lambda function ARN"
+
+Resources:
+  # This creates new DocDB cluster
+  DBCluster:
+    Type: "AWS::DocDB::DBCluster"
+    DeletionPolicy: Delete
+    Properties:
+      DBClusterIdentifier: !Ref DBClusterName
+      MasterUsername: !Ref MasterUser
+      MasterUserPassword: !GetAtt DBAdminPassword.RandomString
+      EngineVersion: 4.0.0
+
+  # This deploys one instance to the DocDb cluster
+  DBInstance:
+    Type: "AWS::DocDB::DBInstance"
+    Properties:
+      DBClusterIdentifier: !Ref DBCluster
+      DBInstanceIdentifier: !Ref DBInstanceName
+      DBInstanceClass: !Ref DBInstanceClass
+    DependsOn: DBCluster
+
+  # This generates admin password.
+  DBAdminPassword:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Length: 16
+      RDSCompatible: true
+      Punctuation: false
+      ServiceToken: !Ref RandomStringLambdaFunctionArn
+
+Outputs:
+  ClusterId:
+    Value: !Ref DBCluster
+  ClusterEndpoint:
+    Value: !GetAtt DBCluster.Endpoint
+  ClusterPort:
+    Value: !GetAtt DBCluster.Port
+  MasterUsername:
+    Value: !Ref MasterUser
+  MasterPassword:
+    Value: !GetAtt DBAdminPassword.RandomString
+  EngineVersion:
+    Value: "4.0.0"
+

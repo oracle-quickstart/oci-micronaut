@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.EachBean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Parameter;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.io.ResourceLoader;
@@ -30,6 +31,7 @@ import java.util.Properties;
  * Factory for creating instances of {@link OracleRDBMSClient}
  */
 @Factory
+@Requires(property = "datasources.default")
 public class OracleSodaClientFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(OracleSodaClientFactory.class);

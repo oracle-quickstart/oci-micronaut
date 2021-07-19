@@ -14,5 +14,4 @@ flyway:
     default:
       enabled: true
       locations: classpath:db/mysql
-      create-schemas: true
 

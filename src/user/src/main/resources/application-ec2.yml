@@ -5,6 +5,11 @@ micronaut:
         enabled: true
         namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
 
+  ssl:
+    trust-store:
+      path: /certs/rds-truststore.jks
+      password: changeme
+
 datasources:
   default:
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -14,3 +19,4 @@ flyway:
     default:
       enabled: true
       locations: classpath:db/mysql
+      create-schemas: true

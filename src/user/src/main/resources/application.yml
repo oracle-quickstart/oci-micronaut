@@ -42,6 +42,6 @@ datasources:
 flyway:
   datasources:
     default:
-      locations: classpath:db/migration
+      locations: classpath:db/oracle
       baseline-version: 0
       baseline-on-migrate: true

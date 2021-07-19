@@ -39,13 +39,7 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-datasources:
-  default:
-    dialect: oracle
-    url: jdbc:oracle:thin:@localhost:1521/xe
-    driverClassName: oracle.jdbc.OracleDriver
-    username: system
-    password: oracle
+
 flyway:
   datasources:
     default:

@@ -1,9 +1,6 @@
-{{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
-{{- if eq "oci" $cloud }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include (printf "%s.fullname" .Chart.Name) . }}-init
   labels: {{ include (printf "%s.labels" .Chart.Name) . | nindent 4 }}
-data: {{- (.Files.Glob "config/*.sql").AsConfig | nindent 2 }}
-{{- end }}
+data: {{- (.Files.Glob "config/*").AsConfig | nindent 2 }}

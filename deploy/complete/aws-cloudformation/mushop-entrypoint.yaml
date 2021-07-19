@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploys an EKS cluster in a new VPC
+Description: Deploys Micronaut MuShop to an EKS cluster.
 Metadata:
   AutoInstance:
     NodeInstanceType:
@@ -50,6 +50,12 @@ Metadata:
           - MMSS3BucketName
           - MMSS3BucketRegion
       - Label:
+          default: RDS configuration
+        Parameters:
+          - DBName
+          - DBInstanceClass
+          - DBAllocatedStorage
+      - Label:
           default: Basic configuration
         Parameters:
           - AvailabilityZones
@@ -95,25 +101,12 @@ Metadata:
           - ALBIngressController
           - ClusterAutoScaler
           - EfsStorageClass
-#          All these below are part of helm deployment
-#          - PrometheusIntegration
-#          - GrafanaIntegration
-#          - MonitoringStack
       - Label:
           default: AWS EKS Quick Start configuration
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
           - QSS3BucketRegion
-          - TestSuite
-      - Label:
-          default: RDS configuration
-        Parameters:
-          - DBName
-          - DBInstanceClass
-          - DBAllocatedStorage
-          - DBUsername
-          - DBPassword
     ParameterLabels:
       # Default
       CloudFormationVersion:
@@ -197,10 +190,6 @@ Metadata:
         default: Database instance class
       DBAllocatedStorage:
         default: The size of the database (GiB)
-      DBUsername:
-        default: Username for database access
-      DBPassword:
-        default: Password MySQL database access
 Parameters:
   CloudFormationVersion:
     Type: String
@@ -376,11 +365,6 @@ Parameters:
       (Optional) Name used to map advanced parameters to an EKS cluster. If you launched an advanced
       configuration stack and want to apply its values to this cluster, this name must match the ConfigSetName parameter
       for the stack. If left blank, a new config set is created using default values.
-  TestSuite:
-    Type: String
-    AllowedValues: [Enabled, Disabled]
-    Default: Disabled
-    Description: Deploys a test stack that tests Quick Start components.
   NodeInstanceFamily:
     Default: Standard
     AllowedValues: ['Standard', 'ARM', 'GPU']
@@ -438,29 +422,19 @@ Mappings:
   Config:
     Prefix: { Value: 'eks-quickstart' }
 Resources:
-#
-#  VPCStack:
-#    Type: AWS::CloudFormation::Stack
-#    Metadata:
-#      cfn-lint: { config: { ignore_checks: [ W9901 ] } }
-#    Properties:
-#      TemplateURL: !Sub
-#        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml'
-#        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-#          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-#      Parameters:
-#        AvailabilityZones: !Join [ ',', !Ref 'AvailabilityZones' ]
-#        NumberOfAZs: !Ref 'NumberOfAZs'
-#        PrivateSubnet1ACIDR: !Ref PrivateSubnet1CIDR
-#        PrivateSubnet2ACIDR: !Ref PrivateSubnet2CIDR
-#        PrivateSubnet3ACIDR: !Ref PrivateSubnet3CIDR
-#        PrivateSubnetATag2: "kubernetes.io/role/internal-elb="
-#        PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
-#        PublicSubnet2CIDR: !Ref PublicSubnet2CIDR
-#        PublicSubnet3CIDR: !Ref PublicSubnet3CIDR
-#        PublicSubnetTag2: "kubernetes.io/role/elb="
-#        VPCCIDR: !Ref VPCCIDR
 
+  # This creates MuShop utilities stack
+  MushopUtilitiesStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop-utilities.yaml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+
+  # This deploys RDS instance into standalone VPC. The RDS instance is accessible only from the EKSStack
+  # what is achieved by providing the CidrIp parameter.
   RDSStack:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -474,25 +448,10 @@ Resources:
         DBInstanceClass: !Ref DBInstanceClass
         DBAllocatedStorage: !Ref DBAllocatedStorage
         CidrIp: !Ref VPCCIDR
+        RandomStringLambdaFunctionArn: !GetAtt MushopUtilitiesStack.Outputs.RandomStringLambdaArn
 
-  MuShop:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub
-        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop.yml'
-        - S3Region: !Ref MMSS3BucketRegion
-          S3Bucket: !Ref MMSS3BucketName
-          Version: !Ref CloudFormationVersion
-      Parameters:
-        KubeClusterName: !GetAtt EKSStack.Outputs.EKSClusterName
-        MushopNamespace: 'mushop'
-        HelmRepository: !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/charts'
-          - S3Region: !Ref MMSS3BucketRegion
-            S3Bucket: !Ref MMSS3BucketName
-            Version: !Ref CloudFormationVersion
-        OIDCIssuerURLWithoutProtocol:  !Join [ '', !Split [ 'https://', !GetAtt EKSStack.Outputs.OIDCIssuerURL ]]
-
+  # This deploys EKS stack into standalone VPC and Bastion host to connect to. The EKS has the public access disabled
+  # by default.
   EKSStack:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -543,17 +502,56 @@ Resources:
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         QSS3BucketRegion: !Ref QSS3BucketRegion
-        TestSuite: !Ref TestSuite
 
-Outputs:
-  EKSClusterName:
-    Value: !GetAtt EKSStack.Outputs.EKSClusterName
-  BastionIP:
-    Value: !GetAtt EKSStack.Outputs.BastionIP
-  BastionSecurityGroup:
-    Value: !GetAtt EKSStack.Outputs.BastionSecurityGroup
-  NodeGroupSecurityGroup:
-    Value: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
+  # This deploys MuShop Helm chart to EKS
+  MuShop:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/mushop.yml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Parameters:
+        KubeClusterName: !GetAtt EKSStack.Outputs.EKSClusterName
+        MushopNamespace: 'mushop'
+        HelmRepository: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/charts'
+          - S3Region: !Ref MMSS3BucketRegion
+            S3Bucket: !Ref MMSS3BucketName
+            Version: !Ref CloudFormationVersion
+        OIDCIssuerURLWithoutProtocol:  !Join [ '', !Split [ 'https://', !GetAtt EKSStack.Outputs.OIDCIssuerURL ]]
+        RdsHostname: !GetAtt RDSStack.Outputs.RDSAddress
+        RdsPort: !GetAtt RDSStack.Outputs.RDSPort
+        RdsAdminUsername: !GetAtt RDSStack.Outputs.RDSAdminUser
+        RdsAdminPassword: !GetAtt RDSStack.Outputs.RDSAdminPass
+        DocDbClusterEndpoint: !GetAtt DocumentDbStack.Outputs.ClusterEndpoint
+        DocDbClusterPort: !GetAtt DocumentDbStack.Outputs.ClusterPort
+        DocDbMasterUsername: !GetAtt DocumentDbStack.Outputs.MasterUsername
+        DocDbMasterPassword: !GetAtt DocumentDbStack.Outputs.MasterPassword
+        RandomStringLambdaFunctionArn: !GetAtt MushopUtilitiesStack.Outputs.RandomStringLambdaArn
+
+  # This deploys MuShop Helm chart to EK
+  DocumentDbStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/docdb.yaml'
+        - S3Region: !Ref MMSS3BucketRegion
+          S3Bucket: !Ref MMSS3BucketName
+          Version: !Ref CloudFormationVersion
+      Parameters:
+        RandomStringLambdaFunctionArn: !GetAtt MushopUtilitiesStack.Outputs.RandomStringLambdaArn
+
+#Outputs:
+#  EKSClusterName:
+#    Value: !GetAtt EKSStack.Outputs.EKSClusterName
+#  BastionIP:
+#    Value: !GetAtt EKSStack.Outputs.BastionIP
+#  BastionSecurityGroup:
+#    Value: !GetAtt EKSStack.Outputs.BastionSecurityGroup
+#  NodeGroupSecurityGroup:
+#    Value: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
 Rules:
   AutoDetectSharedParams:
     RuleCondition: !Or

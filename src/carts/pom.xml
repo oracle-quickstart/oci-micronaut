@@ -102,6 +102,35 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- AWS configuration discovery -->
+        <dependency>
+            <groupId>io.micronaut.aws</groupId>
+            <artifactId>micronaut-aws-secretsmanager</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micronaut.aws</groupId>
+            <artifactId>micronaut-aws-parameter-store</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
+            <version>2.16.99</version>
+        </dependency>
+
+        <!-- Mongo access -->
+        <dependency>
+            <groupId>io.micronaut.mongodb</groupId>
+            <artifactId>micronaut-mongo-sync</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- ATP db access -->
         <dependency>
             <groupId>io.micronaut.oraclecloud</groupId>

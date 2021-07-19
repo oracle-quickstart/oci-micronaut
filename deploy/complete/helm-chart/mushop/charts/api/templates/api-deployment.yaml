@@ -41,8 +41,8 @@ spec:
             {{- if eq "oci" $cloud }}
               {{- include "api.oapm.connection" . | nindent 12 }}
               {{- include "api.oims.config" . | nindent 12 }}
-              {{- include "api.streaming" . | nindent 12 }}
             {{- end }}
+            {{- include "api.streaming" . | nindent 12 }}
             - name: REDIS_URI
               value: redis://mushop-session:6379
 

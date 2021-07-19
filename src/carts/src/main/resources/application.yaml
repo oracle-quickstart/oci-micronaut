@@ -15,16 +15,17 @@ micronaut:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
-datasources:
-  default:
-    url: jdbc:oracle:thin:@localhost:1521/xe
-    driverClassName: oracle.jdbc.OracleDriver
-    username: system
-    password: oracle
-    data-source-properties:
-      oracle:
-        jdbc:
-          fanEnabled: false
+#datasources:
+#  default:
+#    url: jdbc:oracle:thin:@localhost:1521/xe
+#    driverClassName: oracle.jdbc.OracleDriver
+#    username: system
+#    password: oracle
+#    data-source-properties:
+#      oracle:
+#        jdbc:
+#          fanEnabled: false
+
     # Optimization: cache collection metadata to avoid extra roundtrips
     # to the database when opening a collection
     soda:

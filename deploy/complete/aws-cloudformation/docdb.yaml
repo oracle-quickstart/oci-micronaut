@@ -2,7 +2,7 @@ Description: "Create AWS DocumentDB"
 
 Parameters:
   DBClusterName:
-    Default: "MuShopDocumentDb"
+    Default: "MuShopDocDb"
     Description : "MuShop Document DB Cluster name"
     Type: "String"
     MinLength: "1"
@@ -10,8 +10,13 @@ Parameters:
     AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
     ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
 
+  DBClusterPort:
+    Default: 27017
+    Type: Number
+    Description: "MuShop Document DB Cluster port"
+
   DBInstanceName:
-    Default: "MuShopDocumentDbInstance01"
+    Default: "MuShopDocDbInstance01"
     Description : "MuShop Document Db Instance name"
     Type: "String"
     MinLength: "1"
@@ -46,29 +51,77 @@ Parameters:
   RandomStringLambdaFunctionArn:
     Type: "String"
     Description: "Random String Lambda function ARN"
+  PrivateSubnet1ID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet2ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet3ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  VPCID:
+    Type: String
+    Description: "VPC of subnets and security group."
+  VPCCIDR:
+    Type: String
+    Description: "Cidr range for the security group allowing access to DocDb port"
 
 Resources:
   # This creates new DocDB cluster
-  DBCluster:
+  DocDBCluster:
     Type: "AWS::DocDB::DBCluster"
     DeletionPolicy: Delete
     Properties:
       DBClusterIdentifier: !Ref DBClusterName
       MasterUsername: !Ref MasterUser
-      MasterUserPassword: !GetAtt DBAdminPassword.RandomString
+      MasterUserPassword: !GetAtt DocDBAdminPassword.RandomString
       EngineVersion: 4.0.0
+      DBSubnetGroupName: !Ref DocDBSubnetGroup
+      Port: !Ref DBClusterPort
+      VpcSecurityGroupIds:
+        - !Ref DocDBInstanceSecurityGroup
+
+
+  # This creates security group allowing access to DocDb port.
+  DocDBInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to DocumendDB
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !Ref DBClusterPort
+          ToPort: !Ref DBClusterPort
+          CidrIp: !Ref VPCCIDR
+      Tags:
+        - Key: Name
+          Value: !Ref 'AWS::StackName'
+
+  # This creates subnetgroup in which the DocDb instances will be placed.
+  DocDBSubnetGroup:
+    Type: AWS::DocDB::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: AWS DocumendDb subnet group
+      DBSubnetGroupName: docdbsubnetgroup
+      SubnetIds:
+        - Ref: PrivateSubnet1ID
+        - Ref: PrivateSubnet2ID
+        - Ref: PrivateSubnet3ID
 
   # This deploys one instance to the DocDb cluster
-  DBInstance:
+  DocDBInstance:
     Type: "AWS::DocDB::DBInstance"
     Properties:
-      DBClusterIdentifier: !Ref DBCluster
+      DBClusterIdentifier: !Ref DocDBCluster
       DBInstanceIdentifier: !Ref DBInstanceName
       DBInstanceClass: !Ref DBInstanceClass
-    DependsOn: DBCluster
+    DependsOn: DocDBCluster
 
   # This generates admin password.
-  DBAdminPassword:
+  DocDBAdminPassword:
     Type: AWS::CloudFormation::CustomResource
     Properties:
       Length: 16
@@ -78,15 +131,15 @@ Resources:
 
 Outputs:
   ClusterId:
-    Value: !Ref DBCluster
+    Value: !Ref DocDBCluster
   ClusterEndpoint:
-    Value: !GetAtt DBCluster.Endpoint
+    Value: !GetAtt DocDBCluster.Endpoint
   ClusterPort:
-    Value: !GetAtt DBCluster.Port
+    Value: !GetAtt DocDBCluster.Port
   MasterUsername:
     Value: !Ref MasterUser
   MasterPassword:
-    Value: !GetAtt DBAdminPassword.RandomString
+    Value: !GetAtt DocDBAdminPassword.RandomString
   EngineVersion:
     Value: "4.0.0"
 

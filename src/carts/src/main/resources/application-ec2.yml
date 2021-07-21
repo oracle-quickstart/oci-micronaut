@@ -1,0 +1,16 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
+
+carts:
+  database: mushop
+
+mongodb:
+  readPreference: SECONDARY
+  ssl:
+    enabled: true
+  retry-writes: false
+

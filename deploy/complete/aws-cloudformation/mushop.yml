@@ -431,6 +431,12 @@ Resources:
 #            service: "false"
 #          imageSuffix: openjdk-aws
 #          serviceAccount: mushop-service
+#        api:
+#          env:
+#            trackingEnabled: false
+#        ingress:
+#          grafana:
+#            enabled: false
 #        tags:
 #          streaming: false
 #          atp: true

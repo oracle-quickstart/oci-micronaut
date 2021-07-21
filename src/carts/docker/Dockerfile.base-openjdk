@@ -6,8 +6,8 @@ RUN apk update \
 
 COPY import-aws-rds-certs.sh /certs/import-aws-rds-certs.sh
 
-ARG trustStorePassword
-RUN sh /certs/import-aws-rds-certs.sh
+RUN sh /certs/import-aws-rds-certs.sh /opt/openjdk-16/lib/security/cacerts
 
 FROM openjdk:16-alpine
-COPY --from=builder /certs/rds-truststore.jks /certs/rds-truststore.jks
+
+COPY --from=builder /opt/openjdk-16/lib/security/cacerts /opt/openjdk-16/lib/security/cacerts

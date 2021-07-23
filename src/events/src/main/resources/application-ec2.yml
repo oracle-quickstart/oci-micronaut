@@ -1,0 +1,23 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
+
+kafka:
+  security:
+    protocol: SASL_SSL
+  ssl:
+    truststore:
+      location: /opt/openjdk-16/lib/security/cacerts
+      password: changeit
+      type: PKCS12
+  sasl:
+    mechanism: AWS_MSK_IAM
+    jaas:
+      config: "software.amazon.msk.auth.iam.IAMLoginModule required;"
+    client:
+      callback:
+        handler:
+          class: software.amazon.msk.auth.iam.IAMClientCallbackHandler

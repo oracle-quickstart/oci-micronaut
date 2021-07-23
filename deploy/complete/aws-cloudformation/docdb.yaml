@@ -65,9 +65,9 @@ Parameters:
   VPCID:
     Type: String
     Description: "VPC of subnets and security group."
-  VPCCIDR:
+  NodeGroupSecurityGroup:
     Type: String
-    Description: "Cidr range for the security group allowing access to DocDb port"
+    Description: "Security group of EKS nodes"
 
 Resources:
   # This creates new DocDB cluster
@@ -95,7 +95,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref DBClusterPort
           ToPort: !Ref DBClusterPort
-          CidrIp: !Ref VPCCIDR
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
       Tags:
         - Key: Name
           Value: !Ref 'AWS::StackName'

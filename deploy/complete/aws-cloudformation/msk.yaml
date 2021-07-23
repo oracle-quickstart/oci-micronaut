@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+
+  PrivateSubnet1ID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet2ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet3ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  VPCID:
+    Type: String
+    Description: "VPC of subnets and security group."
+  ClusterName:
+    Type: String
+    Description: "Name of the MSK cluster."
+    Default: mushop
+  NodeGroupSecurityGroup:
+    Type: String
+    Description: "Security group of EKS nodes"
+Mappings:
+  Config:
+    Prefix: { Value: 'eks-quickstart' }
+Resources:
+
+  MSKSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable access to Kafka
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2181
+          ToPort: 2181
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+
+        - IpProtocol: tcp
+          FromPort: 9094
+          ToPort: 9094
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+
+        - IpProtocol: tcp
+          FromPort: 9092
+          ToPort: 9092
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Ref 'AWS::StackName'
+
+  MSKCluster:
+    Type: 'AWS::MSK::Cluster'
+    Properties:
+      BrokerNodeGroupInfo:
+        ClientSubnets:
+          - !Ref PrivateSubnet1ID
+          - !Ref PrivateSubnet2ID
+          - !Ref PrivateSubnet3ID
+        InstanceType: kafka.m5.large
+        SecurityGroups:
+          - !GetAtt
+            - MSKSecurityGroup
+            - GroupId
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: 200
+      ClusterName: !Ref ClusterName
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: TLS
+          InCluster: true
+      EnhancedMonitoring: PER_TOPIC_PER_BROKER
+      KafkaVersion: 2.2.1
+      NumberOfBrokerNodes: 3
+      ClientAuthentication:
+        Sasl:
+          Iam:
+            Enabled: true
+
+  MskClusterBrokers:
+    Type: Custom::CliQuery
+    Properties:
+      ServiceToken: !Sub [ 'arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${Prefix}-ResourceReader', { Prefix: !FindInMap [ Config, Prefix, Value ] } ]
+      AwsCliCommand: !Sub
+        - |
+          kafka get-bootstrap-brokers --cluster-arn ${CLUSTER_ARN}
+        - CLUSTER_ARN: !Ref MSKCluster
+      IdField: 'BootstrapBrokerStringSaslIam'
+
+Outputs:
+  MSKSecurityGroupID:
+    Description: The ID of the security group created for the MSK clusters
+    Value: !GetAtt
+      - MSKSecurityGroup
+      - GroupId
+  MSKClusterArn:
+    Description: The Arn for the MSKMMCluster1 MSK cluster
+    Value: !Ref MSKCluster
+  MskClusterBrokers:
+    Description: The Kafka server bootstrap brokers
+    Value: !Ref MskClusterBrokers
+  MSKClusterName:
+    Description: The MKS server name
+    Value: !Ref ClusterName

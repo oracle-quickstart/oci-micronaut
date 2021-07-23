@@ -25,11 +25,16 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-validation")
 
-    // Monitoring
+    // Metrics - Core
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Metrics - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Metrics - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")
@@ -39,6 +44,17 @@ dependencies {
 
     // Streaming
     implementation("io.micronaut.kafka:micronaut-kafka:3.3.3")
+
+    // AWS - Kafka IAM
+    implementation 'software.amazon.msk:aws-msk-iam-auth:1.0.0'
+
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts")
+
 
     testImplementation "org.testcontainers:testcontainers:1.15.2"
     testImplementation "org.testcontainers:kafka:1.15.2"

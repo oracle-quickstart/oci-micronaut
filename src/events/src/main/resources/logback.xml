@@ -12,5 +12,6 @@
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
+    <logger name="org.apache.kafka" level="debug"/>
 
 </configuration>

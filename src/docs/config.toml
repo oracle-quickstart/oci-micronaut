@@ -9,13 +9,13 @@ theme = "redwood"
 relativeURLs = true
 
 [params]
-editURL = "https://github.com/pgressa/oci-cloudnative/tree/master/docs/content/"
+editURL = "https://github.com/oracle-quickstart/oci-micronaut/tree/main/src/docs/content"
 showVisitedLinks = false
 author = "Oracle Developers"
 organization = "Oracle"
 description = "Oracle Cloud Native Workshop"
 keywords = ["Kubernetes", "OCI", "OKE", "Microservices", "Micronaut"]
-ghrepo = "https://github.com/pgressa/oci-cloudnative"
+ghrepo = "https://github.com/oracle-quickstart/oci-micronaut"
 branch = "master"
 logo = "images/logo.dark.png"
 
@@ -56,13 +56,13 @@ weight = 30
 [[menu.shortcuts]]
 name = "GitHub Source"
 pre = "<span uk-icon='icon: github; ratio: 1.25'></span>"
-url = "https://github.com/pgressa/oci-cloudnative"
+url = "https://github.com/oracle-quickstart/oci-micronaut"
 weight = 40
 
 [[menu.shortcuts]]
 name = "Report Issue"
 pre = "<span uk-icon='icon: warning; ratio: 1.25'></span>"
-url = "https://github.com/pgressa/oci-cloudnative/issues"
+url = "https://github.com/oracle-quickstart/oci-micronaut/issues"
 weight = 50
 
 [outputs]

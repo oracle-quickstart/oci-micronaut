@@ -1,4 +1,4 @@
-# Contributing to oci-cloudnative
+# Contributing to oci-micronaut
 
 *Copyright © 2019, Oracle and/or its affiliates. All rights reserved.*
 
@@ -9,7 +9,7 @@ Pull requests can be made under
 Before submitting a code contribution please discuss it with us by creating a
 new issue.
 
-For pull requests to be accepted into oci-cloudnative, the bottom of
+For pull requests to be accepted into oci-micronaut, the bottom of
 your commit message must have the following line using your name and
 e-mail address as it appears in the OCA Signatories list.
 

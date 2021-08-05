@@ -3,7 +3,7 @@ name: Publish Docs
 on:
   push:
     branches: 
-    - master
+    - main
     - docs_update
     paths:
     - 'src/docs/**'

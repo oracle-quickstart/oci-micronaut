@@ -8,4 +8,4 @@ For practical purposes, multiple charts are used to separate installation into t
 1. [`mushop`](#installation) Deploys the MuShop application runtime
 
 
-Visit the [documentation](https://pgressa.github.io/oraclecloud-cloudnative/quickstart/helm/) for detailed installation instructions.
+Visit the [documentation](https://oracle-quickstart.github.io/oci-micronaut/quickstart/helm/) for detailed installation instructions.

@@ -6,6 +6,7 @@ import catalogue.repositories.CategoryRepository;
 import catalogue.repositories.ProductRepository;
 import io.micrometer.core.annotation.Timed;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.cache.annotation.Cacheable;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -45,6 +46,7 @@ class CatalogueController implements CatalogueOperations {
     @Get("/categories")
     @Timed("category.list")
     @CircuitBreaker(reset = "30s")
+    @Cacheable("categories")
     public CategoriesDTO listCategories() {
         return new CategoriesDTO(categoryRepository.listName());
     }

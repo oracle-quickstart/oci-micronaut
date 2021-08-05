@@ -18,7 +18,7 @@ Storefront backend written as a Micronaut application in Java orchestrating serv
 # Usage
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
-[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+[/deploy/complete/helm-chart/](https://oracle-quickstart.github.io/oci-micronaut/quickstart/).
 
 
 # Running Locally
@@ -39,7 +39,7 @@ Note that in order for the application to be functional it may require you to st
 curl -i http://localhost:8080/api/catalogue
 ```
 
-Will result in a `No available services for ID` error unless the catalogue service is running. You can start the entire topology using the `docker-compose.yml` located in [this directory](https://github.com/pgressa/oci-cloudnative/blob/master/deploy/complete/docker-compose).
+Will result in a `No available services for ID` error unless the catalogue service is running. You can start the entire topology using the `docker-compose.yml` located in [this directory](https://github.com/oracle-quickstart/oci-micronaut/tree/main/deploy/complete/docker-compose).
 
 Alternatively you can start an individual backend service on another port:
 
@@ -111,7 +111,7 @@ Or the native version with:
 ./gradlew dockerPushNative
 ```
 
-The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/pgressa/oraclecloud-cloudnative/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/api/build.gradle#L81-L87):
+The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/api/build.gradle#L81-L87):
 
 ```groovy
 dockerBuild {

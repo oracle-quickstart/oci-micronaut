@@ -11,7 +11,7 @@ The function is written as a Micronaut Function (Serverless) application in Java
 # Usage
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
-[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+[/deploy/complete/helm-chart/](https://github.com/oracle-quickstart/oci-micronaut/tree/master/deploy/complete/helm-chart)).
 
 # Running Locally
 

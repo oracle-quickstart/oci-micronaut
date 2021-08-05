@@ -1,16 +1,24 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::SecretsManager-2020-07-23
-Description: Deploys an RDS instance
+Description: Deploys the RDS cluster with MySQL databse for MuShop services
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Basic configuration
+          default: RDS configuration
         Parameters:
           - DBName
           - DBInstanceClass
           - DBAllocatedStorage
-          - CidrIp
+          - RandomStringLambdaFunctionArn
+      - Label:
+          default: RDS networking configuration
+          Parameters:
+            - VPCID
+            - PrivateSubnet1ID
+            - PrivateSubnet2ID
+            - PrivateSubnet3ID
+            - NodeGroupSecurityGroup
     ParameterLabels:
       DBName:
         default: Database name
@@ -18,8 +26,18 @@ Metadata:
         default: Database instance class
       DBAllocatedStorage:
         default: The size of the database (GiB)
-      CidrIp:
-        default: CIDR block for the ingress security group
+      VPCID:
+        default: VPC ID
+      PrivateSubnet1ID:
+        default: Private subnet 1 ID
+      PrivateSubnet2ID:
+        default: Private subnet 2 ID
+      PrivateSubnet3ID:
+        default: Private subnet 3 ID (in case of 3AZ deployment)
+      RandomStringLambdaFunctionArn:
+        default: ARN of lambda function that generates random strings
+      NodeGroupSecurityGroup:
+        default: Security group to allow access from to RDS
 Parameters:
   DBName:
     Default: dbname
@@ -41,127 +59,143 @@ Parameters:
     MinValue: '5'
     MaxValue: '1024'
     ConstraintDescription: must be between 20 and 65536 GiB.
-  CidrIp:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(0|1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.0.0/16
-    Description: CIDR block for the ingress security group.
+  PrivateSubnet1ID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet2ID:
     Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet3ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  VPCID:
+    Type: String
+    Description: "VPC of subnets and security group."
+  NodeGroupSecurityGroup:
+    Type: String
+    Description: "Security group of EKS nodes"
   RandomStringLambdaFunctionArn:
     Type: String
     Description: Random string lambda function arn
 Resources:
-  # RDS VPC
-  RdsVpc:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsHostnames: true
-      Tags:
-        - Key: Name
-          Value: !Ref 'AWS::StackName'
 
-  # This creates internet gateway for RDS instance network.
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Ref 'AWS::StackName'
+#  # RDS VPC
+#  RdsVpc:
+#    Type: AWS::EC2::VPC
+#    Properties:
+#      CidrBlock: 10.0.0.0/16
+#      EnableDnsHostnames: true
+#      Tags:
+#        - Key: Name
+#          Value: !Ref 'AWS::StackName'
+#
+#  # This creates internet gateway for RDS instance network.
+#  InternetGateway:
+#    Type: AWS::EC2::InternetGateway
+#    Properties:
+#      Tags:
+#        - Key: Name
+#          Value: !Ref 'AWS::StackName'
+#
+#  # This attaches the internet gateway to the VPC
+#  VPCGatewayAttachment:
+#    Type: AWS::EC2::VPCGatewayAttachment
+#    Properties:
+#      VpcId: !Ref RdsVpc
+#      InternetGatewayId: !Ref InternetGateway
 
-  # This attaches the internet gateway to the VPC
-  VPCGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref RdsVpc
-      InternetGatewayId: !Ref InternetGateway
+
+#
+#  # Subnet that the rotation Lambda function and the RDS instance will be placed in
+#  PublicSubnet01:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      CidrBlock: 10.0.96.0/19
+#      AvailabilityZone:
+#        Fn::Select:
+#          - '0'
+#          - Fn::GetAZs: { Ref: 'AWS::Region' }
+#      VpcId: !Ref RdsVpc
+#      MapPublicIpOnLaunch: true
+#      Tags:
+#        - Key: Name
+#          Value: !Ref 'AWS::StackName'
+#
+#  # Subnet that the rotation Lambda function and the RDS instance will be placed in
+#  PublicSubnet02:
+#    Type: AWS::EC2::Subnet
+#    Properties:
+#      CidrBlock: 10.0.128.0/19
+#      AvailabilityZone:
+#        Fn::Select:
+#          - '1'
+#          - Fn::GetAZs: { Ref: 'AWS::Region' }
+#      VpcId: !Ref RdsVpc
+#      MapPublicIpOnLaunch: true
+#      Tags:
+#        - Key: Name
+#          Value: !Ref 'AWS::StackName'
+#
+#  # Route table for VPC
+#  RouteTable:
+#    Type: AWS::EC2::RouteTable
+#    Properties:
+#      VpcId: !Ref RdsVpc
+#      Tags:
+#        - Key: Name
+#          Value: !Ref 'AWS::StackName'
+#
+#  # Associates route with subnet 1
+#  RouteTable1Association:
+#    Type: AWS::EC2::SubnetRouteTableAssociation
+#    Properties:
+#      SubnetId: !Ref PublicSubnet01
+#      RouteTableId: !Ref RouteTable
+#
+#  # Associates route with subnet 2
+#  RouteTable2Association:
+#    Type: AWS::EC2::SubnetRouteTableAssociation
+#    Properties:
+#      SubnetId: !Ref PublicSubnet02
+#      RouteTableId: !Ref RouteTable
+#
+#  # Adds route table rule allowing traffic from internet gateway to subnets
+#  InternetRouteRule:
+#    Type: AWS::EC2::Route
+#    DependsOn: VPCGatewayAttachment
+#    Properties:
+#      RouteTableId: !Ref RouteTable
+#      DestinationCidrBlock: 0.0.0.0/0
+#      GatewayId: !Ref InternetGateway
+
 
   # This opens the port for ingress traffic from the specified IP cidr.
   EksSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Open database for access
-      VpcId: !Ref RdsVpc
+      VpcId: !Ref VPCID
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '3306'
           ToPort: '3306'
-          CidrIp: !Ref CidrIp
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
       Tags:
         - Key: Name
           Value: !Ref 'AWS::StackName'
-
-  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-  PublicSubnet01:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.96.0/19
-      AvailabilityZone:
-        Fn::Select:
-          - '0'
-          - Fn::GetAZs: { Ref: 'AWS::Region' }
-      VpcId: !Ref RdsVpc
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: !Ref 'AWS::StackName'
-
-  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-  PublicSubnet02:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.128.0/19
-      AvailabilityZone:
-        Fn::Select:
-          - '1'
-          - Fn::GetAZs: { Ref: 'AWS::Region' }
-      VpcId: !Ref RdsVpc
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: !Ref 'AWS::StackName'
-
-  # Route table for VPC
-  RouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref RdsVpc
-      Tags:
-        - Key: Name
-          Value: !Ref 'AWS::StackName'
-
-  # Associates route with subnet 1
-  RouteTable1Association:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PublicSubnet01
-      RouteTableId: !Ref RouteTable
-
-  # Associates route with subnet 2
-  RouteTable2Association:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PublicSubnet02
-      RouteTableId: !Ref RouteTable
-
-  # Adds route table rule allowing traffic from internet gateway to subnets
-  InternetRouteRule:
-    Type: AWS::EC2::Route
-    DependsOn: VPCGatewayAttachment
-    Properties:
-      RouteTableId: !Ref RouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
 
   # Database subnet group for the RDS instance
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
-    DependsOn: VPCGatewayAttachment
+#    DependsOn: VPCGatewayAttachment
     Properties:
       DBSubnetGroupDescription: "DB Subnet group"
       SubnetIds:
-        - Ref: PublicSubnet01
-        - Ref: PublicSubnet02
+        - !Ref PrivateSubnet1ID
+        - !Ref PrivateSubnet2ID
+        - !Ref PrivateSubnet3ID
       Tags:
         - Key: Name
           Value: !Ref 'AWS::StackName'

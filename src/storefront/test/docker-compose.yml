@@ -9,10 +9,7 @@ services:
 
   # Storefront API service (node)
   api:
-    build:
-      context: ../../api
-      dockerfile: ./Dockerfile
-    image: mushop/api
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.2.0-SNAPSHOT
     hostname: api
     restart: always
     environment:

@@ -6,6 +6,19 @@ image:
   tag: 1.2.0-SNAPSHOT
   pullPolicy: Always
 
+# Applied only for AWS cloud. The init job creates the topics
+initJob:
+  image:
+    repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/kafka
+    tag: latest
+    pullPolicy: Always
+  auth:
+    security:
+      protocol: SSL
+    ssl:
+      truststore:
+        location: /kafka.client.truststore.jks
+
 osb: {}
 
 hpa:

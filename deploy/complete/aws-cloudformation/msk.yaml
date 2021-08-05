@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
+Description: Deploys MSK cluster for the MuShop event service
 Parameters:
 
   PrivateSubnet1ID:
@@ -67,6 +68,7 @@ Resources:
         StorageInfo:
           EBSStorageInfo:
             VolumeSize: 200
+# TODO: use uniue name
       ClusterName: !Ref ClusterName
       EncryptionInfo:
         EncryptionInTransit:
@@ -75,10 +77,6 @@ Resources:
       EnhancedMonitoring: PER_TOPIC_PER_BROKER
       KafkaVersion: 2.2.1
       NumberOfBrokerNodes: 3
-      ClientAuthentication:
-        Sasl:
-          Iam:
-            Enabled: true
 
   MskClusterBrokers:
     Type: Custom::CliQuery
@@ -88,7 +86,17 @@ Resources:
         - |
           kafka get-bootstrap-brokers --cluster-arn ${CLUSTER_ARN}
         - CLUSTER_ARN: !Ref MSKCluster
-      IdField: 'BootstrapBrokerStringSaslIam'
+      IdField: 'BootstrapBrokerStringTls'
+
+#  MskClusterZookeeperConnectionString:
+#    Type: Custom::CliQuery
+#    Properties:
+#      ServiceToken: !Sub [ 'arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${Prefix}-ResourceReader', { Prefix: !FindInMap [ Config, Prefix, Value ] } ]
+#      AwsCliCommand: !Sub
+#        - |
+#          kafka describe-cluster --cluster-arn ${CLUSTER_ARN}
+#        - CLUSTER_ARN: !Ref MSKCluster
+#      IdField: 'ClusterInfo.ZookeeperConnectString'
 
 Outputs:
   MSKSecurityGroupID:
@@ -100,8 +108,11 @@ Outputs:
     Description: The Arn for the MSKMMCluster1 MSK cluster
     Value: !Ref MSKCluster
   MskClusterBrokers:
-    Description: The Kafka server bootstrap brokers
+    Description: The Kafka cluster bootstrap brokers
     Value: !Ref MskClusterBrokers
+#  MskClusterZookeeperConnectionString:
+#    Description: The Kafka cluster Zookeeper connection string
+#    Value: !Ref MskClusterZookeeperConnectionString
   MSKClusterName:
     Description: The MKS server name
     Value: !Ref ClusterName

@@ -1,4 +1,5 @@
-Description: "Create AWS DocumentDB"
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys DocumentDB for the MuShop cart service"
 
 Parameters:
   DBClusterName:
@@ -75,6 +76,7 @@ Resources:
     Type: "AWS::DocDB::DBCluster"
     DeletionPolicy: Delete
     Properties:
+      # TODO: use unique name of doc db instance
       DBClusterIdentifier: !Ref DBClusterName
       MasterUsername: !Ref MasterUser
       MasterUserPassword: !GetAtt DocDBAdminPassword.RandomString
@@ -112,6 +114,7 @@ Resources:
         - Ref: PrivateSubnet3ID
 
   # This deploys one instance to the DocDb cluster
+  # TODO: use unique name of doc db instance
   DocDBInstance:
     Type: "AWS::DocDB::DBInstance"
     Properties:

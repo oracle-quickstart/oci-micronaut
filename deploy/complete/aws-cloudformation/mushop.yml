@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Deploy an MuShop Helm chart kubernetes cluster"
+Description: "Deploys MuShop to the EKS cluster"
 Parameters:
   HelmRepository:
     Type: String
@@ -106,31 +106,30 @@ Resources:
                 Action:
                   - "cloudwatch:PutMetricData"
                 Resource: '*'
-        - PolicyName: mushop-events-service-policy
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              # Allow to connect to Kafka cluster
-              - Effect: Allow
-                Action:
-                  - "kafka-cluster:Connect"
-                  - "kafka-cluster:AlterCluster"
-                  - "kafka-cluster:DescribeCluster"
-                Resource: !Ref MSKClusterArn
-              # Allow to interact with topics
-              - Effect: Allow
-                Action:
-                  - "kafka-cluster:*Topic*"
-                  - "kafka-cluster:WriteData"
-                  - "kafka-cluster:ReadData"
-                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:topic/${MSKClusterName}/*'
-              # Allow to interact with group
-              - Effect: Allow
-                Action:
-                  - "kafka-cluster:AlterGroup"
-                  - "kafka-cluster:DescribeGroup"
-                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:group/${MSKClusterName}/*'
-
+#        - PolicyName: mushop-events-service-policy
+#          PolicyDocument:
+#            Version: "2012-10-17"
+#            Statement:
+#              # Allow to connect to Kafka cluster
+#              - Effect: Allow
+#                Action:
+#                  - "kafka-cluster:Connect"
+#                  - "kafka-cluster:AlterCluster"
+#                  - "kafka-cluster:DescribeCluster"
+#                Resource: !Ref MSKClusterArn
+#              # Allow to interact with topics
+#              - Effect: Allow
+#                Action:
+#                  - "kafka-cluster:*Topic*"
+#                  - "kafka-cluster:WriteData"
+#                  - "kafka-cluster:ReadData"
+#                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:topic/${MSKClusterName}/*'
+#              # Allow to interact with group
+#              - Effect: Allow
+#                Action:
+#                  - "kafka-cluster:AlterGroup"
+#                  - "kafka-cluster:DescribeGroup"
+#                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:group/${MSKClusterName}/*'
 
   # This creates namespace for MuShop deployment
   MushopNamespaceKubernetesResource:
@@ -408,6 +407,30 @@ Resources:
           ClusterPort: !Ref DocDbClusterPort
       Description: Credentials for connecting catalogue database
 
+  EventsKafkaInitSecrets:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest:
+        Fn::Sub:
+          - |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: events-init-job-secrets
+            type: Opaque
+            data:
+              mskClusterArn: ${ClusterArn}
+              bootstrapServers: ${ClusterBootstrapServerBrokers}
+          - ClusterBootstrapServerBrokers:
+              Fn::Base64:
+                !Ref MSKClusterBootstrapServerBrokers
+            ClusterArn:
+              Fn::Base64:
+                !Ref MSKClusterArn
+
   # This creates parameter that holds the Kafka cluster bootstrap servers
   EventsKafkaClusterBootstrapServers:
     Type: AWS::SSM::Parameter
@@ -417,6 +440,7 @@ Resources:
       Value: !Ref MSKClusterBootstrapServerBrokers
       Description: Events service Kafka cluster bootstrap servers
 
+  # MuShop utilities
   MushopUtilitiesNamespaceKubernetesResource:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
@@ -428,6 +452,7 @@ Resources:
         metadata:
           name: ${MushopUtilitiesNamespace}
 
+  # Nginx helm chart
   NginxHelmChart:
     Type: "AWSQS::Kubernetes::Helm"
     DependsOn: MushopUtilitiesNamespaceKubernetesResource
@@ -442,6 +467,7 @@ Resources:
           metrics:
             enabled: true
 
+  # Certificate manager
   CertManagerChart:
     Type: "AWSQS::Kubernetes::Helm"
     DependsOn: MushopUtilitiesNamespaceKubernetesResource
@@ -455,35 +481,48 @@ Resources:
         installCRDs: true
 
   # This deploys helm chart
-#  MushopHelmChart:
-#    Type: "AWSQS::Kubernetes::Helm"
-#    DependsOn: MushopNamespaceKubernetesResource
-#    Properties:
-#      ClusterID: !Ref KubeClusterName
-#      Namespace: !Ref MushopNamespace
-#      Repository: !Ref HelmRepository
-#      Chart: mushop
-#      Name: mushop
-#      ValueYaml: |
-#        global:
-#          cloud: aws
-#          mock:
-#            service: "false"
-#          imageSuffix: openjdk-aws
-#          serviceAccount: mushop-service
-#        api:
-#          env:
-#            trackingEnabled: false
-#        ingress:
-#          grafana:
-#            enabled: false
-#        tags:
-#          streaming: false
-#          atp: true
+  MushopHelmChart:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Repository: !Ref HelmRepository
+      Chart: mushop
+      Name: mushop
+      ValueYaml: |
+        global:
+          cloud: aws
+          mock:
+            service: "false"
+          imageSuffix: openjdk-aws
+          serviceAccount: mushop-service
+        api:
+          env:
+            trackingEnabled: true
+        ingress:
+          grafana:
+            enabled: false
+        tags:
+          streaming: true
+          atp: true
 
-#Outputs:
-  # Examples for using the outputs of the KubeManifestExample resource
-#  ExampleUid:
-#    Value: !GetAtt KubeManifestExample.uid
-#  ExampleSelfLink:
-#    Value: !Ref KubeManifestExample
+  # This requests the k8s ingress svc
+  GetMuShopIngressAddress:
+    Type: "AWSQS::Kubernetes::Get"
+    DependsOn: MushopHelmChart
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Name: ingress/mushop
+      JsonPath: '{.status.loadBalancer.ingress[0].hostname}'
+
+Outputs:
+  MuShopAddressHttp:
+    Value: !Sub
+      - 'http://${MUSHOP}'
+      - MUSHOP: !GetAtt GetMuShopIngressAddress.Response
+  MuShopAddressHttps:
+    Value: !Sub
+      - 'https://${MUSHOP}'
+      - MUSHOP: !GetAtt GetMuShopIngressAddress.Response

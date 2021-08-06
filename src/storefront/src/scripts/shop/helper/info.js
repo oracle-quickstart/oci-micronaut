@@ -32,6 +32,31 @@ export const TechType = {
 // add icon paths
 iconPrefix(TechType);
 
+export const AwsTechType = {
+  AWS: {
+    name: 'Amazon Web Services',
+    icon: 'aws.png',
+    color: '#ff9900',
+  },
+  NETWORK: {
+    name: 'Networking',
+    icon: 'cdn.svg',
+    color: '#5F5F5F',
+  },
+  COMPUTE: {
+    name: 'Compute',
+    icon: 'compute.svg',
+    color: '#5F5F5F',
+  },
+  EKS: {
+    name: 'Amazon Elastic Kubernetes Service',
+    icon: 'k8s.png',
+    color: '#00758f',
+  },
+};
+// add icon paths
+iconPrefix(AwsTechType);
+
 export const ServiceType = {
   // OCI Stuff
   ATP: {
@@ -56,6 +81,11 @@ export const ServiceType = {
     name: 'Load Balancer',
     icon: 'lb.svg',
   },
+  AWSLB: {
+    name: 'Elastic Load Balancer',
+    icon: 'awslb.png',
+    scale: 1.2
+  },
   VCN: {
     name: 'Virtual Cloud Network',
     icon: 'vcn.svg',
@@ -77,9 +107,29 @@ export const ServiceType = {
     name: 'Function',
     icon: 'fn.png',
   },
+  AWSLAMBDA: {
+    name: 'AWS Lambda Function',
+    icon: 'awslambda.png',
+  },
   NATS: {
     name: 'NATS',
     icon: 'nats.png',
+  },
+  // // AWS Stuff
+  RDS: {
+    name: 'AWS RDS (MySQL)',
+    icon: 'rds.png',
+    scale: 1.4,
+  },
+  MKS: {
+    name: 'AWS MSK (Kafka)',
+    icon: 'msk.png',
+    scale: 0.9,
+  },
+  DOCDB: {
+    name: 'AWS DocumentDB (Mongo compatible)',
+    icon: 'docdb.png',
+    scale: 1.3,
   },
   // container technologies
   JAVA: {
@@ -287,6 +337,156 @@ export const Services = {
   },
 };
 
+export const AwsServices = {
+  // AWS Services
+  // BUCKET: {
+  //   name: 'Bucket',
+  //   type: ServiceType.BUCKET,
+  //   tech: AwsTechType.AWS,
+  //   desc: `Internet scale storage for product media assets`
+  // },
+  RDS: {
+    name: 'AWS RDS',
+    type: ServiceType.RDS,
+    tech: AwsTechType.AWS,
+    desc: `Data persistence, separated by service`
+  },
+  DOCDB: {
+    name: 'AWS DocumentDb',
+    type: ServiceType.DOCDB,
+    tech: AwsTechType.AWS,
+    desc: `Persistence of carts`,
+  },
+  MKS: {
+    name: 'AWS MSK',
+    type: ServiceType.MKS,
+    tech: AwsTechType.AWS,
+    desc: `Application level event records`,
+  },
+  // APIGW: {
+  //   name: 'API Gateway',
+  //   type: ServiceType.APIGW,
+  //   tech: AwsTechType.AWS,
+  //   desc: `Application API gateway`,
+  // },
+  SUBSCRIBE: {
+    name: 'Subscribe',
+    type: ServiceType.AWSLAMBDA,
+    tech: AwsTechType.AWS,
+    desc: `Newsletter subscription lambda function`,
+  },
+  // EMAIL: {
+  //   name: 'Email',
+  //   type: ServiceType.EMAIL,
+  //   tech: AwsTechType.AWS,
+  //   desc: `Managed email delivery SMTP configuration`,
+  // },
+  // // Edge
+  DNS: {
+    name: 'DNS',
+    type: ServiceType.DNS,
+    tech: AwsTechType.NETWORK,
+    desc: `Managed DNS Zone`,
+  },
+  // WAF: {
+  //   name: 'WAF',
+  //   type: ServiceType.WAF,
+  //   tech: AwsTechType.NETWORK,
+  //   desc: `OWASP, DDoS, and access control management`,
+  // },
+  LB: {
+    name: 'LB',
+    type: ServiceType.AWSLB,
+    tech: AwsTechType.NETWORK,
+    desc: `Public application load balancer`,
+  },
+  // // OKE Services
+  INGRESS: {
+    name: 'Ingress',
+    type: ServiceType.NGINX,
+    tech: AwsTechType.EKS,
+    desc: `Kubernetes nginx ingress controller`,
+  },
+  EDGE_ROUTER: {
+    name: 'Router',
+    type: ServiceType.TRAEFIK,
+    tech: AwsTechType.EKS,
+    desc: `Application level routing for exposed services`,
+  },
+  STORE: {
+    name: 'Storefront',
+    type: ServiceType.HTML5,
+    tech: AwsTechType.EKS,
+    desc: `Responsive HTML/CSS/JavaScript client`,
+  },
+  API: {
+    name: 'REST API',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Session management and service gateway`,
+  },
+  // ASSETS: {
+  //   name: 'Media',
+  //   type: ServiceType.NODE,
+  //   tech: AwsTechType.EKS,
+  //   desc: `Product media source, integrating with Object Storage`,
+  // },
+  EVENTS: {
+    name: 'Tracking',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Streaming message producer for application level events`,
+  },
+  SESSION: {
+    name: 'Session DB',
+    type: ServiceType.REDIS,
+    tech: AwsTechType.EKS,
+    desc: `Client session management`,
+  },
+  CATALOG: {
+    name: 'Catalog',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Product catalog services`,
+  },
+  CART: {
+    name: 'Carts',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Shopping cart services`,
+  },
+  ORDERS: {
+    name: 'Orders',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Order management services`,
+  },
+  FULFILLMENT: {
+    name: 'Fulfillment',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Order fulfillment/processing service`,
+  },
+  PAYMENT: {
+    name: 'Payment',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Checkout payment verification`,
+  },
+  USER: {
+    name: 'Users',
+    type: ServiceType.MICRONAUT,
+    tech: AwsTechType.EKS,
+    desc: `Customer profile services`,
+  },
+  NATS: {
+    name: 'NATS',
+    type: ServiceType.NATS,
+    tech: AwsTechType.EKS,
+    desc: `Cloud native messaging service`,
+  },
+};
+
 /**
  * Define service relationships
  */
@@ -333,6 +533,51 @@ export const ServiceLinks = [
   { source: Services.API, target: Services.APIGW },
   { source: Services.APIGW, target: Services.SUBSCRIBE },
   { source: Services.SUBSCRIBE, target: Services.EMAIL },
+
+];
+
+export const AwsServiceLinks = [
+  // edge
+  // { source: AwsServices.DNS, target: AwsServices.WAF },
+  { source: AwsServices.DNS, target: AwsServices.LB, lineStyle: { type: 'dotted', curveness: 0.2 } }, // insecure
+  { source: AwsServices.LB, target: AwsServices.INGRESS },
+  { source: AwsServices.INGRESS, target: AwsServices.EDGE_ROUTER },
+  { source: AwsServices.EDGE_ROUTER, target: AwsServices.STORE },
+  { source: AwsServices.EDGE_ROUTER, target: AwsServices.API },
+  // { source: AwsServices.EDGE_ROUTER, target: AwsServices.ASSETS },
+  // // ui
+  // // { source: Services.STORE, target: Services.BUCKET },
+  { source: Services.STORE, target: Services.API },
+  // // api
+  { source: AwsServices.API, target: AwsServices.SESSION },
+  { source: AwsServices.API, target: AwsServices.CART },
+  { source: AwsServices.API, target: AwsServices.CATALOG },
+  { source: AwsServices.API, target: AwsServices.USER },
+  { source: AwsServices.API, target: AwsServices.ORDERS },
+  // // events
+  { source: AwsServices.API, target: AwsServices.EVENTS },
+  { source: AwsServices.EVENTS, target: AwsServices.MKS },
+  // // User
+  { source: AwsServices.USER, target: AwsServices.RDS, edgeSymbol: ['arrow', 'arrow'] }, // read/write
+  // // Catalog
+  { source: AwsServices.CATALOG, target: AwsServices.RDS }, // read
+  // { source: AwsServices.ASSETS, target: AwsServices.BUCKET },
+  // // Cart
+  { source: AwsServices.CART, target: AwsServices.DOCDB, edgeSymbol: ['arrow', 'arrow'] }, // read/write
+  // // Orders
+  { source: AwsServices.ORDERS, target: AwsServices.RDS, edgeSymbol: ['arrow', 'arrow'] }, // read/write
+  { source: AwsServices.ORDERS, target: AwsServices.USER },
+  { source: AwsServices.ORDERS, target: AwsServices.CART },
+  { source: AwsServices.ORDERS, target: AwsServices.PAYMENT },
+  { source: AwsServices.ORDERS, target: AwsServices.NATS },
+  // // Fulfillment
+  { source: AwsServices.NATS, target: AwsServices.FULFILLMENT },
+  { source: AwsServices.NATS, target: AwsServices.ORDERS },
+  { source: AwsServices.FULFILLMENT, target: AwsServices.NATS },
+  // // Gateway
+  // { source: AwsServices.API, target: AwsServices.APIGW },
+  { source: AwsServices.API, target: AwsServices.SUBSCRIBE },
+  // { source: AwsServices.SUBSCRIBE, target: AwsServices.EMAIL },
 
 ];
 

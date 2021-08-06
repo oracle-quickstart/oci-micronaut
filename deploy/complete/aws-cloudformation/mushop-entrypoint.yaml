@@ -55,6 +55,17 @@ Metadata:
           - DBInstanceClass
           - DBAllocatedStorage
       - Label:
+          default: MSK Cluster configuration
+        Parameters:
+          - MSKNumberOfBrokers
+          - MSKInstanceType
+          - MSKBrokerEbsStorage
+      - Label:
+          default: DocumentDB configuration
+        Parameters:
+          - DocDbInstanceClass
+          - DocDbMasterUser
+      - Label:
           default: Basic configuration
         Parameters:
           - AvailabilityZones
@@ -67,13 +78,6 @@ Metadata:
           default: VPC network configuration
         Parameters:
           - NumberOfAZs
-          - VPCCIDR
-          - PrivateSubnet1CIDR
-          - PrivateSubnet2CIDR
-          - PrivateSubnet3CIDR
-          - PublicSubnet1CIDR
-          - PublicSubnet2CIDR
-          - PublicSubnet3CIDR
       - Label:
           default: Amazon EC2 configuration
         Parameters:
@@ -91,9 +95,7 @@ Metadata:
           - NodeInstanceType
           - NumberOfNodes
           - MaxNumberOfNodes
-          - NodeGroupOS
           - NodeGroupType
-          - NodeInstanceFamily
       - Label:
           default: Kubernetes add-ins
         Parameters:
@@ -115,18 +117,6 @@ Metadata:
         default: Availability Zones
       KeyPairName:
         default: SSH key name
-      PrivateSubnet1CIDR:
-        default: Private subnet 1 CIDR
-      PrivateSubnet2CIDR:
-        default: Private subnet 2 CIDR
-      PrivateSubnet3CIDR:
-        default: Private subnet 3 CIDR
-      PublicSubnet1CIDR:
-        default: Public subnet 1 CIDR
-      PublicSubnet2CIDR:
-        default: Public subnet 2 CIDR
-      PublicSubnet3CIDR:
-        default: Public subnet 3 CIDR
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3KeyPrefix:
@@ -139,8 +129,6 @@ Metadata:
         default: Micronaut MuShop CloudFormation configuration region
       RemoteAccessCIDR:
         default: Allowed external access CIDR
-      VPCCIDR:
-        default: VPC CIDR
       NodeInstanceType:
         default: Instance type
       NumberOfNodes:
@@ -177,16 +165,27 @@ Metadata:
         default: Test suite
       NodeGroupType:
         default: Node group type
-      NodeInstanceFamily:
-        default: Node instance family
-      NodeGroupOS:
-        default: Node group OS
 
       # RDS Stack labels
       DBInstanceClass:
         default: Database instance class
       DBAllocatedStorage:
         default: The size of the database (GiB)
+
+      # MSK Stack labels
+      MSKInstanceType:
+        default: Instance type
+      MSKBrokerEbsStorage:
+        default: Allocated storage per broker
+      MSKNumberOfBrokers:
+        default: Number of brokers
+
+      # DocDb stack labels
+      DocDbInstanceClass:
+        default: Instance class
+      DocDbMasterUser:
+        default: Admin username
+
 Parameters:
   CloudFormationVersion:
     Type: String
@@ -201,45 +200,6 @@ Parameters:
     Description: Name of an existing key pair, which allows you
       to securely connect to your instance after it launches.
     Type: AWS::EC2::KeyPair::KeyName
-  PrivateSubnet1CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.0.0/19
-    Description: CIDR block for private subnet 1, located in Availability Zone 1.
-    Type: String
-  PrivateSubnet2CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.32.0/19
-    Description: CIDR block for private subnet 2, located in Availability Zone 2.
-    Type: String
-  PrivateSubnet3CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.64.0/19
-    Description: CIDR block for private subnet 3, located in Availability Zone 3.
-    Type: String
-  PublicSubnet1CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.128.0/20
-    Description: CIDR block for the public (DMZ) subnet 1, located in Availability
-      Zone 1.
-    Type: String
-  PublicSubnet2CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.144.0/20
-    Description: CIDR block for the public (DMZ) subnet 2, located in Availability
-      Zone 2.
-    Type: String
-  PublicSubnet3CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.160.0/20
-    Description: CIDR block for the public (DMZ) subnet 3, located in Availability
-      Zone 3.
-    Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
@@ -287,12 +247,6 @@ Parameters:
     AllowedValues: [Enabled, Disabled]
     Default: Disabled
     Description: Configure access to the Kubernetes API server endpoint from outside of your VPC.
-  VPCCIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
-    Default: 10.0.0.0/16
-    Description: CIDR block for the VPC.
-    Type: String
   AdditionalEKSAdminUserArn:
     Default: ""
     Description: "(Optional) IAM user ARN to be granted administrative access to the EKS cluster."
@@ -362,31 +316,26 @@ Parameters:
       (Optional) Name used to map advanced parameters to an EKS cluster. If you launched an advanced
       configuration stack and want to apply its values to this cluster, this name must match the ConfigSetName parameter
       for the stack. If left blank, a new config set is created using default values.
-  NodeInstanceFamily:
-    Default: Standard
-    AllowedValues: ['Standard', 'ARM', 'GPU']
-    Type: String
-    Description: Choose the instance family to match the value of "Node instance type."
   NodeGroupType:
     Type: String
     AllowedValues: [ Managed, Unmanaged ]
     Default: Managed
     Description: Choose "Unmanaged" to create an Auto Scaling group without using the EKS-managed node groups feature.
-  NodeGroupOS:
-    AllowedValues:
-      - 'Amazon Linux 2'
-      - 'Bottlerocket'
-      - 'Windows'
-    Default: 'Amazon Linux 2'
-    Description: Operating system to use for node instances. Choose "Bottlerocket" for the Amazon purpose-built container OS
-      (unmanaged node groups only). Note that if you choose "Windows," an additional Amazon Linux node group is created.
-    Type: String
+
   # RDS stack parameters
   DBInstanceClass:
-    Default: db.m5.large
+    Default: db.t3.medium
     Description: DB instance class
     Type: String
     ConstraintDescription: Must select a valid DB instance type.
+    AllowedValues:
+      - db.t3.medium
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.12xlarge
+      - db.r5.24xlarge
   DBAllocatedStorage:
     Default: '50'
     Description: The size of the database (GiB)
@@ -394,6 +343,54 @@ Parameters:
     MinValue: '5'
     MaxValue: '1024'
     ConstraintDescription: must be between 20 and 65536 GiB.
+
+  # MSK stack parameters
+  MSKInstanceType:
+    Default: kafka.m5.large
+    AllowedValues:
+      - kafka.m5.large
+      - kafka.m5.xlarge
+      - kafka.m5.2xlarge
+      - kafka.m5.4xlarge
+      - kafka.m5.8xlarge
+      - kafka.m5.12xlarge
+      - kafka.m5.16xlarge
+      - kafka.m5.24xlarge
+    Type: String
+    Description: Choose one of the instance type
+  MSKBrokerEbsStorage:
+    Default: 200
+    Description: Allocated storage per broker
+    Type: Number
+  MSKNumberOfBrokers:
+    Default: 3
+    Description: Number of cluster brokers
+    Type: Number
+
+  # Document db parameters
+  DocDbInstanceClass:
+    Description: "Instance class. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+    Type: "String"
+    Default: db.t3.medium
+    AllowedValues:
+      - db.t3.medium
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.12xlarge
+      - db.r5.24xlarge
+    ConstraintDescription: "Instance type must be of the ones supported for the region. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+  DocDbMasterUser:
+    Default: "master"
+    NoEcho: "true"
+    Description: "The database admin account username"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "16"
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription: "Must begin with a letter and contain only alphanumeric characters."
+
 Conditions:
   DetectSharedStacks: !And
     - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
@@ -406,7 +403,6 @@ Conditions:
     - !Equals [!Ref NumberOfAZs, "2"]
     - !Equals [!Ref NumberOfAZs, "3"]
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
-  WindowsNodes: !Equals [!Ref NodeGroupOS, 'Windows']
 Mappings:
   Config:
     Prefix: { Value: 'eks-quickstart' }
@@ -470,13 +466,6 @@ Resources:
 
         # VPC network configuration
         NumberOfAZs: !Ref NumberOfAZs
-        VPCCIDR: !Ref VPCCIDR
-        PrivateSubnet1CIDR: !Ref PrivateSubnet1CIDR
-        PrivateSubnet2CIDR: !Ref PrivateSubnet2CIDR
-        PrivateSubnet3CIDR: !Ref PrivateSubnet3CIDR
-        PublicSubnet1CIDR: !Ref PublicSubnet1CIDR
-        PublicSubnet2CIDR: !Ref PublicSubnet2CIDR
-        PublicSubnet3CIDR: !Ref PublicSubnet3CIDR
         ProvisionBastionHost: !Ref ProvisionBastionHost
 
         # Amazon EKS configuration
@@ -489,9 +478,7 @@ Resources:
         NodeInstanceType: !Ref NodeInstanceType
         NumberOfNodes: !Ref NumberOfNodes
         MaxNumberOfNodes: !Ref MaxNumberOfNodes
-        NodeGroupOS: !Ref NodeGroupOS
         NodeGroupType: !Ref NodeGroupType
-        NodeInstanceFamily: !Ref NodeInstanceFamily
 
         # Kubernetes add-ins
         ALBIngressController: !Ref ALBIngressController
@@ -546,7 +533,6 @@ Resources:
         DocDbMasterPassword: !GetAtt DocumentDbStack.Outputs.MasterPassword
 
         # MSK cluster
-        MSKClusterName: !GetAtt MSKStack.Outputs.MSKClusterName
         MSKClusterArn: !GetAtt MSKStack.Outputs.MSKClusterArn
         MSKClusterBootstrapServerBrokers: !GetAtt MSKStack.Outputs.MskClusterBrokers
 
@@ -562,6 +548,8 @@ Resources:
           S3Bucket: !Ref MMSS3BucketName
           Version: !Ref CloudFormationVersion
       Parameters:
+        DBMasterUser: !Ref DocDbMasterUser
+        DBInstanceClass: !Ref DocDbInstanceClass
         RandomStringLambdaFunctionArn: !GetAtt MushopUtilitiesStack.Outputs.RandomStringLambdaArn
         VPCID: !GetAtt EKSStack.Outputs.VPCID
         PrivateSubnet1ID: !GetAtt EKSStack.Outputs.PrivateSubnet1ID
@@ -587,6 +575,9 @@ Resources:
           S3Bucket: !Ref MMSS3BucketName
           Version: !Ref CloudFormationVersion
       Parameters:
+        InstanceType: !Ref MSKInstanceType
+        BrokerEbsStorage: !Ref MSKBrokerEbsStorage
+        NumberOfBrokers: !Ref MSKNumberOfBrokers
         VPCID: !GetAtt EKSStack.Outputs.VPCID
         PrivateSubnet1ID: !GetAtt EKSStack.Outputs.PrivateSubnet1ID
         PrivateSubnet2ID: !If
@@ -599,16 +590,15 @@ Resources:
           - !Ref AWS::NoValue
         NodeGroupSecurityGroup: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
 
-
 #Outputs:
 #  EKSClusterName:
 #    Value: !GetAtt EKSStack.Outputs.EKSClusterName
 #  BastionIP:
 #    Value: !GetAtt EKSStack.Outputs.BastionIP
-#  BastionSecurityGroup:
-#    Value: !GetAtt EKSStack.Outputs.BastionSecurityGroup
-#  NodeGroupSecurityGroup:
-#    Value: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
+#  MuShopAddressHttp:
+#    Value: !GetAtt MuShop.Outputs.MuShopAddressHttp
+#  MuShopAddressHttps:
+#    Value: !GetAtt MuShop.Outputs.MuShopAddressHttps
 Rules:
   AutoDetectSharedParams:
     RuleCondition: !Or
@@ -619,10 +609,3 @@ Rules:
           - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
           - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
         AssertDescription: "AutDetect must be set/unset for both PerRegionSharedResources and PerAccountSharedResources"
-  WindowsUnmanaged:
-    Assertions:
-      - Assert: !Not [!Equals [NodeGroupOS, 'Windows']]
-        AssertDescription: "Managed nodegroups do not support Windows nodes."
-    RuleCondition: !Equals
-      - !Ref NodeGroupType
-      - Managed

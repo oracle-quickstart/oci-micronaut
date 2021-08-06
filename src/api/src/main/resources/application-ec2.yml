@@ -8,3 +8,6 @@ micronaut:
     http:
       redis:
         enabled: true
+
+configuration:
+  cloudProvider: AWS

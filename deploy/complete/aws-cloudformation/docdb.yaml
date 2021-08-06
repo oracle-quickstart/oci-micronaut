@@ -25,7 +25,7 @@ Parameters:
     AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
     ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
 
-  MasterUser:
+  DBMasterUser:
     Default: "master"
     NoEcho: "true"
     Description : "The database admin account username"
@@ -76,9 +76,8 @@ Resources:
     Type: "AWS::DocDB::DBCluster"
     DeletionPolicy: Delete
     Properties:
-      # TODO: use unique name of doc db instance
-      DBClusterIdentifier: !Ref DBClusterName
-      MasterUsername: !Ref MasterUser
+      DBClusterIdentifier: !Sub 'mushop-${AWS::StackName}'
+      MasterUsername: !Ref DBMasterUser
       MasterUserPassword: !GetAtt DocDBAdminPassword.RandomString
       EngineVersion: 4.0.0
       DBSubnetGroupName: !Ref DocDBSubnetGroup
@@ -114,12 +113,11 @@ Resources:
         - Ref: PrivateSubnet3ID
 
   # This deploys one instance to the DocDb cluster
-  # TODO: use unique name of doc db instance
   DocDBInstance:
     Type: "AWS::DocDB::DBInstance"
     Properties:
       DBClusterIdentifier: !Ref DocDBCluster
-      DBInstanceIdentifier: !Ref DBInstanceName
+      DBInstanceIdentifier: !Sub 'mushop-${AWS::StackName}-01'
       DBInstanceClass: !Ref DBInstanceClass
     DependsOn: DocDBCluster
 
@@ -140,7 +138,7 @@ Outputs:
   ClusterPort:
     Value: !GetAtt DocDBCluster.Port
   MasterUsername:
-    Value: !Ref MasterUser
+    Value: !Ref DBMasterUser
   MasterPassword:
     Value: !GetAtt DocDBAdminPassword.RandomString
   EngineVersion:

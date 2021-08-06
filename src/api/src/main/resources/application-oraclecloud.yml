@@ -16,6 +16,9 @@ oci:
     instance-principal:
       enabled: true
 
+configuration:
+  cloudProvider: OCI
+
 tracing:
   zipkin:
     enabled: true

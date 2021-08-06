@@ -6,7 +6,16 @@
 import { Mu, MuMx, MuCtxAttrMixin } from '../mu';
 
 import { ViewTemplateMixin } from './helper/viewmx';
-import { Services, ServiceType, ServiceLinks, BasicServiceLinks, TechType } from './helper/info';
+import {
+  Services,
+  ServiceType,
+  ServiceLinks,
+  BasicServiceLinks,
+  TechType,
+  AwsServices,
+  AwsTechType,
+  AwsServiceLinks
+} from './helper/info';
 
 const toArray = obj => Object.keys(obj).map(k => obj[k]);
 const createIds = arr => arr.forEach((row, id) => (row.id = id));
@@ -18,18 +27,26 @@ const [AXIS_TOP, AXIS_LEFT] = [65, 55];
 
 // create ids
 createIds(toArray(ServiceType));
+
+// ids for oci
 createIds(toArray(TechType));
 createIds(toArray(Services));
+
+// ids for aws
+createIds(toArray(AwsTechType));
+createIds(toArray(AwsServices));
 
 export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
 
   onMount() {
     super.onMount();
     const { router, config } = this.mu;
-    const { basic, full } = router.queryparams() || {};
+    const { basic, full, aws } = router.queryparams() || {};
     config.get()
       .then(c => this.render({
         basic: basic || (!full && !!Object.keys(c.mockMode || {}).filter(s => c.mockMode[s]).length),
+        aws: aws || (c.cloudProvider && c.cloudProvider === 'AWS' ),
+        ociFull: full || (c.cloudProvider && c.cloudProvider === 'OCI' ),
         initChart: this.handleChart.bind(this),
       }))
       .then(() => this.setOptions());
@@ -37,6 +54,14 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
 
   isBasic() {
     return this.context.get('basic');
+  }
+
+  isAwsCloud() {
+    return this.context.get('aws');
+  }
+
+  isOciFull() {
+    return this.context.get('ociFull');
   }
 
   offsetTop() {
@@ -52,17 +77,27 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
     const setCord = (svc, x, y, ...rest) => Object.assign(svc, { x, y }, ...rest);
 
     const isBasic = this.isBasic();
+    const isOciFull = this.isOciFull();
+    const isAws = this.isAwsCloud();
     const skew = {
       go: { label: { offset: [0, -20] }},
       java: { label: { offset: [0, -5] }},
     }
 
+    let data;
     // determine layout
-    const data = { ...Services };
+    if (isAws){
+      data = { ...AwsServices };
+    } else {
+      data = { ...Services };
+    }
+    console.log("Selected services for aws " + isAws)
+    console.log("JE TO OCI BASIC? " + isBasic)
+    console.log("JE TO OCI FULL? " + isOciFull)
     if (isBasic) {
       // basic coordinates
       setCord(data.LB, col(0), row(0.5));
-      
+
       setCord(data.API, col(1), row(0.25));
       setCord(data.STORE, col(1), row(0.75));
       setCord(data.CATALOG, col(2), row(0.25));
@@ -71,19 +106,34 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
       setCord(data.BUCKET, col(3), row(1));
     } else {
       // full system coordinates
-      setCord(data.DNS, col(1), row(0.05));
-      setCord(data.WAF, col(2), row(0.05));
-      setCord(data.LB, col(3), row(0.05));
+      if (isAws) {
+        setCord(data.DNS, col(1), row(0.05));
+        // setCord(data.WAF, col(2), row(0.05));
+        setCord(data.LB, col(2), row(0.05));
 
-      setCord(data.BUCKET, col(4.5), row(0));
-      setCord(data.STREAMING, col(5.5), row(0), { label: { offset: [0, 10] }});
-      setCord(data.ATP, col(7.5), row(0));
+        // setCord(data.BUCKET, col(4.5), row(0));
+        //
+        setCord(data.MKS, col(4), row(0), { label: { offset: [0, 10] }});
+        setCord(data.RDS, col(5), row(0));
+        setCord(data.DOCDB, col(6), row(0));
+
+      } else {
+        setCord(data.DNS, col(1), row(0.05));
+        setCord(data.WAF, col(2), row(0.05));
+        setCord(data.LB, col(3), row(0.05));
+        setCord(data.ASSETS, col(2), row(1.5));
+
+        setCord(data.BUCKET, col(4.5), row(0));
+        setCord(data.STREAMING, col(5.5), row(0), { label: { offset: [0, 10] }});
+        setCord(data.ATP, col(7.5), row(0));
+      }
+
 
       setCord(data.INGRESS, col(1), row(1));
       setCord(data.EDGE_ROUTER, col(1.5), row(2));
 
       setCord(data.STORE, col(2), row(2.5));
-      setCord(data.ASSETS, col(2), row(1.5));
+
       setCord(data.API, col(2.5), row(2));
 
       setCord(data.EVENTS, col(3.5), row(1), skew.java);
@@ -95,11 +145,11 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
       setCord(data.ORDERS, col(6), row(2), skew.java);
       setCord(data.NATS, col(7), row(2));
       setCord(data.FULFILLMENT, col(7), row(1));
-
-      setCord(data.APIGW, col(6.5), row(0));
+      //
+      // setCord(data.APIGW, col(6.5), row(0));
       setCord(data.SUBSCRIBE, col(8), row(1));
-      setCord(data.EMAIL, col(8), row(2));
-
+      // setCord(data.EMAIL, col(8), row(2));
+      //
       setCord(data.PAYMENT, col(7), row(3), skew.go);
       setCord(data.USER, col(5), row(1));
     }
@@ -112,6 +162,7 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
       node.symbol = node.symbol || toSymbol(node.icon || node.type.icon);
       node.symbolSize = SYMBOL_SVC * (node.type.scale || 1);
     });
+    console.log("Selected nodes to render " + nodes)
     return nodes;
   }
 
@@ -166,7 +217,7 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
   }
 
   techSeries(services) {
-    const techs = toArray(TechType).map(tech => {
+    const techs = toArray(this.isAwsCloud() ? AwsTechType : TechType).map(tech => {
       const nodes = services.filter(s => s.tech.id === tech.id);
       return {
         name: tech.name,
@@ -207,7 +258,7 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
     // console.log('HERE', params, style);
     const orig = api.coord([ api.value(0), api.value(2) ]);
     const size = api.size([ api.value(1) - api.value(0), api.value(2)]);
-    // console.log(orig, size);
+    console.log(orig, size);
     return {
       style,
       type: 'rect',
@@ -245,11 +296,12 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
 
   setOptions() {
     const isBasic = this.isBasic();
+    const isAws = this.isAwsCloud();
 
     const data = this.chartData();
     const techs = data.map(d => isBasic ? d.basic.id : d.tech.id);
     // collect relevant categories
-    const categories = toArray(TechType)
+    const categories = toArray(isAws ? AwsTechType : TechType)
       .filter(t => techs.indexOf(t.id) > -1)
       .map(c => ({
         ...c,
@@ -268,7 +320,7 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
     });
 
     // determine links
-    const links = (isBasic ? BasicServiceLinks : ServiceLinks)
+    const links = ( isAws ? AwsServiceLinks : ( isBasic ? BasicServiceLinks : ServiceLinks))
       .filter(l => l.source && l.target)
       .map(({source, target, ...rest}) => ({source: source.id, target: target.id, ...rest}));
 
@@ -283,12 +335,23 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
   handleChart(chart) {
     chart.on('legendselectchanged', params => {
       const { selected } = params;
-      this.context.set('hide', {
-        oci: !selected[TechType.OCI.name],
-        oke: !selected[TechType.OKE.name],
-        edge: !selected[TechType.EDGE.name],
-        compute: !selected[TechType.COMPUTE.name],
-      });
+      const isAws = this.isAwsCloud();
+
+      if (isAws) {
+        this.context.set('hide', {
+          aws: !selected[AwsTechType.AWS.name],
+          eks: !selected[AwsTechType.EKS.name],
+          network: !selected[AwsTechType.NETWORK.name],
+          compute: !selected[AwsTechType.COMPUTE.name],
+        });
+      } else {
+        this.context.set('hide', {
+          oci: !selected[TechType.OCI.name],
+          oke: !selected[TechType.OKE.name],
+          network: !selected[TechType.NETWORK.name],
+          compute: !selected[TechType.COMPUTE.name],
+        });
+      }
     });
   }
 
@@ -297,8 +360,12 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
 export class MuTechBox extends MuMx.compose(null, ViewTemplateMixin, MuCtxAttrMixin) {
   onMount() {
     super.onMount();
+    const { router } = this.mu;
+    const { aws } = router.queryparams() || {};
+
     const prop = this._ctxProp('mu-tech-box');
-    const tech = TechType[prop] || prop;
+    const techType = aws ? AwsTechType : TechType;
+    const tech = techType[prop] || prop;
     this.render({ tech });
   }
 }

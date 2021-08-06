@@ -1,6 +1,7 @@
 package api.services;
 
 import api.services.annotation.MuService;
+import io.micronaut.context.annotation.Value;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
@@ -14,6 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class ConfigService {
 
+    @Value("${configuration.cloudProvider:`OCI`}")
+    private CLOUD cloudProvider;
+
     /**
      * Returns user session configuration.
      *
@@ -26,20 +30,30 @@ public class ConfigService {
         if (session != null) {
             trackId = session.getId();
         }
-        return Single.just(new Configuration(trackId, false, ""));
+        return Single.just(new Configuration(trackId, false, "", cloudProvider));
+    }
+
+    /**
+     * Enumerates supported cloud providers based on which the UI in storefront is configured.
+     */
+    public enum CLOUD {
+        OCI,
+        AWS
     }
 
     @Schema(title = "Session configuration")
     @Introspected
     static class Configuration {
-        String trackId;
-        boolean mockMode;
-        String staticAssetPrefix;
+        private final String trackId;
+        private final boolean mockMode;
+        private final String staticAssetPrefix;
+        private final CLOUD cloudProvider;
 
-        public Configuration(String trackId, boolean mockMode, String staticAssetPrefix) {
+        public Configuration(String trackId, boolean mockMode, String staticAssetPrefix, CLOUD cloudProvider) {
             this.trackId = trackId;
             this.mockMode = mockMode;
             this.staticAssetPrefix = staticAssetPrefix;
+            this.cloudProvider = cloudProvider;
         }
 
         /**
@@ -61,6 +75,13 @@ public class ConfigService {
          */
         public String getStaticAssetPrefix() {
             return staticAssetPrefix;
+        }
+
+        /**
+         * Cloud provider on which this MuShop runs
+         */
+        public CLOUD getCloudProvider() {
+            return cloudProvider;
         }
     }
 }

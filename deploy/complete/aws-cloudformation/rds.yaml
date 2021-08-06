@@ -7,7 +7,6 @@ Metadata:
       - Label:
           default: RDS configuration
         Parameters:
-          - DBName
           - DBInstanceClass
           - DBAllocatedStorage
           - RandomStringLambdaFunctionArn
@@ -20,8 +19,6 @@ Metadata:
             - PrivateSubnet3ID
             - NodeGroupSecurityGroup
     ParameterLabels:
-      DBName:
-        default: Database name
       DBInstanceClass:
         default: Database instance class
       DBAllocatedStorage:
@@ -39,14 +36,6 @@ Metadata:
       NodeGroupSecurityGroup:
         default: Security group to allow access from to RDS
 Parameters:
-  DBName:
-    Default: dbname
-    Description: Database name
-    Type: String
-    MinLength: '1'
-    MaxLength: '64'
-    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
   DBInstanceClass:
     Default: db.m5.large
     Description: DB instance class
@@ -81,96 +70,6 @@ Parameters:
     Description: Random string lambda function arn
 Resources:
 
-#  # RDS VPC
-#  RdsVpc:
-#    Type: AWS::EC2::VPC
-#    Properties:
-#      CidrBlock: 10.0.0.0/16
-#      EnableDnsHostnames: true
-#      Tags:
-#        - Key: Name
-#          Value: !Ref 'AWS::StackName'
-#
-#  # This creates internet gateway for RDS instance network.
-#  InternetGateway:
-#    Type: AWS::EC2::InternetGateway
-#    Properties:
-#      Tags:
-#        - Key: Name
-#          Value: !Ref 'AWS::StackName'
-#
-#  # This attaches the internet gateway to the VPC
-#  VPCGatewayAttachment:
-#    Type: AWS::EC2::VPCGatewayAttachment
-#    Properties:
-#      VpcId: !Ref RdsVpc
-#      InternetGatewayId: !Ref InternetGateway
-
-
-#
-#  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-#  PublicSubnet01:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      CidrBlock: 10.0.96.0/19
-#      AvailabilityZone:
-#        Fn::Select:
-#          - '0'
-#          - Fn::GetAZs: { Ref: 'AWS::Region' }
-#      VpcId: !Ref RdsVpc
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#        - Key: Name
-#          Value: !Ref 'AWS::StackName'
-#
-#  # Subnet that the rotation Lambda function and the RDS instance will be placed in
-#  PublicSubnet02:
-#    Type: AWS::EC2::Subnet
-#    Properties:
-#      CidrBlock: 10.0.128.0/19
-#      AvailabilityZone:
-#        Fn::Select:
-#          - '1'
-#          - Fn::GetAZs: { Ref: 'AWS::Region' }
-#      VpcId: !Ref RdsVpc
-#      MapPublicIpOnLaunch: true
-#      Tags:
-#        - Key: Name
-#          Value: !Ref 'AWS::StackName'
-#
-#  # Route table for VPC
-#  RouteTable:
-#    Type: AWS::EC2::RouteTable
-#    Properties:
-#      VpcId: !Ref RdsVpc
-#      Tags:
-#        - Key: Name
-#          Value: !Ref 'AWS::StackName'
-#
-#  # Associates route with subnet 1
-#  RouteTable1Association:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      SubnetId: !Ref PublicSubnet01
-#      RouteTableId: !Ref RouteTable
-#
-#  # Associates route with subnet 2
-#  RouteTable2Association:
-#    Type: AWS::EC2::SubnetRouteTableAssociation
-#    Properties:
-#      SubnetId: !Ref PublicSubnet02
-#      RouteTableId: !Ref RouteTable
-#
-#  # Adds route table rule allowing traffic from internet gateway to subnets
-#  InternetRouteRule:
-#    Type: AWS::EC2::Route
-#    DependsOn: VPCGatewayAttachment
-#    Properties:
-#      RouteTableId: !Ref RouteTable
-#      DestinationCidrBlock: 0.0.0.0/0
-#      GatewayId: !Ref InternetGateway
-
-
   # This opens the port for ingress traffic from the specified IP cidr.
   EksSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -189,7 +88,6 @@ Resources:
   # Database subnet group for the RDS instance
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
-#    DependsOn: VPCGatewayAttachment
     Properties:
       DBSubnetGroupDescription: "DB Subnet group"
       SubnetIds:
@@ -225,7 +123,6 @@ Resources:
       BackupRetentionPeriod: 0
       VPCSecurityGroups:
         - Ref: EksSecurityGroup
-      DBName: !Ref DBName
       PubliclyAccessible: true
 
 Outputs:
@@ -233,8 +130,6 @@ Outputs:
     Value: !GetAtt DBInstance.Endpoint.Port
   RDSAddress:
     Value: !GetAtt DBInstance.Endpoint.Address
-  RDSDBName:
-    Value: !Ref DBName
   RDSAdminUser:
     Value: 'admin'
   RDSAdminPass:

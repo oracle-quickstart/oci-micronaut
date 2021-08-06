@@ -50,8 +50,6 @@ Parameters:
     Type: String
   DocDbMasterPassword:
     Type: String
-  MSKClusterName:
-    Type: String
   MSKClusterArn:
     Type: String
   MSKClusterBootstrapServerBrokers:
@@ -106,30 +104,6 @@ Resources:
                 Action:
                   - "cloudwatch:PutMetricData"
                 Resource: '*'
-#        - PolicyName: mushop-events-service-policy
-#          PolicyDocument:
-#            Version: "2012-10-17"
-#            Statement:
-#              # Allow to connect to Kafka cluster
-#              - Effect: Allow
-#                Action:
-#                  - "kafka-cluster:Connect"
-#                  - "kafka-cluster:AlterCluster"
-#                  - "kafka-cluster:DescribeCluster"
-#                Resource: !Ref MSKClusterArn
-#              # Allow to interact with topics
-#              - Effect: Allow
-#                Action:
-#                  - "kafka-cluster:*Topic*"
-#                  - "kafka-cluster:WriteData"
-#                  - "kafka-cluster:ReadData"
-#                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:topic/${MSKClusterName}/*'
-#              # Allow to interact with group
-#              - Effect: Allow
-#                Action:
-#                  - "kafka-cluster:AlterGroup"
-#                  - "kafka-cluster:DescribeGroup"
-#                Resource: !Sub 'arn:${AWS::Partition}:kafka:${AWS::Region}:${AWS::AccountId}:group/${MSKClusterName}/*'
 
   # This creates namespace for MuShop deployment
   MushopNamespaceKubernetesResource:

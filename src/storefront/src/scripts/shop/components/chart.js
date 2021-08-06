@@ -67,7 +67,7 @@ export class MuChart extends MuMx.compose(null, [MxCtxAttrRefresh, ChartConfig.O
   }
 
   refresh(options) {
-    // console.log('CHART refresh', this.context._id, this._ctxKey(), options);
+    console.log('CHART refresh', this.context._id, this._ctxKey(), options);
     if (options) {
       this.chart = this.chart || this.main.init(this.node, ChartConfig.THEME, options);
       this.chart.setOption(options);

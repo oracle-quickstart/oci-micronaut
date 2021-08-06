@@ -38,7 +38,7 @@ services:
 
   # Static media assets
   assets:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/assets:1.0.0
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/assets:1.1.3
     restart: always
     pull_policy: always
     cap_drop:

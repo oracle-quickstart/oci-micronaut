@@ -3,6 +3,7 @@ package catalogue;
 import catalogue.controllers.CatalogueItemDTO;
 import catalogue.controllers.CatalogueOperations;
 import catalogue.controllers.CatalogueSizeDTO;
+import catalogue.controllers.CategoriesDTO;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.Get;
@@ -68,6 +69,23 @@ public class ProductControllerTest {
 
         final Optional<CatalogueItemDTO> garbage = client.find("garbage");
         assertFalse(garbage.isPresent());
+    }
+
+    @Test
+    void testListCategories() {
+        CategoriesDTO results = client.listCategories();
+
+        assertEquals(
+                15,
+                results.getCategories().length
+        );
+
+        results = client.listCategories();
+
+        assertEquals(
+                15,
+                results.getCategories().length
+        );
     }
 
     @Client("/")

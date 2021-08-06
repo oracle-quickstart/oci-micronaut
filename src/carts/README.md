@@ -62,7 +62,7 @@ A microservice demo that stores the MuShop shopping carts. The service is a Micr
 # Usage
 
 The MuShop application deploys this service using Helm, Kubernetes, and Docker. (See
-[/deploy/complete/helm-chart/](https://github.com/pgressa/oraclecloud-cloudnative/tree/master/deploy/complete/helm-chart)).
+[/deploy/complete/helm-chart/](https://github.com/oracle-quickstart/oci-micronaut/tree/master/deploy/complete/helm-chart)).
 
 # Running Locally
 
@@ -114,7 +114,7 @@ Or the native version with:
 ./mvnw deploy -Dpackaging=docker-native
 ```
 
-The Docker image names to push to can be altered by editing the following lines in [pom.xml](https://github.com/pgressa/oraclecloud-cloudnative/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/carts/pom.xml#L224-L228):
+The Docker image names to push to can be altered by editing the following lines in [pom.xml](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/carts/pom.xml#L224-L228):
 
 ```xml
 <configuration>

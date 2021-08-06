@@ -125,7 +125,7 @@ From the directory `deploy/complete/terraform`:
     grafana_admin_password = "....."
     grafana_url = "http://129.159.91.46/grafana"
     kubeconfig_for_kubectl = "export KUBECONFIG=./generated/kubeconfig"
-    mushop_source_code = "https://github.com/pgressa/oraclecloud-cloudnative"
+    mushop_source_code = "https://github.com/oracle-quickstart/oci-micronaut"
     mushop_url = "http://129.159.91.46"
     mushop_url_button = "http://129.159.91.46"
     mushop_url_https = "https://129.159.91.46"

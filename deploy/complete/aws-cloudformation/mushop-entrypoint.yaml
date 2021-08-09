@@ -590,15 +590,15 @@ Resources:
           - !Ref AWS::NoValue
         NodeGroupSecurityGroup: !GetAtt EKSStack.Outputs.NodeGroupSecurityGroup
 
-#Outputs:
-#  EKSClusterName:
-#    Value: !GetAtt EKSStack.Outputs.EKSClusterName
-#  BastionIP:
-#    Value: !GetAtt EKSStack.Outputs.BastionIP
-#  MuShopAddressHttp:
-#    Value: !GetAtt MuShop.Outputs.MuShopAddressHttp
-#  MuShopAddressHttps:
-#    Value: !GetAtt MuShop.Outputs.MuShopAddressHttps
+Outputs:
+  EKSClusterName:
+    Value: !GetAtt EKSStack.Outputs.EKSClusterName
+  BastionIP:
+    Value: !GetAtt EKSStack.Outputs.BastionIP
+  MuShopAddressHttp:
+    Value: !GetAtt MuShop.Outputs.MuShopAddressHttp
+  MuShopAddressHttps:
+    Value: !GetAtt MuShop.Outputs.MuShopAddressHttps
 Rules:
   AutoDetectSharedParams:
     RuleCondition: !Or

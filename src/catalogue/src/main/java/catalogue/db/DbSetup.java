@@ -43,13 +43,9 @@ public class DbSetup {
     @EventListener
     @Transactional
     void init(StartupEvent startupEvent) {
-        LOGGER.info("BOOOOOM");
-
         if (repository.count() > 0) {
             return;
         }
-
-        LOGGER.info("BOOOOOM");
 
         String setupScript = "db/oracle/catalogue.sql";
         if (databaseDriver != null && databaseDriver.contains("mysql")) {

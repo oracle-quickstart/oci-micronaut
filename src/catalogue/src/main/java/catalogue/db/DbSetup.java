@@ -33,7 +33,7 @@ public class DbSetup {
     public DbSetup(DataSource dataSource,
                    ProductRepository repository,
                    ResourceLoader resourceLoader,
-                   @Value("${datasources.default.driverClassName}") String databaseDriver) {
+                   @Value("${datasources.default.driverClassName:`oracle.jdbc.OracleDriver`}") String databaseDriver) {
         this.dataSource = dataSource;
         this.repository = repository;
         this.resourceLoader = resourceLoader;

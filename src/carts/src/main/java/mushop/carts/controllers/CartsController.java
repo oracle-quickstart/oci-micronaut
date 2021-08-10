@@ -149,9 +149,11 @@ class CartsController {
 
     @Error
     HttpResponse<JsonError> failedOperation(HttpRequest<?> request, Exception exception) {
+        LOG.error("Failed " + request.getMethod() + ":" + request.getPath() + " with exception: "
+                + exception.getMessage(), exception);
+
         JsonError error = new JsonError("Failed operation: " + exception.getMessage())
                 .link(Link.SELF, Link.of(request.getUri()));
-
         return HttpResponse.<JsonError>status(HttpStatus.BAD_REQUEST, "Bad request")
                 .body(error);
     }

@@ -1,0 +1,10 @@
+datasources:
+  default:
+    # Optimization: cache collection metadata to avoid extra roundtrips
+    # to the database when opening a collection
+    soda:
+      properties:
+        sharedMetadataCache: true
+      create-collections:
+        - ${carts.collection}
+    driver-class-name: oracle.jdbc.OracleDriver

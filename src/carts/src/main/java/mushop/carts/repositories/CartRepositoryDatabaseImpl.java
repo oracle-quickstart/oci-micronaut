@@ -5,6 +5,7 @@ import io.micrometer.core.annotation.Timed;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Value;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.codec.CodecException;
 import io.micronaut.http.codec.MediaTypeCodec;
@@ -31,7 +32,7 @@ import java.util.Optional;
  */
 @Singleton
 @Primary
-@Requires(property = "datasources.default")
+@Requires(property = "datasources.default.url")
 public class CartRepositoryDatabaseImpl implements CartRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(CartRepositoryDatabaseImpl.class);
@@ -44,9 +45,9 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
     private final String collectionName;
 
     public CartRepositoryDatabaseImpl(
-            @Value("${carts.collection}") String collectionName,
-            OracleDatabase db,
-            MediaTypeCodecRegistry codecRegistry) {
+            @NonNull @Value("${carts.collection}") String collectionName,
+            @NonNull OracleDatabase db,
+            @NonNull MediaTypeCodecRegistry codecRegistry) {
         this.collectionName = collectionName;
         this.codecRegistry = codecRegistry;
         this.db = db;

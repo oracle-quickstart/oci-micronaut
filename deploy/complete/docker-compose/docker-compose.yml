@@ -133,11 +133,10 @@ services:
       - /tmp:rw,noexec,nosuid
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
-      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - MICRONAUT_ENVIRONMENTS=dockercompose
       - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
       - DATASOURCES_DEFAULT_USERNAME=carts
       - DATASOURCES_DEFAULT_PASSWORD=micronaut
-      - SODA_CREATE_USERNAME=true
     logging:
       driver: "json-file"
       options:

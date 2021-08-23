@@ -16,7 +16,7 @@ metadata:
   labels: {{ include "orders.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role

@@ -17,6 +17,8 @@ micronaut:
         step: PT1M
       oraclecloud:
         enabled: false
+      cloudwatch:
+        enabled: false
   data:
     pageable:
       sort-ignore-case: true

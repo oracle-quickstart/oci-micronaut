@@ -49,6 +49,7 @@ public class Product {
 
     @Relation(Relation.Kind.MANY_TO_MANY)
     @JoinTable(
+            name = "PRODUCT_CATEGORY",
             joinColumns = @JoinColumn(name = "sku", referencedColumnName = "sku"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     )

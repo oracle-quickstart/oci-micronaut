@@ -31,10 +31,15 @@ dependencies {
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
-    // Monitoring
+    // Monitoring - Core
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Monitoring - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Monitoring - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

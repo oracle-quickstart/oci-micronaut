@@ -1,0 +1,24 @@
+FROM ghcr.io/graalvm/graalvm-ce:java11-21.1.0
+
+ARG KAFKA_VERSION=kafka_2.13-2.8.0.tgz
+
+# Install kafka
+RUN curl -sS "https://downloads.apache.org/kafka/2.8.0/$KAFKA_VERSION" > /tmp/kafka.tgz && \
+    tar -xzf /tmp/kafka.tgz && \
+    mv ${KAFKA_VERSION%.tgz} /kafka && \
+    cp /opt/graalvm-ce-java11-21.1.0/lib/security/cacerts /kafka.client.truststore.jks
+
+# Install aws cli v2
+COPY aws.cli.pgp /tmp/aws.cli.pgp
+
+RUN curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" > /tmp/awscliv2.zip && \
+    curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig" > /tmp/awscliv2.sig && \
+    gpg --import /tmp/aws.cli.pgp && \
+    gpg --verify /tmp/awscliv2.sig /tmp/awscliv2.zip && \
+    microdnf install unzip jq && \
+    unzip /tmp/awscliv2.zip && \
+    ./aws/install && \
+    rm -rf /tmp/*
+
+WORKDIR /
+

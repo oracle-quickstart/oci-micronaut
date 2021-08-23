@@ -26,6 +26,7 @@ spec:
         prometheus.io/path: /prometheus
         prometheus.io/port: "8082"
     spec:
+      serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
@@ -42,5 +43,8 @@ spec:
               value: "{{ .Values.env.newOrdersSubject }}"
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
-          {{- include "fulfillment.oapm.connection" . | nindent 12 }}
-          {{- include "fulfillment.oims.config" . | nindent 12 }}
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
+            {{- include "fulfillment.oapm.connection" . | nindent 12 }}
+            {{- include "fulfillment.oims.config" . | nindent 12 }}
+          {{- end }}

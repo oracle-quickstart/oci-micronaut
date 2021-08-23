@@ -24,6 +24,7 @@ spec:
         prometheus.io/path: /prometheus
         prometheus.io/port: "8080"
     spec:
+      serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
@@ -32,9 +33,12 @@ spec:
             - name: http
               containerPort: 8080
           env:
-          {{- include "user.oadb.connection" . | nindent 12 }}
-          {{- include "user.oapm.connection" . | nindent 12 }}
-          {{- include "user.oims.config" . | nindent 12 }}
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
+            {{- include "user.oadb.connection" . | nindent 12 }}
+            {{- include "user.oapm.connection" . | nindent 12 }}
+            {{- include "user.oims.config" . | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /health/liveness

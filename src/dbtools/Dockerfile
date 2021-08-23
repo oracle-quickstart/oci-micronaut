@@ -13,6 +13,7 @@ RUN microdnf update && \
     microdnf install oracle-instantclient-basic && \
     microdnf install oracle-instantclient-sqlplus && \
     microdnf install oracle-instantclient-tools && \
+    microdnf install mysql && \
     microdnf clean all && \
     rm -rf /var/cache/dnf && \
     rm -rf /var/cache/yum

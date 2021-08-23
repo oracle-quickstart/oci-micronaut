@@ -1,4 +1,5 @@
 global:
+  cloud: oci
   ociAuthSecret: oci-credentials        # OCI authentication credentials secret name
   ossConnectionSecret: oss-connection   # Previously created streaming secret name
   oadbAdminSecret: oadb-admin           # Name of DB Admin secret created separately

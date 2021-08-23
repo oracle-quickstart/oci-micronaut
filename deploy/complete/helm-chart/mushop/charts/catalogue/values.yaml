@@ -1,5 +1,10 @@
 replicaCount: 1
 
+global:
+  cloud: aws
+  mock:
+    service: none
+
 image:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue
   suffix: native
@@ -8,7 +13,7 @@ image:
 
 dbtools:
   repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/dbtools
-  tag: 21.0.0
+  tag: 21.1.0
   pullPolicy: IfNotPresent
 
 osb: {}

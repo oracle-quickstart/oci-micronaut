@@ -33,7 +33,6 @@ start:
 		-e API_PROXY=$(API) 		\
 		-e PORT=3000            \
 		-p 3000:3000            \
-		--network ${PROJECT}_default  \
 		$(IMAGE) gulp
 
 # Removes the development container

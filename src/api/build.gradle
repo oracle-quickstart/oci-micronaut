@@ -29,11 +29,19 @@ dependencies {
     implementation("io.micronaut:micronaut-session")
     runtimeOnly("ch.qos.logback:logback-classic")
 
-    // Monitoring
+    // Monitoring - Core
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Monitoring - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Monitoring - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts:2.16.99")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

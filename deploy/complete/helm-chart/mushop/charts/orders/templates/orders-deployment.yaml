@@ -24,6 +24,7 @@ spec:
         prometheus.io/path: /prometheus
         prometheus.io/port: "8082"
     spec:
+      serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
@@ -54,8 +55,11 @@ spec:
               value: "{{ .Values.env.newOrdersSubject }}"
             - name: ORDERS_SHIPPED
               value: "{{ .Values.env.shippedOrdersSubject }}"
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
             {{- include "orders.oadb.connection" . | nindent 12 }}
             {{- include "orders.oapm.connection" . | nindent 12 }}
             {{- include "orders.oims.config" . | nindent 12 }}
+          {{- end }}
       nodeSelector:
           beta.kubernetes.io/os: linux

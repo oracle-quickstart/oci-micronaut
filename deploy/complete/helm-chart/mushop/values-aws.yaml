@@ -1,0 +1,66 @@
+global:
+  cloud: aws
+  mock:
+    service: "false"
+  imageSuffix: openjdk-aws
+  serviceAccount: mushop-service
+
+# Depending on the scenario, certain resources might need to be skipped.
+# For example, --set tags.streaming=false to disable required streaming manifests
+tags:
+  streaming: false
+  atp: true
+
+ingress:
+  enabled: true
+
+api:
+  enabled: true
+  env:
+    trackingEnabled: false
+
+assets:
+  enabled: true
+
+carts:
+  enabled: true
+
+catalogue:
+  enabled: true
+
+edge:
+  enabled: true
+
+events:
+  enabled: true
+
+orders:
+  enabled: true
+
+payment:
+  enabled: true
+
+session:
+  enabled: true
+
+storefront:
+  enabled: true
+
+fulfillment:
+  enabled: true
+
+nats:
+  enabled: true
+
+user:
+  enabled: true
+
+secrets:
+  streams:
+    bootstrapServers:
+    jaasConfig:
+  bucket:
+    region:
+    name:
+    namespace:
+    par:

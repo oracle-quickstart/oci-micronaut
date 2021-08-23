@@ -6,6 +6,8 @@ import io.micronaut.configuration.kafka.annotation.Topic;
 
 @KafkaClient(batch = true)
 public interface EventProducer {
-    @Topic("events")
+    String EVENT_TOPIC_NAME = "events";
+
+    @Topic(EVENT_TOPIC_NAME)
     void send(EventRecord... eventRecords);
 }

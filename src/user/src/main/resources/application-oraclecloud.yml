@@ -1,10 +1,4 @@
 micronaut:
-  server:
-    thread-selection: io
-  executors:
-    io:
-      n-threads: 75
-      type: fixed
   metrics:
     export:
       oraclecloud:
@@ -39,3 +33,4 @@ flyway:
   datasources:
     default:
       enabled: true
+      locations: classpath:db/oracle

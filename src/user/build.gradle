@@ -29,25 +29,40 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-validation")
 
-    // ATP db access
+    // DB - Core
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+
+    // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    implementation("io.micronaut.data:micronaut-data-jdbc")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")
-    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
 
-    // Metrics
-    implementation("io.micronaut:micronaut-management")
+    // AWS - RDS db access
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // Monitoring - Core
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Monitoring - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Monitoring - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")

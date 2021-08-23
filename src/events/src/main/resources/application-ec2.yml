@@ -1,0 +1,13 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
+
+kafka:
+  security:
+    protocol: SSL
+  ssl:
+    truststore:
+      location: /opt/openjdk-16/lib/security/cacerts

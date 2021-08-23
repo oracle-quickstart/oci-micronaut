@@ -24,8 +24,8 @@ block article
         h1.uk-article-title= "About " + shopInfo.storeName
 
       div.uk-article-body(mu-service-chart mu-cloak)
-        //- full version
-        div(mu-if="!basic")
+        //- Oracle Cloud full version
+        div(mu-if="ociFull")
           p.uk-text-lead
             | Welcome to MuShop! This application was developed in order to 
             | demonstrate a cloud native approach of microservices delivered
@@ -43,7 +43,26 @@ block article
             //-     img.mu-tech-img(uk-img data-src="images/tech/grafana.png" title="Grafana")
             div.mu-tech.mu-tech-edge.uk-animation-fade(mu-tech-box="EDGE" mu-hide="hide.edge")
             figure(mu-chart options="services.chart" onInit="initChart")
-        
+        //- AWS full version
+        div(mu-if="aws")
+          p.uk-text-lead
+            | Welcome to MuShop! This application was developed in order to
+            | demonstrate a cloud native approach of Micronaut microservices delivered
+            | with <b>Amazon Web Services</b>. Below is a view of the holistic
+            | application architecture and services.
+          //- full service diagram
+          div.tm-ratio.tm-ratio-16-9
+            div.mu-tech.mu-tech-oci.uk-animation-fade(mu-tech-box="AWS" mu-hide="hide.aws")
+              img.mu-tech-img.uk-position-top-right(uk-img data-src="images/tech/aws.png")
+            div.mu-tech.mu-tech-oke.uk-animation-fade(mu-tech-box="EKS" mu-hide="hide.eks")
+              img.mu-tech-img.uk-position-bottom-left(uk-img data-src="images/tech/k8s.png")
+            //-   div(class="k8s-tools uk-position-bottom-right uk-visible@s")
+            //-     img.mu-tech-img(uk-img data-src="images/tech/osbroker.png" title="Open Service Broker")
+            //-     img.mu-tech-img(uk-img data-src="images/tech/prometheus.png" title="Prometheus")
+            //-     img.mu-tech-img(uk-img data-src="images/tech/grafana.png" title="Grafana")
+            div.mu-tech.mu-tech-edge.uk-animation-fade(mu-tech-box="EDGE" mu-hide="hide.network")
+            figure(mu-chart options="services.chart" onInit="initChart")
+
         //- basic version
         div.mu-basic(mu-if="basic")
           p.uk-text-lead

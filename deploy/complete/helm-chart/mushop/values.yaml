@@ -1,4 +1,6 @@
 global:
+  # cloud - aws | oci
+  cloud: aws
   mock:
     service: "false"
   osb:
@@ -21,6 +23,8 @@ tags:
 
 ingress:
   enabled: true
+  grafana:
+    enabled: true
 
 api:
   enabled: true

@@ -32,14 +32,26 @@ dependencies {
     // Kubernetes service discovery
     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
+    // AWS - Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // AWS - authentication
+    implementation("software.amazon.awssdk:sts")
+
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
-    // Metrics
+    // Metrics - Core
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Metrics - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Metrics - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")
@@ -47,7 +59,11 @@ dependencies {
     runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
-    // ATP db access
+    // DB - Core
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.data:micronaut-data-model")
+
+    // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
@@ -56,8 +72,9 @@ dependencies {
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    implementation("io.micronaut.data:micronaut-data-model")
+
+    // DB - AWS RDS
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
     // Nats.io support
     implementation("io.micronaut.nats:micronaut-nats")

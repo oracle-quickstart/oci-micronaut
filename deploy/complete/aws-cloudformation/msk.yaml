@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploys MSK cluster for the MuShop event service
+Parameters:
+  InstanceType:
+    Default: kafka.m5.large
+    Description: Kafka instance type
+    Type: String
+    ConstraintDescription: Must select a valid DB instance type.
+  BrokerEbsStorage:
+    Default: 200
+    Description: Allocated storage per broker
+    Type: Number
+  NumberOfBrokers:
+    Default: 3
+    Description: Number of Kafka cluster brokers
+    Type: Number
+  PrivateSubnet1ID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet2ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet3ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  VPCID:
+    Type: String
+    Description: "VPC of subnets and security group."
+  NodeGroupSecurityGroup:
+    Type: String
+    Description: "Security group of EKS nodes"
+Mappings:
+  Config:
+    Prefix: { Value: 'eks-quickstart' }
+Resources:
+
+  MSKSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable access to Kafka
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2181
+          ToPort: 2181
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+
+        - IpProtocol: tcp
+          FromPort: 9094
+          ToPort: 9094
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+
+        - IpProtocol: tcp
+          FromPort: 9092
+          ToPort: 9092
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Ref 'AWS::StackName'
+
+  MSKCluster:
+    Type: 'AWS::MSK::Cluster'
+    Properties:
+      BrokerNodeGroupInfo:
+        ClientSubnets:
+          - !Ref PrivateSubnet1ID
+          - !Ref PrivateSubnet2ID
+          - !Ref PrivateSubnet3ID
+        InstanceType: !Ref InstanceType
+        SecurityGroups:
+          - !GetAtt
+            - MSKSecurityGroup
+            - GroupId
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: !Ref BrokerEbsStorage
+      ClusterName: !Sub 'mushop-${AWS::StackName}'
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: TLS
+          InCluster: true
+      EnhancedMonitoring: PER_TOPIC_PER_BROKER
+      KafkaVersion: 2.2.1
+      NumberOfBrokerNodes: !Ref NumberOfBrokers
+
+  # This gest the cluster brokers. The IdField depends on used authentication method.
+  MskClusterBrokers:
+    Type: Custom::CliQuery
+    Properties:
+      ServiceToken: !Sub [ 'arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${Prefix}-ResourceReader', { Prefix: !FindInMap [ Config, Prefix, Value ] } ]
+      AwsCliCommand: !Sub
+        - |
+          kafka get-bootstrap-brokers --cluster-arn ${CLUSTER_ARN}
+        - CLUSTER_ARN: !Ref MSKCluster
+      IdField: 'BootstrapBrokerStringTls'
+
+Outputs:
+  MSKClusterArn:
+    Description: The Arn for the MSKMMCluster1 MSK cluster
+    Value: !Ref MSKCluster
+  MskClusterBrokers:
+    Description: The Kafka cluster bootstrap brokers
+    Value: !Ref MskClusterBrokers

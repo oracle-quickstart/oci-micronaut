@@ -103,7 +103,7 @@ class CartsController {
                     "Cart item with id " + itemId + " not found " + cart);
         }
 
-        cartRepository.save(cart);
+        cartRepository.update(cart);
         LOG.info("Item deleted: {}", cart);
         return cart;
     }
@@ -112,6 +112,7 @@ class CartsController {
     HttpResponse<Cart> postCart(@PathVariable String cartId,
                                 @Body Cart newCart) {
 
+        LOG.info("Received {} with cart {}", cartId, newCart);
         Cart cart = cartRepository.getById(cartId);
         if (cart == null) {
             newCart.setId(cartId);
@@ -138,7 +139,7 @@ class CartsController {
             if (item.getItemId().equals(qItem.getItemId())) {
                 item.setQuantity(qItem.getQuantity());
 
-                cartRepository.save(cart);
+                cartRepository.update(cart);
                 LOG.info("Cart item updated: {}", cart);
                 return cart;
             }
@@ -148,9 +149,11 @@ class CartsController {
 
     @Error
     HttpResponse<JsonError> failedOperation(HttpRequest<?> request, Exception exception) {
+        LOG.error("Failed " + request.getMethod() + ":" + request.getPath() + " with exception: "
+                + exception.getMessage(), exception);
+
         JsonError error = new JsonError("Failed operation: " + exception.getMessage())
                 .link(Link.SELF, Link.of(request.getUri()));
-
         return HttpResponse.<JsonError>status(HttpStatus.BAD_REQUEST, "Bad request")
                 .body(error);
     }

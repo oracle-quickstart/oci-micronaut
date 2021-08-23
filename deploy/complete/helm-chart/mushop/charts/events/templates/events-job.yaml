@@ -1,0 +1,40 @@
+{{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+{{- if eq "aws" $cloud }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "events.fullname" . }}-init-{{ .Release.Revision }}
+  labels: {{ include "events.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 120
+  backoffLimit: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app.kubernetes.io/name: {{ include "user.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        # create topic
+        - name: init
+          image: "{{ .Values.initJob.image.repository }}:{{ .Values.initJob.image.tag }}"
+          imagePullPolicy: {{ .Values.initJob.image.pullPolicy }}
+          command: ["/bin/sh","/work/kafka.init.sh"]
+          env:
+            - name: MKS_CLUSTER_ARN
+              valueFrom:
+                secretKeyRef:
+                  name: events-init-job-secrets
+                  key: mskClusterArn
+          volumeMounts:
+            - name: initkafka
+              mountPath: /work/
+      volumes:
+        - name: initkafka
+          configMap:
+            name: {{ include (printf "%s.fullname" .Chart.Name) . }}-init
+{{- end }}

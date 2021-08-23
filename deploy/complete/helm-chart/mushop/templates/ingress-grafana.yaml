@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled }}
+{{- if .Values.ingress.grafana.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -55,4 +56,5 @@ spec:
     - secretName: {{ include "mushop.fullname" . }}-{{ .Values.ingress.clusterIssuer }}-tls
       hosts: {{- toYaml .Values.ingress.hosts | nindent 6 }}
   {{- end -}}
+{{- end -}}
 {{- end -}}

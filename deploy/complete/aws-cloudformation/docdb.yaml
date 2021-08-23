@@ -1,0 +1,146 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys DocumentDB for the MuShop cart service"
+
+Parameters:
+  DBClusterName:
+    Default: "MuShopDocDb"
+    Description : "MuShop Document DB Cluster name"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "64"
+    AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  DBClusterPort:
+    Default: 27017
+    Type: Number
+    Description: "MuShop Document DB Cluster port"
+
+  DBInstanceName:
+    Default: "MuShopDocDbInstance01"
+    Description : "MuShop Document Db Instance name"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "64"
+    AllowedPattern : "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  DBMasterUser:
+    Default: "master"
+    NoEcho: "true"
+    Description : "The database admin account username"
+    Type: "String"
+    MinLength: "1"
+    MaxLength: "16"
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription : "Must begin with a letter and contain only alphanumeric characters."
+
+  DBInstanceClass:
+    Description : "Instance class. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+    Type: "String"
+    Default: db.t3.medium
+    AllowedValues:
+      - db.t3.medium
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.12xlarge
+      - db.r5.24xlarge
+    ConstraintDescription : "Instance type must be of the ones supported for the region. Please refer to: https://docs.aws.amazon.com/documentdb/latest/developerguide/db-instance-classes.html#db-instance-classes-by-region"
+
+  RandomStringLambdaFunctionArn:
+    Type: "String"
+    Description: "Random String Lambda function ARN"
+  PrivateSubnet1ID:
+    Type: "AWS::EC2::Subnet::Id"
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet2ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  PrivateSubnet3ID:
+    Type: String
+    Default: ""
+    Description: "Private subnet for doc db instances"
+  VPCID:
+    Type: String
+    Description: "VPC of subnets and security group."
+  NodeGroupSecurityGroup:
+    Type: String
+    Description: "Security group of EKS nodes"
+
+Resources:
+  # This creates new DocDB cluster
+  DocDBCluster:
+    Type: "AWS::DocDB::DBCluster"
+    DeletionPolicy: Delete
+    Properties:
+      DBClusterIdentifier: !Sub 'mushop-${AWS::StackName}'
+      MasterUsername: !Ref DBMasterUser
+      MasterUserPassword: !GetAtt DocDBAdminPassword.RandomString
+      EngineVersion: 4.0.0
+      DBSubnetGroupName: !Ref DocDBSubnetGroup
+      Port: !Ref DBClusterPort
+      VpcSecurityGroupIds:
+        - !Ref DocDBInstanceSecurityGroup
+
+
+  # This creates security group allowing access to DocDb port.
+  DocDBInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to DocumendDB
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !Ref DBClusterPort
+          ToPort: !Ref DBClusterPort
+          SourceSecurityGroupId: !Ref NodeGroupSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Ref 'AWS::StackName'
+
+  # This creates subnetgroup in which the DocDb instances will be placed.
+  DocDBSubnetGroup:
+    Type: AWS::DocDB::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: AWS DocumendDb subnet group
+      DBSubnetGroupName: docdbsubnetgroup
+      SubnetIds:
+        - Ref: PrivateSubnet1ID
+        - Ref: PrivateSubnet2ID
+        - Ref: PrivateSubnet3ID
+
+  # This deploys one instance to the DocDb cluster
+  DocDBInstance:
+    Type: "AWS::DocDB::DBInstance"
+    Properties:
+      DBClusterIdentifier: !Ref DocDBCluster
+      DBInstanceIdentifier: !Sub 'mushop-${AWS::StackName}-01'
+      DBInstanceClass: !Ref DBInstanceClass
+    DependsOn: DocDBCluster
+
+  # This generates admin password.
+  DocDBAdminPassword:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Length: 16
+      RDSCompatible: true
+      Punctuation: false
+      ServiceToken: !Ref RandomStringLambdaFunctionArn
+
+Outputs:
+  ClusterId:
+    Value: !Ref DocDBCluster
+  ClusterEndpoint:
+    Value: !GetAtt DocDBCluster.Endpoint
+  ClusterPort:
+    Value: !GetAtt DocDBCluster.Port
+  MasterUsername:
+    Value: !Ref DBMasterUser
+  MasterPassword:
+    Value: !GetAtt DocDBAdminPassword.RandomString
+  EngineVersion:
+    Value: "4.0.0"
+

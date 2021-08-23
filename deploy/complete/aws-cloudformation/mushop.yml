@@ -1,0 +1,502 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys MuShop to the EKS cluster"
+Parameters:
+  HelmRepository:
+    Type: String
+  MushopNamespace:
+    Type: String
+    Default: mushop
+  KubeClusterName:
+    Type: String
+  OIDCIssuerURLWithoutProtocol:
+    Type: String
+  RdsHostname:
+    Type: String
+  RdsPort:
+    Type: String
+  RdsAdminUsername:
+    Type: String
+  RdsAdminPassword:
+    Type: String
+  RandomStringLambdaFunctionArn:
+    Type: String
+    Description: Random string lambda function arn
+  UserServiceDatabaseName:
+    Type: String
+    Default: user
+  UserServiceDatabaseUsername:
+    Type: String
+    Default: user
+  OrdersServiceDatabaseName:
+    Type: String
+    Default: orders
+  OrdersServiceDatabaseUsername:
+    Type: String
+    Default: orders
+  CatalogueServiceDatabaseName:
+    Type: String
+    Default: catalogue
+  CatalogueServiceDatabaseUsername:
+    Type: String
+    Default: catalogue
+  MushopUtilitiesNamespace:
+    Type: String
+    Default: mushop-utilities
+  DocDbClusterEndpoint:
+    Type: String
+  DocDbClusterPort:
+    Type: String
+  DocDbMasterUsername:
+    Type: String
+  DocDbMasterPassword:
+    Type: String
+  MSKClusterArn:
+    Type: String
+  MSKClusterBootstrapServerBrokers:
+    Type: String
+Resources:
+
+  # This creates policy and role for the ServiceAccount the MuShop services will run with.
+  MuShopServiceIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: MuShopServiceIamRole
+      AssumeRolePolicyDocument: !Sub |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/${OIDCIssuerURLWithoutProtocol}"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "${OIDCIssuerURLWithoutProtocol}:sub": "system:serviceaccount:${MushopNamespace}:mushop-service"
+                }
+              }
+            }
+          ]
+        }
+      Policies:
+        - PolicyName: mushop-service-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # Allow to read all secret manager keys
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetResourcePolicy"
+                  - "secretsmanager:GetSecretValue"
+                  - "secretsmanager:DescribeSecret"
+                  - "secretsmanager:ListSecretVersionIds"
+                  - "secretsmanager:ListSecrets"
+                Resource: '*'
+              # Allow to read all param store keys
+              - Effect: Allow
+                Action:
+                  - "ssm:GetParameter"
+                  - "ssm:GetParameters"
+                  - "ssm:GetParametersByPath"
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - "cloudwatch:PutMetricData"
+                Resource: '*'
+
+  # This creates namespace for MuShop deployment
+  MushopNamespaceKubernetesResource:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ${MushopNamespace}
+
+  # This creates Service Account with policy that allows services to access the AWS resources.
+  ServiceAccountKubernetesResource:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          annotations:
+            eks.amazonaws.com/role-arn: ${MuShopServiceIamRole.Arn}
+          name: mushop-service
+
+  # This generates user service database password
+  UserServiceDatabasePassword:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Length: 16
+      RDSCompatible: true
+      Punctuation: false
+      ServiceToken: !Ref RandomStringLambdaFunctionArn
+
+  # This generates user service RDS init job secrets based on which the database and db user is created
+  UserServiceRdsInitSecret:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest:
+        Fn::Sub:
+          - |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: user-rds-init-job-secrets
+            type: Opaque
+            data:
+              dbHost: ${DB_HOST}
+              dbPort: ${DB_PORT}
+              adminUsername: ${ADMIN_USERNAME}
+              adminPassword: ${ADMIN_PASSWORD}
+              serviceDbName: ${SERVICE_DB_NAME}
+              serviceDbUsername: ${SERVICE_DB_USERNAME}
+              serviceDbPassword: ${SERVICE_DB_PASSWORD}
+          - DB_HOST:
+              Fn::Base64:
+                !Ref RdsHostname
+            DB_PORT:
+              Fn::Base64:
+                !Ref RdsPort
+            ADMIN_USERNAME:
+              Fn::Base64:
+                !Ref RdsAdminUsername
+            ADMIN_PASSWORD:
+              Fn::Base64:
+                !Ref RdsAdminPassword
+            SERVICE_DB_NAME:
+              Fn::Base64:
+                !Ref UserServiceDatabaseName
+            SERVICE_DB_USERNAME:
+              Fn::Base64:
+                !Ref UserServiceDatabaseUsername
+            SERVICE_DB_PASSWORD:
+              Fn::Base64:
+                !GetAtt UserServiceDatabasePassword.RandomString
+
+
+  # This generates orders service database password
+  OrdersServiceDatabasePassword:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Length: 16
+      RDSCompatible: true
+      Punctuation: false
+      ServiceToken: !Ref RandomStringLambdaFunctionArn
+
+  # This generates orders service RDS init job secrets based on which the database and db orders is created
+  OrdersServiceRdsInitSecret:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest:
+        Fn::Sub:
+          - |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: orders-rds-init-job-secrets
+            type: Opaque
+            data:
+              dbHost: ${DB_HOST}
+              dbPort: ${DB_PORT}
+              adminUsername: ${ADMIN_USERNAME}
+              adminPassword: ${ADMIN_PASSWORD}
+              serviceDbName: ${SERVICE_DB_NAME}
+              serviceDbUsername: ${SERVICE_DB_USERNAME}
+              serviceDbPassword: ${SERVICE_DB_PASSWORD}
+          - DB_HOST:
+              Fn::Base64:
+                !Ref RdsHostname
+            DB_PORT:
+              Fn::Base64:
+                !Ref RdsPort
+            ADMIN_USERNAME:
+              Fn::Base64:
+                !Ref RdsAdminUsername
+            ADMIN_PASSWORD:
+              Fn::Base64:
+                !Ref RdsAdminPassword
+            SERVICE_DB_NAME:
+              Fn::Base64:
+                !Ref OrdersServiceDatabaseName
+            SERVICE_DB_USERNAME:
+              Fn::Base64:
+                !Ref OrdersServiceDatabaseUsername
+            SERVICE_DB_PASSWORD:
+              Fn::Base64:
+                !GetAtt OrdersServiceDatabasePassword.RandomString
+
+  # This generates catalogue service database password
+  CatalogueServiceDatabasePassword:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      Length: 16
+      RDSCompatible: true
+      Punctuation: false
+      ServiceToken: !Ref RandomStringLambdaFunctionArn
+
+  # This generates catalogue service RDS init job secrets based on which the database and db catalogue is created
+  CatalogueServiceRdsInitSecret:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest:
+        Fn::Sub:
+          - |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: catalogue-rds-init-job-secrets
+            type: Opaque
+            data:
+              dbHost: ${DB_HOST}
+              dbPort: ${DB_PORT}
+              adminUsername: ${ADMIN_USERNAME}
+              adminPassword: ${ADMIN_PASSWORD}
+              serviceDbName: ${SERVICE_DB_NAME}
+              serviceDbUsername: ${SERVICE_DB_USERNAME}
+              serviceDbPassword: ${SERVICE_DB_PASSWORD}
+          - DB_HOST:
+              Fn::Base64:
+                !Ref RdsHostname
+            DB_PORT:
+              Fn::Base64:
+                !Ref RdsPort
+            ADMIN_USERNAME:
+              Fn::Base64:
+                !Ref RdsAdminUsername
+            ADMIN_PASSWORD:
+              Fn::Base64:
+                !Ref RdsAdminPassword
+            SERVICE_DB_NAME:
+              Fn::Base64:
+                !Ref CatalogueServiceDatabaseName
+            SERVICE_DB_USERNAME:
+              Fn::Base64:
+                !Ref CatalogueServiceDatabaseUsername
+            SERVICE_DB_PASSWORD:
+              Fn::Base64:
+                !GetAtt CatalogueServiceDatabasePassword.RandomString
+
+
+  # This creates parameter that holds the JDBC url for connecting user service to RDS.
+  UserDatasourcesDefaultUrl:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /config/user/datasources/default/url
+      Type: String
+      Value: !Sub
+        - 'jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${DB_NAME}'
+        - RDS_HOSTNAME: !Ref RdsHostname
+          RDS_PORT: !Ref RdsPort
+          DB_NAME: !Ref UserServiceDatabaseName
+      Description: User service RDS JDBC URL
+
+  # This creates secret that holds connection credentials for user database
+  UserDatasourcesDefaultCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: /config/user/
+      SecretString: !Sub
+        - '{"datasources.default.username":"${DB_USERNAME}","datasources.default.password":"${DB_PASSWORD}"}'
+        - DB_USERNAME: !Ref UserServiceDatabaseUsername
+          DB_PASSWORD: !GetAtt UserServiceDatabasePassword.RandomString
+      Description: Credentials for connecting user database
+
+  # This creates parameter that holds the JDBC url for connecting orders service to RDS.
+  OrdersDatasourcesDefaultUrl:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /config/orders/datasources/default/url
+      Type: String
+      Value: !Sub
+        - 'jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${DB_NAME}'
+        - RDS_HOSTNAME: !Ref RdsHostname
+          RDS_PORT: !Ref RdsPort
+          DB_NAME: !Ref OrdersServiceDatabaseName
+      Description: Orders service RDS JDBC URL
+
+  # This creates secret that holds connection credentials for orders database
+  OrdersDatasourcesDefaultCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: /config/orders/
+      SecretString: !Sub
+        - '{"datasources.default.username":"${DB_USERNAME}","datasources.default.password":"${DB_PASSWORD}"}'
+        - DB_USERNAME: !Ref OrdersServiceDatabaseUsername
+          DB_PASSWORD: !GetAtt OrdersServiceDatabasePassword.RandomString
+      Description: Credentials for connecting orders database
+
+  # This creates parameter that holds the JDBC url for connecting catalogue service to RDS.
+  CatalogueDatasourcesDefaultUrl:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /config/catalogue/datasources/default/url
+      Type: String
+      Value: !Sub
+        - 'jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${DB_NAME}'
+        - RDS_HOSTNAME: !Ref RdsHostname
+          RDS_PORT: !Ref RdsPort
+          DB_NAME: !Ref CatalogueServiceDatabaseName
+      Description: Catalogue service RDS JDBC URL
+
+  # This creates secret that holds connection credentials for catalogue database
+  CatalogueDatasourcesDefaultCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: /config/catalogue/
+      SecretString: !Sub
+        - '{"datasources.default.username":"${DB_USERNAME}","datasources.default.password":"${DB_PASSWORD}"}'
+        - DB_USERNAME: !Ref CatalogueServiceDatabaseUsername
+          DB_PASSWORD: !GetAtt CatalogueServiceDatabasePassword.RandomString
+      Description: Credentials for connecting catalogue database
+
+  # This creates secret that holds connection credentials for catalogue database
+  CartsMongoDocumentDbCredentials:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: /config/carts/
+      SecretString: !Sub
+        - '{"mongodb.uri":"mongodb://${MasterUsername}:${MasterPassword}@${ClusterEndpoint}:${ClusterPort}/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"}'
+        - MasterUsername: !Ref DocDbMasterUsername
+          MasterPassword: !Ref DocDbMasterPassword
+          ClusterEndpoint: !Ref DocDbClusterEndpoint
+          ClusterPort: !Ref DocDbClusterPort
+      Description: Credentials for connecting catalogue database
+
+  EventsKafkaInitSecrets:
+    Type: "AWSQS::Kubernetes::Resource"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Manifest:
+        Fn::Sub:
+          - |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: events-init-job-secrets
+            type: Opaque
+            data:
+              mskClusterArn: ${ClusterArn}
+              bootstrapServers: ${ClusterBootstrapServerBrokers}
+          - ClusterBootstrapServerBrokers:
+              Fn::Base64:
+                !Ref MSKClusterBootstrapServerBrokers
+            ClusterArn:
+              Fn::Base64:
+                !Ref MSKClusterArn
+
+  # This creates parameter that holds the Kafka cluster bootstrap servers
+  EventsKafkaClusterBootstrapServers:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /config/events/kafka/bootstrap/servers
+      Type: String
+      Value: !Ref MSKClusterBootstrapServerBrokers
+      Description: Events service Kafka cluster bootstrap servers
+
+  # MuShop utilities
+  MushopUtilitiesNamespaceKubernetesResource:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopUtilitiesNamespace
+      Manifest: !Sub |
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ${MushopUtilitiesNamespace}
+
+  # Nginx helm chart
+  NginxHelmChart:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: MushopUtilitiesNamespaceKubernetesResource
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopUtilitiesNamespace
+      Repository: https://kubernetes.github.io/ingress-nginx
+      Chart: ingress-nginx
+      Name: mushop-utils-ingress-nginx
+      ValueYaml: |
+        controller:
+          metrics:
+            enabled: true
+
+  # Certificate manager
+  CertManagerChart:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: MushopUtilitiesNamespaceKubernetesResource
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopUtilitiesNamespace
+      Repository: https://charts.jetstack.io
+      Chart: cert-manager
+      Name: cert-manager
+      ValueYaml: |
+        installCRDs: true
+
+  # This deploys helm chart
+  MushopHelmChart:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: MushopNamespaceKubernetesResource
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Repository: !Ref HelmRepository
+      Chart: mushop
+      Name: mushop
+      ValueYaml: |
+        global:
+          cloud: aws
+          mock:
+            service: "false"
+          imageSuffix: openjdk-aws
+          serviceAccount: mushop-service
+        api:
+          env:
+            trackingEnabled: true
+        ingress:
+          grafana:
+            enabled: false
+        tags:
+          streaming: true
+          atp: true
+
+  # This requests the k8s ingress svc
+  GetMuShopIngressAddress:
+    Type: "AWSQS::Kubernetes::Get"
+    DependsOn: MushopHelmChart
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: !Ref MushopNamespace
+      Name: ingress/mushop
+      JsonPath: '{.status.loadBalancer.ingress[0].hostname}'
+
+Outputs:
+  MuShopAddressHttp:
+    Value: !Sub
+      - 'http://${MUSHOP}'
+      - MUSHOP: !GetAtt GetMuShopIngressAddress.Response
+  MuShopAddressHttps:
+    Value: !Sub
+      - 'https://${MUSHOP}'
+      - MUSHOP: !GetAtt GetMuShopIngressAddress.Response

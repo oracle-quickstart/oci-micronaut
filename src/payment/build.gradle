@@ -25,9 +25,16 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-tracing")
 
+    // Monitoring - Core
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
+    // Monitoring - OCI
     runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // Monitoring - AWS
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
 
     implementation("io.opentracing.brave:brave-opentracing")
     implementation("io.swagger.core.v3:swagger-annotations")

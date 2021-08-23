@@ -26,6 +26,18 @@ cp terraform.tfvars.example mushop.tfvars Then edit the mushop.tfvars:
     </item>
     
     <item>
+      <title>[Oracle Cloud] Resource manager</title>
+      <link>/quickstart/oci-terraform/</link>
+      <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
+      
+      <guid>/quickstart/oci-terraform/</guid>
+      <description>Prerequisites You need to have an Oracle Cloud Infrastructure account.
+Note that the charges will be applied since used services are not part of the Oracle Cloud Free Tier.
+ Create stack To start with the OCI Resource Manager click on the following button:  
+The link will redirect you to the Resource manager create stack page. Before the Resource manager will load the Terraform templates, you have to comply with Terms of Use.</description>
+    </item>
+    
+    <item>
       <title>[Oracle Cloud] Helm</title>
       <link>/quickstart/helm/</link>
       <pubDate>Fri, 06 Mar 2020 12:27:43 -0700</pubDate>

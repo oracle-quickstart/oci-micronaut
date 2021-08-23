@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>[AWS] Cloudformation :: Micronaut MuShop</title>
+  
+  <meta name="application-name" content="Micronaut MuShop"/>
+<meta name="description" content="Oracle Cloud Native Workshop">
+<meta name="keywords" content="Kubernetes,OCI,OKE,Microservices,Micronaut">
+
+<meta property="og:title" content="Micronaut MuShop - [AWS] Cloudformation" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/quickstart/aws-cloudformation/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
+  <link rel="manifest" href="../../icons/site.webmanifest">
+  <link rel="mask-icon" href="../../icons/safari-pinned-tab.svg" color="#41727e">
+  <meta name="msapplication-TileColor" content="#c74634">
+  <meta name="theme-color" content="#fcfbfa">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="../../sass/main.min.1cfa9655311242a0a659a59ecabdb240453b9a3299947792014d86ff1644a477.css" integrity="sha256-HPqWVTESQqCmWaWeyr2yQEU7mjKZlHeSAU2G/xZEpHc=">
+  <link rel="stylesheet" type="text/css" href="../../fonts/fonts.min.58744946497c59fa8a6ac77636ea480457079e54512cf3dcb552592b56503cc1.css" integrity="sha256-WHRJRkl8WfqKasd2NupIBFcHnlRRLPPctVJZK1ZQPME=">
+  <link rel="stylesheet" type="text/css" href="../../sass/mushop.min.c31ca585e7b3a90dfeb2fd0ac2d7d93ff0af82ea19b0cab20c8539d987761606.css" integrity="sha256-wxylheezqQ3&#43;sv0KwtfZP/CvguoZsMqyDIU52Yd2FgY=">
+</head>
+
+  <body class="" data-url="/quickstart/aws-cloudformation/">
+    
+<div class="uk-navbar-container uk-hidden@s">
+  <div class="">
+    <nav role="navigation" class="uk-light uk-navbar" uk-navbar>
+      <div class="uk-navbar-left">
+        <a href="../../index.html" class="uk-navbar-item uk-logo">
+          <img
+            alt="Micronaut MuShop"
+            class="uk-width-small"
+            src="../../images/logo.dark.png">
+        </a>
+      </div>
+      <div class="uk-navbar-right">
+        <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #navigation"></a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<div class="uk-grid">
+  
+  
+  <aside
+    id="navigation"
+    class="rw-sidebar uk-offcanvas uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-light uk-padding-remove"
+    uk-offcanvas="overlay: true;">
+    <div class="uk-offcanvas-bar uk-padding-small">
+      
+      
+      <section>
+        <div class="uk-margin-bottom uk-visible@s">
+          <a href="../../index.html" class="uk-logo">
+            <img src="../../images/logo.dark.png" alt="Micronaut MuShop">
+          </a>
+        </div>
+        <div class="uk-margin-bottom">
+          <form class="uk-search uk-search-default uk-width-expand">
+  <span class="uk-search-icon-flip" uk-search-icon></span>
+  <input id="search" class="uk-search-input uk-width-expand" type="search" placeholder="Search...">
+</form>
+<div id="search-results" class="uk-background-primary uk-text-small"></div>
+        </div>
+        <ul class="uk-nav uk-nav-primary" uk-nav="multiple: true; toggle: > a .uk-icon">
+          <li class="uk-nav-divider"></li>
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/introduction/" title="Introduction" class="">
+    <a href="../../introduction/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Introduction</div>
+      </div>
+    </a>
+    
+    
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/quickstart/" title="Getting Started" class=" uk-parent uk-open">
+    <a href="../../quickstart/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Getting Started</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/dockecompose/" title="[Local] Docker compose" class="">
+      <a href="../../quickstart/dockecompose/" class="uk-text-truncate">
+        [Local] Docker compose
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/terraform/" title="[Oracle Cloud] Terraform &#43; Helm" class="">
+      <a href="../../quickstart/terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Terraform &#43; Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/oci-terraform/" title="[Oracle Cloud] Resource manager" class="">
+      <a href="../../quickstart/oci-terraform/" class="uk-text-truncate">
+        [Oracle Cloud] Resource manager
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/helm/" title="[Oracle Cloud] Helm" class="">
+      <a href="../../quickstart/helm/" class="uk-text-truncate">
+        [Oracle Cloud] Helm
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/quickstart/aws-cloudformation/" title="[AWS] Cloudformation" class="uk-active">
+      <a href="../../quickstart/aws-cloudformation/" class="uk-text-truncate">
+        [AWS] Cloudformation
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+            
+
+
+  
+  
+  
+  <li data-nav-id="/micronaut/" title="Micronaut Advantages" class=" uk-parent">
+    <a href="../../micronaut/">
+      <div class="uk-flex uk-flex-between uk-flex-middle">
+        <div class="uk-text-truncate">Micronaut Advantages</div><span class="uk-flex-none" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+      </div>
+    </a>
+    
+    
+    <ul class="uk-nav-sub">
+      
+      
+      
+      
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/cloudnative/" title="Cloud Native Configuration" class="">
+      <a href="../../micronaut/cloudnative/" class="uk-text-truncate">
+        Cloud Native Configuration
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/service-discovery/" title="Service Discovery" class="">
+      <a href="../../micronaut/service-discovery/" class="uk-text-truncate">
+        Service Discovery
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/tracing/" title="Distributed Tracing" class="">
+      <a href="../../micronaut/tracing/" class="uk-text-truncate">
+        Distributed Tracing
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/management/" title="Health Checks &amp; Observability" class="">
+      <a href="../../micronaut/management/" class="uk-text-truncate">
+        Health Checks &amp; Observability
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/metrics/" title="Application Metrics and Monitoring" class="">
+      <a href="../../micronaut/metrics/" class="uk-text-truncate">
+        Application Metrics and Monitoring
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/atp/" title="Connecting Autonomous Database" class="">
+      <a href="../../micronaut/atp/" class="uk-text-truncate">
+        Connecting Autonomous Database
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/data/" title="Database Access" class="">
+      <a href="../../micronaut/data/" class="uk-text-truncate">
+        Database Access
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/openapi/" title="OpenAPI / Swagger" class="">
+      <a href="../../micronaut/openapi/" class="uk-text-truncate">
+        OpenAPI / Swagger
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/gateway/" title="Gateway Service" class="">
+      <a href="../../micronaut/gateway/" class="uk-text-truncate">
+        Gateway Service
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/security/" title="Security" class="">
+      <a href="../../micronaut/security/" class="uk-text-truncate">
+        Security
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/messaging/" title="Messaging" class="">
+      <a href="../../micronaut/messaging/" class="uk-text-truncate">
+        Messaging
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/httpclient/" title="HTTP Client" class="">
+      <a href="../../micronaut/httpclient/" class="uk-text-truncate">
+        HTTP Client
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/deployment/" title="Deployment" class="">
+      <a href="../../micronaut/deployment/" class="uk-text-truncate">
+        Deployment
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+        
+        
+
+
+  
+    
+    <li data-nav-id="/micronaut/native/" title="GraalVM Native Image" class="">
+      <a href="../../micronaut/native/" class="uk-text-truncate">
+        GraalVM Native Image
+      </a>
+    </li>
+    
+  
+
+ 
+
+        
+      
+    </ul>
+  
+  </li>
+  
+
+ 
+
+          
+          <li class="uk-nav-divider"></li>
+        </ul>
+      </section>
+      
+      <section>
+        <ul class="uk-nav uk-nav-default" uk-nav>
+          
+          
+          <li>
+            <a title="More Information" href="../../resources" class="uk-text-truncate">
+              <span uk-icon='icon: info; ratio: 1.25'></span>
+              <span class="uk-text-middle">More Information</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Acknowledgements" href="../../acknowledgements" class="uk-text-truncate">
+              <span uk-icon='icon: users; ratio: 1.25'></span>
+              <span class="uk-text-middle">Acknowledgements</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Tags" href="../../tags" class="uk-text-truncate">
+              <span uk-icon='icon: tag; ratio: 1.25'></span>
+              <span class="uk-text-middle">Tags</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="GitHub Source" href="https://github.com/oracle-quickstart/oci-micronaut" class="uk-text-truncate">
+              <span uk-icon='icon: github; ratio: 1.25'></span>
+              <span class="uk-text-middle">GitHub Source</span>
+              
+            </a>
+          </li>
+          <li>
+            <a title="Report Issue" href="https://github.com/oracle-quickstart/oci-micronaut/issues" class="uk-text-truncate">
+              <span uk-icon='icon: warning; ratio: 1.25'></span>
+              <span class="uk-text-middle">Report Issue</span>
+              
+            </a>
+          </li>
+            <li>
+              <a title='Edit this page' href="https://github.com/oracle-quickstart/oci-micronaut/tree/main/src/docs/contentquickstart/aws-cloudformation.md" target="blank">
+                <span uk-icon="pencil"></span>
+                <span class="uk-text-middle">Edit this page</span>
+              </a>
+            </li>
+            
+          
+        </ul>
+      </section>
+      <section class="uk-margin-top">
+        <hr>
+        <ul id="rw-settings" class="uk-nav uk-nav-default" uk-nav>
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>Theme</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="theme"
+    target="html, .content-container" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="uk-background-default" >
+      Light
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="uk-light uk-background-secondary" >
+      Dark
+    </button></div>
+</li>
+
+
+  <li class="uk-grid uk-grid-small uk-flex-middle uk-flex-between uk-flex-nowrap uk-text-nowrap">
+  <div class="uk-width-1-4">
+    
+    <span>OS</span>
+  </div>
+  <div class="uk-button-group rw-setting"
+    setting="platform"
+    target="html" ><button class="uk-button uk-button-small uk-button-secondary
+    uk-active" toggle="stg-os-macos" >
+      Mac
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-linux" >
+      Linux
+    </button><button class="uk-button uk-button-small uk-button-secondary
+    " toggle="stg-os-windows" >
+      Windows
+    </button></div>
+</li>
+</ul>
+
+
+
+      </section>
+      <section class="uk-text-small uk-text-lighter uk-margin-top">
+        <hr>
+        <div class="uk-text-muted">
+  <div class="uk-margin-small">
+    Made with <span uk-icon="icon: heart; ratio: 0.75"></span> by Oracle Developers
+  </div>
+  Copyright © 2021 Oracle and/or its affiliates. All rights reserved.
+</div>
+      </section>
+    </div>
+  </aside>
+  
+  <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+
+
+
+    <div class="content-container uk-width-expand">
+      <div class="uk-position-relative">
+        <div id="content" class="uk-grid uk-container-xlarge" uk-grid>
+          
+
+<div class="uk-flex-last uk-width-1-4 uk-visible@l">
+  <aside id="toc-nav" uk-sticky="offset: 40">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#create-stack">Create stack</a></li>
+        <li><a href="#specify-stack-details">Specify stack details</a></li>
+        <li><a href="#stack-options">Stack options</a></li>
+        <li><a href="#review">Review</a></li>
+        <li><a href="#deployment">Deployment</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    <hr/>
+    
+  <div>
+    
+    <a class="uk-label" href="../../tags/aws">
+      <span uk-icon="tag"></span>
+      AWS
+    </a>
+    
+    <a class="uk-label" href="../../tags/eks">
+      <span uk-icon="tag"></span>
+      EKS
+    </a>
+    
+    <a class="uk-label" href="../../tags/helm">
+      <span uk-icon="tag"></span>
+      Helm
+    </a>
+    
+    <a class="uk-label" href="../../tags/cloudformation">
+      <span uk-icon="tag"></span>
+      Cloudformation
+    </a>
+    
+  </div>
+
+  </aside>
+</div>
+
+
+          <main class="uk-width-expand">
+            <header>
+  
+  
+    <ul class="uk-breadcrumb uk-margin-top uk-text-small">
+    
+  
+  <li><a href='../../'>Home</a></li> <li><a href='../../quickstart/'>Getting Started</a></li> <li>[AWS] Cloudformation</li>
+    </ul></header>
+
+
+
+            <h1 class="rw-accent">[AWS] Cloudformation</h1>
+              
+  <p>Deploys complete Micronaut MuShop to <a href="https://aws.amazon.com/eks/">Amazon Elastic Kubernetes Service (EKS)</a> in combination with <a href="https://aws.amazon.com/documentdb/">Amazon DocumentDb (with MongoDB compatibility)</a>, <a href="https://aws.amazon.com/rds/">Amazon Relational Database Service (RDS)</a> and <a href="https://aws.amazon.com/msk/">Amazon Managed Streaming for Apache Kafka (MSK)</a>.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>AWS account with configured billing.</p>
+<div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: warning; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note that the charges will be applied since used services are not part of the <a href="https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&amp;all-free-tier.sort-order=asc&amp;awsf.Free%20Tier%20Types=*all&amp;awsf.Free%20Tier%20Categories=*all">AWS Free Tier</a>.</p>
+</div></div>
+<h2 id="create-stack">Create stack</h2>
+<p>To start with the <a href="https://aws.amazon.com/cloudformation/">AWS Cloudformation</a> click on the following button:
+</br>
+<a href="https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&amp;templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml"><img src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Launch Stack"></a></p>
+<p>Proceed to specify stack details:
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-create.png" alt="Micronaut Mushop stack create"></p>
+</div></p>
+<h2 id="specify-stack-details">Specify stack details</h2>
+<p>The stack contains lot of configuration options for AWS services. Majority of the options are already preconfigured however there are few options that needs to be configured manually:</p>
+<ul>
+<li><code>Availability Zones</code> - List of Availability Zones in the region the stack is going to be deployed into. It is recommended to select at least 3 AZs.</li>
+<li><code>VPC network configuration</code> - Insert the number of selected availability zones.</li>
+<li><code>SSH key name</code> - select existing or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair">create new ec2 keypair</a>. This keypair is used to access the bastion host.</li>
+</ul>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Micronaut Mushop stack configure"></p>
+</div>
+<p>Once you have provided the values, proceed next to the stack options.</p>
+<h2 id="stack-options">Stack options</h2>
+<p>Configure here the Cloudformation stack options. Generally you can skip this page and proceed to the Stack Review page.</p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Micronaut Mushop stack options"></p>
+</div>
+<h2 id="review">Review</h2>
+<p>On this page review the configuration options and check all requested capabilities. Then hit <code>Create stack</code> button.</p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-review.png" alt="Micronaut Mushop stack review"></p>
+</div>
+<div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
+<p>Note that if you do not check all required capabilities the stack won&rsquo;t be completely created.</p>
+</div></div>
+<h2 id="deployment">Deployment</h2>
+<p>The stack itself consist from several sub-stacks:</p>
+<ul>
+<li><code>EKSStack</code> - stack deploys EKS and VNC, deployment time ~40 minutes</li>
+<li><code>DocumentDB</code> - stack deploys AWS DocumentDb, deployment time ~10 minutes</li>
+<li><code>MSKStack</code> - stack deploys the AWS MSK, deployment time ~40-60minutes</li>
+<li><code>RDSStack</code> - stack deploys the AWS RDS with MySQL engine, deployment time ~10minutes</li>
+<li><code>MushopUtilitiesStack</code> - stack deploys helper Lambda functions, deployment time ~5 minutes</li>
+<li><code>MuShop</code> - stack creates configuration options in the AWS Secret Manager, AWS Parameter Store and uses MuShop Helm chart to deploy the Micronaut MuShop application to the EKS.</li>
+</ul>
+<p>The deployment of the complete stack takes around ~60-90 minutes. Once finished the <code>Outputs</code> tab will contain the url of the application as well as the IP of bastion host (if requested to create).</p>
+
+
+            </main>
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+    
+<footer class="uk-position-fixed uk-position-bottom">
+  <div class="uk-grid">
+    
+    
+    <div class="uk-width-1-1 uk-width-1-3@s uk-width-1-4@m uk-width-1-5@l uk-width-1-6@xl uk-visible@s"></div>
+    <div class="uk-width-expand">
+      <div>
+      
+      
+      
+      
+
+
+  
+    
+    
+  
+
+  
+  
+  
+    
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+    
+
+
+  
+    
+      
+      
+    
+  
+
+  
+  
+  
+
+  
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+    
+
+
+  
+    
+  
+
+  
+  
+  
+
+  
+  
+
+
+  
+
+
+  
+
+
+        <div class="uk-flex uk-flex-between uk-margin-top">
+          <a href="../../quickstart/helm/" title="[Oracle Cloud] Helm" class="rw-page-prev uk-flex-first uk-flex uk-flex-left uk-flex-middle uk-text-truncate">
+            <span uk-icon="icon: chevron-left; ratio: 2.5" class="uk-margin-small-right uk-flex-none"></span>
+            <label class="uk-visible@m">[Oracle Cloud] Helm</label>
+          </a><span></span>
+          <a href="../../micronaut/" title="Micronaut Advantages" class="rw-page-next uk-flex-last uk-flex uk-flex-right uk-flex-middle uk-flex-last uk-text-truncate">
+            <label class="uk-visible@m">Micronaut Advantages</label>
+            <span uk-icon="icon: chevron-right; ratio: 2.5" class="uk-margin-small-left uk-flex-none"></span>
+          </a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script type="text/javascript">
+  (function(w, s) {
+    Object.assign(s, {
+      BaseURL: '',
+      RelURL: '\/',
+      cssConfig: {
+        table: 'uk-table uk-table-small uk-table-striped',
+        '#TableOfContents > ul': 'uk-nav uk-nav-default uk-nav-parent-icon',
+        '#TableOfContents > ul ul': 'uk-nav-sub',
+      },
+      uikit: {
+        '#TableOfContents > ul': ['scrollspyNav', { closest: 'li', offset: 10 }],
+        
+      }
+    });
+  })(window, window.Site = window.Site || {});
+</script>
+
+<script src="../../js/vendor.min.e005c93e1a94928260d72859a61ad84fa0324ea594a8fb4318c00381a451a8c3.js" ></script><script src="../../js/extras.min.88dc65673919eb6e8151f4f309d54cecb7ba304c48d378ff4d9b858b6b1d2742.js"  async></script><script src="../../js/site.min.d7973f1560bba2270850ebebf4e3a2a2e58e84e1f993191030325ddaef76a81c.js"  async></script>
+  </body>
+</html>

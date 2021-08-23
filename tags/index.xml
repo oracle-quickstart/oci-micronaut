@@ -75,11 +75,47 @@
     </item>
     
     <item>
+      <title>AWS</title>
+      <link>/tags/aws/</link>
+      <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
+      
+      <guid>/tags/aws/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cloudformation</title>
+      <link>/tags/cloudformation/</link>
+      <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
+      
+      <guid>/tags/cloudformation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>EKS</title>
+      <link>/tags/eks/</link>
+      <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
+      
+      <guid>/tags/eks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Quickstart</title>
       <link>/tags/quickstart/</link>
       <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
       
       <guid>/tags/quickstart/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Resource manager</title>
+      <link>/tags/resource-manager/</link>
+      <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
+      
+      <guid>/tags/resource-manager/</guid>
       <description></description>
     </item>
     

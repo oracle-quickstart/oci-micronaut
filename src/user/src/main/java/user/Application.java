@@ -4,6 +4,9 @@ import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
+/*
+ * This annotation triggers the generation of OpenAPI documentation
+ */
 @OpenAPIDefinition(
         info = @Info(
                 title = "user",
@@ -11,8 +14,11 @@ import io.swagger.v3.oas.annotations.info.Info;
         )
 )
 public class Application {
-
+    /**
+     * Main entry point for the application.
+     */
     public static void main(String[] args) {
+        // starts the Micronaut server
         Micronaut.run(Application.class, args);
     }
 }

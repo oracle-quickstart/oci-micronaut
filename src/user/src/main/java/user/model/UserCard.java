@@ -12,13 +12,33 @@ import io.micronaut.data.annotation.Version;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+/*
+ * Allows binding the results from the {@code USER_CARDS} database table.
+ *
+ * @see https://micronaut-projects.github.io/micronaut-data/latest/guide/#sqlMapping
+ */
 @MappedEntity("USER_CARDS")
 public class UserCard {
 
+    /**
+     * The database ID column is represented as a UUID.
+     * The {@code AutoPopulated} annotation indicates that Micronaut Data 
+     * will generate a new UUID if none is already set and assign it to 
+     * The entity prior to insert.
+     * 
+     * @see https://micronaut-projects.github.io/micronaut-data/latest/api/io/micronaut/data/annotation/AutoPopulated.html
+     */
     @Id
     @AutoPopulated(updateable = false)
     private UUID id;
 
+    /**
+     * A version column used to help control concurrent updates using Optimistic Locking 
+     * which can improve performance over Pessimistic locking.
+     * 
+     * @see https://micronaut-projects.github.io/micronaut-data/latest/guide/#optimisticLocking
+     * @see https://en.wikipedia.org/wiki/Optimistic_concurrency_control
+     */
     @Version
     private Long version;
 

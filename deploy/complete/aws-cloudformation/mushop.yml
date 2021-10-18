@@ -469,7 +469,7 @@ Resources:
           cloud: aws
           mock:
             service: "false"
-          imageSuffix: openjdk-aws
+          imageSuffix: native
           serviceAccount: mushop-service
         api:
           env:

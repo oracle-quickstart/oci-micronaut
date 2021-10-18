@@ -58,7 +58,8 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
         );
         final Map<String, Object> result = client.register(userRegistrationRequest);
         assertNotNull(result);
-        assertEquals(true, result.get("authenticated"));
+        assertNotNull(result.get("attributes"));
+        assertTrue(((Map)result.get("attributes")).containsKey("id"));
     }
 
     @Test
@@ -130,7 +131,7 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.0.0-SNAPSHOT";
+        return "1.2.0-SNAPSHOT";
     }
 
     @Override

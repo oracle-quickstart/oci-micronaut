@@ -22,9 +22,6 @@ import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
-import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,6 +29,8 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.Map;
@@ -46,7 +45,7 @@ import static org.mockito.Mockito.when;
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PlaceOrderTest implements TestPropertyProvider {
-
+//DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts" + "-" + AbstractDatabaseServiceTest.defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion())
     @Container
     static GenericContainer<?> cartsContainer = new GenericContainer<>(
             DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:" + getServiceVersion())
@@ -87,11 +86,11 @@ public class PlaceOrderTest implements TestPropertyProvider {
         final String addressId = UUID.randomUUID().toString();
         final AddressInfo addressInfo = new AddressInfo(addressId, "10", "Smith st", "SomethingVille", "SomethingCountry", "124345");
         when(usersClient.getProfile(mockAuth.userId))
-                .thenReturn(Single.just(userDetails));
+                .thenReturn(Mono.just(userDetails));
         when(usersClient.getCards(mockAuth.userId))
-                .thenReturn(Flowable.just(cardInfo));
+                .thenReturn(Flux.just(cardInfo));
         when(usersClient.getAddresses(mockAuth.userId))
-                .thenReturn(Flowable.just(addressInfo));
+                .thenReturn(Flux.just(addressInfo));
 
         final HttpStatus result = ordersApiClient.placeOrder(sessionID);
         assertEquals(HttpStatus.CREATED, result);
@@ -120,20 +119,20 @@ public class PlaceOrderTest implements TestPropertyProvider {
 
     @MockBean(api.services.CartsService.CatalogueClient.class)
     api.services.CartsService.CatalogueClient catalogueClient() {
-        return id -> Maybe.just(new Product(id, 10.00));
+        return id -> Mono.just(new Product(id, 10.00));
     }
 
     @MockBean(ServiceLocator.class)
     ServiceLocator ServiceLocator() {
         return new ServiceLocator() {
             @Override
-            public Single<UriTemplate> getCartsURL() {
-                return Single.just(UriTemplate.of("http://localhost"));
+            public Mono<UriTemplate> getCartsURL() {
+                return Mono.just(UriTemplate.of("http://localhost"));
             }
 
             @Override
-            public Single<UriTemplate> getUsersURL() {
-                return Single.just(UriTemplate.of("http://localhost"));
+            public Mono<UriTemplate> getUsersURL() {
+                return Mono.just(UriTemplate.of("http://localhost"));
             }
         };
     }
@@ -150,24 +149,25 @@ public class PlaceOrderTest implements TestPropertyProvider {
         return new OrdersService.OrdersClient() {
 
             @Override
-            public Single<Map<String,Object>> getOrders(String custId, @Nullable String sort) {
-                return Single.just(Collections.emptyMap());
+            public Mono<Map<String, Object>> getOrders(String custId, @Nullable String sort) {
+                return Mono.just(Collections.emptyMap());
             }
 
             @Override
-            public Single<Map<String, Object>> getOrder(Long orderId) {
-                return Single.just(Collections.emptyMap());
+            public Mono<Map<String, Object>> getOrder(Long orderId) {
+                return Mono.just(Collections.emptyMap());
             }
 
             @Override
-            public Single<Map<String, Object>> newOrder(OrdersService.OrderRequest orderRequest) {
+            public Mono<Map<String, Object>> newOrder(OrdersService.OrderRequest orderRequest) {
                 PlaceOrderTest.this.lastOrder = orderRequest;
-                return Single.just(Collections.emptyMap());
+                return Mono.just(Collections.emptyMap());
             }
         };
     }
+
     @MockBean(UsersClient.class)
-    UsersClient usersClient(){
+    UsersClient usersClient() {
         return mock(UsersClient.class);
     }
 }

@@ -5,13 +5,16 @@ import api.model.UserRegistrationRequest;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
-import io.reactivex.Single;
+import reactor.core.publisher.Mono;
 
+/**
+ * The authentication client.
+ */
 @Client(id = ServiceLocator.USER)
 public interface AuthClient {
     @Post("/login")
-    Single<MuUserDetails> login(String username, String password);
+    Mono<MuUserDetails> login(String username, String password);
 
     @Post("/register")
-    Single<MuUserDetails> register(@Body UserRegistrationRequest registrationRequest);
+    Mono<MuUserDetails> register(@Body UserRegistrationRequest registrationRequest);
 }

@@ -17,7 +17,6 @@ import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Maybe;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -154,7 +154,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @MockBean(api.services.CartsService.CatalogueClient.class)
     api.services.CartsService.CatalogueClient catalogueClient() {
-        return id -> Maybe.just(new Product(id, 10.00));
+        return id -> Mono.just(new Product(id, 10.00));
     }
 
     @Introspected
@@ -190,6 +190,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.0.3-SNAPSHOT";
+        return "1.2.0-SNAPSHOT";
     }
 }

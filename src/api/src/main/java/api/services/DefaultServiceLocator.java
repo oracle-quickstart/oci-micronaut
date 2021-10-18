@@ -4,10 +4,13 @@ import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.http.client.LoadBalancer;
 import io.micronaut.http.client.LoadBalancerResolver;
 import io.micronaut.http.uri.UriTemplate;
-import io.reactivex.Single;
+import jakarta.inject.Singleton;
+import reactor.core.publisher.Mono;
 
-import javax.inject.Singleton;
 
+/**
+ * The {@link ServiceLocator} used to dynamically construct the {@link UriTemplate}s.
+ */
 @Singleton
 class DefaultServiceLocator implements ServiceLocator {
 
@@ -22,17 +25,17 @@ class DefaultServiceLocator implements ServiceLocator {
     }
 
     @Override
-    public Single<UriTemplate> getCartsURL() {
+    public Mono<UriTemplate> getCartsURL() {
         return toUriTemplate(cartLoadBalancer);
     }
 
     @Override
-    public Single<UriTemplate> getUsersURL() {
+    public Mono<UriTemplate> getUsersURL() {
         return toUriTemplate(userLoadBalancer);
     }
 
-    private Single<UriTemplate> toUriTemplate(LoadBalancer cartLoadBalancer) {
-        return Single.fromPublisher(cartLoadBalancer.select())
+    private Mono<UriTemplate> toUriTemplate(LoadBalancer cartLoadBalancer) {
+        return Mono.from(cartLoadBalancer.select())
                 .map(serviceInstance -> UriTemplate.of(serviceInstance.getURI().toString()));
     }
 }

@@ -6,13 +6,16 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.http.bind.binders.AnnotatedRequestArgumentBinder;
 import io.micronaut.session.Session;
 import io.micronaut.session.http.HttpSessionFilter;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Binds the {@link CartId} to the {@link UUID}.
+ */
 @Singleton
 public class CartIdBinder implements AnnotatedRequestArgumentBinder<CartId, UUID> {
     private static final Logger LOG = LoggerFactory.getLogger(CartIdBinder.class);

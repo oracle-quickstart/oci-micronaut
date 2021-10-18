@@ -1,7 +1,7 @@
 package api.auth;
 
 import api.services.AuthClient;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.AuthenticationFailed;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
@@ -9,11 +9,13 @@ import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
-import io.reactivex.Flowable;
+import jakarta.inject.Singleton;
 import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
-import javax.inject.Singleton;
-
+/**
+ * MuShop implementation of {@link AuthenticationProvider} that uses {@link AuthClient} to authenticate users.
+ */
 @Singleton
 public class MuShopAuthenticationProvider implements AuthenticationProvider {
 
@@ -30,9 +32,8 @@ public class MuShopAuthenticationProvider implements AuthenticationProvider {
         if (authenticationRequest instanceof UsernamePasswordCredentials) {
             UsernamePasswordCredentials credentials = (UsernamePasswordCredentials) authenticationRequest;
             return client.login(credentials.getUsername(), credentials.getPassword())
-                    .cast(AuthenticationResponse.class)
-                    .toFlowable();
+                    .map(muUserDetails -> AuthenticationResponse.success(credentials.getUsername(), muUserDetails.getAttributes()));
         }
-        return Flowable.just(new AuthenticationFailed(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH));
+        return Mono.just(new AuthenticationFailed(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH));
     }
 }

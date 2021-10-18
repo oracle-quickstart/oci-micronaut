@@ -1,6 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "1.5.0"
+    id("io.micronaut.application") version "2.0.6"
 }
 
 group = "micronaut.mushop"
@@ -20,11 +20,11 @@ micronaut {
 
 dependencies {
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    annotationProcessor("io.micronaut.security:micronaut-security-annotations:2.4.3")
+    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut.security:micronaut-security-annotations:2.4.3")
-    implementation("io.micronaut.security:micronaut-security-session:2.4.3")
+    implementation("io.micronaut.security:micronaut-security-annotations")
+    implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-session")
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -50,17 +50,17 @@ dependencies {
     runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:2.3.2")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Redis HTTP session store
-    implementation("io.micronaut.redis:micronaut-redis-lettuce:4.0.2")
+    implementation("io.micronaut.redis:micronaut-redis-lettuce")
 
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
     // Testing
     // https://github.com/micronaut-projects/micronaut-test/issues/423
-    testImplementation enforcedPlatform("io.micronaut.test:micronaut-test-bom:2.3.3")
+    testImplementation enforcedPlatform("io.micronaut.test:micronaut-test-bom")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:oracle-xe")

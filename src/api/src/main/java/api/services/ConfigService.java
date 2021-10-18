@@ -7,10 +7,13 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.session.Session;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import reactor.core.publisher.Mono;
 
+/**
+ * The MuShop UI config service.
+ */
 @MuService
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class ConfigService {
@@ -25,12 +28,12 @@ public class ConfigService {
      */
     @Tag(name="user")
     @Get("/config")
-    Single<Configuration> getConfig(Session session) {
+    Mono<Configuration> getConfig(Session session) {
         String trackId = "";
         if (session != null) {
             trackId = session.getId();
         }
-        return Single.just(new Configuration(trackId, false, "", cloudProvider));
+        return Mono.just(new Configuration(trackId, false, "", cloudProvider));
     }
 
     /**

@@ -18,11 +18,8 @@ import io.micronaut.http.annotation.Status;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
+import io.micronaut.security.handlers.LoginHandler;
 import io.micronaut.security.rules.SecurityRule;
-import io.micronaut.security.session.SessionLoginHandler;
-import io.reactivex.Completable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -30,7 +27,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
+/**
+ * The MuShop user service forwarder.
+ */
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class UsersService {
@@ -39,14 +40,14 @@ public class UsersService {
 
     private final UsersClient client;
     private final AuthClient authClient;
-    private final SessionLoginHandler sessionLoginHandler;
+    private final LoginHandler loginHandler;
 
     UsersService(UsersClient client,
                  AuthClient authClient,
-                 SessionLoginHandler sessionLoginHandler) {
+                 LoginHandler loginHandler) {
         this.client = client;
         this.authClient = authClient;
-        this.sessionLoginHandler = sessionLoginHandler;
+        this.loginHandler = loginHandler;
     }
 
     @Post("/register")
@@ -61,12 +62,12 @@ public class UsersService {
             },
             tags = {"user"}
     )
-    public Single<MuUserDetails> register(HttpRequest<?> request,
+    public Mono<MuUserDetails> register(HttpRequest<?> request,
                                           UserRegistrationRequest registrationRequest) {
         return authClient.register(registrationRequest)
                 .doOnError(throwable -> LOG.error("Failed to register user: " + throwable.getMessage(), throwable))
                 .map((userDTO -> {
-                    sessionLoginHandler.loginSuccess(userDTO, request);
+                    loginHandler.loginSuccess(userDTO, request);
                     return userDTO;
                 }))
                 .doOnError(throwable -> LOG.error("Failed to create user session: " + throwable.getMessage(), throwable));
@@ -82,7 +83,7 @@ public class UsersService {
                     @ApiResponse(responseCode = "401", description = "Unauthorized.")
             },
             tags = {"user"})
-    public Maybe<UserDetail> getProfile(Authentication auth) {
+    public Mono<UserDetail> getProfile(Authentication auth) {
         return client.getUser(MuUserDetails.resolveId(auth));
     }
 
@@ -100,12 +101,12 @@ public class UsersService {
             },
             tags = {"user"})
     @Get("/customers/{id}")
-    public Maybe<UserDetail> getProfile(String id, Authentication auth) {
+    public Mono<UserDetail> getProfile(String id, Authentication auth) {
         final String authId = MuUserDetails.resolveId(auth);
         if (id.equals(authId)) {
             return client.getUser(authId);
         } else {
-            return Maybe.error(new HttpStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
+            return Mono.error(new HttpStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
         }
     }
 
@@ -120,7 +121,7 @@ public class UsersService {
             tags = {"user"})
     @Post("/address")
     @TrackEvent("create:address")
-    public Single<AddressInfo> addAddress(Authentication authentication, @Body AddressInfo body) {
+    public Mono<AddressInfo> addAddress(Authentication authentication, @Body AddressInfo body) {
         return client.addAddress(MuUserDetails.resolveId(authentication), body);
     }
 
@@ -135,8 +136,8 @@ public class UsersService {
             tags = {"user"})
     @Get("/address")
     @TrackEvent("get:address")
-    public Single<AddressInfo> getAddress(Authentication authentication) {
-        return client.getAddresses(MuUserDetails.resolveId(authentication)).firstOrError();
+    public Mono<AddressInfo> getAddress(Authentication authentication) {
+        return client.getAddresses(MuUserDetails.resolveId(authentication)).single();
     }
 
     @Operation(
@@ -150,7 +151,7 @@ public class UsersService {
             tags = {"card"})
     @Post("/card")
     @TrackEvent("create:card")
-    public Single<CardInfo> addCard(Authentication authentication, @Body CardInfo body) {
+    public Mono<CardInfo> addCard(Authentication authentication, @Body CardInfo body) {
         return client.addCard(MuUserDetails.resolveId(authentication), body);
     }
 
@@ -170,7 +171,7 @@ public class UsersService {
     @Delete("/card/{cardId}")
     @TrackEvent("delete:card")
     @Status(HttpStatus.NO_CONTENT)
-    public Completable deleteCard(Authentication authentication, String cardId) {
+    public Mono<Void> deleteCard(Authentication authentication, String cardId) {
         return client.deleteCard(MuUserDetails.resolveId(authentication), cardId);
     }
 
@@ -190,7 +191,7 @@ public class UsersService {
     @Delete("/address/{addressId}")
     @TrackEvent("delete:address")
     @Status(HttpStatus.NO_CONTENT)
-    public Completable deleteAddress(Authentication authentication, String addressId) {
+    public Mono<Void> deleteAddress(Authentication authentication, String addressId) {
         return client.deleteAddress(MuUserDetails.resolveId(authentication), addressId);
     }
 
@@ -206,7 +207,7 @@ public class UsersService {
 
     @Get("/card")
     @TrackEvent("get:card")
-    public Single<CardInfo> getCard(Authentication authentication) {
-        return client.getCards(MuUserDetails.resolveId(authentication)).firstOrError();
+    public Mono<CardInfo> getCard(Authentication authentication) {
+        return client.getCards(MuUserDetails.resolveId(authentication)).single();
     }
 }

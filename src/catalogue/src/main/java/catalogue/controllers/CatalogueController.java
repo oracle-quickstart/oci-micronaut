@@ -125,6 +125,7 @@ class CatalogueController implements CatalogueOperations {
                     required = false
             )
     })
+    
     public List<CatalogueItemDTO> list(
             @Nullable List<String> categories,
             @Parameter(hidden = true) @Nullable Pageable pageable) {

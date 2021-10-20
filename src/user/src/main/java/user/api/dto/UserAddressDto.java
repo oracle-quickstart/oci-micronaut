@@ -4,6 +4,9 @@ import io.micronaut.core.annotation.Introspected;
 
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * {@link user.model.UserAddress} DTO.
+ */
 @Introspected
 public class UserAddressDto {
 

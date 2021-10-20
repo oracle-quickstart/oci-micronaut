@@ -4,6 +4,9 @@ import io.micronaut.core.annotation.Introspected;
 
 import javax.validation.constraints.Size;
 
+/**
+ * {@link user.model.UserCard} DTO.
+ */
 @Introspected
 public class UserCardDto {
 

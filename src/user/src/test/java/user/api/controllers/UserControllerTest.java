@@ -188,7 +188,7 @@ public class UserControllerTest {
             fail();
         } catch (HttpClientResponseException e) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
-            assertEquals("User with username: bunny doesn't match provided password", e.getMessage());
+            assertEquals("Unauthorized", e.getMessage());
         }
 
         try {
@@ -196,7 +196,7 @@ public class UserControllerTest {
             fail();
         } catch (HttpClientResponseException e) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
-            assertEquals("User with username: unknownusername not found", e.getMessage());
+            assertEquals("Unauthorized", e.getMessage());
         }
 
         client.deleteUser(userDetail.getId());

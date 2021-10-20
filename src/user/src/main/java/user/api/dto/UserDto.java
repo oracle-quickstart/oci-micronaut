@@ -4,6 +4,9 @@ import io.micronaut.core.annotation.Introspected;
 
 import java.util.List;
 
+/**
+ * {@link user.model.User} DTO.
+ */
 @Introspected
 public class UserDto {
 

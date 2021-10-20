@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 
 /**
- * An authorization request
+ * An authorization request for the payment.
  */
 @Introspected
 public class AuthorizationRequest {

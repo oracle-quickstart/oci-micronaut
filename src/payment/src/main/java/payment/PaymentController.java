@@ -8,6 +8,9 @@ import io.micronaut.http.exceptions.HttpStatusException;
 
 import static io.micronaut.http.HttpStatus.BAD_REQUEST;
 
+/**
+ * The payment authorization controller.
+ */
 @Controller
 class PaymentController {
 

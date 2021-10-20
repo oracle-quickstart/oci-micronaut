@@ -10,4 +10,4 @@ kafka:
     protocol: SSL
   ssl:
     truststore:
-      location: /opt/openjdk-16/lib/security/cacerts
+      location: /opt/cacerts

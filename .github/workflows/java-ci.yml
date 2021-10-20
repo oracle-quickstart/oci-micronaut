@@ -184,7 +184,11 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+          if [ "${{ matrix.project-path }}" == "carts" ]; then
+              ./mvnw deploy -Dpackaging=docker -Djib.from.image=iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+            else
+              ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+          fi
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPush --no-daemon
           fi
@@ -193,7 +197,11 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker --no-transfer-progress
+            if [ "${{ matrix.project-path }}" == "carts" ]; then
+              ./mvnw deploy -Dpackaging=docker -Djib.from.image=iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/openjdk:16-alpine --no-transfer-progress
+            else
+              ./mvnw deploy -Dpackaging=docker --no-transfer-progress
+            fi
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPush -PjavaBaseImage=openjdk --no-daemon
           fi

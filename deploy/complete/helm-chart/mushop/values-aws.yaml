@@ -2,7 +2,7 @@ global:
   cloud: aws
   mock:
     service: "false"
-  imageSuffix: openjdk-aws
+  imageSuffix: openjdk
   serviceAccount: mushop-service
 
 # Depending on the scenario, certain resources might need to be skipped.

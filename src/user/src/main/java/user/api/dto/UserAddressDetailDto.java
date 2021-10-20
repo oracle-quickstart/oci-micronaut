@@ -5,6 +5,9 @@ import io.micronaut.core.annotation.Introspected;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+/**
+ * {@link user.model.UserAddress} detailed DTO.
+ */
 @Introspected
 public class UserAddressDetailDto {
 

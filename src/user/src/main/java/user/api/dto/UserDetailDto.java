@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * {@link user.model.User} detailed DTO.
+ */
 @Introspected
 public class UserDetailDto {
 

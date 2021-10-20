@@ -1,6 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "1.5.0"
+    id("io.micronaut.application") version "2.0.6"
 }
 
 group = "micronaut.mushop"
@@ -37,7 +37,7 @@ dependencies {
     // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:2.0.0")
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
     runtimeOnly("com.oracle.database.security:oraclepki")
@@ -51,7 +51,7 @@ dependencies {
     implementation("software.amazon.awssdk:sts")
 
     // AWS - Configuration discovery
-    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
     // Monitoring - Core

@@ -104,6 +104,11 @@ Resources:
                 Action:
                   - "cloudwatch:PutMetricData"
                 Resource: '*'
+              - Effect: Allow
+                Action:
+                  - "kafka-cluster:*"
+                Resource: !Ref MSKClusterArn
+
 
   # This creates namespace for MuShop deployment
   MushopNamespaceKubernetesResource:

@@ -31,14 +31,9 @@
         <micronaut.data.version>3.1.0</micronaut.data.version>
         <micronaut.oraclecloud.version>2.0.2</micronaut.oraclecloud.version>
         <micronaut.micrometer.version>3.4.0</micronaut.micrometer.version>
-<!--        <micronaut.aws.version>2.9.0</micronaut.aws.version>-->
-<!--        <micronaut.testcontainers.version>1.15.3</micronaut.testcontainers.version>-->
         <jdbc.version>21.1.0.0</jdbc.version>
         <soda.version>1.1.7.1</soda.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
-<!--        <libs.classpath.prefix>libs</libs.classpath.prefix>-->
-<!--        <copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
     </properties>
 
     <repositories>

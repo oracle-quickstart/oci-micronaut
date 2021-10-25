@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The event to track.
+ */
 @Introspected
 public class Event {
 

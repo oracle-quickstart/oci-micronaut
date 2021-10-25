@@ -4,18 +4,18 @@
  **/
 package mushop
 
-import io.micronaut.http.client.RxHttpClient
+import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
+import jakarta.inject.Inject
 
-import javax.inject.Inject
 
 @MicronautTest
 class FulfillmentControllerSpec extends AbstractFulfillmentSpec {
 
     @Inject
     @Client("/fulfillment")
-    RxHttpClient httpClient
+    HttpClient httpClient
 
     void 'test Fulfillment Controller'() {
         expect:

@@ -7,6 +7,9 @@ package mushop;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 
+/**
+ * Fulfillment controller.
+ */
 @Controller("/fulfillment")
 class FulfillmentController {
 

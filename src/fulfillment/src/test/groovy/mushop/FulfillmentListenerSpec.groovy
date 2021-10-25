@@ -4,21 +4,22 @@
  **/
 package mushop
 
-import io.micronaut.http.client.RxHttpClient
+import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.nats.annotation.NatsListener
 import io.micronaut.nats.annotation.Subject
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
+import jakarta.inject.Inject
 import spock.util.concurrent.AsyncConditions
 
-import javax.inject.Inject
+
 
 @MicronautTest
 class FulfillmentListenerSpec extends AbstractFulfillmentSpec {
 
     @Inject
     @Client("/fulfillment")
-    RxHttpClient httpClient
+    HttpClient httpClient
 
     @Inject
     ShipmentListener shipmentListener

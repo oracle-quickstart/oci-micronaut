@@ -1,7 +1,7 @@
 plugins {
     id("groovy")
-    id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "1.5.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "2.0.6"
 }
 
 group "micronaut.mushop"
@@ -21,7 +21,7 @@ micronaut {
 
 dependencies {
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
+    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut:micronaut-runtime")

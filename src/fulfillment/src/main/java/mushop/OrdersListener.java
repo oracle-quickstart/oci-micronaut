@@ -23,6 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
+/**
+ * Implementation of the <a href="https://micronaut-projects.github.io/micronaut-nats/latest/guide/#consumer">NATS messaging listener</a>.
+ * The {@link io.micronaut.nats.intercept.NatsConsumerAdvice} is an ExecutableMethodProcessor that will process all
+ * beans annotated with NatsListener. It creates and subscribes the relevant methods as consumers to Nats subjects.
+ */
 @NatsListener
 public class OrdersListener {
 

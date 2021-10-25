@@ -7,6 +7,9 @@ package  mushop;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 
+/**
+ * The messaging business object.
+ */
 @Introspected
 public class OrderUpdate {
 

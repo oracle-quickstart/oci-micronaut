@@ -5,10 +5,10 @@ import events.model.EventRecord;
 import events.model.EventsReceived;
 import io.micronaut.tracing.annotation.NewSpan;
 import io.micronaut.tracing.annotation.SpanTag;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
 import java.util.Arrays;
 
 @Singleton
@@ -25,7 +25,7 @@ public class EventService {
     @NewSpan("receive events")
     public EventsReceived postEvents(@SpanTag String source,
                                      String track,
-                                     Event...events) {
+                                     Event... events) {
         final int numEvents = events.length;
         try {
             LOG.debug("Posting Events (source: {}, track {}, length {})", source, track, numEvents);

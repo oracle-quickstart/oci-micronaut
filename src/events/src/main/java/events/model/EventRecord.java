@@ -7,6 +7,9 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Event record.
+ */
 @Introspected
 public class EventRecord extends Event {
 

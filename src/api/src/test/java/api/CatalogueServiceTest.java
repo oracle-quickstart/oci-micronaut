@@ -66,7 +66,7 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.2.0-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 
     @Override

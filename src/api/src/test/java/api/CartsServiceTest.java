@@ -173,11 +173,14 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
         ).withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
+                        "MICRONAUT_ENVIRONMENTS", "dockercompose",
                         "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
                         "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
                         "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword(),
-                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", "oracle.jdbc.OracleDriver",
-                        "SODA_CREATE_USERNAME", "true"
+                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", oracleContainer.getDriverClassName(),
+                        "DATASOURCES_DEFAULT_SODA_CREATE-SODA-USER", "true",
+                        "DATASOURCES_DEFAULT_SODA_PROPERTIES_SHAREDMETADATACACHE", "true",
+                        "CARTS_COLLECTION", "cart"
                 ));
     }
 
@@ -188,6 +191,6 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.2.0-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 }

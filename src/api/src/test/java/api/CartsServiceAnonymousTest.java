@@ -53,7 +53,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(1)
     void testReadNonExistentCart(CartClient client) {
-        System.out.println("testReadNonExistentCart");
         final List<ProductAndQuantity> cart = client.getCart(sessionID);
         assertNotNull(cart);
         assertTrue(cart.isEmpty());
@@ -62,7 +61,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(2)
     void testDeleteNonExistentCart(CartClient client) {
-        System.out.println("testDeleteNonExistentCart");
         final HttpStatus status = client.deleteCart(sessionID);
         assertNotNull(status);
         assertEquals(HttpStatus.NO_CONTENT, status);
@@ -71,7 +69,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(3)
     void testAddItemToCart(CartClient client) {
-        System.out.println("testAddItemToCart");
         final HttpStatus status = client.addItem(sessionID, Map.of(
                 "id", 1234,
                 "quantity", 2
@@ -120,7 +117,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     }
 
     @Client("/api/config")
-    interface ConfigClient{
+    interface ConfigClient {
         @Get
         HttpResponse<?> getConfig();
     }
@@ -180,11 +177,14 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
         return new GenericContainer<>(composeServiceDockerImage()).withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
+                        "MICRONAUT_ENVIRONMENTS", "dockercompose",
                         "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
                         "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
                         "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword(),
-                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", "oracle.jdbc.OracleDriver",
-                        "SODA_CREATE_USERNAME", "true"
+                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", oracleContainer.getDriverClassName(),
+                        "DATASOURCES_DEFAULT_SODA_CREATE-SODA-USER", "true",
+                        "DATASOURCES_DEFAULT_SODA_PROPERTIES_SHAREDMETADATACACHE", "true",
+                        "CARTS_COLLECTION", "cart"
                 ));
     }
 
@@ -195,6 +195,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.2.0-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 }

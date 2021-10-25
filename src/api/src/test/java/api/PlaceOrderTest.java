@@ -45,10 +45,9 @@ import static org.mockito.Mockito.when;
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PlaceOrderTest implements TestPropertyProvider {
-//DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts" + "-" + AbstractDatabaseServiceTest.defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion())
     @Container
     static GenericContainer<?> cartsContainer = new GenericContainer<>(
-            DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:" + getServiceVersion())
+        DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts" + "-" + AbstractDatabaseServiceTest.defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion())
     ).withExposedPorts(8080);
 
     private static String sessionID;
@@ -57,7 +56,7 @@ public class PlaceOrderTest implements TestPropertyProvider {
     private OrdersService.OrderRequest lastOrder;
 
     private static String getServiceVersion() {
-        return "1.0.1-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 
     @BeforeAll

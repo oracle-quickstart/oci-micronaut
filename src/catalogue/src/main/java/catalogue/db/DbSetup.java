@@ -7,10 +7,10 @@ import io.micronaut.core.io.IOUtils;
 import io.micronaut.core.io.ResourceLoader;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.runtime.exceptions.ApplicationStartupException;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.io.BufferedReader;

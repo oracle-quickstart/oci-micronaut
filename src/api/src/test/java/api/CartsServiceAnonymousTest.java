@@ -33,6 +33,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @MicronautTest
@@ -52,13 +53,16 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(1)
     void testReadNonExistentCart(CartClient client) {
+        System.out.println("testReadNonExistentCart");
         final List<ProductAndQuantity> cart = client.getCart(sessionID);
         assertNotNull(cart);
+        assertTrue(cart.isEmpty());
     }
 
     @Test
     @Order(2)
     void testDeleteNonExistentCart(CartClient client) {
+        System.out.println("testDeleteNonExistentCart");
         final HttpStatus status = client.deleteCart(sessionID);
         assertNotNull(status);
         assertEquals(HttpStatus.NO_CONTENT, status);
@@ -67,6 +71,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     @Test
     @Order(3)
     void testAddItemToCart(CartClient client) {
+        System.out.println("testAddItemToCart");
         final HttpStatus status = client.addItem(sessionID, Map.of(
                 "id", 1234,
                 "quantity", 2

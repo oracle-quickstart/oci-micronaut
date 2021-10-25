@@ -5,7 +5,7 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import mushop.carts.entities.Cart;
@@ -37,7 +37,7 @@ public class TestCartService implements OracleSodaTest {
 
     @Inject
     @Client("/")
-    RxHttpClient httpClient;
+    HttpClient httpClient;
 
     @Test
     public void testMetricsJson() {
@@ -66,18 +66,18 @@ public class TestCartService implements OracleSodaTest {
         c.setCustomerId("c1");
         c.getItems().add(i);
 
-        HttpResponse<Cart> created = httpClient.exchange(HttpRequest.POST("/carts/" + c.getId(), c), Cart.class).blockingSingle();
+        HttpResponse<Cart> created = httpClient.toBlocking().exchange(HttpRequest.POST("/carts/" + c.getId(), c), Cart.class);
         assertEquals(HttpStatus.CREATED, created.getStatus());
         assertEquals(c.getId(), created.body().getId());
 
-        HttpResponse<List<Item>> items = httpClient.exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class)).blockingSingle();
+        HttpResponse<List<Item>> items = httpClient.toBlocking().exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class));
         assertEquals(1, items.body().size());
         assertEquals(i.getId(), items.body().get(0).getId());
 
-        HttpResponse<Cart> deleteItem = httpClient.exchange(HttpRequest.DELETE("/carts/" + c.getId() + "/items/" + i.getItemId()), Cart.class).blockingSingle();
+        HttpResponse<Cart> deleteItem = httpClient.toBlocking().exchange(HttpRequest.DELETE("/carts/" + c.getId() + "/items/" + i.getItemId()), Cart.class);
         assertEquals(HttpStatus.OK, deleteItem.getStatus());
 
-        items = httpClient.exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class)).blockingSingle();
+        items = httpClient.toBlocking().exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class));
         assertEquals(0, items.body().size());
     }
 

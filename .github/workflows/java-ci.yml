@@ -121,7 +121,7 @@ jobs:
           cat docker-compose.override.yml
 
           docker-compose pull
-          docker-compose up -d --renew-anon-volumes --force-recreate
+          docker-compose up -d --renew-anon-volumes --force-recreate --remove-orphans
           docker-compose ps
 
           #

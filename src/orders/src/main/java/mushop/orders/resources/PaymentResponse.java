@@ -6,6 +6,9 @@ package mushop.orders.resources;
 
 import io.micronaut.core.annotation.Introspected;
 
+/**
+ * The messaging business object.
+ */
 @Introspected
 public class PaymentResponse {
 

@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * The collection of {@link CustomerOrderDto}s.
+ */
 @Introspected
 public class CustomerOrdersDto extends AbstractResource<CustomerOrdersDto> {
 

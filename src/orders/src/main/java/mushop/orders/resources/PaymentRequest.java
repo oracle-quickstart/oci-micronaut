@@ -12,6 +12,9 @@ import mushop.orders.entities.Customer;
 
 import java.util.Objects;
 
+/**
+ * The messaging business object.
+ */
 @Introspected
 public class PaymentRequest {
 

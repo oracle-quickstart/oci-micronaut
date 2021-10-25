@@ -7,6 +7,9 @@ package mushop.orders.resources;
 import io.micronaut.core.annotation.Introspected;
 import mushop.orders.entities.Shipment;
 
+/**
+ * The messaging business object.
+ */
 @Introspected
 public class OrderUpdate {
 

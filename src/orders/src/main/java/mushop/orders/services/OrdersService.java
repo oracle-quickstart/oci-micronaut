@@ -7,11 +7,9 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.reactivex.Flowable;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
+import jakarta.inject.Singleton;
 import mushop.orders.OrdersConfiguration;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.entities.Address;
@@ -25,18 +23,23 @@ import mushop.orders.resources.OrderUpdate;
 import mushop.orders.resources.PaymentRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import javax.inject.Singleton;
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static mushop.orders.controllers.OrdersController.OrderFailedException;
 import static mushop.orders.controllers.OrdersController.PaymentDeclinedException;
 
+/**
+ * Service implements the order execution.
+ */
 @Singleton
 public class OrdersService {
 
@@ -47,16 +50,16 @@ public class OrdersService {
     private final OrdersPublisher ordersPublisher;
     private final PaymentClient paymentClient;
     private final OrdersConfiguration ordersConfiguration;
-    private final RxHttpClient userClient;
-    private final RxHttpClient cartsClient;
+    private final HttpClient userClient;
+    private final HttpClient cartsClient;
 
     public OrdersService(CustomerOrderRepository customerOrderRepository,
                          MeterRegistry meterRegistry,
                          OrdersPublisher ordersPublisher,
                          PaymentClient paymentClient,
                          OrdersConfiguration ordersConfiguration,
-                         @Client("users") RxHttpClient userClient,
-                         @Client("carts") RxHttpClient cartsClient) {
+                         @Client("users") HttpClient userClient,
+                         @Client("carts") HttpClient cartsClient) {
         this.customerOrderRepository = customerOrderRepository;
         this.meterRegistry = meterRegistry;
         this.ordersPublisher = ordersPublisher;
@@ -70,7 +73,7 @@ public class OrdersService {
         return customerOrderRepository.findById(id);
     }
 
-    public Page<CustomerOrder> searchCustomerOrders(String customerId, Pageable pagable){
+    public Page<CustomerOrder> searchCustomerOrders(String customerId, Pageable pagable) {
         LOG.info("Searching for {} orders {}", customerId, pagable);
         return customerOrderRepository.findByCustomerId(customerId, pagable);
     }
@@ -86,20 +89,23 @@ public class OrdersService {
      * @return created order
      */
     @Counted("orders.placed")
-    public Single<CustomerOrder> placeOrder(NewOrderResource orderPayload) {
-        return Flowable.just(new PaymentRequest())
+    public Mono<CustomerOrder> placeOrder(NewOrderResource orderPayload) {
+        return Flux.just(new PaymentRequest())
                 .doOnNext((request) -> LOG.info("Placing new order {}", orderPayload))
                 .switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.getAddress().getPath()), Address.class)
+                        Flux.from(userClient.retrieve(HttpRequest.GET(orderPayload.getAddress().getPath()), Address.class))
                                 .map(request::setAddress)
-                ).switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.getCustomer().getPath()), Customer.class)
+                )
+                .switchMap((request) ->
+                        Flux.from(userClient.retrieve(HttpRequest.GET(orderPayload.getCustomer().getPath()), Customer.class))
                                 .map(request::setCustomer)
-                ).switchMap((request) ->
-                        userClient.retrieve(HttpRequest.GET(orderPayload.getCard().getPath()), Card.class)
+                )
+                .switchMap((request) ->
+                        Flux.from(userClient.retrieve(HttpRequest.GET(orderPayload.getCard().getPath()), Card.class))
                                 .map(request::setCard)
-                ).switchMap((request) ->
-                        cartsClient.retrieve(HttpRequest.GET(orderPayload.getItems().getPath()), Argument.listOf(Item.class))
+                )
+                .switchMap((request) ->
+                        Flux.from(cartsClient.retrieve(HttpRequest.GET(orderPayload.getItems().getPath()), Argument.listOf(Item.class)))
                                 .map((orderItems) -> {
                                     //Calculate total
                                     float amount = calculateTotal(orderItems);
@@ -107,45 +113,44 @@ public class OrdersService {
                                     return new OrderDetail(request, orderItems);
                                 })
                 )
-                .timeout(ordersConfiguration.getTimeout(), TimeUnit.SECONDS)
-                .onErrorResumeNext((throwable -> {
+                .timeout(Duration.of(ordersConfiguration.getTimeout(), ChronoUnit.SECONDS))
+                .onErrorResume((throwable -> {
                             if (throwable instanceof TimeoutException) {
                                 LOG.error("Timeout exception", throwable);
                                 meterRegistry.counter("orders.rejected", "cause", "timeout").increment();
-                                return Flowable.error(new OrderFailedException("Unable to create order due to timeout from one of the services: " + throwable.getMessage()));
+                                return Flux.error(new OrderFailedException("Unable to create order due to timeout from one of the services: " + throwable.getMessage()));
                             }
-                            return Flowable.error(throwable);
+                            return Flux.error(throwable);
                         })
                 )
-                .switchMap((orderDetail -> {
+                .switchMap(orderDetail -> {
                     // authorize payment
                     final PaymentRequest paymentRequest = orderDetail.request;
                     LOG.info("Sending payment request: {}", paymentRequest);
                     return paymentClient.createPayment(paymentRequest)
                             .flatMap((paymentResponse -> {
                                 LOG.info("Received payment response: {}", paymentResponse);
-
                                 if (!paymentResponse.isAuthorised()) {
                                     LOG.warn("Payment rejected: {}", paymentResponse);
                                     meterRegistry.counter("orders.rejected", "cause", "payment_declined").increment();
-                                    return Flowable.error(new PaymentDeclinedException(paymentResponse.getMessage()));
+                                    return Mono.error(new PaymentDeclinedException(paymentResponse.getMessage()));
                                 } else {
-                                    return Flowable.just(orderDetail);
+                                    return Mono.just(orderDetail);
                                 }
                             }))
-                            .timeout(ordersConfiguration.getTimeout(), TimeUnit.SECONDS)
-                            .onErrorResumeNext((throwable -> {
+                            .timeout(Duration.of(ordersConfiguration.getTimeout(), ChronoUnit.SECONDS))
+                            .onErrorResume(throwable -> {
                                 if (throwable instanceof TimeoutException) {
                                     meterRegistry.counter("orders.rejected", "cause", "payment_timeout").increment();
-                                    return Flowable.error(new PaymentDeclinedException("Timeout authorising payment"));
+                                    return Mono.error(new PaymentDeclinedException("Timeout authorising payment"));
                                 }
-                                return Flowable.error(throwable);
-                            }));
-                })).switchMap((orderDetail -> {
+                                return Mono.error(throwable);
+                            });
+                }).switchMap(orderDetail -> {
                     final PaymentRequest paymentRequest = orderDetail.request;
-                    return Single.fromCallable(() -> createOrder(paymentRequest, orderDetail.items))
-                            .subscribeOn(Schedulers.io())
-                            .flatMapPublisher((order) -> {
+                    return Mono.fromCallable(() -> createOrder(paymentRequest, orderDetail.items))
+//                            .subscribeOn(Schedulers.io())
+                            .flatMap((order) -> {
                                 meterRegistry.summary("orders.amount").record(paymentRequest.getAmount());
                                 DistributionSummary.builder("order.stats")
                                         .serviceLevelObjectives(10d, 20d, 30d, 40d, 50d, 60d, 70d, 80d, 90d, 100d, 110d)
@@ -158,10 +163,10 @@ public class OrdersService {
                                 OrderUpdate update = new OrderUpdate(order.getId(), null);
                                 ordersPublisher.dispatchToFulfillment(update);
                                 LOG.info("Order {} sent for fulfillment: {}", order, update);
-                                return Flowable.just(order);
+                                return Mono.just(order);
 
                             });
-                })).firstOrError();
+                }).singleOrEmpty();
     }
 
     @Transactional

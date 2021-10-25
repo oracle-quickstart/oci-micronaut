@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * The cart shipment business object.
+ */
 @Entity
 public class Shipment implements Serializable {
 

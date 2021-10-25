@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The customer business object.
+ */
 @Entity
 public class Customer implements Serializable {
 

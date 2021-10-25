@@ -19,7 +19,6 @@ import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.hateoas.Link;
 import io.micronaut.transaction.annotation.ReadOnly;
-import io.reactivex.Single;
 
 import java.util.Optional;
 import javax.validation.ConstraintViolationException;
@@ -30,6 +29,7 @@ import mushop.orders.controllers.dto.CustomerOrdersDto;
 import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
+import reactor.core.publisher.Mono;
 
 /**
  * Orders controller.
@@ -48,7 +48,7 @@ public class OrdersController {
 
     @Status(HttpStatus.CREATED)
     @Post
-    Single<CustomerOrderDto> newOrder(@Body @Valid NewOrderResource newOrderResource) {
+    Mono<CustomerOrderDto> newOrder(@Body @Valid NewOrderResource newOrderResource) {
         return ordersService.placeOrder(newOrderResource)
                 .map(dtoMapper::toCustomerOrderDto);
     }

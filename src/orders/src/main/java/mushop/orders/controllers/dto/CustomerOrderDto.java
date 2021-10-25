@@ -25,6 +25,9 @@ import mushop.orders.entities.Shipment;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * The {@link mushop.orders.entities.CustomerOrder} DTO.
+ */
 @Introspected
 public class CustomerOrderDto extends AbstractResource<CustomerOrderDto> {
 

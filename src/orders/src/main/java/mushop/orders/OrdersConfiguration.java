@@ -9,6 +9,10 @@ import io.micronaut.core.bind.annotation.Bindable;
 @ConfigurationProperties("orders")
 public interface OrdersConfiguration {
 
+    /**
+     * General timeout for communicating with other microservices.
+     * @return timeout in seconds
+     */
     @Bindable(defaultValue = "5")
     int getTimeout();
 }

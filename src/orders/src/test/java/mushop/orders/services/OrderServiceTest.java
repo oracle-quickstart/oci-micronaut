@@ -2,10 +2,10 @@ package mushop.orders.services;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.core.type.Argument;
-import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.HttpClient;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Flowable;
+import jakarta.inject.Inject;
 import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
@@ -19,12 +19,13 @@ import mushop.orders.resources.NewOrderResource;
 import mushop.orders.resources.PaymentRequest;
 import mushop.orders.resources.PaymentResponse;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Mono;
 
-import javax.inject.Inject;
 import java.net.URI;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -50,7 +51,7 @@ public class OrderServiceTest extends AbstractTest {
     private long timeout;
 
     @Inject
-    private RxHttpClient httpClient;
+    private HttpClient httpClient;
 
     NewOrderResource orderPayload = new NewOrderResource(
             URI.create("http://user/customers/1"),
@@ -84,22 +85,22 @@ public class OrderServiceTest extends AbstractTest {
     public void normalOrdersSucceed() {
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(paymentClient.createPayment(paymentRequest))
-                .thenReturn(Flowable.just(payment_authorized));
+                .thenReturn(Mono.just(payment_authorized));
 
         when(httpClient.retrieve(any(), eq(Card.class)))
-                .thenReturn(Flowable.just(card));
+                .thenReturn(Mono.just(card));
 
         when(httpClient.retrieve(any(), eq(Customer.class)))
-                .thenReturn(Flowable.just(customer));
+                .thenReturn(Mono.just(customer));
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
-                .thenReturn(Flowable.just(items));
+                .thenReturn(Mono.just(items));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
@@ -114,84 +115,84 @@ public class OrderServiceTest extends AbstractTest {
         PaymentResponse payment_unauthorized = new PaymentResponse(false, "Payment unauthorized");
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(paymentClient.createPayment(priceyRequest))
-                .thenReturn(Flowable.just(payment_unauthorized));
+                .thenReturn(Mono.just(payment_unauthorized));
 
         when(httpClient.retrieve(any(), eq(Card.class)))
-                .thenReturn(Flowable.just(card));
+                .thenReturn(Mono.just(card));
 
         when(httpClient.retrieve(any(), eq(Customer.class)))
-                .thenReturn(Flowable.just(customer));
+                .thenReturn(Mono.just(customer));
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
-                .thenReturn(Flowable.just(expensiveItems));
+                .thenReturn(Mono.just(expensiveItems));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.placeOrder(orderPayload).blockingGet());
+                () -> ordersService.placeOrder(orderPayload).block());
     }
 
     @Test
     public void paymentTimeoutOrdersDeclined() {
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(paymentClient.createPayment(paymentRequest))
-                .thenReturn(Flowable.just(payment_authorized).delay(timeout + 1, TimeUnit.SECONDS));
+                .thenReturn(Mono.just(payment_authorized).delayElement(Duration.of(timeout + 1, ChronoUnit.SECONDS)));
 
         when(httpClient.retrieve(any(), eq(Card.class)))
-                .thenReturn(Flowable.just(card));
+                .thenReturn(Mono.just(card));
 
         when(httpClient.retrieve(any(), eq(Customer.class)))
-                .thenReturn(Flowable.just(customer));
+                .thenReturn(Mono.just(customer));
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
-                .thenReturn(Flowable.just(items));
+                .thenReturn(Mono.just(items));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
         assertThrows(OrdersController.PaymentDeclinedException.class,
-                () -> ordersService.placeOrder(orderPayload).blockingGet());
+                () -> ordersService.placeOrder(orderPayload).block());
     }
 
     @Test
     public void timeoutException_rethrown_as_OrderFailedException() {
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(paymentClient.createPayment(paymentRequest))
-                .thenReturn(Flowable.just(payment_authorized));
+                .thenReturn(Mono.just(payment_authorized));
 
         when(httpClient.retrieve(any(), eq(Card.class)))
-                .thenReturn(Flowable.just(card));
+                .thenReturn(Mono.just(card));
 
         when(httpClient.retrieve(any(), eq(Customer.class)))
-                .thenReturn(Flowable.just(customer));
+                .thenReturn(Mono.just(customer));
 
         when(httpClient.retrieve(any(), eq(Address.class)))
-                .thenReturn(Flowable.just(address));
+                .thenReturn(Mono.just(address));
 
         when(httpClient.retrieve(any(), eq(Argument.listOf(Item.class))))
-                .thenReturn(Flowable.just(items).delay(timeout + 1, TimeUnit.SECONDS));
+                .thenReturn(Mono.just(items).delayElement(Duration.of(timeout + 1, ChronoUnit.SECONDS)));
 
         when(customerOrderRepository.save(any(CustomerOrder.class)))
                 .then(returnsFirstArg());
 
         assertThrows(OrdersController.OrderFailedException.class,
-                () -> ordersService.placeOrder(orderPayload).blockingGet());
+                () -> ordersService.placeOrder(orderPayload).block());
     }
 
     @MockBean(OrdersPublisher.class)
@@ -204,9 +205,9 @@ public class OrderServiceTest extends AbstractTest {
         return mock(ShipmentsListener.class);
     }
 
-    @MockBean(RxHttpClient.class)
-    RxHttpClient httpClient(){
-        return mock(RxHttpClient.class);
+    @MockBean(HttpClient.class)
+    HttpClient httpClient() {
+        return mock(HttpClient.class);
     }
 
     @MockBean(PaymentClient.class)

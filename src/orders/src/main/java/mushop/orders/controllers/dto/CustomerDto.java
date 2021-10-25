@@ -2,6 +2,9 @@ package mushop.orders.controllers.dto;
 
 import io.micronaut.core.annotation.Introspected;
 
+/**
+ * The {@link mushop.orders.entities.Customer} DTO.
+ */
 @Introspected
 public class CustomerDto {
 

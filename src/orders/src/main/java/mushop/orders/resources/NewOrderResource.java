@@ -10,6 +10,9 @@ import java.net.URI;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The messaging business object.
+ */
 @Introspected
 public class NewOrderResource {
 

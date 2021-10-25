@@ -4,16 +4,12 @@
  **/
 package mushop.orders.repositories;
 
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.jpa.repository.JpaRepository;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import mushop.orders.entities.CustomerOrder;
-
-import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 /**
  * Customer order repository.

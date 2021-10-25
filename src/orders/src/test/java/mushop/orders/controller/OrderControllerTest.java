@@ -7,12 +7,11 @@ import io.micronaut.data.model.Sort;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Single;
 import mushop.orders.AbstractTest;
 import mushop.orders.controllers.OrdersController;
 import mushop.orders.controllers.OrdersController.OrderFailedException;
@@ -23,6 +22,7 @@ import mushop.orders.entities.CustomerOrder;
 import mushop.orders.resources.NewOrderResource;
 import mushop.orders.services.OrdersService;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -46,7 +46,7 @@ public class OrderControllerTest extends AbstractTest {
 
     @Inject
     @Client("/")
-    private RxHttpClient httpClient;
+    private HttpClient httpClient;
 
     Address address = new Address(
             "001",
@@ -79,17 +79,20 @@ public class OrderControllerTest extends AbstractTest {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
-                .thenReturn(Single.just(order));
+                .thenReturn(Mono.just(order));
 
-        assertEquals(HttpStatus.CREATED, httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class)
-                        .body(orderPayload)).blockingSingle().getStatus());
+        assertEquals(HttpStatus.CREATED, httpClient
+                .toBlocking()
+                .exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload))
+                .getStatus());
     }
 
     @Test
     void loadPayload_returns_200() {
         when(ordersService.getById(eq(123L))).thenReturn(Optional.of(order));
 
-        HttpResponse<JsonNode> response = httpClient.exchange(HttpRequest.GET("/orders/123"), JsonNode.class).blockingSingle();
+        HttpResponse<JsonNode> response = httpClient.toBlocking()
+                .exchange(HttpRequest.GET("/orders/123"), JsonNode.class);
         assertEquals(HttpStatus.OK, response.getStatus());
     }
 
@@ -98,10 +101,10 @@ public class OrderControllerTest extends AbstractTest {
         NewOrderResource orderPayload = new NewOrderResource(null, addressURI, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
-                .thenReturn(Single.just(order));
+                .thenReturn(Mono.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, e.getStatus());
@@ -112,10 +115,10 @@ public class OrderControllerTest extends AbstractTest {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, null, cardURI, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
-                .thenReturn(Single.just(order));
+                .thenReturn(Mono.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, e.getStatus());
@@ -126,10 +129,10 @@ public class OrderControllerTest extends AbstractTest {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, null, itemsURI);
 
         when(ordersService.placeOrder(orderPayload))
-                .thenReturn(Single.just(order));
+                .thenReturn(Mono.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, e.getStatus());
@@ -140,10 +143,10 @@ public class OrderControllerTest extends AbstractTest {
         NewOrderResource orderPayload = new NewOrderResource(customerURI, addressURI, cardURI, null);
 
         when(ordersService.placeOrder(orderPayload))
-                .thenReturn(Single.just(order));
+                .thenReturn(Mono.just(order));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, e.getStatus());
@@ -156,7 +159,7 @@ public class OrderControllerTest extends AbstractTest {
                 .thenThrow(new OrdersController.PaymentDeclinedException("test"));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, e.getStatus());
@@ -170,7 +173,7 @@ public class OrderControllerTest extends AbstractTest {
                 .thenThrow(new OrderFailedException("test"));
 
         HttpClientResponseException e = assertThrows(HttpClientResponseException.class, () -> {
-            httpClient.exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload)).blockingSingle();
+            httpClient.toBlocking().exchange(HttpRequest.POST("/orders", NewOrderResource.class).body(orderPayload));
         });
 
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, e.getStatus());
@@ -183,7 +186,7 @@ public class OrderControllerTest extends AbstractTest {
         when(ordersService.searchCustomerOrders(eq("123"), any(Pageable.class)))
                 .thenReturn(p);
 
-        HttpResponse<JsonNode> lists = httpClient.exchange(HttpRequest.GET("/orders/search/customer?custId=123"), JsonNode.class).blockingSingle();
+        HttpResponse<JsonNode> lists = httpClient.toBlocking().exchange(HttpRequest.GET("/orders/search/customer?custId=123"), JsonNode.class);
         assertEquals(HttpStatus.OK, lists.getStatus());
     }
 
@@ -196,7 +199,7 @@ public class OrderControllerTest extends AbstractTest {
                 eq(Pageable.from(0, -1, Sort.of(Sort.Order.desc("orderDate", true))))))
                 .thenReturn(p);
 
-        HttpResponse<JsonNode> response = httpClient.exchange(HttpRequest.GET("/orders/search/customer?custId=123&sort=orderDate,desc"), JsonNode.class).blockingSingle();
+        HttpResponse<JsonNode> response = httpClient.toBlocking().exchange(HttpRequest.GET("/orders/search/customer?custId=123&sort=orderDate,desc"), JsonNode.class);
         assertEquals(HttpStatus.OK, response.getStatus());
         assertTrue(response.body().has("_embedded"));
         assertTrue(response.body().has("page"));

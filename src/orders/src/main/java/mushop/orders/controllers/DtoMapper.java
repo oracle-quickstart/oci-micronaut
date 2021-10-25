@@ -29,6 +29,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The DTO mapper that leverages the <a href="https://mapstruct.org/">Mapstruct</a>.
+ */
 @Mapper(componentModel = "jsr330")
 public abstract class DtoMapper {
 

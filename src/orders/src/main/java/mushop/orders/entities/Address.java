@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The customer address business object.
+ */
 @Entity
 public class Address implements Serializable {
 

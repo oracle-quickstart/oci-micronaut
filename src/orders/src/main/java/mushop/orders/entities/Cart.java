@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The cart business object.
+ */
 @Entity
 public class Cart implements Serializable {
 

@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The customer address business object.
+ */
 @Entity
 public class CustomerOrder implements Serializable {
 

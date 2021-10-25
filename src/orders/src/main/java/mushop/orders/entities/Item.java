@@ -14,6 +14,9 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The cart item business object.
+ */
 @Entity
 public class Item implements Serializable {
 

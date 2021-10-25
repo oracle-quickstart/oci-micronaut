@@ -42,6 +42,19 @@ output "grafana_admin_password" {
 output "mushop_source_code" {
   value = "https://github.com/oracle-quickstart/oci-micronaut"
 }
+
+output "deploy_id" {
+  value = random_string.deploy_id.result
+}
+
+output "deployed_to_region" {
+  value = var.region
+}
+
+output "sensitive_comments_local_tf" {
+  value = "To get sensitive outputs, use `terraform output autonomous_database_password` or `terraform output grafana_admin_password` or `terraform output generated_private_key_pem`"
+}
+
 locals {
   mushop_ingress_ip       = data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].ip
   mushop_ingress_hostname = data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].hostname == "" ? data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].ip : data.kubernetes_service.mushop_ingress.load_balancer_ingress[0].hostname

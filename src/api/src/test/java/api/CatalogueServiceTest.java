@@ -6,11 +6,11 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Maybe;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import reactor.core.publisher.Mono;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +35,14 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Test
     void testGetItem() {
-        final Map<String, Object> notThere = catalogueApiClient.getItem("junk").blockingGet();
+
+        final Map<String, Object> notThere = catalogueApiClient.getItem("junk")
+                .onErrorResume(throwable -> Mono.empty())
+                .block();
         assertNull(notThere);
 
-        final Map<String, Object> item = catalogueApiClient.getItem("MU-US-002").blockingGet();
+        final Map<String, Object> item = catalogueApiClient.getItem("MU-US-002")
+                .block();
 
         assertNotNull(item);
         assertTrue(item.containsKey("brand"));
@@ -62,7 +66,7 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.0.0-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 
     @Override
@@ -73,7 +77,7 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
     @Client("/api")
     interface CatalogueApiClient {
         @Get("/catalogue/{id}")
-        Maybe<Map<String, Object>> getItem(String id);
+        Mono<Map<String, Object>> getItem(String id);
 
         @Get("/categories")
         Map<String, Object> getCategories();

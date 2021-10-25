@@ -21,25 +21,25 @@ import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
-import io.reactivex.Completable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The MuShop carts service forwarder.
+ */
 @MuService
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class CartsService {
@@ -65,10 +65,10 @@ public class CartsService {
      */
     @Tag(name="cart") 
     @Get(value = "/cart", produces = MediaType.APPLICATION_JSON)
-    Single<List<CartItem>> getCart(@Parameter(hidden = true) @CartId UUID cartID) {
+    Mono<List<CartItem>> getCart(@Parameter(hidden = true) @CartId UUID cartID) {
         return client.getCartItems(cartID)
                 .doOnSuccess(cartItems -> LOG.info("Found cart " + cartItems))
-                .onErrorReturnItem(Collections.emptyList());
+                .onErrorReturn(Collections.emptyList());
     }
 
     /**
@@ -79,9 +79,9 @@ public class CartsService {
     @Delete(value = "/cart", produces = MediaType.APPLICATION_JSON)
     @Status(HttpStatus.NO_CONTENT)
     @TrackEvent("delete:cart")
-    Completable deleteCart(@Parameter(hidden = true) @CartId UUID cartID) {
+    Mono<Void> deleteCart(@Parameter(hidden = true) @CartId UUID cartID) {
         return client.deleteCart(cartID)
-                    .onErrorComplete();
+                    .onErrorResume(throwable -> Mono.empty());
     }
 
     /**
@@ -92,14 +92,14 @@ public class CartsService {
     @Status(HttpStatus.CREATED)
     @Post(value = "/cart")
     @TrackEvent("cart:addItem")
-    Completable addItem(
+    Mono<Void>  addItem(
             @Nullable Authentication authentication,
             @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
         return catalogueClient.getItem(addItem.getId())
-            .switchIfEmpty(Single.error(() ->
+            .switchIfEmpty(Mono.error(() ->
                 new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.getId())
-            )).flatMapCompletable((product ->
+            )).flatMap((product ->
                     client.postCart(cartId, Map.of(
                            "customerId", authentication == null ? "" : MuUserDetails.resolveId(authentication),
                            "items", Collections.singletonList(Map.of(
@@ -107,11 +107,11 @@ public class CartsService {
                                     UNIT_PRICE, product.getPrice(),
                                     QUANTITY, addItem.quantity
                             ))
-                    )).flatMapCompletable(httpStatus -> {
+                    )).flatMap(httpStatus -> {
                         if (httpStatus.getCode() > 201) {
-                            return Completable.error(new HttpStatusException(httpStatus, "Unable to add to cart"));
+                            return Mono.error(new HttpStatusException(httpStatus, "Unable to add to cart"));
                         }
-                        return Completable.complete();
+                        return Mono.empty();
                     })
             ));
     }
@@ -124,22 +124,22 @@ public class CartsService {
     @ApiResponse(responseCode = "200", description = "Item updated.")
     @Status(HttpStatus.OK)
     @Post(value = "/cart/update")
-    Completable updateItem(
+    Mono<Void>  updateItem(
             @Parameter(hidden = true) @CartId UUID cartId,
             @Body ItemUpdate addItem) {
         return catalogueClient.getItem(addItem.id)
-                .switchIfEmpty(Single.error(() ->
+                .switchIfEmpty(Mono.error(() ->
                         new HttpStatusException(HttpStatus.NOT_FOUND, "Product not found for id " + addItem.id)
-                )).flatMapCompletable((product ->
+                )).flatMap((product ->
                         client.updateCartItem(cartId, Map.of(
                                 ITEM_ID, product.getId(),
                                 UNIT_PRICE, product.getPrice(),
                                 QUANTITY, addItem.getQuantity()
-                        )).flatMapCompletable(httpStatus -> {
+                        )).flatMap(httpStatus -> {
                             if (httpStatus.getCode() > 201) {
-                                return Completable.error(new HttpStatusException(httpStatus, "Unable to update to cart"));
+                                return Mono.error(new HttpStatusException(httpStatus, "Unable to update to cart"));
                             }
-                            return Completable.complete();
+                            return Mono.empty();
                         })
                 ));
     }
@@ -154,32 +154,32 @@ public class CartsService {
     @Delete(value = "/cart/{id}", produces = MediaType.APPLICATION_JSON)
     @Status(HttpStatus.NO_CONTENT)
     @TrackEvent("delete:cartItem")
-    Completable deleteCartItem( @Parameter(hidden = true) @CartId UUID cartID, String id) {
+    Mono<Void>  deleteCartItem( @Parameter(hidden = true) @CartId UUID cartID, String id) {
         return client.deleteCartItem(cartID, id);
     }
 
     @Client(id = ServiceLocator.CATALOGUE, path = "/catalogue")
     public interface CatalogueClient {
         @Get("/{id}")
-        Maybe<Product> getItem(String id);
+        Mono<Product> getItem(String id);
     }
 
     @Client(id = ServiceLocator.CARTS, path = "/carts")
     interface CartsClient {
         @Get(uri = "/{cartId}/items", produces = MediaType.APPLICATION_JSON)
-        Single<List<CartItem>> getCartItems(UUID cartId);
+        Mono<List<CartItem>> getCartItems(UUID cartId);
 
         @Delete(uri = "/{cartId}")
-        Completable deleteCart(UUID cartId);
+        Mono<Void>  deleteCart(UUID cartId);
 
         @Delete(uri = "/{cartId}/items/{itemId}", produces = MediaType.APPLICATION_JSON)
-        Completable deleteCartItem(UUID cartId, String itemId);
+        Mono<Void>  deleteCartItem(UUID cartId, String itemId);
 
         @Post(uri = "/{cartId}", processes = MediaType.APPLICATION_JSON)
-        Single<HttpStatus> postCart(UUID cartId, @Body Map<String, Object> body);
+        Mono<HttpStatus> postCart(UUID cartId, @Body Map<String, Object> body);
 
         @Put(uri = "/{cartId}/items", processes = MediaType.APPLICATION_JSON)
-        Single<HttpStatus> updateCartItem(UUID cartId, @Body Map<String, Object> body);
+        Mono<HttpStatus> updateCartItem(UUID cartId, @Body Map<String, Object> body);
     }
 
     @Schema(title = "Cart item update")

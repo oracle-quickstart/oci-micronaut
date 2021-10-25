@@ -6,11 +6,13 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.hateoas.Link;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
-
+/**
+ * General MuShop implementation of {@link ExceptionHandler} that processes failed responses returned by MuShop services.
+ */
 @Singleton
 public class ClientResponseExceptionHandler implements ExceptionHandler<HttpClientResponseException, HttpResponse<?>> {
 

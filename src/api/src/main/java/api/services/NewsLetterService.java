@@ -10,14 +10,17 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * The MuShop newsletter service forwarder.
+ */
 @MuService
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class NewsLetterService {
@@ -38,11 +41,11 @@ public class NewsLetterService {
     )
     @Post("/newsletter")
     @TrackEvent("subscribe:newsletter")
-    Single<SubscribeResponse> subscribe(@Email @NotBlank String email) {
+    Mono<SubscribeResponse> subscribe(@Email @NotBlank String email) {
         return client.post(email)
-                .onErrorResumeNext((throwable -> {
+                .onErrorResume((throwable -> {
                             final HttpStatus status = getStatus(throwable);
-                            return Single.error(new HttpStatusException(status, "Unable to sign up for newsletter. Status code: " + status));
+                            return Mono.error(new HttpStatusException(status, "Unable to sign up for newsletter. Status code: " + status));
                         })
                 );
     }
@@ -57,7 +60,7 @@ public class NewsLetterService {
     @Client(id = ServiceLocator.NEWSLETTER)
     interface NewsLetterClient {
         @Post("/subscribe/")
-        Single<SubscribeResponse> post(String email);
+        Mono<SubscribeResponse> post(String email);
     }
 
     @Schema(name = "Subscription response", description = "Subscription summary.")

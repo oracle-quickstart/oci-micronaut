@@ -10,13 +10,16 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
-import io.reactivex.Flowable;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * The MuShop catalogue service forwarder.
+ */
 @MuService
 @Client(id = ServiceLocator.CATALOGUE)
 @Secured(SecurityRule.IS_ANONYMOUS)
@@ -29,7 +32,7 @@ public interface CatalogueService {
      */
     @Tag(name="catalogue")
     @Get(uri = "/catalogue/images/{+path}", processes = MediaType.IMAGE_PNG)
-    Flowable<HttpResponse<byte[]>> getImage(String path);
+    Flux<HttpResponse<byte[]>> getImage(String path);
 
     /**
      * Get catalogue item.
@@ -39,7 +42,7 @@ public interface CatalogueService {
      */    
     @Tag(name="catalogue")
     @Get("/catalogue/{id}")
-    Single<HttpResponse<CatalogueItem>> getItem(
+    Mono<HttpResponse<CatalogueItem>> getItem(
             @Parameter(example = "MU-US-001") String id);
 
     /**
@@ -50,7 +53,7 @@ public interface CatalogueService {
      */    
     @Tag(name="catalogue")
     @Get("/catalogue{?categories,size}")
-    Single<HttpResponse<List<CatalogueItem>>> getCatalogue(
+    Mono<HttpResponse<List<CatalogueItem>>> getCatalogue(
             @Parameter(example = "Food Pouches,Dry Food") @Nullable List<String> categories,
             @Parameter(example = "5") @Nullable Integer size);
 
@@ -60,5 +63,5 @@ public interface CatalogueService {
      */    
     @Tag(name="catalogue")
     @Get("/categories")
-    Single<Categories> getCategories();
+    Mono<Categories> getCategories();
 }

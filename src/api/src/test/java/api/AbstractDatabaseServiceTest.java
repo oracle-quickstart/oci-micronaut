@@ -22,7 +22,7 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     static OracleContainer oracleContainer;
     static GenericContainer<?> serviceContainer;
 
-    protected DockerImageServiceType defaultDockerImageServiceType = DockerImageServiceType.GRAALVM;
+    protected static DockerImageServiceType defaultDockerImageServiceType = DockerImageServiceType.GRAALVM;
 
     @AfterAll
     static void cleanup() {

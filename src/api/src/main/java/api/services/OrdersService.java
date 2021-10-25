@@ -16,18 +16,21 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
-import io.reactivex.Single;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * The MuShop orders service forwarder.
+ */
 @MuService
 @Secured(SecurityRule.IS_AUTHENTICATED)
 public class OrdersService {
@@ -61,8 +64,8 @@ public class OrdersService {
             tags = {"orders"}
     )
     @Get("/orders{?sort}")
-    Single<List<?>> getOrders(Authentication authentication,
-                              @Nullable @Parameter(description = "Sort orders", example = "createdDate,asc") String sort) {
+    Mono<List<?>> getOrders(Authentication authentication,
+                            @Nullable @Parameter(description = "Sort orders", example = "createdDate,asc") String sort) {
         final String customerId = MuUserDetails.resolveId(authentication);
         return client.getOrders(customerId, sort)
                 .map(stringObjectMap -> {
@@ -94,7 +97,7 @@ public class OrdersService {
             tags = {"orders"}
     )
     @Get("/orders/{orderId}")
-    Single<Map<String, Object>> getOrder(Long orderId) {
+    Mono<Map<String, Object>> getOrder(Long orderId) {
         return client.getOrder(orderId);
     }
 
@@ -111,14 +114,14 @@ public class OrdersService {
     @Post("/orders")
     @Status(HttpStatus.CREATED)
     @TrackEvent("create:order")
-    Single<Map<String, Object>> placeOrder(Authentication authentication, @CartId UUID cartId) {
+    Mono<Map<String, Object>> placeOrder(Authentication authentication, @CartId UUID cartId) {
         final String userId = MuUserDetails.resolveId(authentication);
         return usersClient.getProfile(userId)
                 .flatMap(userDetails -> serviceLocator.getUsersURL().flatMap(customerURI ->
                         serviceLocator.getCartsURL().flatMap(cartURI -> {
                             final String customerId = userDetails.getId();
-                            return usersClient.getCards(customerId).firstOrError().flatMap(cardInfo ->
-                                    usersClient.getAddresses(customerId).firstOrError().flatMap(addressInfo -> {
+                            return usersClient.getCards(customerId).single().flatMap(cardInfo ->
+                                    usersClient.getAddresses(customerId).single().flatMap(addressInfo -> {
                                         OrderRequest orderRequest = new OrderRequest(
                                                 cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
                                                 customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
@@ -133,13 +136,13 @@ public class OrdersService {
     @Client(id = ServiceLocator.ORDERS, path = "/orders")
     public interface OrdersClient {
         @Get("/search/customer{?custId,sort}")
-        Single<Map<String, Object>> getOrders(String custId, @Nullable String sort);
+        Mono<Map<String, Object>> getOrders(String custId, @Nullable String sort);
 
         @Get("/{orderId}")
-        Single<Map<String, Object>> getOrder(Long orderId);
+        Mono<Map<String, Object>> getOrder(Long orderId);
 
         @Post
-        Single<Map<String, Object>> newOrder(@Body OrderRequest orderRequest);
+        Mono<Map<String, Object>> newOrder(@Body OrderRequest orderRequest);
     }
 
     @Introspected

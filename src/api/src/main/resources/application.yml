@@ -37,6 +37,8 @@ micronaut:
         mapping: /swagger/**
   session:
     http:
+      header: true
+      cookie: true
       redis:
         enabled: false
         namespace: 'mushop:sessions'

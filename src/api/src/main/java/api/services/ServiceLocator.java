@@ -1,8 +1,11 @@
 package api.services;
 
 import io.micronaut.http.uri.UriTemplate;
-import io.reactivex.Single;
+import reactor.core.publisher.Mono;
 
+/**
+ * The service locator.
+ */
 public interface ServiceLocator {
 
     String CARTS = "mushop-carts";
@@ -12,7 +15,7 @@ public interface ServiceLocator {
     String EVENTS = "mushop-events";
     String NEWSLETTER = "mushop-newsletter";
 
-    Single<UriTemplate> getCartsURL();
+    Mono<UriTemplate> getCartsURL();
 
-    Single<UriTemplate> getUsersURL();
+    Mono<UriTemplate> getUsersURL();
 }

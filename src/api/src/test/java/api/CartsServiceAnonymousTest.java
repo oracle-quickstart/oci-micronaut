@@ -17,7 +17,6 @@ import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Maybe;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -27,12 +26,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @MicronautTest
@@ -54,6 +55,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     void testReadNonExistentCart(CartClient client) {
         final List<ProductAndQuantity> cart = client.getCart(sessionID);
         assertNotNull(cart);
+        assertTrue(cart.isEmpty());
     }
 
     @Test
@@ -115,7 +117,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
     }
 
     @Client("/api/config")
-    interface ConfigClient{
+    interface ConfigClient {
         @Get
         HttpResponse<?> getConfig();
     }
@@ -154,7 +156,7 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @MockBean(api.services.CartsService.CatalogueClient.class)
     api.services.CartsService.CatalogueClient catalogueClient() {
-        return id -> Maybe.just(new Product(id, 10.00));
+        return id -> Mono.just(new Product(id, 10.00));
     }
 
     @Introspected
@@ -175,11 +177,14 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
         return new GenericContainer<>(composeServiceDockerImage()).withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
+                        "MICRONAUT_ENVIRONMENTS", "dockercompose",
                         "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
                         "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
                         "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword(),
-                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", "oracle.jdbc.OracleDriver",
-                        "SODA_CREATE_USERNAME", "true"
+                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", oracleContainer.getDriverClassName(),
+                        "DATASOURCES_DEFAULT_SODA_CREATE-SODA-USER", "true",
+                        "DATASOURCES_DEFAULT_SODA_PROPERTIES_SHAREDMETADATACACHE", "true",
+                        "CARTS_COLLECTION", "cart"
                 ));
     }
 
@@ -190,6 +195,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected String getServiceVersion() {
-        return "1.0.3-SNAPSHOT";
+        return "2.0.0-SNAPSHOT";
     }
 }

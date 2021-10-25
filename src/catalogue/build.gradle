@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "1.4.5"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "2.0.6"
 }
 
 group = "micronaut.mushop"
@@ -19,7 +19,7 @@ micronaut {
 }
 
 dependencies {
-    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation:3.4.0")
+    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
 
@@ -30,11 +30,11 @@ dependencies {
 
     // Metrics - Core
     implementation("io.micronaut:micronaut-management")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core:3.4.0")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
 
     // Metrics - OCI
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer:1.3.4")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
     // Metrics - AWS
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
@@ -47,14 +47,14 @@ dependencies {
     // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     runtimeOnly("com.oracle.database.jdbc:ojdbc8")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:1.3.4")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:2.0.2")
     runtimeOnly("com.oracle.oci.sdk:oci-java-sdk-monitoring")
 
     // DB - AWS RDS
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 
     // AWS - Configuration discovery
-    implementation("io.micronaut.aws:micronaut-aws-secretsmanager:2.8.0")
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
     // AWS - authentication
@@ -69,7 +69,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 
     // Caching
-    implementation("io.micronaut.cache:micronaut-cache-caffeine:2.4.0")
+    implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:oracle-xe")

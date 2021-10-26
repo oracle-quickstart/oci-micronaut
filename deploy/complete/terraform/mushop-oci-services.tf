@@ -82,7 +82,7 @@ resource "kubernetes_cluster_role" "secret_creator" {
   rule {
     api_groups = [""]
     resources  = ["secrets"]
-    verbs      = ["create"]
+    verbs      = ["get","create"]
   }
 
   count = var.mushop_mock_mode_all ? 0 : 1
@@ -140,7 +140,7 @@ resource "kubernetes_job" "wallet_extractor_job" {
           name    = "wallet-binding"
           image   = "bitnami/kubectl"
           command = ["/bin/sh", "-c"]
-          args    = ["kubectl create secret generic oadb-wallet --from-file=/wallet"]
+          args    = ["if kubectl get secret oadb-wallet > /dev/null 2>&1; then echo \"oadb-wallet already exits\"; else kubectl create secret generic oadb-wallet --from-file=/wallet; fi"]
           volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
             name       = kubernetes_service_account.wallet_extractor_sa[0].default_secret_name

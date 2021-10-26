@@ -17,7 +17,7 @@ locals {
   supported_regions = ["us-phoenix-1", "us-ashburn-1", "eu-frankfurt-1", "uk-london-1"]
   is_supported_region =  contains(local.supported_regions, var.region)
   fallback_image = local.is_supported_region ? var.newsletter_function_docker_image_repo_mapping[var.region] : var.newsletter_function_docker_image_repo_mapping["us-phoenix-1"]
-  fn_image = var.newsletter_function_docker_image_repository != "" ? var.newsletter_function_docker_image_repository : local.fallback_image
+  fn_image = var.newsletter_function_docker_image_repository != "" ? var.newsletter_function_docker_image_repository : "${local.fallback_image}-${var.mushop_micronaut_service_version}"
 }
 
 resource "oci_identity_user" "fn_email_user" {

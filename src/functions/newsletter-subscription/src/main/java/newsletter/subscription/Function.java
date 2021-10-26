@@ -2,9 +2,9 @@ package newsletter.subscription;
 
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.oraclecloud.function.OciFunction;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.Map;
 

@@ -1,8 +1,8 @@
 package newsletter.subscription;
 
 import io.micronaut.context.annotation.Property;
+import jakarta.inject.Singleton;
 
-import javax.inject.Singleton;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;

@@ -94,14 +94,27 @@ variableGroups:
       - apm_zipkin_url
       - apm_zipkin_path
 
+  - title: "Cluster Utilities (MuShop Utilities) - Ingress"
+    variables:
+      - ingress_nginx_enabled
+      - ingress_load_balancer_shape
+      - ingress_load_balancer_shape_flex_min
+      - ingress_load_balancer_shape_flex_max
+      - ingress_hosts
+      - cert_manager_enabled
+      - ingress_tls
+      - ingress_cluster_issuer
+      - ingress_email_issuer
+    visible:
+      and:
+        - show_advanced
+
   - title: "Cluster Utilities (MuShop Utilities)"
     variables:
-    - grafana_enabled
-    - prometheus_enabled
-    - ingress_nginx_enabled
-    - cert_manager_enabled
-    - metrics_server_enabled
-    - catalog_enabled
+      - grafana_enabled
+      - prometheus_enabled
+      - metrics_server_enabled
+      - catalog_enabled
     visible:
       and:
         - show_advanced
@@ -236,7 +249,7 @@ variables:
     type: enum
     enum: # Necessary hardcoded supported versions, as ORM does not retrieve the versions from OKE.
     - "Latest"
-    - "v1.20.8"
+    - "v1.20.11"
     - "v1.19.12"
     - "v1.18.10"
     title: "Kubernetes Version"
@@ -516,7 +529,104 @@ variables:
         - use_encryption_from_oci_vault
         - create_new_encryption_key
         - create_vault_policies_for_group
-        -
+
+  # Cluster Utilities - Ingress
+  ingress_nginx_enabled:
+    type: boolean
+    title: "Ingress NGINX"
+
+  ingress_load_balancer_shape:
+    type: enum
+    enum:
+      - "flexible"
+      - "10Mbps"
+      - "100Mbps"
+      - "400Mbps"
+      - "8000Mbps"
+    title: "Select a shape for the load balancer created by the Ingress"
+    visible:
+      and:
+        - show_advanced
+        - ingress_nginx_enabled
+
+  ingress_load_balancer_shape_flex_min:
+    type: integer
+    minimum: 10
+    maximum: 8000
+    title: "Choose the minimum bandwidth"
+    required: true
+    visible:
+      and:
+        - and:
+            - show_advanced
+            - ingress_nginx_enabled
+        - eq:
+            - ingress_load_balancer_shape
+            - "flexible"
+
+  ingress_load_balancer_shape_flex_max:
+    type: integer
+    minimum: 10
+    maximum: 8000
+    title: "Choose the maximum bandwidth"
+    required: true
+    visible:
+      and:
+        - and:
+            - show_advanced
+            - ingress_nginx_enabled
+        - eq:
+            - ingress_load_balancer_shape
+            - "flexible"
+
+  ingress_hosts:
+    type: string
+    title: "Optional valid domain name"
+    visible:
+      and:
+        - show_advanced
+        - ingress_nginx_enabled
+
+  cert_manager_enabled:
+    type: boolean
+    title: "Certificate Management"
+
+  ingress_tls:
+    type: boolean
+    title: "Use TLS to enable HTTPS on the valid domain name"
+    visible:
+      and:
+        - show_advanced
+        - ingress_nginx_enabled
+        - cert_manager_enabled
+
+  ingress_cluster_issuer:
+    type: enum
+    enum:
+      - "letsencrypt-prod"
+      - "letsencrypt-staging"
+      - "selfsigned"
+    title: "Certificate Issuer"
+    required: true
+    visible:
+      and:
+        - show_advanced
+        - ingress_nginx_enabled
+        - ingress_tls
+        - cert_manager_enabled
+
+  ingress_email_issuer:
+    type: string
+    title: "Certificate Issuer Email"
+    required: true
+    visible:
+      and:
+        - show_advanced
+        - ingress_nginx_enabled
+        - ingress_tls
+        - cert_manager_enabled
+
+
   # Oracle Cloud Function newsletter
   create_oracle_function_newsletter:
     type: boolean
@@ -640,14 +750,6 @@ variables:
   metrics_server_enabled:
     type: boolean
     title: "Metrics Server"
-
-  ingress_nginx_enabled:
-    type: boolean
-    title: "Ingress NGINX"
-
-  cert_manager_enabled:
-    type: boolean
-    title: "Certificate Management"
 
   catalog_enabled:
     type: boolean

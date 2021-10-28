@@ -30,7 +30,7 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:3.2.0")
 
     // AWS - Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager")

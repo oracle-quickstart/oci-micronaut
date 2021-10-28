@@ -3,3 +3,10 @@ kubernetes:
     discovery:
       mode: service
       enabled: true
+      mode-configuration:
+        endpoint:
+          watch:
+            enabled: true
+        service:
+          watch:
+            enabled: true

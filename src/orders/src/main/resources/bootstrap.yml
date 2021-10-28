@@ -8,3 +8,10 @@ kubernetes:
           name: mushop-user
         carts:
           name: mushop-carts
+      mode-configuration:
+        endpoint:
+          watch:
+            enabled: true
+        service:
+          watch:
+            enabled: true

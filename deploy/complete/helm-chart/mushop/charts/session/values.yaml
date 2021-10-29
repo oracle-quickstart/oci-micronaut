@@ -13,7 +13,7 @@ securityContext:
       - CHOWN
       - SETGID
       - SETUID
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
 
 service:
   port: 6379

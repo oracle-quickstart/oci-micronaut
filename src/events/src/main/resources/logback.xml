@@ -13,5 +13,6 @@
         <appender-ref ref="STDOUT" />
     </root>
     <logger name="org.apache.kafka" level="debug"/>
+    <logger name="events" level="debug"/>
 
 </configuration>

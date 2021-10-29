@@ -84,8 +84,8 @@ dependencies {
     testImplementation "org.mockito:mockito-core:3.9.0"
     testImplementation 'com.openpojo:openpojo:0.8.12'
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:oracle-xe")
-    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:oracle-xe:1.16.2")
+    testImplementation("org.testcontainers:testcontainers:1.16.2")
 }
 
 application {

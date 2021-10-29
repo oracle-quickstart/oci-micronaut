@@ -3,7 +3,10 @@
 # 
 
 # OCI Services
-## Autonomous Database
+##**************************************************************************
+##                        Autonomous Database
+##**************************************************************************
+
 ### creates an ATP database
 resource "oci_database_autonomous_database" "mushop_autonomous_database" {
   admin_password           = random_string.autonomous_database_admin_password.result
@@ -20,6 +23,7 @@ resource "oci_database_autonomous_database" "mushop_autonomous_database" {
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }
+
 ### Wallet
 resource "oci_database_autonomous_database_wallet" "autonomous_database_wallet" {
   autonomous_database_id = oci_database_autonomous_database.mushop_autonomous_database[0].id
@@ -43,29 +47,6 @@ resource "kubernetes_secret" "oadb-admin" {
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 
-resource "kubernetes_config_map" "oci-deployment" {
-  metadata {
-    name      = var.oci_deployment
-    namespace = kubernetes_namespace.mushop_namespace.id
-  }
-  data = {
-    region        = var.region
-    compartment_id = local.oke_compartment_ocid
-  }
-}
-
-resource "kubernetes_secret" "oapm-connection" {
-  metadata {
-    name      = var.apm_connection_name
-    namespace = kubernetes_namespace.mushop_namespace.id
-  }
-  data = {
-    zipkin_url        = var.apm_zipkin_url
-    zipkin_path       = var.apm_zipkin_path
-    zipkin_enabled    = var.apm_zipkin_enabled
-  }
-}
-
 resource "kubernetes_secret" "oadb-connection" {
   metadata {
     name      = var.db_connection_name
@@ -79,21 +60,6 @@ resource "kubernetes_secret" "oadb-connection" {
   type = "Opaque"
 
   count = var.mushop_mock_mode_all ? 0 : 1
-}
-
-### OSS events streaming
-resource "kubernetes_secret" "oss-connection" {
-  metadata {
-    name      = var.oss_conection
-    namespace = kubernetes_namespace.mushop_namespace.id
-  }
-  data = {
-    bootstrapServers    = oci_streaming_stream_pool.stream_pool[0].kafka_settings[0].bootstrap_servers
-    jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user[0].name}/${oci_streaming_stream_pool.stream_pool[0].id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token[0].token}\";"
-  }
-  type = "Opaque"
-
-  count = var.create_oracle_streaming_service_stream ? 1 : 0
 }
 
 ### OADB Wallet extraction <>
@@ -116,7 +82,7 @@ resource "kubernetes_cluster_role" "secret_creator" {
   rule {
     api_groups = [""]
     resources  = ["secrets"]
-    verbs      = ["create"]
+    verbs      = ["get","create"]
   }
 
   count = var.mushop_mock_mode_all ? 0 : 1
@@ -174,7 +140,7 @@ resource "kubernetes_job" "wallet_extractor_job" {
           name    = "wallet-binding"
           image   = "bitnami/kubectl"
           command = ["/bin/sh", "-c"]
-          args    = ["kubectl create secret generic oadb-wallet --from-file=/wallet"]
+          args    = ["if kubectl get secret oadb-wallet > /dev/null 2>&1; then echo \"oadb-wallet already exits\"; else kubectl create secret generic oadb-wallet --from-file=/wallet; fi"]
           volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
             name       = kubernetes_service_account.wallet_extractor_sa[0].default_secret_name
@@ -206,15 +172,53 @@ resource "kubernetes_job" "wallet_extractor_job" {
         service_account_name = "wallet-extractor-sa"
       }
     }
-    backoff_limit = 1
-    # ttl_seconds_after_finished = 120 # Not supported by TF K8s provider 1.8. ORM need to update provider
+    backoff_limit              = 1
+    ttl_seconds_after_finished = 120
   }
+
+  depends_on = [kubernetes_deployment.cluster_autoscaler_deployment, helm_release.ingress_nginx]
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 ### OADB Wallet extraction </>
 
-## Object Storage
+##**************************************************************************
+##                Application Performance  Monitoring
+##**************************************************************************
+resource "kubernetes_secret" "oapm-connection" {
+  metadata {
+    name      = var.apm_connection_name
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    zipkin_url        = var.apm_zipkin_url
+    zipkin_path       = var.apm_zipkin_path
+    zipkin_enabled    = var.apm_zipkin_enabled
+  }
+}
+
+
+##**************************************************************************
+##                        Event Streaming
+##**************************************************************************
+### OSS events streaming
+resource "kubernetes_secret" "oss-connection" {
+  metadata {
+    name      = var.oss_conection
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    bootstrapServers    = oci_streaming_stream_pool.stream_pool[0].kafka_settings[0].bootstrap_servers
+    jaasConfig          = "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"${data.oci_identity_tenancy.mushop_compartment.name}/${oci_identity_user.events_streaming_user[0].name}/${oci_streaming_stream_pool.stream_pool[0].id}\" password=\"${oci_identity_auth_token.events_streaming_user_auth_token[0].token}\";"
+  }
+  type = "Opaque"
+
+  count = var.create_oracle_streaming_service_stream ? 1 : 0
+}
+
+##**************************************************************************
+##                          Object Storage
+##**************************************************************************
 resource "oci_objectstorage_bucket" "mushop_catalogue_bucket" {
   compartment_id = local.oke_compartment_ocid
   namespace      = data.oci_objectstorage_namespace.ns.namespace
@@ -250,8 +254,10 @@ resource "kubernetes_secret" "oos_bucket" {
   count = var.mushop_mock_mode_all ? 0 : 1
 }
 
-## OCI Functions
 
+##**************************************************************************
+##                      Oracle Cloud Functions
+##**************************************************************************
 resource "kubernetes_service" "newsletter_svc" {
   metadata {
     name = var.newsletter_service_name
@@ -269,7 +275,9 @@ resource "kubernetes_service" "newsletter_svc" {
   count = var.create_oracle_function_newsletter ? 1 : 0
 }
 
-## OCI KMS Vault
+##**************************************************************************
+##                            OCI KMS Vault
+##**************************************************************************
 ### OCI Vault vault
 resource "oci_kms_vault" "mushop_vault" {
   compartment_id = local.oke_compartment_ocid
@@ -292,6 +300,20 @@ resource "oci_kms_key" "mushop_key" {
   }
 
   count = var.use_encryption_from_oci_vault ? (var.create_new_encryption_key ? 1 : 0) : 0
+}
+
+##**************************************************************************
+##                      Deployment Location
+##**************************************************************************
+resource "kubernetes_config_map" "oci-deployment" {
+  metadata {
+    name      = var.oci_deployment
+    namespace = kubernetes_namespace.mushop_namespace.id
+  }
+  data = {
+    region        = var.region
+    compartment_id = local.oke_compartment_ocid
+  }
 }
 
 ### Vault and Key definitions

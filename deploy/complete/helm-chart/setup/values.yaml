@@ -3,8 +3,8 @@ metrics-server:
   enabled: true
   args: [
     # not recommended in production
-    --kubelet-insecure-tls,
-    --kubelet-preferred-address-types=InternalIP
+      --kubelet-insecure-tls,
+      --kubelet-preferred-address-types=InternalIP
   ]
 
 # https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/README.md
@@ -22,7 +22,7 @@ prometheus:
 
 # https://github.com/kubernetes-sigs/service-catalog/blob/master/charts/catalog/README.md
 catalog:
-  enabled: true
+  enabled: false
 
 # https://kubernetes.github.io/ingress-nginx/
 # https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
@@ -92,14 +92,14 @@ grafana:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-      - name: 'default'
-        orgId: 1
-        folder: ''
-        type: file
-        disableDeletion: true
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/default
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: true
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
   sidecar:
     datasources:
       enabled: true
@@ -110,6 +110,7 @@ grafana:
   grafana.ini:
     server:
       root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana"
+      serve_from_sub_path: true
   persistence:
     enabled: true
   plugins:

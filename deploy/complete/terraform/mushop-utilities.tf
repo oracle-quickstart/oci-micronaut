@@ -7,7 +7,10 @@ resource "kubernetes_namespace" "cluster_utilities_namespace" {
   metadata {
     name = "mushop-utilities"
   }
-  depends_on = [oci_containerengine_node_pool.oke_node_pool]
+  depends_on = [oci_containerengine_node_pool.oke_node_pool, local_file.kubeconfig]
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 # MuShop Utilities helm charts
@@ -18,7 +21,7 @@ resource "helm_release" "prometheus" {
   name       = "prometheus"
   repository = local.helm_repository.prometheus
   chart      = "prometheus"
-  version    = "13.6.0"
+  version    = "14.4.1"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
   wait       = false
 
@@ -37,13 +40,14 @@ resource "helm_release" "grafana" {
   name       = "mushop-utils-grafana" # mushop-utils included to be backwards compatible to the docs and setup chart install
   repository = local.helm_repository.grafana
   chart      = "grafana"
-  version    = "6.7.3"
+  version    = "6.14.1"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
   wait       = false
 
   set {
     name  = "grafana\\.ini.server.root_url"
     value = "%(protocol)s://%(domain)s:%(http_port)s/grafana"
+    type  = "string"
   }
 
   values = [
@@ -109,7 +113,7 @@ resource "helm_release" "ingress_nginx" {
   name       = "mushop-utils-ingress-nginx" # mushop-utils included to be backwards compatible to the docs and setup chart install
   repository = local.helm_repository.ingress_nginx
   chart      = "ingress-nginx"
-  version    = "3.29.0"
+  version    = "3.34.0"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
   wait       = true
 
@@ -117,10 +121,20 @@ resource "helm_release" "ingress_nginx" {
     name  = "controller.metrics.enabled"
     value = true
   }
-
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/oci-load-balancer-shape"
     value = var.ingress_load_balancer_shape
+    type  = "string"
+  }
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/oci-load-balancer-shape-flex-min"
+    value = var.ingress_load_balancer_shape_flex_min
+    type  = "string"
+  }
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/oci-load-balancer-shape-flex-max"
+    value = var.ingress_load_balancer_shape_flex_max
+    type  = "string"
   }
 
   timeout = 1800 # workaround to wait the node be active for other charts
@@ -145,20 +159,24 @@ resource "helm_release" "svc-cat" {
 }
 
 ## https://github.com/jetstack/cert-manager/blob/master/README.md
-## https://artifacthub.io/packages/helm/jetstack/cert-manager
+## https://artifacthub.io/packages/helm/cert-manager/cert-manager
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
   repository = local.helm_repository.jetstack
   chart      = "cert-manager"
-  version    = "1.3.0"
+  version    = "1.4.1"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
-  wait       = false
+  wait       = true # wait to allow the webhook be properly configured
 
   set {
     name  = "installCRDs"
     value = true
   }
 
+  set {
+    name  = "webhook.timeoutSeconds"
+    value = "30"
+  }
   depends_on = [helm_release.ingress_nginx] # Ugly workaround because of the oci pvc provisioner not be able to wait for the node be active and retry.
 
   count = var.cert_manager_enabled ? 1 : 0
@@ -172,6 +190,8 @@ data "kubernetes_service" "mushop_ingress" {
     namespace = kubernetes_namespace.cluster_utilities_namespace.id
   }
   depends_on = [helm_release.ingress_nginx]
+
+  count = var.ingress_nginx_enabled ? 1 : 0
 }
 
 ## Kubernetes Secret: Grafana Admin Password
@@ -181,6 +201,8 @@ data "kubernetes_secret" "mushop_utils_grafana" {
     namespace = kubernetes_namespace.cluster_utilities_namespace.id
   }
   depends_on = [helm_release.grafana, helm_release.mushop]
+
+  count = var.grafana_enabled ? 1 : 0
 }
 
 locals {

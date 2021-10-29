@@ -3,31 +3,37 @@
 # 
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = ">= 1.0"
   required_providers {
     oci = {
       source  = "hashicorp/oci"
-      version = ">= 4.26.0"
+      version = ">= 4.36.0"
+      # https://registry.terraform.io/providers/hashicorp/oci/4.36.0
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "1.11.2" # Latest version as April 2021 = 2.1.0. Using 1.11.2 (March, 2020) for ORM compatibility
+      version = "2.2.0" # Latest version as June 2021 = 2.3.2. Using 2.2.0 (May, 2021) for ORM compatibility
+      # https://registry.terraform.io/providers/hashicorp/kubernetes/2.2.0
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "1.1.1" # Latest version as April 2021 = 2.1.1. Using 1.1.1 (March, 2020) for ORM compatibility
+      version = "2.1.0" # Latest version as June 2021 = 2.2.0. Using 2.1.0 (March, 2021) for ORM compatibility
+      # https://registry.terraform.io/providers/hashicorp/helm/2.1.0
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "2.0.1" # Latest version as March 2021 = 3.1.0. Using 2.0.1 (April, 2020) for ORM compatibility
+      version = "3.1.0" # Latest version as June 2021 = 3.1.0.
+      # https://registry.terraform.io/providers/hashicorp/tls/3.1.0
     }
     local = {
       source  = "hashicorp/local"
-      version = "1.4.0" # Latest version as March 2021 = 2.1.0. Using 1.4.0 (September, 2019) for ORM compatibility
+      version = "2.1.0" # Latest version as June 2021 = 2.1.0.
+      # https://registry.terraform.io/providers/hashicorp/local/2.1.0
     }
     random = {
       source  = "hashicorp/random"
-      version = "2.3.0" # Latest version as March 2021 = 3.1.0. Using 2.3.0 (July, 2020) for ORM compatibility
+      version = "3.1.0" # Latest version as June 2021 = 3.1.0.
+      # https://registry.terraform.io/providers/hashicorp/random/3.1.0
     }
   }
 }
@@ -57,11 +63,18 @@ provider "oci" {
   private_key_path = var.private_key_path
 }
 
+# Extra step to avoid Terraform Kubernetes provider interpolation. https://registry.terraform.io/providers/hashicorp/kubernetes/2.2.0/docs#stacking-with-managed-kubernetes-cluster-resources
+resource "local_file" "kubeconfig" {
+  content  = data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content
+  filename = "${path.module}/generated/kubeconfig"
+}
+
 # https://docs.cloud.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#notes
 provider "kubernetes" {
-  load_config_file       = "false" # Workaround for tf k8s provider < 1.11.1 to work with ORM
   cluster_ca_certificate = base64decode(yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["certificate-authority-data"])
   host                   = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["server"]
+  config_context         = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["contexts"][0]["name"]
+
   exec {
     api_version = "client.authentication.k8s.io/v1beta1" # Workaround for tf k8s provider < 1.11.1 to work with orm - yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["users"][0]["user"]["exec"]["apiVersion"]
     args = [yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["users"][0]["user"]["exec"]["args"][0],
@@ -78,9 +91,9 @@ provider "kubernetes" {
 # https://docs.cloud.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#notes
 provider "helm" {
   kubernetes {
-    load_config_file       = "false" # Workaround for tf helm provider < 1.1.1 to work with ORM
     cluster_ca_certificate = base64decode(yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["certificate-authority-data"])
     host                   = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["clusters"][0]["cluster"]["server"]
+    config_context         = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["contexts"][0]["name"]
     exec {
       api_version = yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["users"][0]["user"]["exec"]["apiVersion"]
       args = [yamldecode(data.oci_containerengine_cluster_kube_config.oke_cluster_kube_config.content)["users"][0]["user"]["exec"]["args"][0],

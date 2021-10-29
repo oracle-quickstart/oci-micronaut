@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "mushop_namespace" {
   metadata {
     name = "mushop"
   }
-  depends_on = [oci_containerengine_node_pool.oke_node_pool]
+  depends_on = [oci_containerengine_node_pool.oke_node_pool, local_file.kubeconfig]
 }
 
 # Deploy mushop chart
@@ -49,6 +49,7 @@ resource "helm_release" "mushop" {
     name  = "global.test"
     value = var.oci_deployment
   }
+
   set {
     name  = "global.imageSuffix"
     value = var.mushop_micronaut_service_version
@@ -56,6 +57,11 @@ resource "helm_release" "mushop" {
   set {
     name  = "api.env.trackingEnabled"
     value = var.create_oracle_streaming_service_stream ? true : false
+  }
+
+  set {
+    name  = "global.cloud"
+    value = "oci"
   }
 
   # set {
@@ -71,7 +77,29 @@ resource "helm_release" "mushop" {
     value = var.create_oracle_streaming_service_stream ? true : false
   }
 
-  depends_on = [helm_release.ingress_nginx] # Ugly workaround because of the oci pvc provisioner not be able to wait for the node be active and retry.
+
+  set {
+    name  = "ingress.enabled"
+    value = var.ingress_nginx_enabled
+  }
+  set {
+    name  = "ingress.hosts"
+    value = "{${var.ingress_hosts}}"
+  }
+  set {
+    name  = "ingress.clusterIssuer"
+    value = var.cert_manager_enabled ? var.ingress_cluster_issuer : ""
+  }
+  set {
+    name  = "ingress.email"
+    value = var.ingress_email_issuer
+  }
+  set {
+    name  = "ingress.tls"
+    value = var.ingress_tls
+  }
+
+  depends_on = [helm_release.ingress_nginx, helm_release.cert_manager] # Ugly workaround because of the oci pvc provisioner not be able to wait for the node be active and retry.
 
   timeout = 500
 }

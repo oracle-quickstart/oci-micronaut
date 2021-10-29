@@ -14,7 +14,7 @@ umbrella chart included here. Either complete the setup, or follow these instruc
 1. Add the helm repository:
 
     ```shell
-    helm repo add svc-cat https://svc-catalog-charts.storage.googleapis.com
+    helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
     ```
 
 1. Create a namespace:
@@ -29,7 +29,7 @@ umbrella chart included here. Either complete the setup, or follow these instruc
     helm install catalog svc-cat/catalog --namespace service-catalog
     ```
 
-    Or using Helm V2
+   Or using Helm V2
 
     ```shell
     helm install svc-cat/catalog --name catalog --namespace service-catalog
@@ -50,23 +50,23 @@ umbrella chart included here. Either complete the setup, or follow these instruc
       --from-file=privatekey=<PATH_OF_USER_PRIVATE_API_KEY>
     ```
 
-    > **NOTE:** The passphrase entry is **required**. If you do not have passphrase for your key, just leave empty
+   > **NOTE:** The passphrase entry is **required**. If you do not have passphrase for your key, just leave empty
 
 1. Install the OCI service broker referencing the credentials above:
 
     ```text
-    helm install oci-service-broker https://github.com/oracle/oci-service-broker/releases/download/v1.5.2/oci-service-broker-1.5.2.tgz \
+    helm install oci-service-broker https://github.com/oracle/oci-service-broker/releases/download/v1.6.0/oci-service-broker-1.6.0.tgz \
       --namespace mushop \
       --set ociCredentials.secretName=oci-credentials \
       --set storage.etcd.useEmbedded=true \
       --set tls.enabled=false
     ```
 
-    >Note: instead of doing helm install like this, we could copy the .tgz file and use one helm install command to install everything.
+   >Note: instead of doing helm install like this, we could copy the .tgz file and use one helm install command to install everything.
 
-    >Another note: The OCI service broker pod will be failing due to a missing secret - that secret is deployed using the provision chart below. If we did the fix above (copy tgz manually and install everyhing using helm), then this wouldn't be happening.
+   >Another note: The OCI service broker pod will be failing due to a missing secret - that secret is deployed using the provision chart below. If we did the fix above (copy tgz manually and install everything using helm), then this wouldn't be happening.
 
-    >Etcd node: The above command will deploy the OCI Service Broker using an embedded etcd instance. It is not recommended to deploy the OCI Service Broker using an embedded etcd instance and tls disabled in production environments, instead a separate etcd cluster should be setup and used by the OCI Sevice Broker.
+   >Etcd node: The above command will deploy the OCI Service Broker using an embedded etcd instance. It is not recommended to deploy the OCI Service Broker using an embedded etcd instance and tls disabled in production environments, instead a separate etcd cluster should be setup and used by the OCI Service Broker.
 
 1. Create a `myvalues.yaml` file with the following information:
 
@@ -84,7 +84,7 @@ umbrella chart included here. Either complete the setup, or follow these instruc
       --values myvalues.yaml
     ```
 
-    Or with Helm V2
+   Or with Helm V2
 
     ```text
     helm install provision \

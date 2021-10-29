@@ -15,4 +15,5 @@
 
     <logger name="api" level="trace" />
     <logger name="io.micronaut.http" level="debug"/>
+    <logger name="io.micronaut.kubernetes" level="debug"/>
 </configuration>

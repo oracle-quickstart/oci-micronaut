@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CartRepositoryDatabaseImplTest implements OracleSodaTest {
 
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("registry.gitlab.com/micronaut-projects/micronaut-graal-tests/oracle-database:18.4.0-xe");
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim");
 
     @Inject
     CartRepository cartRepository;

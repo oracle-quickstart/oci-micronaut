@@ -33,7 +33,7 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     @NonNull
     @Override
     public Map<String, String> getProperties() {
-        oracleContainer = new OracleContainer("registry.gitlab.com/micronaut-projects/micronaut-graal-tests/oracle-database:18.4.0-xe")
+        oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim")
                 .withNetwork(Network.SHARED)
                 .withNetworkAliases("oracledb");
         oracleContainer.start();

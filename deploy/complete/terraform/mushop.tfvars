@@ -78,8 +78,12 @@ newsletter_function_approved_email_address = "" # e.g. "micronaut-newsletter@mus
 # Streaming
 create_oracle_streaming_service_stream = false
 
+# APM - Update: Now the terraform provider for APM is already available - See: "apm.tf"
+apm_display_name = "APM-Domain-Test-01"
+apm_description  = "APM Test 01 - A domain to demo APM with Micronaut"
+
 # Tracing
-# TO-DO (APM is already created with OCI Resource Manager)
+# TO-DO (Deprecated: APM is created first with OCI Resource Manager)
 apm_zipkin_enabled = false
 apm_zipkin_url = "" # Copy here the APM domain Data Upload Endpoint.
 apm_zipkin_path = "" # The format is: /20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=<APM DOMAIN PUBLIC DATA KEY>

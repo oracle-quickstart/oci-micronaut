@@ -68,7 +68,7 @@ object_storage_mushop_media_compartment_ocid = "" # e.g.: "ocid1.compartment..."
 object_storage_mushop_media_visibility       = "Public"
 
 # Tracing
-# TO-DO (APM is already created with OCI Resource Manager)
+# TO-DO (APM is created first with OCI Resource Manager)
 apm_zipkin_enabled = false
 apm_zipkin_url = "" # Copy here the APM domain Data Upload Endpoint.
 apm_zipkin_path = "" # The format is: /20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=<auto_generated_public_key>

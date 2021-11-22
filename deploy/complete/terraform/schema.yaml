@@ -712,6 +712,23 @@ variables:
     visible: true
     default: false
 
+  # Oracle Cloud APM Domain
+  apm_display_name:
+    type: string
+    title: "APM Domain name"
+    description: "APM-Domain-Test-01"
+    required: true
+    visible: true
+
+  apm_description:
+    type: string
+    title: "APM Domain description"
+    description: "APM Test 01 - A domain to demo APM with Micronaut"
+    required: false
+    visible:
+      and:
+        - apm_display_name
+
   # Oracle Cloud Application Monitoring service
   apm_zipkin_enabled:
     type: boolean

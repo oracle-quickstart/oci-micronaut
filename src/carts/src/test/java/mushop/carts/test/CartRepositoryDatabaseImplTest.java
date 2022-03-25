@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CartRepositoryDatabaseImplTest implements OracleSodaTest {
 
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim");
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim").withEnv("ORACLE_PASSWORD", "oracle");;
 
     @Inject
     CartRepository cartRepository;

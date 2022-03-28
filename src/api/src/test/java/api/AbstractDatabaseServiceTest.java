@@ -1,6 +1,5 @@
 package api;
 
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
@@ -10,13 +9,13 @@ import io.micronaut.test.support.TestPropertyProvider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.OracleContainer;
+import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.Map;
@@ -53,7 +52,9 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
             throw new RuntimeException("Unable to setup SODA: " + e.getMessage(), e);
         }
 
-        serviceContainer = initService();
+        serviceContainer = initService().waitingFor(
+                new LogMessageWaitStrategy()
+                        .withRegEx("(?s).*Startup completed.*"));
         serviceContainer.start();
         return Map.of(
                 "micronaut.http.services.mushop-" + getServiceId() + ".url", "http://localhost:" + serviceContainer.getFirstMappedPort()
@@ -61,14 +62,14 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     }
 
     protected GenericContainer<?> initService() {
-        Map serviceConfig = Map.of(
-                "DATASOURCES_DEFAULT_URL", oracleContainer.getJdbcUrl(),
-                "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
-                "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword()
-        );
         return new GenericContainer<>(composeServiceDockerImage())
+                .withNetwork(Network.SHARED)
                 .withExposedPorts(getServiceExposedPort())
-                .withEnv(serviceConfig);
+                .withEnv(Map.of(
+                        "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
+                        "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
+                        "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword()
+                ));
     }
 
     protected DockerImageName composeServiceDockerImage() {

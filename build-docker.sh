@@ -11,3 +11,4 @@ for DIR in $(find ./src -mindepth 1 -maxdepth 1 -type d ); do
   fi
   popd
 done
+

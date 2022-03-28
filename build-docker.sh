@@ -7,7 +7,7 @@ for DIR in $(find ./src -mindepth 1 -maxdepth 1 -type d ); do
   elif [ -f "gradlew" ]; then
     ./gradlew clean dockerBuild
   elif [ -f "build-and-push.sh" ]; then
-    ./build-and-push.sh
+    echo "Skipping $(pwd)"
   fi
   popd
 done

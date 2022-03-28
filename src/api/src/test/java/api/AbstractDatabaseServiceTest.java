@@ -1,14 +1,18 @@
 package api;
 
+import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.support.TestPropertyProvider;
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
@@ -34,16 +38,21 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     @Override
     public Map<String, String> getProperties() {
         oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim")
+                .usingSid()
                 .withNetwork(Network.SHARED)
                 .withNetworkAliases("oracledb");
         oracleContainer.start();
-        try (Connection connection = oracleContainer.createConnection("")) {
-            try (final PreparedStatement ps = connection.prepareStatement("GRANT SODA_APP TO " + oracleContainer.getUsername())) {
-                ps.execute();
-            }
+
+        try (Connection connection = DriverManager.getConnection(
+                oracleContainer.getJdbcUrl(),
+                "system",
+                oracleContainer.getPassword()
+        )) {
+            connection.prepareStatement("GRANT SODA_APP TO " + oracleContainer.getUsername()).execute();
         } catch (SQLException e) {
             throw new RuntimeException("Unable to setup SODA: " + e.getMessage(), e);
-        }        
+        }
+
         serviceContainer = initService();
         serviceContainer.start();
         return Map.of(
@@ -52,17 +61,17 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
     }
 
     protected GenericContainer<?> initService() {
+        Map serviceConfig = Map.of(
+                "DATASOURCES_DEFAULT_URL", oracleContainer.getJdbcUrl(),
+                "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
+                "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword()
+        );
         return new GenericContainer<>(composeServiceDockerImage())
                 .withExposedPorts(getServiceExposedPort())
-                .withNetwork(Network.SHARED)
-                .withEnv(Map.of(
-                        "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
-                        "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
-                        "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword()
-                ));
+                .withEnv(serviceConfig);
     }
 
-    protected DockerImageName composeServiceDockerImage(){
+    protected DockerImageName composeServiceDockerImage() {
         return DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/" + getServiceId() + "-" + defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion());
     }
 
@@ -80,7 +89,7 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
         HttpResponse<?> login(BasicAuth basicAuth);
     }
 
-    enum DockerImageServiceType{
+    enum DockerImageServiceType {
         GRAALVM,
         OPENJDK,
         NATIVE

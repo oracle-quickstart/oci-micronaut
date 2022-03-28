@@ -174,7 +174,8 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected GenericContainer<?> initService() {
-        return new GenericContainer<>(composeServiceDockerImage()).withExposedPorts(getServiceExposedPort())
+        return new GenericContainer<>(composeServiceDockerImage())
+                .withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
                         "MICRONAUT_ENVIRONMENTS", "dockercompose",

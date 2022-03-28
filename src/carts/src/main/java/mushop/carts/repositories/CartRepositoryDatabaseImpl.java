@@ -45,7 +45,7 @@ public class CartRepositoryDatabaseImpl implements CartRepository {
     private final String collectionName;
 
     public CartRepositoryDatabaseImpl(
-            @NonNull @Value("${carts.collection}") String collectionName,
+            @NonNull @Value("${carts.collection:cart}") String collectionName,
             @NonNull OracleDatabase db,
             @NonNull MediaTypeCodecRegistry codecRegistry) {
         this.collectionName = collectionName;

@@ -72,8 +72,8 @@ dependencies {
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:oracle-xe")
-    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:oracle-xe:1.16.2")
+    testImplementation("org.testcontainers:testcontainers:1.16.2")
 }
 
 application {

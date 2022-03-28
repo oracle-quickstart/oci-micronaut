@@ -58,6 +58,7 @@ public class OracleSodaClientFactory {
             final boolean hasCollectionsToCreate = !collections.isEmpty();
             if (isCreateSodaUser) {
                 final String username = jdbcConfiguration.getUsername();
+                LOG.info("Initializing soda user: GRANT SODA_APP TO {}", username);
                 try (Connection connection = DriverManager.getConnection(
                         jdbcConfiguration.getUrl(),
                         jdbcConfiguration.getUsername(),

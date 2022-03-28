@@ -27,7 +27,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -168,9 +167,8 @@ public class CartsServiceTest extends AbstractDatabaseServiceTest {
 
     @Override
     protected GenericContainer<?> initService() {
-        return new GenericContainer<>(
-                DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/" + getServiceId() + "-" + defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion())
-        ).withExposedPorts(getServiceExposedPort())
+        return new GenericContainer<>(composeServiceDockerImage())
+                .withExposedPorts(getServiceExposedPort())
                 .withNetwork(Network.SHARED)
                 .withEnv(Map.of(
                         "MICRONAUT_ENVIRONMENTS", "dockercompose",

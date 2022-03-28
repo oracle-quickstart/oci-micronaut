@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestCartService implements OracleSodaTest {
 
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim").withEnv("ORACLE_PASSWORD", "oracle");
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim").usingSid();
 
     @Inject
     @Client("/")

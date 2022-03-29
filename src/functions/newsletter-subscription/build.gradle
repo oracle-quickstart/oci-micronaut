@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "2.0.6"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.3.1"
 }
 
 group = "microanut.mushop.newsletter.subscription"
@@ -9,30 +9,21 @@ repositories {
     mavenCentral()
 }
 
-micronaut {
-    runtime("oracle_function")
-    testRuntime("junit5")
-    processing {
-        incremental(true)
-        annotations("newsletter.subscription.*")
-    }
-}
-
 dependencies {
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut:micronaut-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("io.micronaut:micronaut-http-client")
-
     implementation 'javax.mail:mail:1.5.0-b01'
-    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-function") {
-        exclude module:'micronaut-oraclecloud-common'
-    }
+
+    runtimeOnly("org.slf4j:slf4j-simple")
+    implementation("io.micronaut:micronaut-validation")
 
     testImplementation("com.fnproject.fn:testing-junit4")
-    runtimeOnly("org.slf4j:slf4j-simple")
-}
+    testImplementation("io.micronaut:micronaut-http-client")
 
+}
 
 application {
     mainClass.set("com.example.Application")
@@ -43,26 +34,41 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-if (javaBaseImage == "graalvm") {
-    dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+tasks {
+    // the base image for Oracle Function is fnproject/fn-java-fdk:jre11-latest
+    // TODO: build fnproject image on top of graalvm-ce
+//    if (javaBaseImage == "graalvm") {
+//        dockerfile {
+//            baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-22"
+//        }
+//    }
+
+    dockerfileNative {
+        args("-XX:MaximumHeapSizePercent=80")
+    }
+
+    dockerBuild {
+        images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    }
+
+    dockerBuildNative {
+        images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
     }
 }
 
-
-nativeImage {
-    args("--static",
-         "--initialize-at-build-time=newsletter.subscription")
+graalvmNative.toolchainDetection = false
+graalvmNative {
+    binaries.configureEach {
+        buildArgs.add("--initialize-at-build-time=newsletter.subscription")
+        buildArgs.add("--static")
+    }
 }
 
-dockerfileNative {
-    args("-XX:MaximumHeapSizePercent=80")
-}
-
-dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
-}
-
-dockerBuildNative {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+micronaut {
+    runtime("oracle_function")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("newsletter.subscription.*")
+    }
 }

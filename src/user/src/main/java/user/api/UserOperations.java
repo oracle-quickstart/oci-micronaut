@@ -1,5 +1,6 @@
 package user.api;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
@@ -78,6 +79,7 @@ public interface UserOperations {
      * @return addresses
      */
     @Get("/customers/{userId}/addresses")
+    @Nullable
     List<UserAddressDetailDto> getUserAddresses(UUID userId);
 
     /**

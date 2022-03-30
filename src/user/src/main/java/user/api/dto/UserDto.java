@@ -1,13 +1,15 @@
 package user.api.dto;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
 
 /**
  * {@link user.model.User} DTO.
  */
-@Introspected
+@Serdeable
 public class UserDto {
 
     private final String username;
@@ -24,7 +26,7 @@ public class UserDto {
                    String lastName,
                    String email,
                    String phone,
-                   List<UserAddressDto> addresses) {
+                   @Nullable List<UserAddressDto> addresses) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

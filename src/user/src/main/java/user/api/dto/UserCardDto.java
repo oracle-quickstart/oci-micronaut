@@ -1,13 +1,14 @@
 package user.api.dto;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import javax.validation.constraints.Size;
 
 /**
  * {@link user.model.UserCard} DTO.
  */
-@Introspected
+@Serdeable
 public class UserCardDto {
 
     private final String ccv;

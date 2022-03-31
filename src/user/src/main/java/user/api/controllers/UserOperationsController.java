@@ -2,9 +2,13 @@ package user.api.controllers;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.hateoas.JsonError;
+import io.micronaut.http.hateoas.Link;
 import io.micronaut.transaction.annotation.ReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,4 +237,13 @@ class UserOperationsController implements UserOperations {
     protected HttpStatusException userAddressNotFoundException(UUID userId, UUID addressId) {
         throw new HttpStatusException(HttpStatus.NOT_FOUND, "User address with id: " + addressId + " not found for the user with id: " + userId + "!");
     }
+//
+//    @io.micronaut.http.annotation.Error
+//    public HttpResponse<JsonError> jsonError(HttpRequest request, Exception e) { //
+//        JsonError error = new JsonError(e.getMessage()) //
+//                .link(Link.SELF, Link.of(request.getUri()));
+//
+//        return HttpResponse.<JsonError>status(HttpStatus.BAD_REQUEST, "Fix Your JSON")
+//                .body(error); //
+//    }
 }

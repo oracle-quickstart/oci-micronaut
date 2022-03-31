@@ -1,8 +1,11 @@
 package user.api.controllers;
 
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
+import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
 import user.api.LoginOperations;
@@ -26,6 +29,21 @@ public class UserControllerTest {
 
     @Inject
     UserClient client;
+
+    @Inject
+    HttpClient httpClient;
+
+    @Inject
+    EmbeddedServer embeddedServer;
+
+    @Test
+    void testBadRequest() {
+        String json = "{\"username\":\"fred\",\"password\":\"testpass\",\"firstName\":\"Fred\",\"lastName\":\"Flintstone\",\"email\":\"fred@flinstones.com\"}";
+
+        String response = httpClient.toBlocking().retrieve(
+                HttpRequest.POST(embeddedServer.getURL() + "/register", json));
+        assertEquals("x", response);
+    }
 
     @Test
     void testCreate() {
@@ -153,7 +171,7 @@ public class UserControllerTest {
         assertEquals("xxxxxxxxxxxx3456", userCard.getLongNum());
         assertEquals("0310", userCard.getExpires());
 
-        List<UserCardDetailDto> cards  = client.getUserCards(userDetail.getId());
+        List<UserCardDetailDto> cards = client.getUserCards(userDetail.getId());
 
         assertEquals(1, cards.size());
         userCard = cards.stream().filter(a -> a.getNumber().equals("3456")).findFirst().orElseThrow();

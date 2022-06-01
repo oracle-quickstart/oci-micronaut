@@ -110,3 +110,8 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
+
+dockerfile {
+    runCommand("microdnf install strace")
+    entryPoint('strace', "java", "-jar", "/home/app/application.jar")
+}

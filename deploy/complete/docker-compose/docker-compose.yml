@@ -138,7 +138,7 @@ services:
 
   # OCI Orders service
   orders:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -171,7 +171,7 @@ services:
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -195,7 +195,7 @@ services:
 
   # Payment service
   payment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -213,7 +213,7 @@ services:
 
   # Fulfillment service
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:2.0.0-SNAPSHOT
     restart: always
     read_only: true
     tmpfs:

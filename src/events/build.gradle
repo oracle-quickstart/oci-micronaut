@@ -74,7 +74,7 @@ java {
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
     }
 } else {
     dockerfile {
@@ -89,3 +89,9 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
+
+dockerfile {
+    runCommand("microdnf install strace")
+    entryPoint('strace', "java", "-jar", "/home/app/application.jar")
+}
+

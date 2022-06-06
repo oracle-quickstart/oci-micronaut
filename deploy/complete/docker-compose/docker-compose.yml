@@ -18,7 +18,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:strace
     hostname: api
     restart: always
     cap_drop:
@@ -33,6 +33,11 @@ services:
       - MICRONAUT_HTTP_SERVICES_MUSHOP-ORDERS_URL=http://orders:8082
       - MICRONAUT_HTTP_SERVICES_MUSHOP-USER_URL=http://user:8080
       - REDIS_URI=redis://session-db:6379
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "5"
 
   # Static media assets
   assets:
@@ -88,7 +93,7 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:strace
     restart: always
     depends_on:
       oracledb:
@@ -107,12 +112,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   # OCI Carts service
   carts:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-openjdk:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-openjdk:strace
     restart: always
     depends_on:
       oracledb:
@@ -133,12 +138,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   # OCI Orders service
   orders:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:strace
     restart: always
     cap_drop:
       - ALL
@@ -166,12 +171,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:strace
     restart: always
     cap_drop:
       - ALL
@@ -190,12 +195,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   # Payment service
   payment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:strace
     restart: always
     cap_drop:
       - ALL
@@ -208,12 +213,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   # Fulfillment service
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:2.0.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:strace
     restart: always
     read_only: true
     tmpfs:
@@ -230,7 +235,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "500m"
         max-file: "5"
 
   nats:

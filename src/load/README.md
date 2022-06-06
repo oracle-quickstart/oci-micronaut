@@ -40,6 +40,14 @@ kubectl delete -f load-dep.yaml
 
 ## Running in Docker Container
 
+The image has already been pushed to `iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/load:latest`. For example:
+
+```shell
+docker run --net=host iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/load:latest -h localhost:81 -c 10 -r 30
+```
+
+If you want to build your own image:
+
 * Build `docker build -t mushop/load .`
 * Run `docker run mushop/load -h [host] -c [number of clients] -r [total run time]`
 

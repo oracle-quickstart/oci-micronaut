@@ -96,7 +96,7 @@ if (javaBaseImage == "graalvm") {
 }
 
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:strace"]
 }
 
 dockerBuildNative {
@@ -105,5 +105,5 @@ dockerBuildNative {
 
 dockerfile {
     runCommand("microdnf install strace")
-    entryPoint('strace', "java", "-jar", "/home/app/application.jar")
+    entryPoint("strace", "-f", "java", "-jar", "/home/app/application.jar")
 }

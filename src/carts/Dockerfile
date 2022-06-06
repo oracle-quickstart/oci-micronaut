@@ -4,4 +4,4 @@ COPY classes /home/app/classes
 COPY dependency/* /home/app/libs/
 EXPOSE 8080
 RUN microdnf install strace
-ENTRYPOINT ["strace", "java", "-cp", "/home/app/libs/*:/home/app/classes/", "mushop.carts.Application"]
+ENTRYPOINT ["strace", "-f", "java", "-cp", "/home/app/libs/*:/home/app/classes/", "mushop.carts.Application"]

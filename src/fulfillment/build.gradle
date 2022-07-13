@@ -43,9 +43,9 @@ dependencies {
 
     // Tracing
     implementation("io.micronaut:micronaut-tracing")
-    implementation("io.opentracing.brave:brave-opentracing")
-    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
-    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
+    implementation("io.opentracing.brave:brave-opentracing:1.0.0")
+    runtimeOnly("io.zipkin.brave:brave-instrumentation-http:5.13.10")
+    runtimeOnly("io.zipkin.reporter2:zipkin-reporter:2.16.3")
     runtimeOnly("ch.qos.logback:logback-classic")
 
     // NATS

@@ -30,7 +30,7 @@ public class UnitPojo {
     // The package to test
     private static final String POJO_PACKAGE = "mushop.orders.entities";
 
-    private final PojoClassFilter filter = new FilterClassName("^((?!Introspection)(?!Unit).)*$");
+    private final PojoClassFilter filter = new FilterClassName("^((?!Introspection)(?!Unit)(?!ReflectConfig).)*$");
 
     @Test
     public void ensureExpectedPojoCount() {

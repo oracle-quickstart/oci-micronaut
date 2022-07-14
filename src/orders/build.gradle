@@ -1,6 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "2.0.6"
+    id("io.micronaut.application") version "3.4.0"
 }
 
 group = "micronaut.mushop"
@@ -54,10 +54,8 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
-    implementation("io.micronaut:micronaut-tracing")
-    implementation("io.opentracing.brave:brave-opentracing:1.0.0")
-    runtimeOnly("io.zipkin.brave:brave-instrumentation-http:5.13.10")
-    runtimeOnly("io.zipkin.reporter2:zipkin-reporter:2.16.3")
+    implementation("io.micronaut.tracing:micronaut-tracing-core")
+    implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
 
     // DB - Core
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")

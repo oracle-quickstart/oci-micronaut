@@ -1,6 +1,6 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "2.0.6"
+    id("io.micronaut.application") version "3.4.0"
 }
 
 group = "micronaut.mushop"
@@ -23,7 +23,8 @@ dependencies {
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut:micronaut-tracing")
+    implementation("io.micronaut.tracing:micronaut-tracing-core")
+    implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
 
     // Monitoring - Core
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")

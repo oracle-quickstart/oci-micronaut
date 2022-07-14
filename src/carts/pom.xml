@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.5.1</version>
+        <version>3.5.3</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,10 +27,10 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.1.1</micronaut.version>
-        <micronaut.data.version>3.1.0</micronaut.data.version>
-        <micronaut.oraclecloud.version>2.0.2</micronaut.oraclecloud.version>
-        <micronaut.micrometer.version>3.4.0</micronaut.micrometer.version>
+        <micronaut.version>3.5.3</micronaut.version>
+        <micronaut.data.version>3.5.0</micronaut.data.version>
+        <micronaut.oraclecloud.version>2.1.5</micronaut.oraclecloud.version>
+        <micronaut.micrometer.version>4.3.0</micronaut.micrometer.version>
         <jdbc.version>21.1.0.0</jdbc.version>
         <soda.version>1.1.7.1</soda.version>
         <docker.image.suffix>openjdk</docker.image.suffix>

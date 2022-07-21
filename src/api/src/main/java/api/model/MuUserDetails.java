@@ -1,19 +1,20 @@
 package api.model;
 
+import java.util.Collections;
+import java.util.Objects;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.ClientAuthentication;
-import io.micronaut.security.authentication.ServerAuthentication;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.util.Collections;
-import java.util.Objects;
 
 /**
  * MuShop User Details.
  */
 @Schema(title = "Authentication details")
 @Introspected
+@JsonDeserialize(as = MuUserDetails.class)
 public class MuUserDetails extends ClientAuthentication {
 
     public static final String ID = "id";

@@ -1,28 +1,37 @@
 package mushop.carts.entities;
 
-import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
-@Introspected
+import io.micronaut.core.annotation.Creator;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.MappedEntity;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
+@MappedEntity
 public class Cart {
 
+    @Id
     private String id;
 
+    @NotNull
     private String customerId;
 
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new ArrayList<>();
 
     public Cart() {
         id = UUID.randomUUID().toString();
     }
 
     @Creator
-    public Cart(String cartId) {
-        this.id = cartId;
+    @BsonCreator
+    public Cart(
+        @BsonProperty("id") String id
+    ) {
+        this.id = id;
     }
 
     public String getId() {

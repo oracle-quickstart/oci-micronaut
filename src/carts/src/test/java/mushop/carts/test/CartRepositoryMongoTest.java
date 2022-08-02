@@ -20,7 +20,7 @@ import io.micronaut.test.support.TestPropertyProvider;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import mushop.carts.repositories.CartRepository;
-import mushop.carts.repositories.CartRepositoryMongoImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.MongoDBContainer;
@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CartRepositoryMongoImplTest implements TestPropertyProvider {
+public class CartRepositoryMongoTest implements TestPropertyProvider {
 
     @Container
     final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
@@ -61,13 +62,11 @@ public class CartRepositoryMongoImplTest implements TestPropertyProvider {
 
     @Test
     void testCartRepositoryResolution(){
-        assertTrue(cartRepository instanceof CartRepositoryMongoImpl);
+        assertNotNull(cartRepository);
     }
 
     @Test
     void testCartRepository() {
-        assertTrue(cartRepository.healthCheck());
-
         Cart cart = new Cart("1234");
         cart.setCustomerId("abcd");
         Item item = new Item();
@@ -78,9 +77,9 @@ public class CartRepositoryMongoImplTest implements TestPropertyProvider {
         cart.getItems().add(item);
         cartRepository.save(cart);
 
-        Cart acart = cartRepository.getById("1234");
-        assertNotNull(acart);
-        assertEquals(cart.getCustomerId(), acart.getCustomerId());
+        Optional<Cart> acart = cartRepository.findById("1234");
+        assertTrue(acart.isPresent());
+        assertEquals(cart.getCustomerId(), acart.get().getCustomerId());
 
         List<Cart> customerCart = cartRepository.getByCustomerId("abcd");
         assertNotNull(customerCart);

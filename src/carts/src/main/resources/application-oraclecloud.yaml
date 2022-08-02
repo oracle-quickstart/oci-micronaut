@@ -22,14 +22,6 @@ datasources:
       oracle:
         jdbc:
           fanEnabled: false
-    # Optimization: cache collection metadata to avoid extra roundtrips
-    # to the database when opening a collection
-    soda:
-      properties:
-        sharedMetadataCache: true
-      create-soda-user: false
-      create-collections:
-        - ${carts.collection}
 tracing:
   zipkin:
     enabled: true

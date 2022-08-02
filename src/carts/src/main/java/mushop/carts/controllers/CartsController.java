@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller("/carts")
 @ExecuteOn(TaskExecutors.IO)
@@ -54,53 +55,50 @@ class CartsController {
 
     @Get("/{cartId}")
     Cart getCart(String cartId) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart with id " + cartId + " not found");
-        }
-        return cart;
+        return cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
     }
 
     @Get("/{cartId}/items")
     List<Item> getCartItems(String cartId) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart with id " + cartId + " not found");
-        }
+        Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
         return cart.getItems();
     }
 
     @Delete("/{cartId}")
     Cart deleteCart(String cartId) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart with id " + cartId + " not found");
-        }
-
-        if (cartRepository.deleteCart(cartId)) {
-            LOG.info("Cart deleted: {}", cart);
-            return cart;
-        } else {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Failed to delete cart " + cartId);
-        }
+        Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
+        cartRepository.delete(cart);
+        return cart;
     }
 
     @Delete("/{cartId}/items/{itemId}")
     @Timed("carts.updated.timer")
     Cart deleteCartItem(String cartId, String itemId) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart with id " + cartId + " not found");
-        }
+        Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
 
         if (!cart.removeItem(itemId)) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart item with id " + itemId + " not found " + cart);
+                "Cart item with id " + itemId + " not found " + cart);
         }
 
         cartRepository.update(cart);
@@ -113,13 +111,14 @@ class CartsController {
                                 @Body Cart newCart) {
 
         LOG.info("Received {} with cart {}", cartId, newCart);
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
+        Optional<Cart> cartHolder = cartRepository.findById(cartId);
+        if (cartHolder.isEmpty()) {
             newCart.setId(cartId);
             cartRepository.save(newCart);
             LOG.info("Cart created: {}", newCart);
             return HttpResponse.created(newCart);
         } else {
+            Cart cart = cartHolder.get();
             cart.merge(newCart);
             cartRepository.update(cart);
             LOG.info("Cart updated: {}", cart);
@@ -129,11 +128,12 @@ class CartsController {
 
     @Put("/{cartId}/items")
     Cart updateCartItem(@PathVariable String cartId, @Body Item qItem) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                    "Cart with id " + cartId + " not found");
-        }
+        Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
 
         for (Item item : cart.getItems()) {
             if (item.getItemId().equals(qItem.getItemId())) {
@@ -150,11 +150,11 @@ class CartsController {
     @Error
     HttpResponse<JsonError> failedOperation(HttpRequest<?> request, Exception exception) {
         LOG.error("Failed " + request.getMethod() + ":" + request.getPath() + " with exception: "
-                + exception.getMessage(), exception);
+            + exception.getMessage(), exception);
 
         JsonError error = new JsonError("Failed operation: " + exception.getMessage())
-                .link(Link.SELF, Link.of(request.getUri()));
+            .link(Link.SELF, Link.of(request.getUri()));
         return HttpResponse.<JsonError>status(HttpStatus.BAD_REQUEST, "Bad request")
-                .body(error);
+            .body(error);
     }
 }

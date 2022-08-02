@@ -1,19 +1,22 @@
 package mushop.carts.entities;
 
-import io.micronaut.core.annotation.Introspected;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
-@Introspected
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.MappedEntity;
+
+@MappedEntity
 public class Item {
 
+    @Id
     private String id;
 
+    @NotNull
     private String itemId;
 
     private int quantity;
-
     private BigDecimal unitPrice;
 
     public Item() {

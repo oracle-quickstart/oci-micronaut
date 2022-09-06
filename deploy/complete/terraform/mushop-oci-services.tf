@@ -112,6 +112,18 @@ resource "kubernetes_service_account" "wallet_extractor_sa" {
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }
+resource "kubernetes_secret" "wallet_extractor_sa_token" {
+  metadata {
+    name        = "wallet-extractor-sa-token"
+    namespace   = kubernetes_namespace.mushop_namespace.id
+    annotations = {
+      "kubernetes.io/service-account.name" = "wallet-extractor-sa"
+    }
+  }
+  type = "kubernetes.io/service-account-token"
+
+  depends_on = [kubernetes_service_account.wallet_extractor_sa]
+}
 resource "kubernetes_job" "wallet_extractor_job" {
   metadata {
     name      = "wallet-extractor-job"
@@ -143,7 +155,7 @@ resource "kubernetes_job" "wallet_extractor_job" {
           args    = ["if kubectl get secret oadb-wallet > /dev/null 2>&1; then echo \"oadb-wallet already exits\"; else kubectl create secret generic oadb-wallet --from-file=/wallet; fi"]
           volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.wallet_extractor_sa[0].default_secret_name
+            name       = kubernetes_secret.wallet_extractor_sa_token.metadata[0].name
             read_only  = true
           }
           volume_mount {
@@ -153,9 +165,9 @@ resource "kubernetes_job" "wallet_extractor_job" {
           }
         }
         volume {
-          name = kubernetes_service_account.wallet_extractor_sa[0].default_secret_name
+          name = kubernetes_secret.wallet_extractor_sa_token.metadata[0].name
           secret {
-            secret_name = kubernetes_service_account.wallet_extractor_sa[0].default_secret_name
+            secret_name = kubernetes_secret.wallet_extractor_sa_token.metadata[0].name
           }
         }
         volume {
@@ -176,7 +188,7 @@ resource "kubernetes_job" "wallet_extractor_job" {
     ttl_seconds_after_finished = 120
   }
 
-  depends_on = [kubernetes_deployment.cluster_autoscaler_deployment, helm_release.ingress_nginx]
+  depends_on = [kubernetes_deployment.cluster_autoscaler_deployment, helm_release.ingress_nginx, kubernetes_secret.wallet_extractor_sa_token]
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }

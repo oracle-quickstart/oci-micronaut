@@ -111,3 +111,11 @@ dockerBuildNative {
 shadowJar {
     zip64 = true
 }
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add('--initialize-at-run-time=org.bouncycastle.asn1.ASN1UTF8String')
+        }
+    }
+}

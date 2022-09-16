@@ -37,15 +37,13 @@ dependencies {
     // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp:2.0.0")
-    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-    runtimeOnly("com.oracle.database.jdbc:ojdbc8")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")
 
     // AWS - RDS db access
-    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+    runtimeOnly 'mysql:mysql-connector-java'
 
     // AWS - authentication
     implementation("software.amazon.awssdk:sts")
@@ -74,8 +72,8 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:oracle-xe:1.16.2")
-    testImplementation("org.testcontainers:testcontainers:1.16.2")
+    testImplementation("org.testcontainers:oracle-xe")
+    testImplementation("org.testcontainers:testcontainers")
 }
 
 application {

@@ -89,12 +89,12 @@ EOF
   count = var.grafana_enabled ? 1 : 0
 }
 
-## https://github.com/helm/charts/blob/master/stable/metrics-server/README.md
+## https://artifacthub.io/packages/helm/metrics-server/metrics-server/
 resource "helm_release" "metrics_server" {
   name       = "metrics-server"
   repository = local.helm_repository.stable
   chart      = "metrics-server"
-  version    = "2.11.4"
+  version    = "3.8.2"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
   wait       = false
 
@@ -113,7 +113,7 @@ resource "helm_release" "ingress_nginx" {
   name       = "mushop-utils-ingress-nginx" # mushop-utils included to be backwards compatible to the docs and setup chart install
   repository = local.helm_repository.ingress_nginx
   chart      = "ingress-nginx"
-  version    = "3.34.0"
+  version    = "4.2.3"
   namespace  = kubernetes_namespace.cluster_utilities_namespace.id
   wait       = true
 
@@ -208,7 +208,7 @@ data "kubernetes_secret" "mushop_utils_grafana" {
 locals {
   # Helm repos
   helm_repository = {
-    stable        = "https://charts.helm.sh/stable"
+    stable        = "https://kubernetes-sigs.github.io/metrics-server"
     ingress_nginx = "https://kubernetes.github.io/ingress-nginx"
     jetstack      = "https://charts.jetstack.io"                        # cert-manager
     svc_catalog   = "https://kubernetes-sigs.github.io/service-catalog" # Service Catalog

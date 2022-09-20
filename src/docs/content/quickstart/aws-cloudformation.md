@@ -21,9 +21,9 @@ Note that the charges will be applied since used services are not part of the [A
 {{% /alert %}}
 
 ## Create stack
-To start with the [AWS Cloudformation](https://aws.amazon.com/cloudformation/) click on the following button:
+To start with the [AWS Cloudformation](https://aws.amazon.com/cloudformation/) click on the following button (currently disabled for maintenance):
 </br>
-[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml)
+<!-- [![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml) -->
 
 Proceed to specify stack details:
 {{% width 1-2 %}}

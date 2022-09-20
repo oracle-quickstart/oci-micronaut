@@ -8,16 +8,13 @@ import javax.validation.constraints.NotNull;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 @MappedEntity
 public class Cart {
 
     @Id
     private String id;
-
-    @NotNull
+    
     private String customerId;
 
     private List<Item> items = new ArrayList<>();
@@ -26,11 +23,7 @@ public class Cart {
         id = UUID.randomUUID().toString();
     }
 
-    @Creator
-    @BsonCreator
-    public Cart(
-        @BsonProperty("id") String id
-    ) {
+    public Cart(String id) {
         this.id = id;
     }
 

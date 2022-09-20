@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.6.3</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,8 +27,8 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.5.3</micronaut.version>
-        <micronaut.data.version>3.5.0</micronaut.data.version>
+        <micronaut.version>3.6.3</micronaut.version>
+        <micronaut.data.version>3.7.3</micronaut.data.version>
         <micronaut.micrometer.version>4.3.0</micronaut.micrometer.version>
         <jdbc.version>21.1.0.0</jdbc.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
@@ -197,6 +197,11 @@
             <plugin>
                 <groupId>io.micronaut.build</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
+                <configuration>
+                    <nativeImageBuildArgs>
+                        <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
+                    </nativeImageBuildArgs>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>

@@ -12,16 +12,9 @@ oci:
     instance-principal:
       enabled: true
 
-datasources:
-  default:
-    ocid: ${ORACLECLOUD_ATP_OCID}
-    walletPassword: ${ORACLECLOUD_ATP_WALLET_PASSWORD}
-    username: ${ORACLECLOUD_ATP_USERNAME}
-    password: ${ORACLECLOUD_ATP_PASSWORD}
-    data-source-properties:
-      oracle:
-        jdbc:
-          fanEnabled: false
+mongodb:
+  uri: mongodb://${ORACLECLOUD_ATP_USERNAME}:${ORACLECLOUD_ATP_PASSWORD}@${ORACLECLOUD_ATP_HOST}:${ORACLECLOUD_ATP_PORT:27017}/${ORACLECLOUD_ATP_USERNAME}?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false&loadBalanced=true
+
 tracing:
   zipkin:
     enabled: true

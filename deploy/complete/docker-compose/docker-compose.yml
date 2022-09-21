@@ -114,9 +114,6 @@ services:
   carts:
     image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-graalvm:1.2.0-SNAPSHOT
     restart: always
-    depends_on:
-      oracledb:
-        condition: service_healthy
     cap_drop:
       - ALL
     cap_add:
@@ -127,9 +124,11 @@ services:
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
       - MICRONAUT_ENVIRONMENTS=dockercompose
-      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
-      - DATASOURCES_DEFAULT_USERNAME=carts
-      - DATASOURCES_DEFAULT_PASSWORD=micronaut
+      - MONGO_USER=mongoadmin
+      - MONGO_PASS=mongopass
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGODB=cartsdb
     logging:
       driver: "json-file"
       options:
@@ -248,3 +247,11 @@ services:
     restart: always
     volumes:
       - ./dbinit:/opt/oracle/scripts/startup
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=mongopass
+      - MONGO_INITDB_DATABASE=cartsdb

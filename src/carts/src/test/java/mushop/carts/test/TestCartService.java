@@ -49,7 +49,7 @@ public class TestCartService implements TestPropertyProvider {
         mongoDBContainer.start();
         return Map.of(
             "mongodb.uri", mongoDBContainer.getReplicaSetUrl(),
-            "carts.database", "mongodb"
+            "mongodb.package-names", "mushop.carts"
         );
     }
 

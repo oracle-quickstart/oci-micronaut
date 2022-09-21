@@ -20,7 +20,6 @@ import io.micronaut.test.support.TestPropertyProvider;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import mushop.carts.repositories.CartRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.MongoDBContainer;
@@ -56,7 +55,8 @@ public class CartRepositoryMongoTest implements TestPropertyProvider {
         mongoDBContainer.start();
         return Map.of(
                 "mongodb.uri", mongoDBContainer.getReplicaSetUrl(),
-                "carts.database", "mongodb"
+                "mongodb.package-names", "mushop.carts",
+                "micronaut.data.mongodb.create-collections", "true"
         );
     }
 

@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.7.0</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,12 +27,7 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.5.3</micronaut.version>
-        <micronaut.data.version>3.5.0</micronaut.data.version>
-        <micronaut.oraclecloud.version>2.1.5</micronaut.oraclecloud.version>
-        <micronaut.micrometer.version>4.3.0</micronaut.micrometer.version>
-        <jdbc.version>21.1.0.0</jdbc.version>
-        <soda.version>1.1.7.1</soda.version>
+        <micronaut.version>3.7.0</micronaut.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
     </properties>
 
@@ -42,18 +37,6 @@
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
-
-    <dependencyManagement>
-        <dependencies>        
-            <dependency>
-                <groupId>com.oracle.database.jdbc</groupId>
-                <artifactId>ojdbc-bom</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-                <version>${jdbc.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -118,52 +101,25 @@
 
         <!-- Mongo access -->
         <dependency>
-            <groupId>io.micronaut.mongodb</groupId>
-            <artifactId>micronaut-mongo-sync</artifactId>
+            <groupId>io.micronaut.data</groupId>
+            <artifactId>micronaut-data-mongodb</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
-            <version>1.16.3</version>
             <scope>test</scope>
         </dependency>
 
         <!-- ATP db access -->
         <dependency>
-            <groupId>io.micronaut.oraclecloud</groupId>
-            <artifactId>micronaut-oraclecloud-atp</artifactId>
-            <version>${micronaut.oraclecloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>oraclepki</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>osdt_core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>osdt_cert</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micronaut.sql</groupId>
-            <artifactId>micronaut-jdbc-hikari</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>io.micronaut.data</groupId>
             <artifactId>micronaut-data-tx</artifactId>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.soda</groupId>
-            <artifactId>orajsoda</artifactId>
-            <version>${soda.version}</version>
         </dependency>
 
         <!-- Monitoring - AWS -->
@@ -211,13 +167,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.16.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>oracle-xe</artifactId>
-            <version>1.16.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -242,6 +191,11 @@
             <plugin>
                 <groupId>io.micronaut.build</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
+                <configuration>
+                    <nativeImageBuildArgs>
+                        <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
+                    </nativeImageBuildArgs>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
@@ -263,24 +217,44 @@
                     <annotationProcessorPaths combine.children="append">
                         <path>
                             <groupId>io.micronaut</groupId>
-                            <artifactId>micronaut-http-validation</artifactId>
+                            <artifactId>micronaut-inject-java</artifactId>
                             <version>${micronaut.version}</version>
                         </path>
-                        <annotationProcessorPath>
+                        <path>
                             <groupId>io.micronaut.data</groupId>
                             <artifactId>micronaut-data-processor</artifactId>
                             <version>${micronaut.data.version}</version>
-                        </annotationProcessorPath>
-                        <annotationProcessorPath>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-graal</artifactId>
+                            <version>${micronaut.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-http-validation</artifactId>
+                            <version>${micronaut.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-validation</artifactId>
+                            <version>${micronaut.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut.data</groupId>
+                            <artifactId>micronaut-data-document-processor</artifactId>
+                            <version>${micronaut.data.version}</version>
+                        </path>
+                        <path>
                             <groupId>io.micronaut.openapi</groupId>
                             <artifactId>micronaut-openapi</artifactId>
                             <version>${micronaut.openapi.version}</version>
-                        </annotationProcessorPath>
-                        <annotationProcessorPath>
+                        </path>
+                        <path>
                             <groupId>io.micronaut.micrometer</groupId>
                             <artifactId>micronaut-micrometer-annotation</artifactId>
                             <version>${micronaut.micrometer.version}</version>
-                        </annotationProcessorPath>
+                        </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Amicronaut.processing.group=mushop</arg>

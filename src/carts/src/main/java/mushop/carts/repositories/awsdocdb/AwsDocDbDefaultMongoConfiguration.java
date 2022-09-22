@@ -18,6 +18,7 @@ package mushop.carts.repositories.awsdocdb;
 import com.mongodb.DBObjectCodecProvider;
 import com.mongodb.DBRefCodecProvider;
 import com.mongodb.DocumentToDBRefTransformer;
+import com.mongodb.Jep395RecordCodecProvider;
 import com.mongodb.client.gridfs.codecs.GridFSFileCodecProvider;
 import com.mongodb.client.model.geojson.codecs.GeoJsonCodecProvider;
 import io.micronaut.configuration.mongo.core.DefaultMongoConfiguration;
@@ -27,13 +28,17 @@ import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.Environment;
 import io.micronaut.runtime.ApplicationConfiguration;
+import jakarta.inject.Inject;
 import org.bson.codecs.BsonCodecProvider;
 import org.bson.codecs.BsonValueCodecProvider;
 import org.bson.codecs.DocumentCodecProvider;
+import org.bson.codecs.EnumCodecProvider;
 import org.bson.codecs.IterableCodecProvider;
+import org.bson.codecs.JsonObjectCodecProvider;
 import org.bson.codecs.MapCodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.jsr310.Jsr310CodecProvider;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.util.List;
 
@@ -43,6 +48,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 /**
  * Overridden default MongoDB configuration class that replaces default codecs by the AWS DocDB specific ones.
  */
+@Requires(env=io.micronaut.context.env.Environment.AMAZON_EC2)
 @Requires(property = MongoSettings.PREFIX)
 @Requires(missingProperty = MongoSettings.MONGODB_SERVERS)
 @ConfigurationProperties(MongoSettings.PREFIX)
@@ -54,23 +60,30 @@ public class AwsDocDbDefaultMongoConfiguration extends DefaultMongoConfiguration
      * {@link org.bson.codecs.ValueCodecProvider} by {@link AwsDocDbValueCodecProvider}.
      */
     private static final CodecRegistry DEFAULT_CODEC_REGISTRY =
-            fromProviders(asList(new AwsDocDbValueCodecProvider(),
-                    new BsonValueCodecProvider(),
-                    new DBRefCodecProvider(),
-                    new DBObjectCodecProvider(),
-                    new DocumentCodecProvider(new DocumentToDBRefTransformer()),
-                    new IterableCodecProvider(new DocumentToDBRefTransformer()),
-                    new MapCodecProvider(new DocumentToDBRefTransformer()),
-                    new GeoJsonCodecProvider(),
-                    new GridFSFileCodecProvider(),
-                    new Jsr310CodecProvider(),
-                    new BsonCodecProvider()));
-
+        fromProviders(asList(
+                new AwsDocDbValueCodecProvider(),
+                new BsonValueCodecProvider(),
+                new DBRefCodecProvider(),
+                new DBObjectCodecProvider(),
+                new DocumentCodecProvider(new DocumentToDBRefTransformer()),
+                new IterableCodecProvider(new DocumentToDBRefTransformer()),
+                new MapCodecProvider(new DocumentToDBRefTransformer()),
+                new GeoJsonCodecProvider(),
+                new GridFSFileCodecProvider(),
+                new Jsr310CodecProvider(),
+                new JsonObjectCodecProvider(),
+                new BsonCodecProvider(),
+                new EnumCodecProvider(),
+                new Jep395RecordCodecProvider(),
+                PojoCodecProvider.builder().register("mushop.carts.entities").build()
+            )
+        );
 
     public AwsDocDbDefaultMongoConfiguration(ApplicationConfiguration applicationConfiguration) {
         super(applicationConfiguration);
     }
 
+    @Inject
     public AwsDocDbDefaultMongoConfiguration(ApplicationConfiguration applicationConfiguration, Environment environment) {
         super(applicationConfiguration, environment);
     }

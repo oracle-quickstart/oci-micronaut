@@ -1,6 +1,18 @@
 package mushop.carts.test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import javax.inject.Inject;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -8,36 +20,38 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.OracleContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import javax.inject.Inject;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TestCartService implements OracleSodaTest {
+public class TestCartService implements TestPropertyProvider {
 
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-xe:slim").usingSid();
+    final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @Inject
     @Client("/")
     HttpClient httpClient;
+
+    @NonNull
+    @Override
+    public Map<String, String> getProperties() {
+        mongoDBContainer.start();
+        return Map.of(
+            "mongodb.uri", mongoDBContainer.getReplicaSetUrl(),
+            "mongodb.package-names", "mushop.carts"
+        );
+    }
 
     @Test
     public void testMetricsJson() {
@@ -79,10 +93,5 @@ public class TestCartService implements OracleSodaTest {
 
         items = httpClient.toBlocking().exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class));
         assertEquals(0, items.body().size());
-    }
-
-    @Override
-    public OracleContainer getOracleContainer() {
-        return oracleContainer;
     }
 }

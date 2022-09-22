@@ -81,6 +81,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     secretKeyRef:
       name: {{ $connectionSecret }}
       key: oadb_service
+- name: ORACLECLOUD_ATP_HOST
+  valueFrom:
+    secretKeyRef:
+      name: {{ $connectionSecret }}
+      key: oadb_host
 {{- end -}}
 
 {{/* OADB ADMIN environment */}}

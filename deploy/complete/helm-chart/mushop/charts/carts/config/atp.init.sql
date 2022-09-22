@@ -67,6 +67,13 @@ BEGIN
 			EXECUTE IMMEDIATE 'CREATE ROLE ' || roleName;
 			EXECUTE IMMEDIATE 'GRANT ' || roleName || ' TO &1';
 			EXECUTE IMMEDIATE 'GRANT CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE SEQUENCE, SODA_APP TO ' || roleName;
+			EXECUTE IMMEDIATE 'GRANT CONNECT, RESOURCE TO &1';
+			ORDS_ADMIN.ENABLE_SCHEMA(
+				p_enabled => TRUE,
+				p_schema => '&1',
+				p_url_mapping_type => 'BASE_PATH',
+				p_url_mapping_pattern => '&1',
+				p_auto_rest_auth => TRUE);
 		ELSE
 			DBMS_OUTPUT.PUT_LINE ('Role '|| roleName ||' exists, steps ignored');
 		END IF;

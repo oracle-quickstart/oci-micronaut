@@ -20,6 +20,7 @@ resource "oci_database_autonomous_database" "mushop_autonomous_database" {
   license_model            = var.autonomous_database_license_model
   is_auto_scaling_enabled  = var.autonomous_database_is_auto_scaling_enabled
   is_free_tier             = var.autonomous_database_is_free_tier
+  whitelisted_ips          = [oci_core_virtual_network.oke_vcn[0].id]
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }
@@ -55,7 +56,8 @@ resource "kubernetes_secret" "oadb-connection" {
   data = {
     oadb_wallet_pw = random_string.autonomous_database_wallet_password.result
     oadb_service   = "${local.app_name_for_db}${random_string.deploy_id.result}_TP"
-    oadb_ocid      =  oci_database_autonomous_database.mushop_autonomous_database[0].id
+    oadb_ocid      = oci_database_autonomous_database.mushop_autonomous_database[0].id
+    oadb_host      = split("/", oci_database_autonomous_database.mushop_autonomous_database[0].connection_urls[0].apex_url)[2]
   }
   type = "Opaque"
 

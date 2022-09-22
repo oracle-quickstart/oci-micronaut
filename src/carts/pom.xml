@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.6.3</version>
+        <version>3.7.0</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,12 +27,8 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.6.3</micronaut.version>
-        <micronaut.data.version>3.7.3</micronaut.data.version>
-        <micronaut.micrometer.version>4.3.0</micronaut.micrometer.version>
-        <jdbc.version>21.1.0.0</jdbc.version>
+        <micronaut.version>3.7.0</micronaut.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
-        <test.containers.version>1.17.2</test.containers.version>
     </properties>
 
     <repositories>
@@ -116,7 +112,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
-            <version>${test.containers.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -172,7 +167,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${test.containers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

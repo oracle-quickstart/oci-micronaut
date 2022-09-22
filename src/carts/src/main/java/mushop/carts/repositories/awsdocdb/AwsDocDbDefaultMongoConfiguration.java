@@ -48,7 +48,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 /**
  * Overridden default MongoDB configuration class that replaces default codecs by the AWS DocDB specific ones.
  */
-@Requires(env="ec2")
+@Requires(env=io.micronaut.context.env.Environment.AMAZON_EC2)
 @Requires(property = MongoSettings.PREFIX)
 @Requires(missingProperty = MongoSettings.MONGODB_SERVERS)
 @ConfigurationProperties(MongoSettings.PREFIX)

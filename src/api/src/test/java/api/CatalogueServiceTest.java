@@ -1,5 +1,6 @@
 package api;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -25,6 +26,15 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Inject
     CatalogueApiClient catalogueApiClient;
+
+    @NonNull
+    @Override
+    public Map<String, String> getProperties() {
+        boolean useOracleDB = true;
+        boolean useMongoDB = false;
+        boolean useNats = false;
+        return getProperties(useOracleDB, useMongoDB, useNats);
+    }
 
     @Test
     void testListCategories() {

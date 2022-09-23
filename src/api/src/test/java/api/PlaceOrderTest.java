@@ -21,14 +21,10 @@ import io.micronaut.http.uri.UriTemplate;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.micronaut.test.support.TestPropertyProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -44,23 +40,25 @@ import static org.mockito.Mockito.when;
 @Testcontainers
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PlaceOrderTest implements TestPropertyProvider {
-    @Container
-    static GenericContainer<?> cartsContainer = new GenericContainer<>(
-        DockerImageName.parse("iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts" + "-" + AbstractDatabaseServiceTest.defaultDockerImageServiceType.name().toLowerCase() + ":" + getServiceVersion())
-    ).withExposedPorts(8080);
+public class PlaceOrderTest extends AbstractDatabaseServiceTest {
 
     private static String sessionID;
 
     private final MockAuth mockAuth = new MockAuth();
     private OrdersService.OrderRequest lastOrder;
 
-    private static String getServiceVersion() {
+    @Override
+    protected String getServiceVersion() {
         return "2.0.0-SNAPSHOT";
     }
 
+    @Override
+    protected String getServiceId() {
+        return "carts";
+    }
+
     @BeforeAll
-    static void login(AbstractDatabaseServiceTest.LoginClient client) {
+    static void login(LoginClient client) {
         final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
@@ -111,9 +109,10 @@ public class PlaceOrderTest implements TestPropertyProvider {
     @NonNull
     @Override
     public Map<String, String> getProperties() {
-        return Collections.singletonMap(
-                "micronaut.http.services." + ServiceLocator.CARTS + ".url", "http://localhost:" + cartsContainer.getFirstMappedPort()
-        );
+        boolean useOracleDB = false;
+        boolean useMongoDB = true;
+        boolean useNats = false;
+        return getProperties(useOracleDB, useMongoDB, useNats);
     }
 
     @MockBean(api.services.CartsService.CatalogueClient.class)

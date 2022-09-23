@@ -1,6 +1,7 @@
 package api;
 
 import api.services.AuthClient;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.CookieValue;
@@ -13,13 +14,10 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,20 +28,14 @@ public class OrdersServiceTest extends AbstractDatabaseServiceTest {
 
     private static String sessionID;
 
-    @Container
-    static GenericContainer<?> natsContainer =
-            new GenericContainer<>("nats:latest")
-                    .withExposedPorts(4222)
-                    .withNetwork(Network.SHARED)
-                    .withNetworkAliases("nats-local")
-                    .waitingFor(new LogMessageWaitStrategy().withRegEx("(?s).*Server is ready.*"));
-
+    @NonNull
     @Override
-    protected GenericContainer<?> initService() {
-        return super.initService()
-                    .withEnv("NATS_ADDRESSES", "nats://nats-local:4222");
+    public Map<String, String> getProperties() {
+        boolean useOracleDB = true;
+        boolean useMongoDB = false;
+        boolean useNats = true;
+        return getProperties(useOracleDB, useMongoDB, useNats);
     }
-
 
     @BeforeAll
     static void login(LoginClient client) {

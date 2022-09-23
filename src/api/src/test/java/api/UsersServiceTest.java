@@ -3,6 +3,7 @@ package api;
 import api.model.AddressInfo;
 import api.model.CardInfo;
 import api.model.UserRegistrationRequest;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
@@ -36,6 +37,15 @@ public class UsersServiceTest extends AbstractDatabaseServiceTest {
 
     private UserRegistrationRequest userRegistrationRequest;
     private String sessionID;
+
+    @NonNull
+    @Override
+    public Map<String, String> getProperties() {
+        boolean useOracleDB = true;
+        boolean useMongoDB = false;
+        boolean useNats = false;
+        return getProperties(useOracleDB, useMongoDB, useNats);
+    }
 
     @Test
     @Order(1)

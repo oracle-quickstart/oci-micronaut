@@ -5,6 +5,7 @@ import api.services.AuthClient;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -23,8 +24,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Mono;
 
@@ -48,6 +47,15 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
         final HttpResponse<?> response = client.getConfig();
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
+    }
+
+    @NonNull
+    @Override
+    public Map<String, String> getProperties() {
+        boolean useOracleDB = false;
+        boolean useMongoDB = true;
+        boolean useNats = false;
+        return getProperties(useOracleDB, useMongoDB, useNats);
     }
 
     @Test
@@ -170,23 +178,6 @@ public class CartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
             super(id, price);
             this.quantity = quantity;
         }
-    }
-
-    @Override
-    protected GenericContainer<?> initService() {
-        return new GenericContainer<>(composeServiceDockerImage())
-                .withExposedPorts(getServiceExposedPort())
-                .withNetwork(Network.SHARED)
-                .withEnv(Map.of(
-                        "MICRONAUT_ENVIRONMENTS", "dockercompose",
-                        "DATASOURCES_DEFAULT_URL", "jdbc:oracle:thin:system/oracle@oracledb:1521:xe",
-                        "DATASOURCES_DEFAULT_USERNAME", oracleContainer.getUsername(),
-                        "DATASOURCES_DEFAULT_PASSWORD", oracleContainer.getPassword(),
-                        "DATASOURCES_DEFAULT_DRIVER_CLASS_NAME", oracleContainer.getDriverClassName(),
-                        "DATASOURCES_DEFAULT_SODA_CREATE-SODA-USER", "true",
-                        "DATASOURCES_DEFAULT_SODA_PROPERTIES_SHAREDMETADATACACHE", "true",
-                        "CARTS_COLLECTION", "cart"
-                ));
     }
 
     @Override

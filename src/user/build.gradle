@@ -98,3 +98,11 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/oracle,classpath:db/mysql'")
+        }
+    }
+}

@@ -52,7 +52,17 @@ These services must be provisioned manually and are configured using kubernetes 
 
 #### Configure
 
-1. Provision an Autonomous Transaction Processing (ATP) database. Once **RUNNING** download the DB Connection Wallet and configure secrets as follows:
+1. Provision an Autonomous Transaction Processing (ATP) database. Once **RUNNING**:
+
+    - Configure `Oracle Database API for MongoDB`
+
+        - Update network access type to `Secure access from allowed IPs and VCNs only` and set your public IP address.
+
+        - Go to `Database Actions`, select `Oracle Database API for MongoDB` related service, extract the database host from the url and copy it for later usage (`oadb_host` value in the `oadb-connection` secret)
+
+            > Extracted host format: \<adb-id\>-\<db-name\>.adb.\<oci-region\>.oraclecloudapps.com
+
+        - Update network access type by replacing your public IP address with the OKE virtual cloud network.
 
    - Create `oadb-admin` secret containing the database administrator password. Used once for schema initializations.
 
@@ -62,7 +72,7 @@ These services must be provisioned manually and are configured using kubernetes 
          --from-literal=oadb_admin_pw='<DB_ADMIN_PASSWORD>'
        ```
 
-   - Create `oadb-wallet` secret with the Wallet _contents_ using the downloaded `Wallet_*.zip`. The extracted `Wallet_*` directory is specified as the secret contents.
+   - Download the DB Connection Wallet and create `oadb-wallet` secret with the Wallet _contents_ using the downloaded `Wallet_*.zip`. The extracted `Wallet_*` directory is specified as the secret contents.
 
        ```shell
        kubectl create secret generic oadb-wallet \
@@ -78,18 +88,37 @@ These services must be provisioned manually and are configured using kubernetes 
          --from-literal=oadb_wallet_pw='<DB_WALLET_PASSWORD>' \
          --from-literal=oadb_service='<DB_TNS_NAME>' \
          --from-literal=oadb_ocid='<DB_OCID>' \
+         --from-literal=oadb_host='<DB_HOST>'
        ```
 
      > Each database has 5 unique TNS Names displayed when the Wallet is downloaded an example would be `mushopdb_TP`.
 
-1. **Optional**: Instead of creating a shared database for the entire application, you may establish full separation of services by provisioning _individual_ ATP instances for each service that requires a database. To do so, repeat the previous steps for each database,and give each secret a unique name, for example: `carts-oadb-admin`, `carts-oadb-connection`, `carts-oadb-wallet`.
+1. **Optional**: Instead of creating a shared database for the entire application, you may establish full separation of services by provisioning _individual_ ATP instances for each service that requires a database. To do so, repeat the previous steps for each database (_Oracle Database API for MongoDB configuration step and oadb_host in the oadb-connection secret are required only for the carts database_) and give each secret a unique name, for example: `carts-oadb-admin`, `carts-oadb-connection`, `carts-oadb-wallet`.
 
    - `carts`
    - `catalogue`
    - `orders`
    - `user`
 
-1. Provision a Streaming instance from the [Oracle Cloud Infrastructure Console](https://console.us-phoenix-1.oraclecloud.com/storage/streaming), and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.
+1. Authorize instances to manage ATP databases
+
+    - Create a Dynamic Group
+
+        Navigate to `Identity -> Dynamic Groups -> Create Dynamic Group`
+
+            Name: <DynamicGroupName>
+            Description: <DynamicGroupDescription>
+            Matching Rules: ANY {ALL {instance.compartment.id = '<COMPARTMENT ID>'},ALL {resource.type = 'cluster', resource.compartment.id = '<COMPARTMENT ID>'}}
+
+    - Create an IAM Policy
+
+        Navigate to `Identity -> Policies -> Create Policy`
+
+            Name: <PolicyName>
+            Description: <PolicyDescription>
+            Statement: Allow dynamic-group <DynamicGroupName> to manage autonomous-database-family in compartment id <COMPARTMENT ID>
+
+1. **Optional**: Provision a Streaming instance from the [Oracle Cloud Infrastructure Console](https://console.us-phoenix-1.oraclecloud.com/storage/streaming), and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.
 
    - Create `oss-connection` secret containing the Stream connection details.
 
@@ -100,11 +129,11 @@ These services must be provisioned manually and are configured using kubernetes 
          --from-literal=jaasConfig='<JAAS CONFIG>'
        ```
    
-   Note that `<OSS STREAM BOOTSTRAP SERVERS>` and `<JAAS CONFIG>` values can can be found in the `Stream Pool -> Kafka Connection Setting`. In case you want to connect under different user then the `<JAAS CONFIG>` format is:
-    ```
-    jaasConfig="org.apache.kafka.common.security.plain.PlainLoginModule required username=\"<USER_COMPARTMENT_NAME>/<USER_NAME>/<OSS_POOL_ID>\" password=\"<USER_TOKEN>\";"
-    ```
-   Make sure the user has permission to write to the given stream.
+       Note that `<OSS STREAM BOOTSTRAP SERVERS>` and `<JAAS CONFIG>` values can can be found in the `Stream Pool -> Kafka Connection Setting`. In case you want to connect under different user then the `<JAAS CONFIG>` format is:
+       ```
+       jaasConfig="org.apache.kafka.common.security.plain.PlainLoginModule required username=\"<USER_COMPARTMENT_NAME>/<USER_NAME>/<OSS_POOL_ID>\" password=\"<USER_TOKEN>\";"
+       ```
+       Make sure the user has permission to write to the given stream.
 
 1. Configure a config map with deployment details:
 
@@ -123,7 +152,7 @@ These services must be provisioned manually and are configured using kubernetes 
     1. Edit the `mushop.tfvars`:
 
      ```shell
-       kubectl create secret generic oss-connection \
+       kubectl create secret generic oapm-connection \
          --namespace mushop \
          --from-literal=zipkin_enabled=true \
          --from-literal=zipkin_path='<APM DOMAIN DATA UPLOAD ENDPOINT>' \

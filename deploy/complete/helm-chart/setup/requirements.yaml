@@ -15,19 +15,14 @@ dependencies:
     repository: https://grafana.github.io/helm-charts
   # HPA Metrics
   - name: metrics-server
-    version: 2.11.4
+    version: 3.8.2
     condition: metrics-server.enabled
-    repository: https://charts.helm.sh/stable
+    repository: https://kubernetes-sigs.github.io/metrics-server
   # Ingress Controller
   - name: ingress-nginx
-    version: 4.0.1
+    version: 4.2.3
     condition: ingress-nginx.enabled
     repository: https://kubernetes.github.io/ingress-nginx
-  # Service Catalog
-  - name: catalog
-    version: 0.3.1
-    condition: catalog.enabled
-    repository: https://kubernetes-sigs.github.io/service-catalog
   # cert-manager
   - name: cert-manager
     version: 1.5.3

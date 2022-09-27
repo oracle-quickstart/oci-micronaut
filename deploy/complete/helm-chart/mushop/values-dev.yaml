@@ -1,16 +1,22 @@
 global:
   cloud: oci
+  mock:
+    service: "none"
   ociAuthSecret: oci-credentials        # OCI authentication credentials secret name
   ossConnectionSecret: oss-connection   # Previously created streaming secret name
   oadbAdminSecret: oadb-admin           # Name of DB Admin secret created separately
   oadbWalletSecret: oadb-wallet         # Name of wallet secret created separately
   oadbConnectionSecret: oadb-connection # Name of connection secret created separately
   oosBucketSecret: oos-bucket           # Object storage bucket secret name (optional)
-  oapmConnectionSecret: oapm-connection # Name of application monitoring secret created separately
+  ociDeploymentConfigMap: oci-deployment  # Name of Deployment details config map
 
 ingress:
   hosts: # Configure ingress to support host-specific routing
     # - yourname.mushop.com 
+
+tags:
+  atp: true                               # General flag to use Oracle Autonomous Database
+  streaming: false                        # General flag to use Oracle Streaming Service
 
 api:
   env:

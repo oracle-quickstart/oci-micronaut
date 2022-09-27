@@ -732,12 +732,6 @@ application features.</p>
 <td>true</td>
 </tr>
 <tr>
-<td><a href="https://github.com/kubernetes-sigs/service-catalog/blob/master/charts/catalog/README.md">Service Catalog</a></td>
-<td>Service Catalog chart utilized by Oracle Service Broker</td>
-<td><code>catalog.enabled</code></td>
-<td>true</td>
-</tr>
-<tr>
 <td><a href="https://github.com/jetstack/cert-manager/blob/master/README.md">Cert Manager</a></td>
 <td>x509 certificate management for Kubernetes</td>
 <td><code>cert-manager.enabled</code></td>
@@ -762,21 +756,16 @@ application features.</p>
 </code></pre></div></li>
 <li>
 <p>Install <code>setup</code> chart:</p>
-<pre><code class="language-shell--helm2" data-lang="shell--helm2">helm install setup \
-  --name mushop-utils \
-  --namespace mushop-utilities
-</code></pre><pre><code class="language-shell--helm3" data-lang="shell--helm3">kubectl create ns mushop-utilities
-</code></pre><pre><code class="language-shell--helm3" data-lang="shell--helm3">helm install mushop-utils setup \
-  --namespace mushop-utilities
-</code></pre></li>
-</ol>
-<blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create ns mushop-utilities
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">helm install mushop-utils setup <span class="se">\
+</span><span class="se"></span>  --namespace mushop-utilities
+</code></pre></div><blockquote>
 <p><strong>OPTIONAL</strong> The Jenkins automation server can be enabled by setting <code>jenkins.enabled</code> to <code>true</code> in <code>values.yaml</code> or by adding the command line flag <code>--set jenkins.enabled=true</code> in the <code>helm install</code> command above.</p>
 </blockquote>
-<pre><code class="language-shell--helm3" data-lang="shell--helm3">helm install mushop-utils setup \
-  --namespace mushop-utilities \
-  --set jenkins.enabled=true
-</code></pre><ol>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">helm install mushop-utils setup <span class="se">\
+</span><span class="se"></span>  --namespace mushop-utilities <span class="se">\
+</span><span class="se"></span>  --set jenkins.enabled<span class="o">=</span><span class="nb">true</span>
+</code></pre></div></li>
 <li>
 <p><strong>NOTE</strong> the public <code>EXTERNAL-IP</code> assigned to the ingress controller load balancer:</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get svc mushop-utils-ingress-nginx-controller <span class="se">\
@@ -789,8 +778,25 @@ These services must be provisioned manually and are configured using kubernetes 
 <h4 id="configure">Configure</h4>
 <ol>
 <li>
-<p>Provision an Autonomous Transaction Processing (ATP) database. Once <strong>RUNNING</strong> download the DB Connection Wallet and configure secrets as follows:</p>
+<p>Provision an Autonomous Transaction Processing (ATP) database. Once <strong>RUNNING</strong>:</p>
 <ul>
+<li>
+<p>Configure <code>Oracle Database API for MongoDB</code></p>
+<ul>
+<li>
+<p>Update network access type to <code>Secure access from allowed IPs and VCNs only</code> and set your public IP address.</p>
+</li>
+<li>
+<p>Go to <code>Database Actions</code>, select <code>Oracle Database API for MongoDB</code> related service, extract the database host from the url and copy it for later usage (<code>oadb_host</code> value in the <code>oadb-connection</code> secret)</p>
+<blockquote>
+<p>Extracted host format: &lt;adb-id&gt;-&lt;db-name&gt;.adb.&lt;oci-region&gt;.oraclecloudapps.com</p>
+</blockquote>
+</li>
+<li>
+<p>Update network access type by replacing your public IP address with the OKE virtual cloud network.</p>
+</li>
+</ul>
+</li>
 <li>
 <p>Create <code>oadb-admin</code> secret containing the database administrator password. Used once for schema initializations.</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oadb-admin <span class="se">\
@@ -798,7 +804,7 @@ These services must be provisioned manually and are configured using kubernetes 
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_admin_pw</span><span class="o">=</span><span class="s1">&#39;&lt;DB_ADMIN_PASSWORD&gt;&#39;</span>
 </code></pre></div></li>
 <li>
-<p>Create <code>oadb-wallet</code> secret with the Wallet <em>contents</em> using the downloaded <code>Wallet_*.zip</code>. The extracted <code>Wallet_*</code> directory is specified as the secret contents.</p>
+<p>Download the DB Connection Wallet and create <code>oadb-wallet</code> secret with the Wallet <em>contents</em> using the downloaded <code>Wallet_*.zip</code>. The extracted <code>Wallet_*</code> directory is specified as the secret contents.</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oadb-wallet <span class="se">\
 </span><span class="se"></span>  --namespace mushop <span class="se">\
 </span><span class="se"></span>  --from-file<span class="o">=</span>&lt;PATH_TO_EXTRACTED_WALLET_FOLDER&gt;
@@ -810,14 +816,15 @@ These services must be provisioned manually and are configured using kubernetes 
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_wallet_pw</span><span class="o">=</span><span class="s1">&#39;&lt;DB_WALLET_PASSWORD&gt;&#39;</span> <span class="se">\
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_service</span><span class="o">=</span><span class="s1">&#39;&lt;DB_TNS_NAME&gt;&#39;</span> <span class="se">\
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_ocid</span><span class="o">=</span><span class="s1">&#39;&lt;DB_OCID&gt;&#39;</span> <span class="se">\
-</span></code></pre></div><blockquote>
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">oadb_host</span><span class="o">=</span><span class="s1">&#39;&lt;DB_HOST&gt;&#39;</span>
+</code></pre></div><blockquote>
 <p>Each database has 5 unique TNS Names displayed when the Wallet is downloaded an example would be <code>mushopdb_TP</code>.</p>
 </blockquote>
 </li>
 </ul>
 </li>
 <li>
-<p><strong>Optional</strong>: Instead of creating a shared database for the entire application, you may establish full separation of services by provisioning <em>individual</em> ATP instances for each service that requires a database. To do so, repeat the previous steps for each database,and give each secret a unique name, for example: <code>carts-oadb-admin</code>, <code>carts-oadb-connection</code>, <code>carts-oadb-wallet</code>.</p>
+<p><strong>Optional</strong>: Instead of creating a shared database for the entire application, you may establish full separation of services by provisioning <em>individual</em> ATP instances for each service that requires a database. To do so, repeat the previous steps for each database (<em>Oracle Database API for MongoDB configuration step and oadb_host in the oadb-connection secret are required only for the carts database</em>) and give each secret a unique name, for example: <code>carts-oadb-admin</code>, <code>carts-oadb-connection</code>, <code>carts-oadb-wallet</code>.</p>
 <ul>
 <li><code>carts</code></li>
 <li><code>catalogue</code></li>
@@ -826,7 +833,28 @@ These services must be provisioned manually and are configured using kubernetes 
 </ul>
 </li>
 <li>
-<p>Provision a Streaming instance from the <a href="https://console.us-phoenix-1.oraclecloud.com/storage/streaming">Oracle Cloud Infrastructure Console</a>, and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.</p>
+<p>Authorize instances to manage ATP databases</p>
+<ul>
+<li>
+<p>Create a Dynamic Group</p>
+<p>Navigate to <code>Identity -&gt; Dynamic Groups -&gt; Create Dynamic Group</code></p>
+<pre><code>  Name: &lt;DynamicGroupName&gt;
+  Description: &lt;DynamicGroupDescription&gt;
+  Matching Rules: ANY {ALL {instance.compartment.id = '&lt;COMPARTMENT ID&gt;'},ALL {resource.type = 'cluster', resource.compartment.id = '&lt;COMPARTMENT ID&gt;'}}
+</code></pre>
+</li>
+<li>
+<p>Create an IAM Policy</p>
+<p>Navigate to <code>Identity -&gt; Policies -&gt; Create Policy</code></p>
+<pre><code>  Name: &lt;PolicyName&gt;
+  Description: &lt;PolicyDescription&gt;
+  Statement: Allow dynamic-group &lt;DynamicGroupName&gt; to manage autonomous-database-family in compartment id &lt;COMPARTMENT ID&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Optional</strong>: Provision a Streaming instance from the <a href="https://console.us-phoenix-1.oraclecloud.com/storage/streaming">Oracle Cloud Infrastructure Console</a>, and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.</p>
 <ul>
 <li>
 <p>Create <code>oss-connection</code> secret containing the Stream connection details.</p>
@@ -834,11 +862,11 @@ These services must be provisioned manually and are configured using kubernetes 
 </span><span class="se"></span>  --namespace mushop <span class="se">\
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">bootstrapServers</span><span class="o">=</span><span class="s1">&#39;&lt;OSS STREAM BOOTSTRAP SERVERS&gt;&#39;</span> <span class="se">\
 </span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">jaasConfig</span><span class="o">=</span><span class="s1">&#39;&lt;JAAS CONFIG&gt;&#39;</span>
-</code></pre></div></li>
-</ul>
-<p>Note that <code>&lt;OSS STREAM BOOTSTRAP SERVERS&gt;</code> and <code>&lt;JAAS CONFIG&gt;</code> values can can be found in the <code>Stream Pool -&gt; Kafka Connection Setting</code>. In case you want to connect under different user then the <code>&lt;JAAS CONFIG&gt;</code> format is:</p>
+</code></pre></div><p>Note that <code>&lt;OSS STREAM BOOTSTRAP SERVERS&gt;</code> and <code>&lt;JAAS CONFIG&gt;</code> values can can be found in the <code>Stream Pool -&gt; Kafka Connection Setting</code>. In case you want to connect under different user then the <code>&lt;JAAS CONFIG&gt;</code> format is:</p>
 <pre><code>jaasConfig=&quot;org.apache.kafka.common.security.plain.PlainLoginModule required username=\&quot;&lt;USER_COMPARTMENT_NAME&gt;/&lt;USER_NAME&gt;/&lt;OSS_POOL_ID&gt;\&quot; password=\&quot;&lt;USER_TOKEN&gt;\&quot;;&quot;
 </code></pre><p>Make sure the user has permission to write to the given stream.</p>
+</li>
+</ul>
 </li>
 <li>
 <p>Configure a config map with deployment details:</p>
@@ -855,7 +883,7 @@ These services must be provisioned manually and are configured using kubernetes 
 <li>Once created make a note of <code>Data Upload Endpoint</code> and <code>auto_generated_public_key</code>.</li>
 <li>Edit the <code>mushop.tfvars</code>:</li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">  kubectl create secret generic oss-connection <span class="se">\
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">  kubectl create secret generic oapm-connection <span class="se">\
 </span><span class="se"></span>    --namespace mushop <span class="se">\
 </span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">zipkin_enabled</span><span class="o">=</span><span class="nb">true</span> <span class="se">\
 </span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">zipkin_path</span><span class="o">=</span><span class="s1">&#39;&lt;APM DOMAIN DATA UPLOAD ENDPOINT&gt;&#39;</span> <span class="se">\

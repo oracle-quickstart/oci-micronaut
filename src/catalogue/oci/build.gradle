@@ -1,0 +1,54 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "3.4.0"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("catalogue.*")
+    }
+}
+
+dependencies {
+    // Metrics - OCI
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // DB - OCI ATP
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    runtimeOnly("com.oracle.oci.sdk:oci-java-sdk-monitoring")
+
+    implementation(project(":app"))
+}
+
+application {
+    mainClass.set("catalogue.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}

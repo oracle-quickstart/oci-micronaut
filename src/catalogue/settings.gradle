@@ -1,1 +1,5 @@
 rootProject.name="catalogue"
+
+include "app"
+include "aws"
+include "oci"

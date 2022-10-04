@@ -32,31 +32,10 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
 
-    // Metrics - OCI
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
-
-    // Metrics - AWS
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
-
     // DB - Core
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut.data:micronaut-data-jdbc")
-
-    // DB - OCI ATP
-    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    runtimeOnly("com.oracle.oci.sdk:oci-java-sdk-monitoring")
-
-    // DB - AWS RDS
-    runtimeOnly 'mysql:mysql-connector-java'
-
-    // AWS - Configuration discovery
-    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
-    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
-
-    // AWS - authentication
-    implementation("software.amazon.awssdk:sts")
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")

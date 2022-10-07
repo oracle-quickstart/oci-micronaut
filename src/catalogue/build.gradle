@@ -41,6 +41,7 @@ dependencies {
     // DB - Core
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+    runtimeOnly("org.flywaydb:flyway-mysql")
     implementation("io.micronaut.data:micronaut-data-jdbc")
 
     // DB - OCI ATP
@@ -94,4 +95,12 @@ dockerBuild {
 
 dockerBuildNative {
   images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+}
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/oracle,classpath:db/mysql'")
+        }
+    }
 }

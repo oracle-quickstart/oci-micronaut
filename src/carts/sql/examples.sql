@@ -18,8 +18,8 @@
 --   SELECT query.  The json_serialize converts the document to JSON text so
 --   that it may be viewed by the client.
 
-SELECT c.id, json_serialize(c.json_document)
-FROM carts c;
+SELECT c.id, json_serialize(c.data)
+FROM cart c;
 
 -- Example 2:
 --   Simple dot notation can be used to select values from within JSON.  The following
@@ -27,9 +27,9 @@ FROM carts c;
 --   for each cart, and the total price of the items in the cart.
 
 SELECT c.id,
-       c.json_document.customerId,
-       c.json_document.items.count() totItems,
-       c.json_document.items.unitPrice.sum() totPrice
+       c.data.customerId,
+       c.data.items.count() totItems,
+       c.data.items.unitPrice.sum() totPrice
 FROM cart c;
 
 
@@ -37,9 +37,9 @@ FROM cart c;
 --   Aggregate queries can also be used over JSON data.  The next example
 --   groups carts by the total number of items in each cart.
 
-SELECT count(*) numCarts, c.json_document.items.quantity.sum() itemCount
+SELECT count(*) numCarts, c.data.items.quantity.sum() itemCount
 FROM cart c
-GROUP BY c.json_document.items.quantity.sum()
+GROUP BY c.data.items.quantity.sum();
 
 -- Example 4:
 --  Nested arrays of data can be mapped to rows using the SQL NESTED clause
@@ -49,7 +49,7 @@ GROUP BY c.json_document.items.quantity.sum()
 
 SELECT c.*
 FROM cart
-   NESTED json_document
+   NESTED data
    COLUMNS (customerId, NESTED items[*] COLUMNS (quantity NUMBER, itemId, unitPrice NUMBER)) c;
 
 -- Example 5:
@@ -58,7 +58,7 @@ FROM cart
 CREATE VIEW items AS
   SELECT c.*
   FROM cart
-     NESTED json_document
+     NESTED data
      COLUMNS (customerId, NESTED items[*] COLUMNS (quantity NUMBER, itemId, unitPrice NUMBER)) c;
 
 SELECT * FROM items;
@@ -71,8 +71,8 @@ SELECT * FROM items;
 
 SELECT u."firstName", u."email"
 FROM "user" u, cart c
-WHERE u."id" = c.json_document.customerId AND
-      c.json_document.items.unitPrice.sum() > 10;
+WHERE u."id" = c.data.customerId AND
+      c.data.items.unitPrice.sum() > 10;
 
 -- Example 7:
 --   The next example does a 3-way join between users, products, and cart items.
@@ -80,6 +80,6 @@ WHERE u."id" = c.json_document.customerId AND
 SELECT u."firstName", u."email", p.title, c.quantity, p.qty
 FROM products p,
      "user" u,
-     cart NESTED json_document COLUMNS(customerId, NESTED items[*] COLUMNS(itemId, quantity)) c
+     cart NESTED data COLUMNS(customerId, NESTED items[*] COLUMNS(itemId, quantity)) c
 WHERE u."id" = customerId AND
       itemId = p.sku AND p.qty > 10;

@@ -9,7 +9,7 @@ carts:
   database: mushop
 
 mongodb:
-  readPreference: SECONDARY
+  readPreference: PRIMARY
   ssl:
     enabled: true
   retry-writes: false

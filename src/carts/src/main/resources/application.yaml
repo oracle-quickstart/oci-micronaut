@@ -27,4 +27,4 @@ endpoints:
     sensitive: false
     details-visible: ANONYMOUS
 mongodb:
-  uri: mongodb://${MONGO_USER:root}:${MONGO_PASS}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGODB:cartsdb}?authSource=admin
+  uri: mongodb://${MONGO_USER:root}:${MONGO_PASS}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/?authSource=admin

@@ -13,7 +13,9 @@ oci:
       enabled: true
 
 mongodb:
-  uri: mongodb://${ORACLECLOUD_ATP_USERNAME}:${ORACLECLOUD_ATP_PASSWORD}@${ORACLECLOUD_ATP_HOST}:${ORACLECLOUD_ATP_PORT:27017}/${ORACLECLOUD_ATP_USERNAME}?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false&loadBalanced=true
+  uri: mongodb://${ORACLECLOUD_ATP_USERNAME}:${ORACLECLOUD_ATP_PASSWORD}@${ORACLECLOUD_ATP_HOST}:${ORACLECLOUD_ATP_PORT:27017}/?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false&loadBalanced=true
+carts:
+  database: ${ORACLECLOUD_ATP_USERNAME}
 
 tracing:
   zipkin:

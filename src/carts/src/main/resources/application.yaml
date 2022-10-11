@@ -28,3 +28,5 @@ endpoints:
     details-visible: ANONYMOUS
 mongodb:
   uri: mongodb://${MONGO_USER:root}:${MONGO_PASS}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/?authSource=admin
+carts:
+  database: mushop

@@ -54,9 +54,10 @@ public class CartRepositoryMongoTest implements TestPropertyProvider {
     public Map<String, String> getProperties() {
         mongoDBContainer.start();
         return Map.of(
-                "mongodb.uri", mongoDBContainer.getReplicaSetUrl("cartsdb"),
+                "mongodb.uri", mongoDBContainer.getReplicaSetUrl("mushop"),
                 "mongodb.package-names", "mushop.carts",
-                "micronaut.data.mongodb.create-collections", "true"
+                "micronaut.data.mongodb.create-collections", "true",
+                "carts.database", "mushop"
         );
     }
 

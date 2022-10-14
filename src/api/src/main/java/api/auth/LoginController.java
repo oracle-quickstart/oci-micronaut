@@ -15,7 +15,6 @@
  */
 package api.auth;
 
-import api.model.MuUserDetails;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEvent;
 import io.micronaut.context.event.ApplicationEventPublisher;
@@ -101,7 +100,7 @@ class LoginController {
                         if (authenticationResponse.isAuthenticated() && authenticationResponse.isAuthenticated()) {
                             Authentication authentication = authenticationResponse.getAuthentication().get();
                             eventPublisher.publishEvent(new LoginSuccessfulEvent(authentication));
-                            return loginHandler.loginSuccess(new MuUserDetails((String)authentication.getAttributes().get("id"), authentication.getName()), request);
+                            return loginHandler.loginSuccess(authentication, request);
                         } else {
                             eventPublisher.publishEvent(new LoginFailedEvent(authenticationResponse));
                             return loginHandler.loginFailed(authenticationResponse, request);

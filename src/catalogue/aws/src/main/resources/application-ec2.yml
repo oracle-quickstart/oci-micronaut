@@ -12,6 +12,5 @@ datasources:
 flyway:
   datasources:
     default:
-      enabled: true
-      locations: classpath:db/mysql
+      locations: classpath:db/migration
 

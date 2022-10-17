@@ -33,10 +33,10 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
 
     // DB - Core
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
-    runtimeOnly("org.flywaydb:flyway-mysql")
     implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")
@@ -73,7 +73,7 @@ dockerBuild {
 }
 
 dockerBuildNative {
-  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
 
 graalvmNative {

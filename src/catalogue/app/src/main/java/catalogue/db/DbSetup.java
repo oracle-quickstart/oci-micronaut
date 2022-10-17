@@ -25,6 +25,8 @@ public class DbSetup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DbSetup.class);
 
+    private static final String SETUP_SCRIPT = "db/catalogue_data.sql";
+
     private final DataSource dataSource;
     private final ProductRepository repository;
     private final ResourceLoader resourceLoader;
@@ -33,7 +35,7 @@ public class DbSetup {
     public DbSetup(DataSource dataSource,
                    ProductRepository repository,
                    ResourceLoader resourceLoader,
-                   @Value("${datasources.default.driverClassName:`oracle.jdbc.OracleDriver`}") String databaseDriver) {
+                   @Value("${datasources.default.driverClassName:`org.h2.Driver`}") String databaseDriver) {
         this.dataSource = dataSource;
         this.repository = repository;
         this.resourceLoader = resourceLoader;
@@ -47,13 +49,10 @@ public class DbSetup {
             return;
         }
 
-        String setupScript = "db/oracle/catalogue.sql";
-        if (databaseDriver != null && databaseDriver.contains("mysql")) {
-            setupScript = "db/mysql/catalogue.sql";
-        }
+        boolean isOracleDB = databaseDriver.contains("oracle");
 
-        LOGGER.info("Database driver: {}, going to setup DB: {}", databaseDriver, setupScript);
-        resourceLoader.getResourceAsStream(setupScript).ifPresent((stream) -> {
+        LOGGER.info("Database driver: {}, going to setup DB: {}", databaseDriver, SETUP_SCRIPT);
+        resourceLoader.getResourceAsStream(SETUP_SCRIPT).ifPresent((stream) -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
                 final String sql = IOUtils.readText(reader);
                 Scanner scanner = new Scanner(sql).useDelimiter(";");

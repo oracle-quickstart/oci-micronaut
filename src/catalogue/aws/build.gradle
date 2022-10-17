@@ -19,24 +19,30 @@ micronaut {
 }
 
 dependencies {
-    // Metrics - AWS
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    implementation(project(":app")) {
+        exclude group:'com.h2database', module:'h2'
+    }
+
+    // Authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // Metrics
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
-    // DB - AWS RDS
-    runtimeOnly 'mysql:mysql-connector-java'
-
-    // AWS - Configuration discovery
+    // Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
-    // AWS - authentication
-    implementation("software.amazon.awssdk:sts")
-
-    implementation(project(":app"))
+    // Database
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+    runtimeOnly("org.flywaydb:flyway-mysql")
+    runtimeOnly("mysql:mysql-connector-java")
 }
 
 application {
-    mainClass.set("catalogue.Application")
+    mainClass.set("catalogue.AwsApplication")
 }
 
 java {

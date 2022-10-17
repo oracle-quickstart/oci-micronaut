@@ -2,31 +2,21 @@
 
 A microservice demo that stores the MuShop shopping carts. The service is a Micronaut application written in Java and makes use of the following components:
 
-  * **Autonomous Database JSON** - Each shopping cart is stored in the autonomous database as a JSON document using [SODA (Simple Oracle Document Access)](https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/).  The microservice stores cart data using simple create, read, update, and delete operations over a collection of JSON documents.  For example:
+  * **Autonomous Database JSON** - Each shopping cart is stored in the autonomous database as a JSON document using [Oracle Database API for MongoDB](https://docs.oracle.com/en/database/oracle/mongodb-api/mgapi/overview-oracle-database-api-mongodb.html).  The microservice uses [Micronaut Data MongoDB](https://micronaut-projects.github.io/micronaut-data/latest/guide/#mongo) to execute create, read, update and delete operations over a collection of JSON documents.
     
-    ```java
-    OracleCollection col = db.openCollection("carts");
-    // insert a cart
-    OracleDocument doc = db.createDocumentFromString("{\"customerId\" : 123, \"items\" : [...] }")
-    col.save(doc);
-
-    // get a cart
-    doc = col.find().filter("{\"customerId\" : 123}").getOne()
-    ```
-    
-    See [src/main/java/mushop/carts/repositories/CartRepositoryDatabaseImpl.java](src/main/java/mushop/carts/repositories/CartRepositoryDatabaseImpl.java)
+    See [src/main/java/mushop/carts/repositories/CartRepository.java](src/main/java/mushop/carts/repositories/CartRepository.java)
 
     Why JSON in the Autonomous Database?
 
-    * **Flexibility** - the shopping cart service can evolve to store new attributes without modifying a database schema or existing SQL queries and DML. [Jackson](https://github.com/FasterXML/jackson) is used to automatically map basic [Cart](src/main/java/mushop/carts/entities/Cart.java) objects to and from JSON. Storing a new Cart attribute only requires modifying the Cart class (not the database, queries, or other parts of the application code).
+    * **Flexibility** - the shopping cart service can evolve to store new attributes without modifying a database schema or existing SQL queries and DML. [Micronaut Serialization](https://micronaut-projects.github.io/micronaut-serialization/snapshot/guide/#introduction) is used to automatically map basic [Cart](src/main/java/mushop/carts/entities/Cart.java) objects to and from JSON. Storing a new Cart attribute only requires modifying the Cart class (not the database, queries, or other parts of the application code).
 
     * **Performance** - JSON documents can be read and written with consistent **single-digit millisecond latency at scale**. The autonomous database can manually or automatically scale out to increase throughput based on demand.  A cart is read from the database without requiring any joins between underlying tables.  An ORM solution, such as [JPA](https://en.wikipedia.org/wiki/Java_Persistence_API), would likely use joins between an underlying _cart_ and _item_ table each time the [Cart](src/main/java/mushop/carts/entities/Cart.java) object is retrieved.  Such joins can be prohibitively expensive for highly concurrent workloads. Also, low-latency, high-throughput JSON performance is maintained **without sacrificing consistency, durability, or isolation** (sacrifices typically made in NoSQL databases).
 
     * **Analytics** - Oracle Database is the world's leading [translytic database](https://blogs.oracle.com/database/oracle-1-in-forresters-translytical-data-platforms-wave-v2).  Even though the cart microservice is written without using SQL, SQL can still be used to access JSON collections.  The data can be exposed, in-place, to existing analytics tools that don't necessarily support JSON and might use older database drivers.  There are no special restrictions on the types of queries that can be used over JSON collections.  In contrast, NoSQL databases typically have significant restrictions on the types of joins and subqueries that can be expressed and don't support standard SQL drivers such as JDBC.
 
       ```SQL
-      SELECT c.json_document.customerId
-      FROM carts c
+      SELECT c.data.customerId
+      FROM cart c
       ```
       See [sql/examples.sql](sql/examples.sql) for more examples of how SQL can be used over the _carts_ collection used by this service.
 
@@ -41,11 +31,12 @@ A microservice demo that stores the MuShop shopping carts. The service is a Micr
     ```java
     @Get("/{cartId}/items")
     List<Item> getCartItems(String cartId) {
-        Cart cart = cartRepository.getById(cartId);
-        if (cart == null) {
-            throw new HttpStatusException(HttpStatus.NOT_FOUND,
-                "Cart with id " + cartId + " not found");
-        }
+        Cart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new HttpStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Cart with id " + cartId + " not found"
+                )
+            );
         return cart.getItems();
     }
     ```
@@ -66,12 +57,12 @@ The MuShop application deploys this service using Helm, Kubernetes, and Docker. 
 
 # Running Locally
 
-This application uses Oracle Autonomous Database when running in Oracle Cloud. To run the application locally you can use a local Oracle database and modify the `datasources` configuration found in `src/main/resources/application.yml` accordingly.
+This application uses Oracle Autonomous Database when running in Oracle Cloud. To run the application locally you can use a local MongoDB database and modify the `datasources` configuration found in `src/main/resources/application.yml` accordingly.
 
-Alternatively you can run Oracle in a container with the following command:
+Alternatively you can run MongoDB in a container with the following command:
 
 ```bash
-$ docker run -p 1521:1521 -e ORACLE_PASSWORD=oracle gvenzl/oracle-xe
+$ docker run -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=mongopass -d mongo:tag
 ```
 
 Then start the application with:
@@ -138,5 +129,6 @@ When running the container image on an Oracle Compute Instance VM or via OKE the
 | `ORACLECLOUD_ATP_WALLET_PASSWORD` | password to encrypt the keys inside the wallet, that must be at least 8 characters long and must include at least 1 letter and either 1 numeric character or 1 special character |
 | `ORACLECLOUD_ATP_USERNAME` | The database username |
 | `ORACLECLOUD_ATP_PASSWORD` | The database password |
+| `ORACLECLOUD_ATP_HOST` | The database host |
 
 In addition [instance principal needs to be configured](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm) to ensure the VM or container has access to the necessary Oracle Cloud resources.

@@ -9,7 +9,7 @@ import mushop.carts.entities.Cart;
 /**
  * An interface to a collection of shopping carts (Cart objects).
  */
-@MongoRepository
+@MongoRepository(databaseName = "${carts.database}")
 public interface CartRepository extends CrudRepository<Cart, String> {
 
     /**

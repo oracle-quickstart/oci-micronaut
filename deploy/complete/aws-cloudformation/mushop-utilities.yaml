@@ -121,7 +121,7 @@ Resources:
               return send_response(event, response)
 
       Handler: index.lambda_handler
-      Runtime: python3.6
+      Runtime: python3.9
       Role: !GetAtt LambdaExecutionRole.Arn
       MemorySize: 128
       Timeout: 20

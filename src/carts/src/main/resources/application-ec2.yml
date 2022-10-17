@@ -5,11 +5,8 @@ micronaut:
         enabled: true
         namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
 
-carts:
-  database: mushop
-
 mongodb:
-  readPreference: SECONDARY
+  readPreference: PRIMARY
   ssl:
     enabled: true
   retry-writes: false

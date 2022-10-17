@@ -33,6 +33,7 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly("io.micronaut.flyway:micronaut-flyway")
+    runtimeOnly("org.flywaydb:flyway-mysql")
 
     // DB - OCI ATP
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")

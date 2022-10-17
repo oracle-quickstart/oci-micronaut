@@ -189,8 +189,8 @@ Metadata:
 Parameters:
   CloudFormationVersion:
     Type: String
-    AllowedValues: [ "3.1.0" ]
-    Default: "3.1.0"
+    AllowedValues: [ "3.3.0" ]
+    Default: "3.3.0"
     Description: Choose deployment version.
   AvailabilityZones:
     Description: List of Availability Zones to use for the subNumberOfAZsnets in the VPC. Three

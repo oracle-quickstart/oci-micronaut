@@ -49,5 +49,6 @@ endpoints:
 flyway:
   datasources:
     default:
+      enabled: true
       baseline-version: 0
       baseline-on-migrate: true

@@ -48,10 +48,6 @@ dependencies {
 
     // Caching
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
-
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:oracle-xe")
-    testImplementation("org.testcontainers:testcontainers")
 }
 
 application {

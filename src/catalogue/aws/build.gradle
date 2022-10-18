@@ -39,6 +39,8 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("org.flywaydb:flyway-mysql")
     implementation("mysql:mysql-connector-java")
+
+    testImplementation("org.testcontainers:mysql")
 }
 
 application {

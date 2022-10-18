@@ -22,23 +22,23 @@ dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
+        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
     }
 
     // Authentication
     implementation("software.amazon.awssdk:sts")
 
-    // Metrics
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
-
     // Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
 
+    // Metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
     // Database
     implementation("io.micronaut.data:micronaut-data-jdbc")
-    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
-    runtimeOnly("org.flywaydb:flyway-mysql")
-    runtimeOnly("mysql:mysql-connector-java")
+    implementation("org.flywaydb:flyway-mysql")
+    implementation("mysql:mysql-connector-java")
 }
 
 application {

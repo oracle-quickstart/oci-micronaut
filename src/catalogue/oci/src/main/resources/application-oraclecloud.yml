@@ -32,4 +32,4 @@ tracing:
 flyway:
   datasources:
     default:
-      enabled: false
+      locations: classpath:db/migration

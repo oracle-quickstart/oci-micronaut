@@ -49,8 +49,6 @@ public class DbSetup {
             return;
         }
 
-        boolean isOracleDB = databaseDriver.contains("oracle");
-
         LOGGER.info("Database driver: {}, going to setup DB: {}", databaseDriver, SETUP_SCRIPT);
         resourceLoader.getResourceAsStream(SETUP_SCRIPT).ifPresent((stream) -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {

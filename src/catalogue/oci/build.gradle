@@ -22,33 +22,20 @@ dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
+        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
     }
 
     // Metrics
     implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
+    // SDK
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
 
-
-
-
-
-    // DB - OCI ATP
-    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-
-
-
-
-
-
-    // database
+    // Database
     implementation("io.micronaut.data:micronaut-data-jdbc")
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    runtimeOnly("io.micronaut.flyway:micronaut-flyway")
-    runtimeOnly("com.oracle.database.jdbc:ojdbc11:21.6.0.0.1")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    implementation("com.oracle.database.jdbc:ojdbc11:21.6.0.0.1")
 }
 
 application {

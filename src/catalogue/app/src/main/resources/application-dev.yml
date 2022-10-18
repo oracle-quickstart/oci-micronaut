@@ -5,3 +5,8 @@ datasources:
     password: ''
     driverClassName: org.h2.Driver
     dialect: H2
+
+flyway:
+  datasources:
+    default:
+      locations: classpath:db/h2

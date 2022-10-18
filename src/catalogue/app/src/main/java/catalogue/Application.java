@@ -1,5 +1,6 @@
 package catalogue;
 
+import io.micronaut.context.env.Environment;
 import io.micronaut.core.annotation.TypeHint;
 import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -34,7 +35,7 @@ public class Application {
     public static void main(String[] args) {
         Micronaut.build(args)
                 .mainClass(Application.class)
-                .defaultEnvironments("dev")
+                .defaultEnvironments(Environment.DEVELOPMENT)
                 .start();
     }
 }

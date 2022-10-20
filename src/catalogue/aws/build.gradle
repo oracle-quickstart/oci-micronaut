@@ -25,6 +25,8 @@ dependencies {
         exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
     }
 
+    implementation("org.slf4j:jcl-over-slf4j")
+
     // Authentication
     implementation("software.amazon.awssdk:sts")
 
@@ -59,9 +61,17 @@ if (javaBaseImage == "graalvm") {
 }
 
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {
-  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/migration'")
+        }
+    }
 }

@@ -35,13 +35,13 @@ dependencies {
     // Database
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    implementation("com.oracle.database.jdbc:ojdbc11:21.6.0.0.1")
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
 
     testImplementation("org.testcontainers:oracle-xe")
 }
 
 application {
-    mainClass.set("catalogue.Application")
+    mainClass.set("catalogue.OciApplication")
 }
 
 java {
@@ -55,10 +55,22 @@ if (javaBaseImage == "graalvm") {
     }
 }
 
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
+}
+
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {
-  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+  images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/migration'")
+        }
+    }
 }

@@ -48,6 +48,8 @@ dependencies {
 
     // Caching
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
+
+    testImplementation(project(":tck"))
 }
 
 application {

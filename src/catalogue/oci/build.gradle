@@ -38,6 +38,7 @@ dependencies {
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
 
     testImplementation("org.testcontainers:oracle-xe")
+    testImplementation(project(":tck"))
 }
 
 application {

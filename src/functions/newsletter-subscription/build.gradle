@@ -45,6 +45,7 @@ tasks {
 
     dockerfileNative {
         args("-XX:MaximumHeapSizePercent=80")
+        instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
     }
 
     dockerBuild {

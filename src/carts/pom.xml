@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.7.0</version>
+        <version>3.7.2</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,7 +27,7 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.7.0</micronaut.version>
+        <micronaut.version>3.7.2</micronaut.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
     </properties>
 
@@ -203,7 +203,7 @@
                 <version>3.0.0</version>
                 <configuration>
                     <to>
-                        <image>iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
+                        <image>phx.ocir.io/oraclelabs/gcn-dev/dradosevic/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
                     </to>
                 </configuration>
             </plugin>         

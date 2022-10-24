@@ -31,7 +31,7 @@ To start the application you can run:
 ./gradlew run
 ```
 
-The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui
+The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui/
 
 Note that in order for the application to be functional it may require you to start an associated backend service. For example accessing the catalogue via:
 
@@ -84,7 +84,7 @@ The following table lists the service IDs the API application uses to discover s
 To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeImage
+./gradlew nativeCompile
 ```
 
 Once the native image is built you can run it with:

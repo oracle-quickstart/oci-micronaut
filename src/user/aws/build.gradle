@@ -1,0 +1,80 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("io.micronaut.application") version "3.4.0"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("user.*")
+    }
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
+    implementation(project(":app")) {
+        exclude group:'com.h2database', module:'h2'
+        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
+    }
+
+    implementation("org.slf4j:jcl-over-slf4j")
+
+    // Authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // Metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    // Database
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("org.flywaydb:flyway-mysql")
+    implementation("mysql:mysql-connector-java")
+
+    testImplementation("org.testcontainers:mysql")
+    testImplementation(project(":tck"))
+}
+
+application {
+    mainClass.set("user.AwsApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/migration'")
+        }
+    }
+}

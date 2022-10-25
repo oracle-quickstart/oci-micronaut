@@ -1,0 +1,18 @@
+plugins {
+    id("io.micronaut.application") version "3.4.0"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":app")) {
+        exclude group:'com.h2database', module:'h2'
+    }
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.data:micronaut-data-model")
+    implementation("org.junit.jupiter:junit-jupiter-api")
+}

@@ -3,12 +3,9 @@ package user.controllers;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import user.controllers.LoginOperations;
-import user.controllers.UserOperations;
 import user.controllers.dto.UserAddressDetailDto;
 import user.controllers.dto.UserAddressDto;
 import user.controllers.dto.UserCardDetailDto;
@@ -18,12 +15,10 @@ import user.controllers.dto.UserDto;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@MicronautTest
-public class UserControllerTest {
+public class AbstractUserControllerTest {
 
     @Inject
     UserClient client;
@@ -220,4 +215,5 @@ public class UserControllerTest {
     @Client("/")
     interface UserClient extends UserOperations, LoginOperations {
     }
+
 }

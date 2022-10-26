@@ -91,7 +91,11 @@ jobs:
           if [ -f "mvnw" ]; then
             ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress
           elif [ -f "gradlew" ]; then
-            ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon
+            if [ "${{ matrix.project-path }}" == "catalogue" ]; then
+              ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
+            else
+              ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon
+            fi
           fi
   docker-compose-test:
     if: success()

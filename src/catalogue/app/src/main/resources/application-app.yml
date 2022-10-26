@@ -1,3 +1,17 @@
+micronaut:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+
+endpoints:
+  prometheus:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
 datasources:
   default:
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE

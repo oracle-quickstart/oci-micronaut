@@ -1,3 +1,9 @@
+micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: false
+
 datasources:
   default:
     url: jdbc:tc:oracle:thin:@/xe

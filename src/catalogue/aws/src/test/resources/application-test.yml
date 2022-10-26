@@ -1,3 +1,9 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: false
+
 datasources:
   default:
     url: jdbc:tc:mysql:8:///db

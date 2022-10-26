@@ -20,15 +20,6 @@ micronaut:
     categories:
       initial-capacity: 20
   metrics:
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
-      oraclecloud:
-        enabled: false
-      cloudwatch:
-        enabled: false
     binders:
       cache:
         enabled: true

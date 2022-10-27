@@ -91,7 +91,7 @@ jobs:
           if [ -f "mvnw" ]; then
             ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress
           elif [ -f "gradlew" ]; then
-            if [ contains(fromJson('["catalogue", "user"]'), "${{ matrix.project-path }}") ]; then
+            if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" ]; then
               ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
             else
               ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon

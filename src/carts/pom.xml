@@ -203,7 +203,7 @@
                 <version>3.0.0</version>
                 <configuration>
                     <to>
-                        <image>phx.ocir.io/oraclelabs/gcn-dev/dradosevic/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
+                        <image>iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
                     </to>
                 </configuration>
             </plugin>         

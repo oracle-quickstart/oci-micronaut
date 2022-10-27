@@ -8,16 +8,6 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.micronaut.http.server.netty.encoders.HttpResponseEncoder;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import io.micronaut.http.netty.stream.HttpStreamsServerHandler;
-import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
-import io.micronaut.http.server.netty.SmartHttpContentCompressor;
-import io.netty.handler.codec.http.HttpServerKeepAliveHandler;
-import io.netty.handler.flow.FlowControlHandler;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.channel.DefaultChannelPipeline;
 
 @OpenAPIDefinition(
         info = @Info(

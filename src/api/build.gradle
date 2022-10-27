@@ -27,6 +27,7 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-session")
+    implementation("io.netty:netty-all:4.1.83.Final")
     runtimeOnly("ch.qos.logback:logback-classic")
 
     // Monitoring - Core

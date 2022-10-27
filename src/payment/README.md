@@ -35,7 +35,7 @@ To build the application into a GraalVM native image you can run:
 Once the native image is built you can run it with:
 
 ```bash
-./build/native-image/application
+./build/native/nativeCompile/payment
 ```
 
 # Deployment to Oracle Cloud

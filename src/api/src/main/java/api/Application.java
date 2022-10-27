@@ -28,27 +28,8 @@ import io.netty.channel.DefaultChannelPipeline;
 )
 
 @TypeHint(
-        typeNames = {
-                "io.netty.channel.DefaultChannelPipeline$HeadContext",
-                "io.netty.channel.DefaultChannelPipeline$TailContext",
-                "io.micronaut.security.authentication.ServerAuthentication",
-                "io.micronaut.http.server.netty.encoders.HttpResponseEncoder",
-                "io.netty.handler.stream.ChunkedWriteHandler",
-                "io.micronaut.http.netty.stream.HttpStreamsServerHandler",
-                "io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler",
-                "io.micronaut.http.server.netty.SmartHttpContentCompressor",
-                "com.github.benmanes.caffeine.cache.StripedBuffer",
-                "io.netty.handler.codec.http.HttpServerKeepAliveHandler",
-                "io.netty.handler.flow.FlowControlHandler",
-                "io.netty.handler.codec.http.HttpServerCodec",
-                "io.netty.handler.timeout.IdleStateHandler",
-                "io.netty.channel.DefaultChannelPipeline"},
-        accessType = {
-                TypeHint.AccessType.ALL_PUBLIC,
-                TypeHint.AccessType.ALL_PUBLIC_CONSTRUCTORS,
-                TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS,
-                TypeHint.AccessType.ALL_DECLARED_FIELDS
-        }
+        value = {ServerAuthentication.class},
+        accessType = {TypeHint.AccessType.ALL_PUBLIC}
 )
 @SecurityScheme(type = SecuritySchemeType.HTTP, name = Application.BASIC_AUTH, scheme = "basic")
 @SecurityScheme(type = SecuritySchemeType.APIKEY, name = Application.COOKIE_AUTH, in = SecuritySchemeIn.COOKIE, paramName = "SESSION")

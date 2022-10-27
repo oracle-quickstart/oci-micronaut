@@ -74,7 +74,7 @@ dockerBuild {
 }
 
 dockerBuildNative {
-    images = ["\"iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
 
 dockerfileNative {

@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
                 description = "Micronaut MuShop API"
         )
 )
-
 @TypeHint(
         value = {ServerAuthentication.class},
         accessType = {TypeHint.AccessType.ALL_PUBLIC}

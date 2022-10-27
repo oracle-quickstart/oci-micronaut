@@ -1,0 +1,77 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "3.4.0"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("catalogue.*")
+    }
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    implementation(project(":app")) {
+        exclude group:'com.h2database', module:'h2'
+        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
+    }
+
+    // Metrics
+    implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // SDK
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+
+    // Database
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+
+    testImplementation("org.testcontainers:oracle-xe")
+    testImplementation(project(":tck"))
+}
+
+application {
+    mainClass.set("catalogue.OciApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
+}
+
+dockerBuild {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add("-Dflyway.locations='classpath:db/migration'")
+        }
+    }
+}

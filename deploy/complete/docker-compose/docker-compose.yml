@@ -88,11 +88,8 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-app-graalvm:1.2.0-SNAPSHOT
     restart: always
-    depends_on:
-      oracledb:
-        condition: service_healthy
     cap_drop:
       - ALL
     cap_add:
@@ -100,10 +97,6 @@ services:
     read_only: true
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
-      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
-      - DATASOURCES_DEFAULT_USERNAME=catalogue
-      - DATASOURCES_DEFAULT_PASSWORD=micronaut
     logging:
       driver: "json-file"
       options:

@@ -29,7 +29,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}-{{.Values.global.cloud}}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080

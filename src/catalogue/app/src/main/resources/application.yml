@@ -1,0 +1,45 @@
+micronaut:
+  application:
+    name: catalogue
+  server:
+    thread-selection: io
+  executors:
+    io:
+      n-threads: 75
+      type: fixed
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/catalogue/images/**"
+        paths: "classpath:images"
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+  caches:
+    categories:
+      initial-capacity: 20
+  metrics:
+    binders:
+      cache:
+        enabled: true
+    enabled: true
+  data:
+    pageable:
+      default-page-size: -1
+      sort-parameter-name: sort
+      page-parameter-name: page
+      size-parameter-name: size
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      baseline-version: 0
+      baseline-on-migrate: true

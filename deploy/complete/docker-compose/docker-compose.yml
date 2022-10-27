@@ -163,22 +163,15 @@ services:
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-graalvm:1.2.0-SNAPSHOT
+    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
-    depends_on:
-      oracledb:
-        condition: service_healthy
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
-      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
-      - DATASOURCES_DEFAULT_USERNAME=muser
-      - DATASOURCES_DEFAULT_PASSWORD=micronaut
     logging:
       driver: "json-file"
       options:

@@ -20,7 +20,6 @@ micronaut {
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'

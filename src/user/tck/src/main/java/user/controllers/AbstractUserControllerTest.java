@@ -4,7 +4,6 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import user.controllers.dto.UserAddressDetailDto;
 import user.controllers.dto.UserAddressDto;
@@ -15,7 +14,8 @@ import user.controllers.dto.UserDto;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class AbstractUserControllerTest {
@@ -183,16 +183,16 @@ public class AbstractUserControllerTest {
             client.login("bunny", "badpassword");
             fail();
         } catch (HttpClientResponseException e) {
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
-            Assertions.assertEquals("Unauthorized", e.getMessage());
+            assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
+            assertEquals("Unauthorized", e.getMessage());
         }
 
         try {
             client.login("unknownusername", "spacejam");
             fail();
         } catch (HttpClientResponseException e) {
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
-            Assertions.assertEquals("Unauthorized", e.getMessage());
+            assertEquals(HttpStatus.UNAUTHORIZED, e.getStatus());
+            assertEquals("Unauthorized", e.getMessage());
         }
 
         client.deleteUser(userDetail.getId());

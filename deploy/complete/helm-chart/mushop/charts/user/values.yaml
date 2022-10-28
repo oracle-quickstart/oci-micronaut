@@ -1,13 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/user
   suffix: native
   tag: 2.0.0-SNAPSHOT
   pullPolicy: Always
 
 dbtools:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/dbtools
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/dbtools
   tag: 21.1.0
   pullPolicy: IfNotPresent
 

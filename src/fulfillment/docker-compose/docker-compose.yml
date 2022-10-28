@@ -11,7 +11,7 @@ services:
       - NET_BIND_SERVICE
     read_only: true
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment:1.0.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/fulfillment:1.0.0-SNAPSHOT
     restart: always
     read_only: true
     ports:

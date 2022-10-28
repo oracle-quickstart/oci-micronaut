@@ -72,18 +72,18 @@ java {
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
+        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
     }
 } else {
     dockerfile {
-        baseImage = "iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/openjdk:16-alpine"
+        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/openjdk:16-alpine"
     }
 }
 
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }

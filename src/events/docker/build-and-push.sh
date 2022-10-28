@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-REGISTRY=iad.ocir.io
-REPOSITORY=cloudnative-devrel/micronaut-showcase/mushop
+REGISTRY=phx.ocir.io
+REPOSITORY=oraclelabs/micronaut-showcase/mushop
 TAG=latest
 
 docker build -t ${REGISTRY}/${REPOSITORY}/kafka:${TAG} -f Dockerfile.kafkaclient .

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-REGISTRY=iad.ocir.io
-REPOSITORY=cloudnative-devrel/micronaut-showcase/mushop
+REGISTRY=phx.ocir.io
+REPOSITORY=oraclelabs/micronaut-showcase/mushop
 
 OPENJDK_TAG=16-alpine
 GRAALVM_TAG=java11-21.1.0

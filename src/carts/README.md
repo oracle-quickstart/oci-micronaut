@@ -110,7 +110,7 @@ The Docker image names to push to can be altered by editing the following lines 
 ```xml
 <configuration>
     <to>
-        <image>iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
+        <image>phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
     </to>
 </configuration>
 ```

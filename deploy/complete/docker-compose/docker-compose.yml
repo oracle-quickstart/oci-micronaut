@@ -3,7 +3,7 @@ version: "3"
 services:
 #  # Edge router application entrypoint
   edge-router:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/edge-router:1.1.0
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/edge-router:1.1.0
     hostname: edge-router
     restart: always
     ports:
@@ -18,7 +18,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/api-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/api-graalvm:1.2.0-SNAPSHOT
     hostname: api
     restart: always
     cap_drop:
@@ -36,7 +36,7 @@ services:
 
   # Static media assets
   assets:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/assets:1.1.3
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/assets:1.1.3
     restart: always
     cap_drop:
       - ALL
@@ -69,7 +69,7 @@ services:
 
   # Storefront frontend
   storefront:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/storefront:2.1.2
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/storefront:2.1.2
     restart: always
     cap_drop:
       - ALL
@@ -88,7 +88,7 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/catalogue-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/catalogue-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -105,7 +105,7 @@ services:
 
   # OCI Carts service
   carts:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -130,7 +130,7 @@ services:
 
   # OCI Orders service
   orders:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/orders-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/orders-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -163,7 +163,7 @@ services:
 
   # User service
   user:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/user-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/user-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -180,7 +180,7 @@ services:
 
   # Payment service
   payment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -198,7 +198,7 @@ services:
 
   # Fulfillment service
   fulfillment:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/fulfillment-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/fulfillment-graalvm:1.2.0-SNAPSHOT
     restart: always
     read_only: true
     tmpfs:

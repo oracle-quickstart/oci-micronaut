@@ -80,7 +80,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
       #
@@ -107,7 +107,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
           logout: false
@@ -179,7 +179,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
           logout: false

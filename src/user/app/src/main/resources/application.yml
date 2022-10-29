@@ -1,0 +1,29 @@
+micronaut:
+  application:
+    name: user
+  server:
+    thread-selection: io
+  executors:
+    io:
+      n-threads: 75
+      type: fixed
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+  metrics:
+    enabled: true
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      baseline-version: 0
+      baseline-on-migrate: true

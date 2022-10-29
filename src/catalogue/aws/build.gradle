@@ -69,14 +69,6 @@ dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
 
-graalvmNative {
-    binaries {
-        main {
-            buildArgs.add("-Dflyway.locations='classpath:db/migration'")
-        }
-    }
-}
-
 dockerfileNative {
     instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

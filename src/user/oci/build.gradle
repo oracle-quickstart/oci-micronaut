@@ -14,12 +14,13 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("catalogue.*")
+        annotations("user.*")
     }
 }
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
+
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
         exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
@@ -37,12 +38,16 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
 
+    runtimeOnly("com.oracle.database.security:oraclepki")
+    runtimeOnly("com.oracle.database.security:osdt_cert")
+    runtimeOnly("com.oracle.database.security:osdt_core")
+
     testImplementation("org.testcontainers:oracle-xe")
     testImplementation(project(":tck"))
 }
 
 application {
-    mainClass.set("catalogue.OciApplication")
+    mainClass.set("user.OciApplication")
 }
 
 java {
@@ -67,4 +72,3 @@ dockerBuild {
 dockerBuildNative {
     images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
-

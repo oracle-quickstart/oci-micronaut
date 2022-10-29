@@ -14,14 +14,16 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("catalogue.*")
+        annotations("user.*")
     }
 }
 
 dependencies {
-    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
+    implementation("org.mapstruct:mapstruct:1.5.3.Final")
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
@@ -42,18 +44,16 @@ dependencies {
     implementation("io.micronaut.tracing:micronaut-tracing-core")
     implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
 
+    // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
     runtimeOnly("ch.qos.logback:logback-classic")
-
-    // Caching
-    implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     testImplementation(project(":tck"))
 }
 
 application {
-    mainClass.set("catalogue.Application")
+    mainClass.set("user.Application")
 }
 
 java {
@@ -81,8 +81,4 @@ graalvmNative {
             buildArgs.add("-Dflyway.locations=classpath:db/h2")
         }
     }
-}
-
-dockerfileNative {
-    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

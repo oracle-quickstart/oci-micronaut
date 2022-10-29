@@ -27,7 +27,7 @@ spec:
       serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}-{{ .Values.global.cloud }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NAMESPACE="iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/"
+NAMESPACE="phx.ocir.io/oraclelabs/micronaut-showcase/mushop/"
 TAG=$(<VERSION)
 
 IMAGE=${NAMESPACE}$(basename $(pwd)):"${TAG}"

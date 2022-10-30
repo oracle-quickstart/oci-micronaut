@@ -80,7 +80,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
       #
@@ -107,7 +107,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
           logout: false
@@ -179,7 +179,7 @@ jobs:
       - name: Login to OCIR
         uses: docker/login-action@v1
         with:
-          registry: iad.ocir.io
+          registry: phx.ocir.io
           username: ${{ secrets.OCI_USERNAME }}
           password: ${{ secrets.OCI_TOKEN }}
           logout: false
@@ -189,7 +189,7 @@ jobs:
         run: |
           if [ -f "mvnw" ]; then
           if [ "${{ matrix.project-path }}" == "carts" ]; then
-              ./mvnw deploy -Dpackaging=docker -Djib.from.image=iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
+              ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
             else
               ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress
           fi
@@ -202,7 +202,7 @@ jobs:
         run: |
           if [ -f "mvnw" ]; then
             if [ "${{ matrix.project-path }}" == "carts" ]; then
-              ./mvnw deploy -Dpackaging=docker -Djib.from.image=iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/base/openjdk:16-alpine --no-transfer-progress
+              ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/openjdk:16-alpine --no-transfer-progress
             else
               ./mvnw deploy -Dpackaging=docker --no-transfer-progress
             fi

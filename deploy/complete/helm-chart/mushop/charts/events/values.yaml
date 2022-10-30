@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/events
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/events
   suffix: native
   tag: 2.0.0-SNAPSHOT
   pullPolicy: Always
@@ -9,7 +9,7 @@ image:
 # Applied only for AWS cloud. The init job creates the topics
 initJob:
   image:
-    repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/kafka
+    repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/kafka
     tag: latest
     pullPolicy: Always
   auth:

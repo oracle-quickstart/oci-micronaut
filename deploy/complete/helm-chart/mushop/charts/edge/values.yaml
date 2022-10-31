@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/edge-router
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/edge-router
   tag: 1.1.0
   pullPolicy: IfNotPresent
 

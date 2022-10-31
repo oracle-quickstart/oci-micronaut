@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/payment
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment
   suffix: native
   tag: 2.0.0-SNAPSHOT
   pullPolicy: Always

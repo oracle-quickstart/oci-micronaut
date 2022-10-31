@@ -49,11 +49,11 @@ tasks {
     }
 
     dockerBuild {
-        images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+        images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
     }
 
     dockerBuildNative {
-        images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+        images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
     }
 }
 

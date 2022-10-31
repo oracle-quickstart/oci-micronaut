@@ -19,11 +19,11 @@ Structure
 
    Typically with a Microservice architecture the majority of services are not directly exposed to the outside world and a single gateway Microservice acts to secure and route requests to other services.
 
-   The `api` application is an HTTP gateway application that is responsibile for security and routing to the different Microservices that occupy the backend and are not directly exposed over the internet. 
+   The `api` application is an HTTP gateway application that is responsible for security and routing to the different Microservices that occupy the backend and are not directly exposed over the internet. 
 
 ### The `assets` project
 
-   In order to serve static assets (images, large files etc.) the `assets` Microservice is responsible for optimizing and deliverying assets served up from Object Storage. This application is currently written as a Node application.
+   In order to serve static assets (images, large files etc.) the `assets` Microservice is responsible for optimizing and delivering assets served up from Object Storage. This application is currently written as a Node application.
 
 ### The `carts` project
 
@@ -33,9 +33,9 @@ Structure
 
 ### The `catalogue` project
 
-   The `catalogue` project is responsible for managing the information about the range of products available on the Micronaut MuShop store front.
+   The `catalogue` project is responsible for managing the information about the range of products available on the Micronaut MuShop storefront.
 
-   A relational database is used to store and retrieve product informatino.
+   A relational database is used to store and retrieve product information.
 
 ### The `events` project
 
@@ -49,7 +49,7 @@ Structure
 
 ### The `functions` project
 
-   Contains Serverless functions. Currently only a single function which is responsible for handling subscriptions to to a hypothetical mailing list for Micronaut MuShop users.
+   Contains Serverless functions. Currently only a single function which is responsible for handling subscriptions to a hypothetical mailing list for Micronaut MuShop users.
 
 ### The `orders` project
 

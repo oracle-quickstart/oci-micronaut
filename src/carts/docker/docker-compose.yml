@@ -2,7 +2,7 @@ version: '2'
 
 services:
   carts:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/carts:1.0.2-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts:1.0.2-SNAPSHOT
     hostname: carts
     restart: always
     read_only: true

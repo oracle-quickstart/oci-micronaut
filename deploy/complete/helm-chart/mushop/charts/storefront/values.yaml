@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/storefront
+  repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/storefront
   tag: 2.1.2
   pullPolicy: IfNotPresent
 

@@ -73,12 +73,12 @@ The Docker image names to push to can be altered by editing the following lines 
 
 ```groovy
 dockerBuild {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
 }
 
 
 dockerBuildNative {
-    images = ["iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
 }
 ```
 

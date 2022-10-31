@@ -29,13 +29,13 @@ The available endpoints can then be browsed at http://localhost:8080/swagger/vie
 To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeImage
+./gradlew nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native-image/application
+./build/native/nativeCompile/payment
 ```
 
 # Deployment to Oracle Cloud

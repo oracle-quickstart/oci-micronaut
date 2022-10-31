@@ -43,20 +43,20 @@ Then start the application with:
 ./gradlew run
 ```
 
-The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui
+The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui/
 
 # Building and Running a GraalVM Native Image
 
 To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeImage
+./gradlew nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native-image/application
+./build/native/nativeCompile/events
 ```
 
 # Deployment to Oracle Cloud

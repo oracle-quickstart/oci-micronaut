@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "3.4.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
 }
 
 group = "micronaut.mushop"
@@ -78,7 +78,11 @@ dockerBuildNative {
 graalvmNative {
     binaries {
         main {
-            buildArgs.add("-Dflyway.locations='classpath:db/h2'")
+            buildArgs.add("-Dflyway.locations=classpath:db/h2")
         }
     }
+}
+
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

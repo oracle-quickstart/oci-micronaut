@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.4.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
 }
 
 group = "micronaut.mushop"
@@ -27,6 +27,7 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-session")
+    implementation("io.netty:netty-all:4.1.83.Final")
     runtimeOnly("ch.qos.logback:logback-classic")
 
     // Monitoring - Core
@@ -98,4 +99,8 @@ graalvmNative {
             buildArgs.add('--initialize-at-run-time=org.bouncycastle.asn1.ASN1UTF8String')
         }
     }
+}
+
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

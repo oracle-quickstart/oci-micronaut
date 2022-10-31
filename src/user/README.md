@@ -64,13 +64,13 @@ The available endpoints can be browsed at http://localhost:8080/swagger/views/sw
 To build the application into a GraalVM native image you can run, go to one of the subprojects and execute:
 
 ```bash
-./gradlew nativeImage
+./gradlew nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native-image/application
+./build/native/nativeCompile/user
 ```
 
 # Deployment to Oracle Cloud

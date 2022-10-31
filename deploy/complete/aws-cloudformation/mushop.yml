@@ -107,6 +107,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "kafka-cluster:*"
+                  - "kafka:DescribeCluster"
                 Resource: !Ref MSKClusterArn
 
 

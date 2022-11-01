@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package mushop.carts.test;
+package mushop.carts;
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
@@ -27,8 +27,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,6 @@ public class CartRepositoryMongoTest implements TestPropertyProvider {
     @Inject
     CartRepository cartRepository;
 
-    @Nonnull
     @Override
     public Map<String, String> getProperties() {
         mongoDBContainer.start();

@@ -1,15 +1,15 @@
-package mushop.carts.test;
+package mushop.carts;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import jakarta.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.micronaut.core.annotation.NonNull;

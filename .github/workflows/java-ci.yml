@@ -214,13 +214,9 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            if [ "${{ matrix.project-path }}" == "carts" ]; then
-              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app
-              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
-              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
-            else
-              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
-            fi
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPushNative --no-daemon
           fi

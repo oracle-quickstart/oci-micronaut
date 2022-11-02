@@ -62,6 +62,7 @@ graalvmNative {
     binaries.configureEach {
         buildArgs.add("--initialize-at-build-time=newsletter.subscription")
         buildArgs.add("--static")
+        buildArgs.add("--add-exports=org.graalvm.nativeimage.builder/com.oracle.svm.core.jni=ALL-UNNAMED")
     }
 }
 

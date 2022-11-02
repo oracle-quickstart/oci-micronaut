@@ -57,7 +57,7 @@ To run the application locally go to the `app` subproject and execute:
 ./gradlew run
 ```
 
-The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui
+The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui/
 
 # Building and Running a GraalVM Native Image
 

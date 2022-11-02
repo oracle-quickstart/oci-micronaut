@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.7.2</version>
+        <version>3.7.3</version>
     </parent>
 
     <groupId>micronaut.mushop</groupId>
@@ -27,7 +27,7 @@
         <release.version>11</release.version>
         <exec.mainClass>mushop.carts.Application</exec.mainClass>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.7.2</micronaut.version>
+        <micronaut.version>3.7.3</micronaut.version>
         <docker.image.suffix>openjdk</docker.image.suffix>
     </properties>
 

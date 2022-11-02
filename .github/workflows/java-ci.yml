@@ -89,7 +89,7 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress -pl app
           elif [ -f "gradlew" ]; then
             if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" ]; then
               ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
@@ -214,7 +214,13 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
+            if [ "${{ matrix.project-path }}" == "carts" ]; then
+              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app
+              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
+              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
+            else
+              ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
+            fi
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPushNative --no-daemon
           fi

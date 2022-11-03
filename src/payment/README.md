@@ -22,7 +22,7 @@ You can start the application with:
 ./gradlew run
 ```
 
-The available endpoints can then be browsed at http://localhost:8080/swagger/views/swagger-ui
+The available endpoints can then be browsed at http://localhost:8080/swagger/views/swagger-ui/
 
 # Building and Running a GraalVM Native Image
 

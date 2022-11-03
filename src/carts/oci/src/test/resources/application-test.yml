@@ -1,0 +1,5 @@
+micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: false

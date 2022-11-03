@@ -3,7 +3,7 @@
 The MuShop application is a showcase of several [Oracle Cloud
 Infrastructure](https://cloud.oracle.com/en_US/cloud-infrastructure) services in
 a unified reference application.  This version is written entirely in the
-Micronaut framework using the [Graal Cloud Native](https://cloud.graal) (GCN)
+Micronaut framework using the Graal Cloud Native (GCN)
 toolkit. See the [full
 documentation](https://oracle-quickstart.github.io/oci-micronaut) for a detailed
 explanation and deployment options. 

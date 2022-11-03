@@ -1,17 +1,17 @@
-Micronaut MuShop Sources
+MuShop Sources
 =======
 
 Introduction
 ----
 
-This directory contains the sources of the Micronaut MuShop implementation.
+This directory contains the sources of the Micronaut with Graal Cloud Native toolkit version of MuShop.
 
-For introductory information and getting started documentation on deployment see the [reference documentation](https://oracle-quickstart.github.io/oci-micronaut/index.html) for Micronaut MuShop.
+For introductory information and getting started documentation on deployment see the [reference documentation](https://oracle-quickstart.github.io/oci-micronaut/index.html) for MuShop.
 
 Structure
 ---
 
-   The sources are split into a number of subprojects each of which implement an application in the Micronaut MuShop Microservice architecture.
+   The sources are split into a number of subprojects each of which implement an application in the MuShop Microservice architecture.
 
    A summary of each directory of importance (some directories are simply utilities and can be ignored) and the purpose of the application is described below:
 
@@ -19,23 +19,23 @@ Structure
 
    Typically with a Microservice architecture the majority of services are not directly exposed to the outside world and a single gateway Microservice acts to secure and route requests to other services.
 
-   The `api` application is an HTTP gateway application that is responsible for security and routing to the different Microservices that occupy the backend and are not directly exposed over the internet. 
+   The `api` application is an HTTP gateway application that is responsibile for security and routing to the different Microservices that occupy the backend and are not directly exposed over the internet. 
 
 ### The `assets` project
 
-   In order to serve static assets (images, large files etc.) the `assets` Microservice is responsible for optimizing and delivering assets served up from Object Storage. This application is currently written as a Node application.
+   In order to serve static assets (images, large files etc.) the `assets` Microservice is responsible for optimizing and deliverying assets served up from Object Storage. This application is currently written as a Node application.
 
 ### The `carts` project
 
-   The `carts` subproject's purpose is to manage shopping carts in the Micronaut MuShop application.
+   The `carts` subproject's purpose is to manage shopping carts in the MuShop application.
 
    These shopping carts are stored in the user session and persisted using document database storage.
 
 ### The `catalogue` project
 
-   The `catalogue` project is responsible for managing the information about the range of products available on the Micronaut MuShop storefront.
+   The `catalogue` project is responsible for managing the information about the range of products available on the MuShop store front.
 
-   A relational database is used to store and retrieve product information.
+   A relational database is used to store and retrieve product informatino.
 
 ### The `events` project
 
@@ -45,11 +45,11 @@ Structure
 
 ### The `fullfillment` project
 
-   A small Microservice that simulates processing the final order for product sold on the Micronaut MuShop.
+   A small Microservice that simulates processing the final order for product sold on the MuShop.
 
 ### The `functions` project
 
-   Contains Serverless functions. Currently only a single function which is responsible for handling subscriptions to a hypothetical mailing list for Micronaut MuShop users.
+   Contains Serverless functions. Currently only a single function which is responsible for handling subscriptions to to a hypothetical mailing list for MuShop users.
 
 ### The `orders` project
 

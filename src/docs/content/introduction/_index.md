@@ -4,9 +4,12 @@ draft: false
 weight: -100
 ---
 
-## Goals of the Micronaut MuShop
+## Goals of MuShop
 
-- Explore the integration of [Micronaut](https://micronaut.io) with [cloud native](https://www.oracle.com/cloud/cloud-native/) services offered by Oracle Cloud Infrastructure
+- Explore the integration of the [Micronaut framework](https://micronaut.io) using the [Graal
+  Cloud Native](https://cloud.graal) toolkit with services offered by Oracle
+  Cloud Infrastructure for [cloud
+  native](https://www.oracle.com/cloud/cloud-native/) development.
 - Build and deploy microservices with [Container Engine for Kubernetes](https://www.oracle.com/cloud/compute/container-engine-kubernetes.html) (OKE)
 - Experience Oracle Cloud services integrated within a single microservices project
 - Provide reference implementations and sample code for _real-world_ application development with Micronaut and Oracle Cloud

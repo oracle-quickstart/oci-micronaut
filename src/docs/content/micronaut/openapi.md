@@ -9,7 +9,7 @@ In the original MuShop sample application most of the applications defined [manu
 
 Keeping the OpenAPI documentation for a service aligned with the actual code can be a real challenge.
 
-With the Micronaut MuShop every single applications defines an accessible OpenAPI definition available via Swagger UI.
+With MuShop every single applications defines an accessible OpenAPI definition available via Swagger UI.
 
 
 For example you can `cd` into the `api` service and run the application with:

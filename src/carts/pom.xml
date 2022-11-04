@@ -21,7 +21,7 @@
 
     <groupId>micronaut.mushop.carts</groupId>
     <artifactId>carts-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <name>carts</name>
     <description>Cart service</description>
@@ -29,6 +29,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <revision>2.0.0-SNAPSHOT</revision>
         <jdk.version>11</jdk.version>
         <release.version>11</release.version>
         <micronaut.runtime>netty</micronaut.runtime>
@@ -99,6 +100,31 @@
                         <arg>-Amicronaut.processing.module=carts</arg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

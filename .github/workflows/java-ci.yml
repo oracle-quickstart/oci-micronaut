@@ -216,7 +216,7 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            # Install only the `lib` module to the local repository so it can be used for building images
+            # Install only the `lib` module to the local repository so it can be used for building `app`, `aws` and `oci` images
             ./mvnw install -pl -app,-aws,-oci
             # Build and deploy images one by one since the micronaut-maven-plugin doesn't support building of native images by executing `deploy` command on the parent in the multi module project
             ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app

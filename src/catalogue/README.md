@@ -1,6 +1,6 @@
 # Catalogue
 
-A microservices demo service written as a Micronaut application in Java that provides catalogue/product information.
+A microservice demo service written as a Micronaut application in Java that provides catalogue/product information.
 
 The `app` subproject contains the application code with no Cloud specific dependencies or configuration.
 
@@ -52,7 +52,7 @@ The available endpoints can be browsed at http://localhost:8080/swagger/views/sw
 
 # Building and Running a GraalVM Native Image
 
-To build the application into a GraalVM native image you can run, go to one of the subprojects and execute:
+To build the application into a GraalVM native image, go to one of the subprojects and execute:
 
 ```bash
 ./gradlew nativeCompile

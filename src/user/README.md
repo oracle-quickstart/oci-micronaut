@@ -61,7 +61,7 @@ The available endpoints can be browsed at http://localhost:8080/swagger/views/sw
 
 # Building and Running a GraalVM Native Image
 
-To build the application into a GraalVM native image you can run, go to one of the subprojects and execute:
+To build the application into a GraalVM native image, go to one of the subprojects and execute:
 
 ```bash
 ./gradlew nativeCompile

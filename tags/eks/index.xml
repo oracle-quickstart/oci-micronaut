@@ -17,7 +17,7 @@
       <pubDate>Thu, 05 Mar 2020 15:34:14 -0700</pubDate>
       
       <guid>/quickstart/aws-cloudformation/</guid>
-      <description>Deploys complete Micronaut MuShop to Amazon Elastic Kubernetes Service (EKS) in combination with Amazon DocumentDb (with MongoDB compatibility), Amazon Relational Database Service (RDS) and Amazon Managed Streaming for Apache Kafka (MSK).
+      <description>Deploys the complete MuShop to Amazon Elastic Kubernetes Service (EKS) in combination with Amazon DocumentDb (with MongoDB compatibility), Amazon Relational Database Service (RDS) and Amazon Managed Streaming for Apache Kafka (MSK).
 Prerequisites AWS account with configured billing.
 Note that the charges will be applied since used services are not part of the AWS Free Tier.
  Create stack To start with the AWS Cloudformation click on the following button (currently disabled for maintenance):</description>

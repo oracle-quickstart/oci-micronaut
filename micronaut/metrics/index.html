@@ -627,7 +627,7 @@
   <p>The original MuShop applications implemented exposing metrics inconsistently with some applications exporting metrics and others not. The applications that did export metrics provided support only for Prometheus, for example in the Go code:</p>
 <div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">r</span><span class="p">.</span><span class="nf">Handle</span><span class="p">(</span><span class="s">&#34;/metrics&#34;</span><span class="p">,</span> <span class="nx">promhttp</span><span class="p">.</span><span class="nf">Handler</span><span class="p">())</span>
 </code></pre></div><p>Micronaut builds on <a href="https://micrometer.io">Micrometer</a> and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.</p>
-<p>Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</p>
+<p>Every single application in the MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">micronaut</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="k">metrics</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="k">export</span><span class="p">:</span><span class="w">

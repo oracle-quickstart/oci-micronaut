@@ -65,7 +65,7 @@ func (s *catalogueService) Health() []Health { var health []Health dbstatus := &
       <guid>/micronaut/metrics/</guid>
       <description>The original MuShop applications implemented exposing metrics inconsistently with some applications exporting metrics and others not. The applications that did export metrics provided support only for Prometheus, for example in the Go code:
 r.Handle(&amp;#34;/metrics&amp;#34;, promhttp.Handler()) Micronaut builds on Micrometer and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.
-Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</description>
+Every single application in the MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:</description>
     </item>
     
     <item>
@@ -98,7 +98,7 @@ func (s *catalogueService) Count(categories []string) (int, error) { query := &a
       <guid>/micronaut/openapi/</guid>
       <description>In the original MuShop sample application most of the applications defined manually crafted OpenAPI definitions that in fact were in some cases out-of-date with the actual state of the code.
 Keeping the OpenAPI documentation for a service aligned with the actual code can be a real challenge.
-With the Micronaut MuShop every single applications defines an accessible OpenAPI definition available via Swagger UI.
+With MuShop every single applications defines an accessible OpenAPI definition available via Swagger UI.
 For example you can cd into the api service and run the application with:</description>
     </item>
     
@@ -164,8 +164,9 @@ None of the Micronaut applications feature a Dockerfile which is provided automa
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/micronaut/native/</guid>
-      <description>Every single application in the Micronaut MuShop can be built into a GraalVM native image and deployed natively as well as in JIT mode allowing the developer to flexibly choose their preferred deployment model and benefit from massive reductions in memory usage and startup time when choosing native.
-To build any of the services into a native image simply navigate to the to the project directory and if using Gradle run:</description>
+      <description>Every single application in MuShop can be built into a GraalVM native image and deployed natively as well as in JIT mode allowing the developer to flexibly choose their preferred deployment model and benefit from massive reductions in memory usage and startup time when choosing native.
+To build any of the services into a native image simply navigate to the to the project directory and if using Gradle run:
+./gradlew nativeImage Or if the project is using Maven run:</description>
     </item>
     
   </channel>

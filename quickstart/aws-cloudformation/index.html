@@ -666,7 +666,7 @@
 
             <h1 class="rw-accent">[AWS] Cloudformation</h1>
               
-  <p>Deploys complete Micronaut MuShop to <a href="https://aws.amazon.com/eks/">Amazon Elastic Kubernetes Service (EKS)</a> in combination with <a href="https://aws.amazon.com/documentdb/">Amazon DocumentDb (with MongoDB compatibility)</a>, <a href="https://aws.amazon.com/rds/">Amazon Relational Database Service (RDS)</a> and <a href="https://aws.amazon.com/msk/">Amazon Managed Streaming for Apache Kafka (MSK)</a>.</p>
+  <p>Deploys the complete MuShop to <a href="https://aws.amazon.com/eks/">Amazon Elastic Kubernetes Service (EKS)</a> in combination with <a href="https://aws.amazon.com/documentdb/">Amazon DocumentDb (with MongoDB compatibility)</a>, <a href="https://aws.amazon.com/rds/">Amazon Relational Database Service (RDS)</a> and <a href="https://aws.amazon.com/msk/">Amazon Managed Streaming for Apache Kafka (MSK)</a>.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>AWS account with configured billing.</p>
 <div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: warning; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
@@ -677,7 +677,7 @@
 </br></p>
 <!-- [![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml) -->
 <p>Proceed to specify stack details:
-<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-create.png" alt="Micronaut Mushop stack create"></p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-create.png" alt="Mushop stack create"></p>
 </div></p>
 <h2 id="specify-stack-details">Specify stack details</h2>
 <p>The stack contains lot of configuration options for AWS services. Majority of the options are already preconfigured however there are few options that needs to be configured manually:</p>
@@ -686,16 +686,16 @@
 <li><code>VPC network configuration</code> - Insert the number of selected availability zones.</li>
 <li><code>SSH key name</code> - select existing or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair">create new ec2 keypair</a>. This keypair is used to access the bastion host.</li>
 </ul>
-<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Micronaut Mushop stack configure"></p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Mushop stack configure"></p>
 </div>
 <p>Once you have provided the values, proceed next to the stack options.</p>
 <h2 id="stack-options">Stack options</h2>
 <p>Configure here the Cloudformation stack options. Generally you can skip this page and proceed to the Stack Review page.</p>
-<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Micronaut Mushop stack options"></p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-mandatory.png" alt="Mushop stack options"></p>
 </div>
 <h2 id="review">Review</h2>
 <p>On this page review the configuration options and check all requested capabilities. Then hit <code>Create stack</code> button.</p>
-<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-review.png" alt="Micronaut Mushop stack review"></p>
+<div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-review.png" alt="Mushop stack review"></p>
 </div>
 <div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: info; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
 <p>Note that if you do not check all required capabilities the stack won&rsquo;t be completely created.</p>
@@ -708,7 +708,7 @@
 <li><code>MSKStack</code> - stack deploys the AWS MSK, deployment time ~40-60minutes</li>
 <li><code>RDSStack</code> - stack deploys the AWS RDS with MySQL engine, deployment time ~10minutes</li>
 <li><code>MushopUtilitiesStack</code> - stack deploys helper Lambda functions, deployment time ~5 minutes</li>
-<li><code>MuShop</code> - stack creates configuration options in the AWS Secret Manager, AWS Parameter Store and uses MuShop Helm chart to deploy the Micronaut MuShop application to the EKS.</li>
+<li><code>MuShop</code> - stack creates configuration options in the AWS Secret Manager, AWS Parameter Store and uses MuShop Helm chart to deploy the MuShop application to the EKS.</li>
 </ul>
 <p>The deployment of the complete stack takes around ~60-90 minutes. Once finished the <code>Outputs</code> tab will contain the url of the application as well as the IP of bastion host (if requested to create).</p>
 

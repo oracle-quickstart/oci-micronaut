@@ -30,7 +30,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("payment.AwsApplication")
+    mainClass.set("payment.OciApplication")
 }
 
 java {

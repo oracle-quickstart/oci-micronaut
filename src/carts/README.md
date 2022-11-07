@@ -99,16 +99,17 @@ The available endpoints can be browsed at http://localhost:8080/swagger/views/sw
 
 # Building and Running a GraalVM Native Image
 
-To build the application into a GraalVM native image, go to one of the subprojects and execute:
+To build the application into a GraalVM native image you can run:
 
 ```bash
-./mvnw package -Dpackaging=native-image
+./mvnw install -pl -app,-aws,-oci
+./mvnw package -Dpackaging=native-image -pl app
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./target/carts
+./app/target/carts-app
 ```
 
 # Deployment to Oracle Cloud
@@ -117,16 +118,18 @@ The entire MuShop application can be deployed with the [Helm Chart](../../deploy
 
 However, if you wish to deploy the carts service manually you can do so.
 
-First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), go to one of the subprojects and deploy the container image with:
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), then you can deploy the container image with:
 
 ```bash
-./mvnw deploy -Dpackaging=docker
+./mvnw install -pl -app,-aws,-oci
+./mvnw deploy -Dpackaging=docker -pl oci
 ```
 
 Or the native version with:
 
 ```bash
-./mvnw deploy -Dpackaging=docker-native
+./mvnw install -pl -app,-aws,-oci
+./mvnw deploy -Dpackaging=docker-native -pl oci
 ```
 
 The Docker image names to push to can be altered by editing the following lines in [pom.xml](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/carts/pom.xml#L224-L228):

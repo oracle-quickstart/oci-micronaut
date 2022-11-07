@@ -1,0 +1,19 @@
+micronaut:
+  application:
+    name: carts
+  metrics:
+    enabled: true
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+carts:
+  database: mushop

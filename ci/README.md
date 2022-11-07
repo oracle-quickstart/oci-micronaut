@@ -1,4 +1,4 @@
-# Micronaut MuShop CI
+# MuShop CI
 
 Project uses GitHub Actions for CI/CD.
 

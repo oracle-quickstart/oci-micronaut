@@ -13,7 +13,7 @@ r.Handle("/metrics", promhttp.Handler())
 
 Micronaut builds on [Micrometer](https://micrometer.io) and supports exporting Metrics to over a dozen metrics backends including Prometheus and Oracle Cloud.
 
-Every single application in the Micronaut MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:
+Every single application in the MuShop demonstration exports metrics consistently and uniformally through the addition of this simple configuration:
 
 ```yaml
 micronaut:

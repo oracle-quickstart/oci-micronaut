@@ -2,8 +2,8 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
 # 
 
-title: "Micronaut MuShop Cloud Native App"
-description: "MuShop: eCommerce microservices demo Micronaut App for Oracle's Container Engine for Kubernetes (OKE)"
+title: "Micronaut with Graal Cloud Native(GCN) MuShop App"
+description: "MuShop: eCommerce microservices demo Micronaut App using GCN for Oracle's Container Engine for Kubernetes (OKE)"
 informationalText: "This stack provision a new OKE cluster (optionally can re-use an existent one), enable Kubernetes cluster autoscaler, provision Oracle Streaming and Oracle Functions along with ATP database and create the necessary tables for the app to run, provision Object Storage with catalogue service images. Deploy the MuShop Complete App. It also allows you to change advanced features for the Kubernetes cluster and the app, such as Node Pool details, Customer-Managed Encryption Keys with OCI Vault (KMS), and more"
 schemaVersion: 1.1.0
 version: "20190304"
@@ -29,7 +29,7 @@ variableGroups:
     # - mushop_atp
     # - mushop_oss
 
-  - title: "Micronaut MuShop"
+  - title: "Micronaut with GCN MuShop"
     variables:
     - mushop_micronaut_service_version
     
@@ -187,9 +187,9 @@ variables:
       - "native"
       - "graalvm"
       - "openjdk"
-    title: "Micronaut MuShop service version"
+    title: "Micronaut with GCN MuShop service version"
     default: "native"
-    description: "Every Micronaut MuShop service has one of three version: using GraalVM for java runtime, using openjdk for java runtime and GraalVM native image."
+    description: "Every Micronaut with GCN MuShop service has one of three version: using GraalVM for java runtime, using openjdk for java runtime and GraalVM native image."
     required: true
 
   show_advanced:

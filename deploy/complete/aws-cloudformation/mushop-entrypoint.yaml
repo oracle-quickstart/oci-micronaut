@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Deploys Micronaut MuShop to an EKS cluster.
+Description: Deploys MuShop to an EKS cluster.
 Metadata:
   AutoInstance:
     NodeInstanceType:
@@ -44,7 +44,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Micronaut MuShop CloudFormation Version
+          default: Mushop CloudFormation Version
         Parameters:
           - CloudFormationVersion
           - MMSS3BucketName
@@ -124,9 +124,9 @@ Metadata:
       QSS3BucketRegion:
         default: Quick Start S3 bucket Region
       MMSS3BucketName:
-        default: Micronaut MuShop CloudFormation configuration bucket
+        default: Mushop CloudFormation configuration bucket
       MMSS3BucketRegion:
-        default: Micronaut MuShop CloudFormation configuration region
+        default: Mushop CloudFormation configuration region
       RemoteAccessCIDR:
         default: Allowed external access CIDR
       NodeInstanceType:
@@ -225,15 +225,15 @@ Parameters:
       hosted. When using your own bucket, you must specify this value.
     Type: String
   MMSS3BucketName:
-    Description: Micronaut MuShop CloudFormation configuration bucket
+    Description: Mushop CloudFormation configuration bucket
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Micronaut MuShop start bucket name can include numbers, lowercase
+    ConstraintDescription: Mushop start bucket name can include numbers, lowercase
         letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
         (-).
     Default: micronaut-mushop-aws
     Type: String
   MMSS3BucketRegion:
-    Description: Micronaut MuShop CloudFormation configuration region
+    Description: Mushop CloudFormation configuration region
     Type: String
     Default: 'us-west-2'
   RemoteAccessCIDR:

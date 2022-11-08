@@ -24,6 +24,11 @@ micronaut:
       cache:
         enabled: true
     enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
   data:
     pageable:
       default-page-size: -1
@@ -33,6 +38,10 @@ micronaut:
 
 endpoints:
   health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  prometheus:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS

@@ -3,6 +3,11 @@ micronaut:
     name: payment
   metrics:
     enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
   router:
     static-resources:
       swagger:
@@ -15,6 +20,10 @@ payment:
 
 endpoints:
   health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  prometheus:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS

@@ -23,7 +23,6 @@ dependencies {
 
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
-        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
     }
 
     // Metrics

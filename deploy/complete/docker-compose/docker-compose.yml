@@ -180,7 +180,7 @@ services:
 
   # Payment service
   payment:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL

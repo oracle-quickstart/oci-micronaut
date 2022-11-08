@@ -93,7 +93,7 @@ jobs:
             ./mvnw install -Drevision=$GITHUB_SHA -pl -app,-aws,-oci
             ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Drevision=$GITHUB_SHA --no-transfer-progress -pl app
           elif [ -f "gradlew" ]; then
-            if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" ]; then
+            if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" || "${{ matrix.project-path }}" == "payment" ]; then
               ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
             else
               ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon

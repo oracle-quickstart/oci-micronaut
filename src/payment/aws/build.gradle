@@ -1,0 +1,57 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("payment.*")
+    }
+}
+
+dependencies {
+    implementation(project(":app")) {
+        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
+    }
+
+    // Metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    testImplementation(project(":tck"))
+}
+
+application {
+    mainClass.set("payment.AwsApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerBuild {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
+}

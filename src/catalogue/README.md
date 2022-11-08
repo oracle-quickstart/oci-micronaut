@@ -42,26 +42,26 @@ The MuShop application deploys this service using Helm, Kubernetes, and Docker. 
 
 # Running Locally
 
-To run the application locally go to the `app` subproject and execute:
+You can start the application with:
 
 ```bash
-./gradlew run
+./gradlew :app:run
 ```
 
 The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui/
 
 # Building and Running a GraalVM Native Image
 
-To build the application into a GraalVM native image, go to one of the subprojects and execute:
+To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeCompile
+./gradlew :app:nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native-image/application
+./app/build/native/nativeCompile/app
 ```
 
 # Deployment to Oracle Cloud
@@ -70,16 +70,16 @@ The entire MuShop application can be deployed with the [Helm Chart](../../deploy
 
 However, if you wish to deploy the catalogue service manually you can do so.
 
-First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), go to one of the subprojects and deploy the container image with:
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), then you can deploy the container image with:
 
 ```bash
-./gradlew dockerPush
+./gradlew :oci:dockerPush
 ```
 
 Or the native version with:
 
 ```bash
-./gradlew dockerPushNative
+./gradlew :oci:dockerPushNative
 ```
 
 The Docker image names to push to can be altered by editing the following lines in subproject build.gradle files.
@@ -96,7 +96,6 @@ dockerBuildNative {
 ```
 
 When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](oci/src/main/resources/application-oraclecloud.yml) configuration file:
-
 
 
 | Env Var | Description |

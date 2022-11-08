@@ -3,20 +3,12 @@ micronaut:
     name: payment
   metrics:
     enabled: true
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
-      oraclecloud:
-        enabled: false
-      cloudwatch:
-        enabled: false
   router:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
+
 payment:
   decline:
     amount: 200
@@ -24,8 +16,5 @@ payment:
 endpoints:
   health:
     enabled: true
-    sensitive: false
-    details-visible: ANONYMOUS
-  prometheus:
     sensitive: false
     details-visible: ANONYMOUS

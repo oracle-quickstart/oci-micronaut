@@ -19,9 +19,7 @@ micronaut {
 }
 
 dependencies {
-    implementation(project(":app")) {
-        exclude group:'io.micronaut.micrometer', module:'micronaut-micrometer-registry-prometheus'
-    }
+    implementation(project(":app"))
 
     // Metrics
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")

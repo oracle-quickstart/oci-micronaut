@@ -1,6 +1,12 @@
 # ![MuShop Logo](./images/logo.png)
 
-The MuShop for Micronaut® is a showcase of several [Oracle Cloud Infrastructure](https://cloud.oracle.com/en_US/cloud-infrastructure) services in a unified reference application, written entirely in the Micronaut framework. See the [full documentation](https://oracle-quickstart.github.io/oci-micronaut) for a detailed explanation and deployment options. 
+The MuShop application is a showcase of several [Oracle Cloud
+Infrastructure](https://cloud.oracle.com/en_US/cloud-infrastructure) services in
+a unified reference application.  This version is written entirely in the
+Micronaut framework using the Graal Cloud Native (GCN)
+toolkit. See the [full
+documentation](https://oracle-quickstart.github.io/oci-micronaut) for a detailed
+explanation and deployment options. 
 
 This project is a fork of the [original MuShop implementation](https://github.com/oracle-quickstart/oci-cloudnative) which used different technologies for each individual Microservice application and is designed as a demonstration of how to use the Micronaut framework to build applications for Oracle Cloud.
 
@@ -23,7 +29,7 @@ Alternatively you can manually upload the Oracle Cloud Resource Manager [zip fil
 To deploy locally with Docker, follow [these instructions](https://oracle-quickstart.github.io/oci-micronaut/quickstart/dockecompose/). 
 
 ### Helm
-MuShop for Micronaut is a Complete is a Microservices application built to showcase a cloud-native approach to application development on Oracle Cloud Infrastructure with the Micronaut framework & GraalVM using Oracle's [cloud native](https://www.oracle.com/cloud/cloud-native/) services. MuShop Complete uses a Kubernetes cluster, and can be deployed using the provided `helm` charts. It is recommended to use an Oracle Container Engine for Kubernetes cluster, however other Kubernetes distributions will also work.
+MuShop is a Microservices application built to showcase a cloud-native approach to application development on Oracle Cloud Infrastructure with the Micronaut framework & GraalVM using Oracle's [cloud native](https://www.oracle.com/cloud/cloud-native/) services. MuShop uses a Kubernetes cluster, and can be deployed using the provided `helm` charts. It is recommended to use an Oracle Container Engine for Kubernetes cluster, however other Kubernetes distributions will also work.
 
 The [helm chart documentation](https://oracle-quickstart.github.io/oci-micronaut/quickstart/helm/) walks through the deployment process and various options for customizing the deployment.
 
@@ -39,7 +45,7 @@ Deploy the complete MuShop with all Oracle Cloud services automatically using th
 
 The following diagram shows the topology created by this stack.
 
-![MuShop Complete Infra](./images/complete/00-Topology.png)
+![MuShop Infra](./images/complete/00-Topology.png)
 
 ## Questions
 

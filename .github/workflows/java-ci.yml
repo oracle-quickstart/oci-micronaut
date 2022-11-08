@@ -89,7 +89,9 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Dproject.version=$GITHUB_SHA --no-transfer-progress
+            # Install only the `lib` module to the local repository so it can be used for building the `app` image
+            ./mvnw install -Drevision=$GITHUB_SHA -pl -app,-aws,-oci
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Drevision=$GITHUB_SHA --no-transfer-progress -pl app
           elif [ -f "gradlew" ]; then
             if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" || "${{ matrix.project-path }}" == "payment" ]; then
               ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
@@ -214,7 +216,12 @@ jobs:
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
-            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm
+            # Install only the `lib` module to the local repository so it can be used for building `app`, `aws` and `oci` images
+            ./mvnw install -pl -app,-aws,-oci
+            # Build and deploy images one by one since the micronaut-maven-plugin doesn't support building of native images by executing `deploy` command on the parent in the multi module project
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
+            ./mvnw deploy -Dpackaging=docker-native -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPushNative --no-daemon
           fi

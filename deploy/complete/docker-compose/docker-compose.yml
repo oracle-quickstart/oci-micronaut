@@ -105,7 +105,7 @@ services:
 
   # OCI Carts service
   carts:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL

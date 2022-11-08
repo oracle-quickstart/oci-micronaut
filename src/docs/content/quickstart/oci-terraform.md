@@ -25,21 +25,21 @@ To start with the [OCI Resource Manager](https://docs.oracle.com/en-us/iaas/Cont
 
 The link will redirect you to the Resource manager create stack page. Before the Resource manager will load the Terraform templates, you have to comply with Terms of Use.
 {{% width 1-2 %}}
-![Micronaut Mushop stack create](../images/oci/oci-stack-welcome.png)
+![Mushop stack create](../images/oci/oci-stack-welcome.png)
 {{% /width %}}
 
 
 Once you agree with the Terms of Use, the Resource manager loads the stack configuration written in Terraform:
 {{% width 1-2 %}}
-![Micronaut Mushop stack create](../images/oci/oci-stack-welcome-reviewed.png)
+![Mushop stack create](../images/oci/oci-stack-welcome-reviewed.png)
 {{% /width %}}
 
 ## Configure stack variables
 
-The stack contains lot of configuration options where all of them are already preconfigured. Optionally you can enable additionally services that will be deployed along the full Micronaut MuShop application.
+The stack contains lot of configuration options where all of them are already preconfigured. Optionally you can enable additionally services that will be deployed along the full Mushop application.
 
 {{% width 1-2 %}}
-![Micronaut Mushop stack configure](../images/oci/oci-stack-configure.png)
+![Mushop stack configure](../images/oci/oci-stack-configure.png)
 {{% /width %}}
 
 These are:
@@ -52,7 +52,7 @@ These are:
 Review the stack info and select the `Run apply` to immediately run the Terraform scripts right after confirmation.  
 
 {{% width 1-2 %}}
-![Micronaut Mushop stack configure](../images/oci/oci-stack-review.png)
+![Mushop stack configure](../images/oci/oci-stack-review.png)
 {{% /width %}}
 
 ## Deployment
@@ -60,7 +60,7 @@ Review the stack info and select the `Run apply` to immediately run the Terrafor
 The deployment of the complete stack takes around ~40 minutes. Once the Apply job is finished the outputs resource contains the stack details:
 
 {{% width 1-2 %}}
-![Micronaut Mushop stack outputs](../images/oci/oci-stack-outputs.png)
+![Mushop stack outputs](../images/oci/oci-stack-outputs.png)
 {{% /width %}}
 
 

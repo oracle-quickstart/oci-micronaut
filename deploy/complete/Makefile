@@ -3,7 +3,7 @@
 #
 # Global AWS configuration
 AWS_S3_BUCKET                  := micronaut-mushop-aws
-AWS_S3_REGION                  := us-west-2
+AWS_S3_REGION                  := us-east-1
 
 #
 # Include external configuration

@@ -8,7 +8,7 @@ tags:
   - Docker Compose
 ---
 
-The complete **Micronaut MuShop** application can be run using `docker-compose` locally.
+The complete **MuShop** application can be run using `docker-compose` locally.
 
 ## Default Configuration
 

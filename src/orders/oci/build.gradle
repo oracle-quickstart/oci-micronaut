@@ -28,6 +28,22 @@ dependencies {
     // Metrics
     implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+
+    // SDK
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
+
+    // Database
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
+
+    runtimeOnly("com.oracle.database.security:oraclepki")
+    runtimeOnly("com.oracle.database.security:osdt_cert")
+    runtimeOnly("com.oracle.database.security:osdt_core")
+
+    testImplementation(project(":tck"))
+    testImplementation("io.micronaut.nats:micronaut-nats")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:oracle-xe")
 }
 
 application {

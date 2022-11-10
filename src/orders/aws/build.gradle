@@ -39,6 +39,11 @@ dependencies {
 
     // Database
     implementation("mysql:mysql-connector-java")
+
+    testImplementation(project(":tck"))
+    testImplementation("io.micronaut.nats:micronaut-nats")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql")
 }
 
 application {

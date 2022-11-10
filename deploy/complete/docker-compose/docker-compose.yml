@@ -114,9 +114,11 @@ services:
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid
+    depends_on:
+      mongo:
+        condition: service_started
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
-      - MICRONAUT_ENVIRONMENTS=dockercompose
       - MONGO_USER=mongoadmin
       - MONGO_PASS=mongopass
       - MONGO_HOST=mongo

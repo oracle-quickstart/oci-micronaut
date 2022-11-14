@@ -18,7 +18,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/api-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/api-graalvm:2.0.0-SNAPSHOT
     hostname: api
     restart: always
     cap_drop:
@@ -88,7 +88,7 @@ services:
 
   # OCI Catalog service
   catalogue:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/catalogue-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/catalogue-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -105,7 +105,7 @@ services:
 
   # OCI Carts service
   carts:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/carts-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -132,7 +132,7 @@ services:
 
   # OCI Orders service
   orders:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/orders-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/orders-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -161,7 +161,7 @@ services:
 
   # User service
   user:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/user-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/user-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -178,7 +178,7 @@ services:
 
   # Payment service
   payment:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment-app-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/payment-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -196,7 +196,7 @@ services:
 
   # Fulfillment service
   fulfillment:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/fulfillment-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/fulfillment-app-graalvm:2.0.0-SNAPSHOT
     restart: always
     read_only: true
     tmpfs:

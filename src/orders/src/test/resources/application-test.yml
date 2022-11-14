@@ -1,6 +1,0 @@
-datasources:
-  default:
-    username: system
-    url: jdbc:tc:oracle:thin:@/xe
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    password: oracle

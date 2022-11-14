@@ -34,6 +34,6 @@ abstract class AbstractFulfillmentSpec extends Specification implements TestProp
 
     @NonNull
     Map<String, String> getProperties() {
-        return ["nats.addresses": "nats://localhost:${natsContainer.getMappedPort(4222)}"]
+        return ["nats.addresses": "nats://${natsContainer.getHost()}:${natsContainer.getMappedPort(4222)}"]
     }
 }

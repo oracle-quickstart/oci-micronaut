@@ -6,12 +6,9 @@ package mushop
 
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
 
-
-@MicronautTest
-class FulfillmentControllerSpec extends AbstractFulfillmentSpec {
+abstract class AbstractFulfillmentControllerSpec extends AbstractFulfillmentSpec {
 
     @Inject
     @Client("/fulfillment")

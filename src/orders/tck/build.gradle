@@ -1,0 +1,21 @@
+plugins {
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":app")) {
+        exclude group:'com.h2database', module:'h2'
+    }
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.test:micronaut-test-junit5")
+    implementation("io.projectreactor:reactor-core")
+    implementation("org.mockito:mockito-core")
+    implementation("org.testcontainers:junit-jupiter")
+}

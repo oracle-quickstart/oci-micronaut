@@ -114,9 +114,11 @@ services:
     read_only: true
     tmpfs:
       - /tmp:rw,noexec,nosuid
+    depends_on:
+      mongo:
+        condition: service_started
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
-      - MICRONAUT_ENVIRONMENTS=dockercompose
       - MONGO_USER=mongoadmin
       - MONGO_PASS=mongopass
       - MONGO_HOST=mongo
@@ -130,7 +132,7 @@ services:
 
   # OCI Orders service
   orders:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/orders-graalvm:1.2.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/orders-app-graalvm:1.2.0-SNAPSHOT
     restart: always
     cap_drop:
       - ALL
@@ -140,18 +142,14 @@ services:
     tmpfs:
       - /tmp:rw,noexec,nosuid
     depends_on:
-      oracledb:
-        condition: service_healthy
+      nats:
+        condition: service_started
     environment:
       - MICRONAUT_ENV_DEDUCTION=false
       - NATS_HOST=nats
       - NATS_PORT=4222
       - ORDERS_NEW=mushop-orders
       - ORDERS_SHIPPED=mushop-shipments
-      - DATASOURCES_DEFAULT_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
-      - DATASOURCES_DEFAULT_URL=jdbc:oracle:thin:system/oracle@oracledb:1521:xe
-      - DATASOURCES_DEFAULT_USERNAME=orders
-      - DATASOURCES_DEFAULT_PASSWORD=micronaut
       - MICRONAUT_HTTP_SERVICES_USERS_URL=http://user:8080
       - MICRONAUT_HTTP_SERVICES_CARTS_URL=http://carts:8080
       - MICRONAUT_HTTP_SERVICES_PAYMENT_URL=http://payment:8080
@@ -227,12 +225,6 @@ services:
     cap_add:
       - NET_BIND_SERVICE
     read_only: true
-
-  oracledb:
-    image: iad.ocir.io/cloudnative-devrel/micronaut-showcase/mushop/oracle-database:18.4.0-xe
-    restart: always
-    volumes:
-      - ./dbinit:/opt/oracle/scripts/startup
 
   mongo:
     image: mongo

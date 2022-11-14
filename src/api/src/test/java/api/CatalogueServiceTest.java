@@ -30,10 +30,9 @@ public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
     @NonNull
     @Override
     public Map<String, String> getProperties() {
-        boolean useOracleDB = true;
         boolean useMongoDB = false;
         boolean useNats = false;
-        return getProperties(useOracleDB, useMongoDB, useNats);
+        return getProperties(useMongoDB, useNats);
     }
 
     @Test

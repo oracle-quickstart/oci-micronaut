@@ -1,0 +1,194 @@
+/**
+ * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * The Universal Permissive License (UPL), Version 1.0
+ */
+
+// Define the GCN colors
+
+$gcn-blue: #176AFF;
+$gcn-blue-light: #C4D1EE;
+$gcn-blue-lighter: #F3F7FF;
+$gcn-blue-dark: #2A3443;
+$gcn-blue-darker: #212832;
+$gcn-blue-darkest: #171923;
+
+$gcn-orange: #F68831;
+$gcn-grey: #8b96ad;
+$gcn-white: #FFFFFF;
+
+// additional colors for code syntax
+
+$gcn-code-green: #99cc99;
+$gcn-code-orange: #f99157;
+$gcn-code-red: #cc9999;
+$gcn-code-blue: #9999cc;
+$gcn-code-purple: #cc99cc;
+$gcn-code-pink: #f95794;
+$gcn-code-yellow: #f9d157;
+
+// Configurations
+
+$o-red:        $gcn-code-red;
+$o-white:      $gcn-white;
+$o-black:      $gcn-blue-darkest;
+$o-neutral:    #312d2a;
+$o-yellow:     $gcn-code-yellow;
+$o-mauve:      #713a47;
+$o-orange:     $gcn-code-orange;
+$o-green:      $gcn-code-green;
+$o-ocean:      #2c5967;
+$o-blue:       $gcn-code-blue;
+$o-teal:       #41817e;
+$o-beige:      #a79f88;
+$o-slate:      #869e9e;
+$o-grey:       #8B8580;
+$o-grey-lt:    #cbc5bf;
+$o-grey-dk:    #67605b;
+$o-muted:      #79726d;
+$o-purple:     $gcn-code-purple;
+$o-pink:       $gcn-code-pink;
+
+$o-brown:      #403c38;
+$o-brown-lt:   #56504b;
+$o-brown-dk:   #383330;
+
+$o-theme-bg:        $gcn-blue-lighter;
+$o-theme-text:      $gcn-blue-darkest;
+$o-darktheme-bg:    $gcn-blue-darkest;
+$o-darktheme-text:  $gcn-blue-light;
+
+$o-link-color: $gcn-blue;
+$o-link-secondary-color: #f9dab1;
+$o-inverse-emphasis: $gcn-blue;
+
+// Custom UIKit variables and variable overrides
+
+// Global variables
+// ========================================================================
+$global-color:                                   $o-theme-text;
+$global-emphasis-color:                          #000;
+$global-muted-color:                             $o-muted;
+$global-font-size:                               16px;
+
+$global-link-color:                              $gcn-blue;
+$global-link-hover-color:                        $gcn-orange;
+$global-inverse-color:                           $o-darktheme-text;
+
+$global-background:                              $o-theme-bg;
+$global-muted-background:                        darken($o-theme-bg, 5%);
+$global-primary-background:                      $gcn-blue-darker;
+$global-secondary-background:                    $o-darktheme-bg;
+$global-success-background:                      $o-green;
+$global-warning-background:                      $gcn-orange;
+$global-danger-background:                       $o-red;
+
+// inverse
+$inverse-global-color:                           $global-inverse-color;
+$inverse-global-emphasis-color:                  lighten($global-inverse-color, 20%);
+$inverse-global-muted-color:                     $inverse-global-color;
+$inverse-global-subtext-color:                   rgba($global-inverse-color, 0.7);
+$inverse-global-inverse-color:                   $global-color;
+$inverse-global-primary-background:              $global-primary-background;
+$inverse-global-secondary-background:            $global-secondary-background;
+$inverse-global-muted-background:                rgba($global-inverse-color, 0.1);
+$inverse-global-border:                          rgba($global-inverse-color, 0.2);
+
+
+// Base
+$base-selection-background:       $o-grey-lt;
+$base-blockquote-font-size:       0.9rem;
+$inverse-base-link-color:         $global-link-color;
+$inverse-base-link-hover-color:   $global-link-hover-color;
+$base-em-color:                   $o-brown;
+
+// Typography
+$global-font-family: "OracleSans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+
+// Navbar
+$navbar-nav-item-height:          60px;
+$navbar-background:               $gcn-blue-darker;
+$navbar-nav-item-color:           $global-inverse-color;
+$inverse-navbar-nav-item-color:   $global-inverse-color;
+
+// Nav
+$nav-primary-item-font-size:              1.3rem;
+// $inverse-nav-primary-item-color:          $inverse-global-muted-color;
+// $inverse-nav-primary-item-hover-color:    $inverse-global-color;
+// $inverse-nav-primary-item-active-color:   $inverse-global-emphasis-color;
+$inverse-nav-default-item-color:          $gcn-white;
+$inverse-nav-default-item-hover-color:    $gcn-blue-light;
+$inverse-nav-default-item-active-color:   $gcn-orange;
+$inverse-nav-primary-item-color:          $inverse-nav-default-item-color;
+$inverse-nav-primary-item-hover-color:    $inverse-nav-default-item-hover-color;
+$inverse-nav-primary-item-active-color:   $inverse-nav-default-item-active-color;
+$inverse-nav-primary-sublist-item-color:          $inverse-nav-primary-item-color;
+$inverse-nav-primary-sublist-item-hover-color:    $inverse-nav-primary-item-hover-color;
+$inverse-nav-primary-sublist-item-active-color:   $inverse-nav-primary-item-active-color;
+
+// Button
+$button-small-padding-horizontal:           10px;
+$button-small-line-height:                  25px;
+
+$inverse-button-default-color:              $global-color;
+$inverse-button-default-hover-color:        $global-color;
+$inverse-button-default-active-color:       $inverse-global-color;
+$inverse-button-default-background:         $global-background;
+$inverse-button-default-active-background:  $inverse-global-primary-background;
+// $inverse-button-default-hover-background:   $o-brown-dk;
+
+// Secondary button (including toggle buttons)
+$inverse-button-secondary-color:              $gcn-blue-darkest;
+$inverse-button-secondary-hover-color:        $gcn-white;
+$inverse-button-secondary-active-color:       $gcn-white;
+$inverse-button-secondary-background:         $gcn-blue-light;
+$inverse-button-secondary-hover-background:   $gcn-blue;
+$inverse-button-secondary-active-background:  $gcn-orange;
+
+// Search input
+$search-input-background: $gcn-blue-dark;
+$search-input-color:      $gcn-blue-light;
+
+// Label
+$label-background:          $gcn-orange;
+$label-text-color:          $gcn-white;
+$inverse-label-color:       $inverse-global-color;
+$label-hover-text-color:    $gcn-blue-darkest;
+
+// Code
+$pre-background:            $gcn-blue-dark;
+$pre-text-color:            $gcn-white;
+
+$code-background:           $gcn-orange;
+$code-background-dark:      $gcn-white;
+$code-text-color:           $gcn-white;
+$code-text-color-dark:      $gcn-blue-darkest;
+
+// Breadcrumb
+$breadcrumb-item-color:          $gcn-grey;
+$breadcrumb-item-active-color:   $gcn-blue-darkest;
+$breadcrumb-divider-color:       $gcn-blue-darkest;
+$breadcrumb-item-color-dark:          $gcn-grey;
+$breadcrumb-item-active-color-dark:   $gcn-white;
+$breadcrumb-divider-color-dark:       $gcn-white;
+
+// content nav
+$content-nav-text-color:         $gcn-grey;
+$content-nav-active-text-color:  $gcn-blue-darkest;
+$content-nav-hover-text-color:   $gcn-orange;
+$content-nav-text-color-dark:           $gcn-grey;
+$content-nav-active-text-color-dark:    $gcn-white;
+$content-nav-hover-text-color-dark:     $gcn-orange;
+
+// Alert
+$alert-primary-background:  lighten($global-primary-background,3%);
+$alert-primary-color:       $o-white;
+
+$alert-success-background:  lighten($global-success-background, 3%);
+$alert-success-color:       $o-white;
+
+$alert-warning-background:  lighten($global-warning-background, 0%);
+$alert-warning-color:       $o-white;
+
+$alert-danger-background:   lighten($global-danger-background, 3%);
+$alert-danger-color:        $o-white;
+

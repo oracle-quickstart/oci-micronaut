@@ -9,13 +9,22 @@
 @import "mixins";
 
 // Main
-main { 
+main {
+  font-weight: 200;
   > p {
     img {
       display: block;
       margin: 0 auto;
     }
   }
+  a {
+    text-decoration: none !important;
+  }
+}
+
+// Search input
+.uk-search-icon svg {
+    color: $search-input-color;
 }
 
 // Nav
@@ -161,7 +170,7 @@ footer {
     width: $global-medium-margin;
     height: 6px;
     margin: $global-margin 0;
-    background: $o-red;
+    background: $gcn-orange;
   }
   &.rw-accent-yellow:after { background: $o-yellow; }
   &.rw-accent-orange:after { background: $o-orange; }

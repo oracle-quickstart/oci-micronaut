@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: orders
+    name: fulfillment
   server:
     port: 8082
   metrics:
@@ -10,15 +10,12 @@ micronaut:
         enabled: true
         descriptions: true
         step: PT1M
-      oraclecloud:
-        enabled: false
-      cloudwatch:
-        enabled: false
   router:
     static-resources:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
+
 endpoints:
   health:
     enabled: true

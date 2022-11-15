@@ -1,0 +1,20 @@
+plugins {
+    id("groovy")
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":app"))
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.nats:micronaut-nats")
+    implementation("io.micronaut:micronaut-inject-groovy")
+    implementation("io.micronaut.test:micronaut-test-spock")
+    implementation("org.testcontainers:spock")
+    implementation("org.testcontainers:testcontainers")
+}

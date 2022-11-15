@@ -8,14 +8,10 @@ import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.nats.annotation.NatsListener
 import io.micronaut.nats.annotation.Subject
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
 import spock.util.concurrent.AsyncConditions
 
-
-
-@MicronautTest
-class FulfillmentListenerSpec extends AbstractFulfillmentSpec {
+abstract class AbstractFulfillmentListenerSpec extends AbstractFulfillmentSpec {
 
     @Inject
     @Client("/fulfillment")

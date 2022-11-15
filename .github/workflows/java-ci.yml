@@ -44,7 +44,7 @@ jobs:
           if [ -f "mvnw" ]; then
               ./mvnw test --no-transfer-progress
           elif [ -f "gradlew" ]; then
-              ./gradlew check --no-daemon --parallel --continue
+              ./gradlew check --no-daemon --continue
           fi
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
@@ -93,10 +93,10 @@ jobs:
             ./mvnw install -Drevision=$GITHUB_SHA -pl -app,-aws,-oci
             ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Drevision=$GITHUB_SHA --no-transfer-progress -pl app
           elif [ -f "gradlew" ]; then
-            if [ "${{ matrix.project-path }}" == "catalogue" || "${{ matrix.project-path }}" == "user" || "${{ matrix.project-path }}" == "payment" || "${{ matrix.project-path }}" == "orders" ]; then
-              ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
-            else
+            if [ "${{ matrix.project-path }}" == "api" ]; then
               ./gradlew dockerPush -Pversion=$GITHUB_SHA --no-daemon
+            else
+              ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
             fi
           fi
   docker-compose-test:

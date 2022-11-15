@@ -4,6 +4,18 @@ This service represents a fulfillment system in an e-commerce platform. The key 
 
 The service is implemented as a Micronaut application written in Java.
 
+The `app` subproject contains the application code with no Cloud specific dependencies or configuration.
+
+The `aws` subproject depends on the `app` project and introduces configuration (defined in `aws/src/main/resources/application-ec2.yml`) and dependencies (defined in `aws/build.gradle`) that integrate the application with services of AWS:
+
+* AWS CloudWatch Metrics
+* AWS CloudWatch Tracing
+
+The `oci` subproject depends on the `app` project and introduces configuration (defined in `oci/src/main/resources/application-oraclecloud.yml`) and dependencies (defined in `oci/build.gradle`) that integrate the application with services of Oracle Cloud:
+
+* Oracle Cloud Application Monitoring (Metrics)
+* Oracle Cloud Application Performance Monitoring (Tracing)
+
 ## Messaging with NATS.io
 
 The messaging system used is [nats.io](https://nats.io). NATS is a production ready messaging system that is extremely lightweight. It's also a cloud-native CNCF project with Kubernetes and Prometheus integrations.
@@ -32,7 +44,7 @@ docker run -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
 Then start the application with:
 
 ```bash
-./gradlew run
+./gradlew :app:run
 ```
 
 The available endpoints can be browsed at http://localhost:8082/swagger/views/swagger-ui/
@@ -42,13 +54,13 @@ The available endpoints can be browsed at http://localhost:8082/swagger/views/sw
 To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeCompile
+./gradlew :app:nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native/nativeCompile/fulfillment
+./app/build/native/nativeCompile/app
 ```
 
 # Deployment to Oracle Cloud
@@ -57,32 +69,32 @@ The entire MuShop application can be deployed with the [Helm Chart](../../deploy
 
 However, if you wish to deploy the fulfillment service manually you can do so.
 
-First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm) then you can deploy the container image with:
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), then you can deploy the container image with:
 
 ```bash
-./gradlew dockerPush
+./gradlew :oci:dockerPush
 ```
 
 Or the native version with:
 
 ```bash
-./gradlew dockerPushNative
+./gradlew :oci:dockerPushNative
 ```
 
-The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/fulfillment/build.gradle#L70-L76):
+The Docker image names to push to can be altered by editing the following lines in subproject build.gradle files.
 
 ```groovy
 dockerBuild {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 
 dockerBuildNative {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
 ```
 
-When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](src/main/resources/application-oraclecloud.yml) configuration file:
+When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](oci/src/main/resources/application-oraclecloud.yml) configuration file:
 
 
 | Env Var | Description |

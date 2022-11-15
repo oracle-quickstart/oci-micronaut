@@ -44,7 +44,7 @@ jobs:
           if [ -f "mvnw" ]; then
               ./mvnw test --no-transfer-progress
           elif [ -f "gradlew" ]; then
-              ./gradlew check --no-daemon --parallel --continue
+              ./gradlew check --no-daemon --continue
           fi
         env:
           TESTCONTAINERS_RYUK_DISABLED: true

@@ -18,7 +18,7 @@ services:
 
   # Storefront application middleware
   api:
-    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/api-graalvm:2.0.0-SNAPSHOT
+    image: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/api-app-graalvm:2.0.0-SNAPSHOT
     hostname: api
     restart: always
     cap_drop:

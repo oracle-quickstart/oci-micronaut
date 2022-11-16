@@ -51,6 +51,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 
     testImplementation(project(":tck"))
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {

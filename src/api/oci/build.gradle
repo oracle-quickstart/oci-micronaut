@@ -25,6 +25,7 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
     testImplementation(project(":tck"))
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {

@@ -20,7 +20,6 @@ import io.micronaut.http.cookie.Cookie;
 import io.micronaut.http.uri.UriTemplate;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -38,9 +37,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Testcontainers
-@MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PlaceOrderTest extends AbstractDatabaseServiceTest {
+abstract class AbstractPlaceOrderTest extends AbstractDatabaseServiceTest {
 
     private static String sessionID;
 
@@ -66,7 +64,7 @@ public class PlaceOrderTest extends AbstractDatabaseServiceTest {
 
     @Test
     void testPlaceOrder(
-            CartsServiceTest.CartClient cartClient,
+            AbstractCartsServiceTest.CartClient cartClient,
             UsersClient usersClient,
             OrdersApiClient ordersApiClient) {
         final HttpStatus status = cartClient.addItem(sessionID, Map.of(
@@ -157,7 +155,7 @@ public class PlaceOrderTest extends AbstractDatabaseServiceTest {
 
             @Override
             public Mono<Map<String, Object>> newOrder(OrdersService.OrderRequest orderRequest) {
-                PlaceOrderTest.this.lastOrder = orderRequest;
+                AbstractPlaceOrderTest.this.lastOrder = orderRequest;
                 return Mono.just(Collections.emptyMap());
             }
         };

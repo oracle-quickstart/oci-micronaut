@@ -9,6 +9,14 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation(project(":app"))
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-session")
+    implementation("io.micronaut.security:micronaut-security-session")
+    implementation("io.micronaut.test:micronaut-test-junit5")
+    implementation("io.projectreactor:reactor-core")
+    implementation("org.testcontainers:testcontainers")
+    implementation("org.testcontainers:mongodb")
+    implementation("org.mockito:mockito-core")
+    implementation("org.testcontainers:junit-jupiter")
 }

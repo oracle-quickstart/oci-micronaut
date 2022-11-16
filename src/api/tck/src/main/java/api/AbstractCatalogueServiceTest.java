@@ -6,7 +6,6 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,9 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CatalogueServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractCatalogueServiceTest extends AbstractDatabaseServiceTest {
 
     @Inject
     CatalogueApiClient catalogueApiClient;

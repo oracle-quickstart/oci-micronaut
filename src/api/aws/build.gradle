@@ -28,6 +28,7 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     testImplementation(project(":tck"))
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {

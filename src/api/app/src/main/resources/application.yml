@@ -2,16 +2,13 @@ micronaut:
   application:
     name: api
   metrics:
+    enabled: true
     export:
       prometheus:
         enabled: true
         descriptions: true
         step: PT1M
-      oraclecloud:
-        enabled: false
-      cloudwatch:
-        enabled: false
-    enabled: true
+ 
   security:
     authentication: session
     intercept-url-map:
@@ -44,3 +41,13 @@ micronaut:
         namespace: 'mushop:sessions'
         write-mode: BACKGROUND
         enable-keyspace-events: false
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  prometheus:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS

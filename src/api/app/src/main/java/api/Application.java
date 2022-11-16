@@ -28,6 +28,9 @@ public class Application {
     public static final String COOKIE_AUTH = "CookieAuth";
 
     public static void main(String[] args) {
-        Micronaut.run(Application.class, args);
+        Micronaut.build(args)
+                .mainClass(Application.class)
+                .defaultEnvironments("app")
+                .start();
     }
 }

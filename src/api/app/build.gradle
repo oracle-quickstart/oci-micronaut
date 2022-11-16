@@ -21,34 +21,26 @@ micronaut {
 dependencies {
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-validation")
+
     implementation("io.micronaut.security:micronaut-security-annotations")
     implementation("io.micronaut.security:micronaut-security-session")
-    implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-session")
-    runtimeOnly("ch.qos.logback:logback-classic")
 
-    // Monitoring - Core
+    // Metrics
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-
-    // Monitoring - OCI
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
-
-    // Monitoring - AWS
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
-
-    // AWS - authentication
-    implementation("software.amazon.awssdk:sts:2.16.99")
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")
     implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:3.2.0")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Redis HTTP session store
     implementation("io.micronaut.redis:micronaut-redis-lettuce")
@@ -56,17 +48,9 @@ dependencies {
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
-    // Testing
-    // https://github.com/micronaut-projects/micronaut-test/issues/423
-    testImplementation enforcedPlatform("io.micronaut.test:micronaut-test-bom")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:testcontainers:1.16.2")
-    testImplementation("org.testcontainers:oracle-xe:1.16.2")
-    testImplementation("org.testcontainers:mongodb")
-    testImplementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-    testImplementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    testImplementation "org.mockito:mockito-core:3.9.0"
-    testImplementation "com.github.kstyrc:embedded-redis:0.6"
+    runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation(project(":tck"))
 }
 
 application {
@@ -85,11 +69,11 @@ if (javaBaseImage == "graalvm") {
 }
 
 dockerBuild {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
 
 graalvmNative {

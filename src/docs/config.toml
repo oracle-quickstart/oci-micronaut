@@ -5,7 +5,7 @@
 baseURL = ""
 languageCode = "en-us"
 title = "Micronaut MuShop"
-theme = "redwood"
+theme = "gcn"
 relativeURLs = true
 
 [params]
@@ -17,7 +17,7 @@ description = "Oracle Cloud Native Workshop"
 keywords = ["Kubernetes", "OCI", "OKE", "Microservices", "Micronaut"]
 ghrepo = "https://github.com/oracle-quickstart/oci-micronaut"
 branch = "master"
-logo = "images/logo.dark.png"
+logo = "images/gcn-logo.png"
 
 [markup]
   [markup.tableOfContents]

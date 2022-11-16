@@ -1,0 +1,189 @@
+/**
+ * Copyright © 2020, Oracle and/or its affiliates. All rights reserved.
+ * The Universal Permissive License (UPL), Version 1.0
+ */
+
+// Logo
+
+@mixin hook-logo {
+    position: relative;
+    inset: -15px;
+    width: calc(100% + 2 * 15px);
+    display: block;
+    .uk-navbar & {
+        inset: unset;
+        width: unset;
+        display: flex;
+    }
+}
+
+// Search input
+@mixin hook-search-input() {
+  background-color: $search-input-background !important;
+  color: $search-input-color !important;
+  &::placeholder {
+    color: $search-input-color !important;
+  }
+}
+
+// Breadcrumbs
+@mixin hook-breadcrumb {
+  font-weight: 400;
+  color: $breadcrumb-item-active-color;
+  .uk-light & {
+    color: $breadcrumb-item-active-color-dark;
+  }
+}
+
+@mixin hook-breadcrumb-item {
+  color: $breadcrumb-item-color;
+  .uk-light & {
+    color: $breadcrumb-item-color-dark !important;
+  }
+}
+
+@mixin hook-breadcrumb-divider {
+  color: $breadcrumb-divider-color !important;
+  .uk-light & {
+    color: $breadcrumb-divider-color-dark !important;
+  }
+}
+
+// Content navigation aside section
+
+@mixin hook-nav-sub {
+  #content & a {
+    color: $content-nav-text-color !important;
+    .uk-light & {
+      color: $content-nav-text-color-dark !important;
+    }
+    &:hover {
+      color: $content-nav-hover-text-color !important;
+      .uk-light & {
+        color: $content-nav-hover-text-color-dark !important;
+      }
+    }
+  }
+  #content & .uk-active a {
+    color: $content-nav-active-text-color !important;
+    .uk-light & {
+      color: $content-nav-active-text-color-dark !important;
+    }
+    &:hover {
+      color: $content-nav-hover-text-color !important;
+      .uk-light & {
+        color: $content-nav-hover-text-color-dark !important;
+      }
+    }
+  }
+}
+
+// Background
+@mixin hook-background-misc() {
+  .uk-background-muted {
+    color: $global-color;
+  }
+  .uk-background-secondary #content .uk-background-secondary {
+    background: $inverse-global-muted-background;
+  }
+}
+
+// Code
+@mixin hook-base-pre() {
+  background: $pre-background !important;
+  color: $pre-text-color;
+}
+
+@mixin hook-base-code() {
+  padding: 2px 6px;
+  background: $code-background;
+  border-radius: 2px;
+  font-style: normal;
+  color: $code-text-color !important;
+  font-weight: bold;
+  .uk-light & {
+    background: $code-background-dark;
+    color: $code-text-color-dark !important;
+  }
+}
+
+// Blockquote
+@mixin hook-base-blockquote() {
+  color: $global-muted-color;
+  * + & {
+    margin: $global-small-margin 0 !important;
+  }
+  p + &, pre + &, .highlight + & {
+    margin-top: -$global-small-margin !important;
+  }
+}
+
+// Label
+@mixin hook-label() {
+  background: $label-background !important;
+  color: $label-text-color !important;
+  &:hover {
+    color: $label-hover-text-color !important;
+    text-decoration: none;
+  }
+}
+
+// Alert
+@mixin hook-alert() {
+  a {
+    color: $global-emphasis-color;
+  }
+  em {
+    color: inherit;
+    font-weight: 400;
+    opacity: 0.7;
+  }
+}
+
+// Cards
+
+@mixin hook-card-secondary() {
+  .uk-background-secondary & {
+    background: $inverse-global-muted-background;
+  }
+}
+
+// Tabs
+$tab-border-width: 4 * $global-border-width;
+$tab-border-color: rgba($global-muted-color, 0.3) !default;
+
+@mixin hook-tab() {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: $global-margin;
+    right: 0;
+    border-bottom: $tab-border-width solid $tab-border-color;
+  }
+}
+@mixin hook-tab-item() {
+  border-bottom: $tab-border-width solid transparent;
+}
+@mixin hook-tab-item-active() {
+  border-bottom-color: $global-primary-background;
+}
+
+@mixin hook-tab-left() {
+  &:before {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    border-right: $tab-border-width solid $tab-border-color;
+    border-bottom: none;
+  }
+  > * > a {
+    border-right: $tab-border-width solid transparent;
+    border-bottom: none;
+  }
+  > .uk-active > a {
+    border-right-color: $global-primary-background;
+  }
+}

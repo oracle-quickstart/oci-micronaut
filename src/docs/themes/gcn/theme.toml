@@ -5,11 +5,8 @@
 # theme.toml template for a Hugo theme
 # See https://github.com/gohugoio/hugoThemes#themetoml for an example
 
-name = "Redwood"
-license = "UPL-1.0"
-licenselink = "https://github.com/oracle-quickstart/oci-cloudnative/blob/master/docs/themes/redwood/LICENSE"
+name = "GCN"
 description = ""
-homepage = "https://oracle-quickstart.github.io/oci-cloudnative/"
 tags = []
 features = []
 min_version = "0.41"

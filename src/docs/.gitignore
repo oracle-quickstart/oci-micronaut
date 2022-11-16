@@ -5,6 +5,6 @@
 public
 node_modules
 themes/*
-!themes/redwood
+!themes/gcn
 resources/_gen/*
 static/index.json

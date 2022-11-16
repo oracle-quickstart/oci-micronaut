@@ -5,6 +5,18 @@ Storefront backend written as a Micronaut application in Java orchestrating serv
 
 > Modified from original source by Weaveworks [microservices-demo](https://github.com/microservices-demo/front-end)
 
+The `app` subproject contains the application code with no Cloud specific dependencies or configuration.
+
+The `aws` subproject depends on the `app` project and introduces configuration (defined in `aws/src/main/resources/application-ec2.yml`) and dependencies (defined in `aws/build.gradle`) that integrate the application with services of AWS:
+
+* AWS CloudWatch Metrics
+* AWS CloudWatch Tracing
+
+The `oci` subproject depends on the `app` project and introduces configuration (defined in `oci/src/main/resources/application-oraclecloud.yml`) and dependencies (defined in `oci/build.gradle`) that integrate the application with services of Oracle Cloud:
+
+* Oracle Cloud Application Monitoring (Metrics)
+* Oracle Cloud Application Performance Monitoring (Tracing)
+
 # Micronaut Features
 
 * [Micronaut Oracle Cloud](https://micronaut-projects.github.io/micronaut-oracle-cloud/latest/guide/)
@@ -28,7 +40,7 @@ This application is a gateway service that communicates with other backend servi
 To start the application you can run:
 
 ```bash
-./gradlew run
+./gradlew :app:run
 ```
 
 The available endpoints can be browsed at http://localhost:8080/swagger/views/swagger-ui/
@@ -43,20 +55,19 @@ Will result in a `No available services for ID` error unless the catalogue servi
 
 Alternatively you can start an individual backend service on another port:
 
-```
+```bash
 cd ../catalogue
-docker run -d -p 1521:1521 -e ORACLE_PASSWORD=oracle gvenzl/oracle-xe
-./gradlew run --args="-Dmicronaut.server.port=8082"
+./gradlew :app:run --args="-Dmicronaut.server.port=8082"
 ```
 
 In the above case catalogue is run on port 8082, then you can run the API service and link service discovery to the backend service:
 
 ```bash
 cd ../api
-./gradlew run --args="-Dmicronaut.http.services.mushop-catalogue.url=http://localhost:8082"
+./gradlew :app:run --args="-Dmicronaut.http.services.mushop-catalogue.url=http://localhost:8082"
 ```
 
-Here the `mushop-catalogue` service is bound as a specific URL. In production and when deployed on OKE the application uses Kubernetes based service discovery and thanks to the following configuration specified in `src/main/resources/bootstrap.yml`:
+Here the `mushop-catalogue` service is bound as a specific URL. In production and when deployed on OKE the application uses Kubernetes based service discovery and thanks to the following configuration specified in `app/src/main/resources/bootstrap.yml`:
 
 ```yaml
 kubernetes:
@@ -84,47 +95,47 @@ The following table lists the service IDs the API application uses to discover s
 To build the application into a GraalVM native image you can run:
 
 ```bash
-./gradlew nativeCompile
+./gradlew :app:nativeCompile
 ```
 
 Once the native image is built you can run it with:
 
 ```bash
-./build/native/nativeCompile/api
+./app/build/native/nativeCompile/app
 ```
 
 # Deployment to Oracle Cloud
 
 The entire MuShop application can be deployed with the [Helm Chart](../../deploy/complete/helm-chart).
 
-However, if you wish to deploy the catalogue service manually you can do so.
+However, if you wish to deploy the api service manually you can do so.
 
-First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm) then you can deploy the container image with:
+First you need to [Login to Oracle Cloud Container Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionslogintoocir.htm), then you can deploy the container image with:
 
 ```bash
-./gradlew dockerPush
+./gradlew :oci:dockerPush
 ```
 
 Or the native version with:
 
 ```bash
-./gradlew dockerPushNative
+./gradlew :oci:dockerPushNative
 ```
 
-The Docker image names to push to can be altered by editing the following lines in [build.gradle](https://github.com/oracle-quickstart/oci-micronaut/blob/983c78a8cd55ecc33b1b3aac6a2d68524683a5b3/src/api/build.gradle#L81-L87):
+The Docker image names to push to can be altered by editing the following lines in subproject build.gradle files.
 
 ```groovy
 dockerBuild {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 
 dockerBuildNative {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
 ```
 
-When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](src/main/resources/application-oraclecloud.yml) configuration file:
+When running the container image on an Oracle Compute Instance VM or via OKE the following environment variables need to be set as defined in the [application-oraclecloud.yml](oci/src/main/resources/application-oraclecloud.yml) configuration file:
 
 
 | Env Var | Description |

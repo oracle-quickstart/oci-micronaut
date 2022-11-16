@@ -1,0 +1,22 @@
+plugins {
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":app"))
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-session")
+    implementation("io.micronaut.security:micronaut-security-session")
+    implementation("io.micronaut.test:micronaut-test-junit5")
+    implementation("io.projectreactor:reactor-core")
+    implementation("org.testcontainers:testcontainers")
+    implementation("org.testcontainers:mongodb")
+    implementation("org.mockito:mockito-core")
+    implementation("org.testcontainers:junit-jupiter")
+}

@@ -4,7 +4,7 @@ Metadata:
   AutoInstance:
     NodeInstanceType:
       InstanceFilters:
-      - [['PV'], "!=", "SupportedVirtualizationTypes"]
+        - [['PV'], "!=", "SupportedVirtualizationTypes"]
   QuickStartDocumentation:
     EntrypointName: "Launch into a new VPC"
     Order: Index a
@@ -38,8 +38,6 @@ Metadata:
     - Integration
     - Auto Scaling
     - Partner
-    - Vault
-    - Consul
     - HashiCorp
     - CalicoIntegration
     - RafaySysIntegration
@@ -134,24 +132,19 @@ Metadata:
           - RafaySysOrganizationName
           - RafaySysEmail
       - Label:
-          default: HashiCorp Vault (AWS Partner security)
-        Parameters:
-          - VaultIntegration
-          - VaultUIACMSSLCertificateArn
-          - VaultUIHostedZoneID
-          - VaultUIDomainName
-      - Label:
-          default: HashiCorp Consul (AWS Partner containers)
-        Parameters:
-          - ConsulIntegration
-          - ConsulUIACMSSLCertificateArn
-          - ConsulUIHostedZoneID
-          - ConsulUIDomainName
-      - Label:
           default: Rancher management (AWS Partner management)
         Parameters:
           - RancherIntegration
           - RancherDomainName
+      - Label:
+          default: MuleSoft Anypoint Runtime Fabric (AWS Partner Integration)
+        Parameters:
+          - MuleSoftRtfIntegration
+          - RTFFabricName
+          - OrgID
+          - UserName
+          - Password
+          - MuleLicenseKeyinbase64
       - Label:
           default: Kubernetes add-ins
         Parameters:
@@ -269,26 +262,22 @@ Metadata:
         default: Node instance family
       NodeGroupOS:
         default: Node group OS
-      VaultIntegration:
-        default: HashiCorp Vault integration
-      VaultUIACMSSLCertificateArn:
-        default: Vault UI ACM SSL certificate ARN
-      VaultUIHostedZoneID:
-        default: Route 53 hosted zone id
-      VaultUIDomainName:
-        default: Vault UI load balancer DNS name
-      ConsulIntegration:
-        default: HashiCorp Consul integration
-      ConsulUIACMSSLCertificateArn:
-        default: ACM SSL certificate ARN
-      ConsulUIHostedZoneID:
-        default: Route 53 hosted zone id
-      ConsulUIDomainName:
-        default: Consul UI load balancer DNS name
       RancherIntegration:
         default: Rancher management integration
       RancherDomainName:
         default: Rancher domain name
+      MuleSoftRtfIntegration:
+        default: MuleSoft Anypoint Runtime Fabric integration
+      RTFFabricName:
+        default: Runtime Fabric Name
+      OrgID:
+        default: Oraganization ID of your Anypoint
+      UserName:
+        default: Anypoint Platform Username
+      Password:
+        default: Anypoint Platform Password
+      MuleLicenseKeyinbase64:
+        default: Mule License Key in Base 64 Format
       PrometheusIntegration:
         default: Prometheus integration
       GrafanaIntegration:
@@ -298,10 +287,15 @@ Parameters:
     Description: List of Availability Zones to use for the subnets in the VPC. Three
       Availability Zones are used for this deployment.
     Type: List<AWS::EC2::AvailabilityZone::Name>
+  # NOTE: Don't change the type of KeyPairName parameter back to AWS::EC2::KeyPair::KeyName.
+  # String type is intentional as it enables default (empty) value. By using defaults, we
+  # promote AWS Systems Manager Session Manager service, which is a recommended way
+  # to connect to EC2 instances.
   KeyPairName:
-    Description: Name of an existing key pair, which allows you
-      to securely connect to your instance after it launches.
-    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing key pair, which allows you to securely connect to your instance after it launches.
+      Leave empty to proceed without a key pair. You would need to use AWS Systems Manager Session Manager to connect to the provisioned EC2 instances.
+    Type: String
+    Default: ""
   PrivateSubnet1CIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16–28
@@ -366,11 +360,15 @@ Parameters:
       hosted. When using your own bucket, you must specify this value.
     Type: String
   RemoteAccessCIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: CIDR IP range that is permitted to access the instances. We recommend
-      that you set this value to a trusted IP range.
     Type: String
+    Description: >-
+      Trusted IPv4 CIDR block that is permitted remote access to your instances
+      if desired in addition to AWS Systems Manager (SSM) access.
+    AllowedPattern: ^(disabled-onlyssmaccess|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2])))$
+    ConstraintDescription: >-
+      CIDR block parameter must be disabled-onlyssmaccess or in the form
+      x.x.x.x/x.
+    Default: disabled-onlyssmaccess
   EKSPublicAccessEndpoint:
     Type: String
     AllowedValues: [Enabled, Disabled]
@@ -384,24 +382,571 @@ Parameters:
     Type: String
   AdditionalEKSAdminUserArn:
     Default: ""
+    AllowedPattern: '^arn:(aws|aws-cn|aws-us-gov):iam::[0-9]{12}:.*|^$'
     Description: "(Optional) IAM user ARN to be granted administrative access to the EKS cluster."
     Type: String
   AdditionalEKSAdminRoleArn:
     Default: ""
+    AllowedPattern: '^arn:(aws|aws-cn|aws-us-gov):iam::[0-9]{12}:.*|^$'
     Description: "(Optional) IAM role ARN to be granted administrative access to the EKS cluster."
     Type: String
   NodeInstanceType:
     Default: t3.medium
-    AllowedValues: ["t3a.nano", "t3.nano", "t2.nano", "t3a.micro", "t3.micro", "t2.micro", "t3a.small", "t1.micro", "t3.small", "t2.small", "a1.medium", "c6g.medium", "t3a.medium", "c6gd.medium", "m6g.medium", "t3.medium", "m1.small", "m6gd.medium", "t2.medium", "r6g.medium", "a1.large", "r6gd.medium", "m3.medium", "c6g.large", "t3a.large", "c6gd.large", "m6g.large", "c5a.large", "t3.large", "c5.large", "c5ad.large", "m5a.large", "m1.medium", "m6gd.large", "t2.large", "c5d.large", "m5.large", "m4.large", "c4.large", "r6g.large", "a1.xlarge", "m5ad.large", "c3.large", "c5n.large", "r5a.large", "m5d.large", "r6gd.large", "m5n.large", "r5.large", "c1.medium", "r5ad.large", "r4.large", "m3.large", "c6g.xlarge", "m5dn.large", "r5d.large", "r5n.large", "t3a.xlarge", "c6gd.xlarge", "m6g.xlarge", "c5a.xlarge", "i3.large", "r3.large", "t3.xlarge", "r5dn.large", "c5.xlarge", "c5ad.xlarge", "m5a.xlarge", "m1.large", "m6gd.xlarge", "t2.xlarge", "z1d.large", "m5.xlarge", "c5d.xlarge", "c4.xlarge", "m4.xlarge", "r6g.xlarge", "a1.2xlarge", "m5ad.xlarge", "c3.xlarge", "c5n.xlarge", "m5d.xlarge", "r5a.xlarge", "i3en.large", "r6gd.xlarge", "m5n.xlarge", "m2.xlarge", "r5.xlarge", "r5ad.xlarge", "m3.xlarge", "r4.xlarge", "m5dn.xlarge", "c6g.2xlarge", "r5d.xlarge", "r5n.xlarge", "t3a.2xlarge", "c6gd.2xlarge", "c5a.2xlarge", "m6g.2xlarge", "i3.xlarge", "t3.2xlarge", "r3.xlarge", "r5dn.xlarge", "c5.2xlarge", "m5a.2xlarge", "c5ad.2xlarge", "m1.xlarge", "m6gd.2xlarge", "inf1.xlarge", "t2.2xlarge", "z1d.xlarge", "c5d.2xlarge", "m5.2xlarge", "c4.2xlarge", "m4.2xlarge", "r6g.2xlarge", "a1.metal", "a1.4xlarge", "m5ad.2xlarge", "c3.2xlarge", "c5n.2xlarge", "r5a.2xlarge", "i3en.xlarge", "m5d.2xlarge", "r6gd.2xlarge", "h1.2xlarge", "m5n.2xlarge", "m2.2xlarge", "r5.2xlarge", "c1.xlarge", "r5ad.2xlarge", "g4dn.xlarge", "r4.2xlarge", "m3.2xlarge", "m5dn.2xlarge", "c6g.4xlarge", "r5d.2xlarge", "inf1.2xlarge", "r5n.2xlarge", "c6gd.4xlarge", "c5a.4xlarge", "m6g.4xlarge", "i3.2xlarge", "g2.2xlarge", "r3.2xlarge", "r5dn.2xlarge", "c5.4xlarge", "c5ad.4xlarge", "m5a.4xlarge", "d2.xlarge", "m6gd.4xlarge", "z1d.2xlarge", "g3s.xlarge", "g4dn.2xlarge", "m5.4xlarge", "c5d.4xlarge", "c4.4xlarge", "m4.4xlarge", "r6g.4xlarge", "m5ad.4xlarge", "x1e.xlarge", "c3.4xlarge", "i2.xlarge", "c5n.4xlarge", "p2.xlarge", "r5a.4xlarge", "i3en.2xlarge", "m5d.4xlarge", "r6gd.4xlarge", "h1.4xlarge", "m5n.4xlarge", "m2.4xlarge", "r5.4xlarge", "r5ad.4xlarge", "r4.4xlarge", "c6g.8xlarge", "m5dn.4xlarge", "z1d.3xlarge", "g3.4xlarge", "r5d.4xlarge", "r5n.4xlarge", "g4dn.4xlarge", "c6gd.8xlarge", "m6g.8xlarge", "c5a.8xlarge", "i3.4xlarge", "r3.4xlarge", "r5dn.4xlarge", "i3en.3xlarge", "m5a.8xlarge", "c5ad.8xlarge", "d2.2xlarge", "m6gd.8xlarge", "c5.9xlarge", "m5.8xlarge", "c4.8xlarge", "r6g.8xlarge", "c6g.12xlarge", "m5ad.8xlarge", "f1.2xlarge", "x1e.2xlarge", "c3.8xlarge", "i2.2xlarge", "c5d.9xlarge", "m5d.8xlarge", "r5a.8xlarge", "r6gd.8xlarge", "c6gd.12xlarge", "c5a.12xlarge", "m6g.12xlarge", "h1.8xlarge", "m5n.8xlarge", "inf1.6xlarge", "c5n.9xlarge", "i3en.24xlarge", "i3en.metal", "p3.8xlarge", "f1.16xlarge", "x1.32xlarge", "x1e.16xlarge", "p2.16xlarge", "m4.10xlarge", "cc2.8xlarge", "r5.8xlarge", "c5.12xlarge", "c5ad.12xlarge", "m5a.12xlarge", "r5ad.8xlarge", "r4.8xlarge", "m6gd.12xlarge", "m5dn.8xlarge", "c6g.16xlarge", "g4dn.8xlarge", "c6g.metal", "z1d.6xlarge", "g3.8xlarge", "m5.12xlarge", "c5d.12xlarge", "r5d.8xlarge", "r5n.8xlarge", "r6g.12xlarge", "c6gd.metal", "c6gd.16xlarge", "m6g.metal", "c5a.16xlarge", "m6g.16xlarge", "m5ad.12xlarge", "i3.8xlarge", "g2.8xlarge", "r3.8xlarge", "r5dn.8xlarge", "r5a.12xlarge", "m5d.12xlarge", "i3en.6xlarge", "c5ad.16xlarge", "m5a.16xlarge", "d2.4xlarge", "r6gd.12xlarge", "m5n.12xlarge", "m6gd.metal", "m6gd.16xlarge", "p3.16xlarge", "x1e.32xlarge", "r5.12xlarge", "p3.2xlarge", "c5.18xlarge", "m5.16xlarge", "r5ad.12xlarge", "m4.16xlarge", "r6g.16xlarge", "r6g.metal", "m5dn.12xlarge", "m5ad.16xlarge", "f1.4xlarge", "x1e.4xlarge", "i2.4xlarge", "c5d.18xlarge", "r5d.12xlarge", "r5n.12xlarge", "m5d.16xlarge", "r5a.16xlarge", "r6gd.metal", "r6gd.16xlarge", "c5a.24xlarge", "h1.16xlarge", "m5n.16xlarge", "c5n.18xlarge", "c5n.metal", "g4dn.12xlarge", "p3dn.24xlarge", "r5dn.12xlarge", "r5.16xlarge", "c5.metal", "c5.24xlarge", "c5ad.24xlarge", "m5a.24xlarge", "r5ad.16xlarge", "r4.16xlarge", "m5dn.16xlarge", "g4dn.16xlarge", "z1d.metal", "z1d.12xlarge", "g3.16xlarge", "m5.24xlarge", "m5.metal", "c5d.24xlarge", "r5d.16xlarge", "c5d.metal", "r5n.16xlarge", "m5ad.24xlarge", "i3.metal", "i3.16xlarge", "r5dn.16xlarge", "m5d.metal", "i3en.12xlarge", "m5d.24xlarge", "r5a.24xlarge", "d2.8xlarge", "m5n.24xlarge", "r5.24xlarge", "r5.metal", "r5ad.24xlarge", "m5dn.24xlarge", "x1.16xlarge", "x1e.8xlarge", "i2.8xlarge", "r5d.24xlarge", "r5d.metal", "r5n.24xlarge", "p2.8xlarge", "inf1.24xlarge", "g4dn.metal", "r5dn.24xlarge", "t4g.nano", "t4g.medium", "t4g.large", "t4g.micro", "t4g.small", "t4g.2xlarge", "t4g.xlarge"]
+    AllowedValues:
+      - a1.medium
+      - a1.large
+      - a1.xlarge
+      - a1.2xlarge
+      - a1.4xlarge
+      - a1.metal
+      - c1.medium
+      - c1.xlarge
+      - c3.large
+      - c3.xlarge
+      - c3.2xlarge
+      - c3.4xlarge
+      - c3.8xlarge
+      - c4.large
+      - c4.xlarge
+      - c4.2xlarge
+      - c4.4xlarge
+      - c4.8xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5.4xlarge
+      - c5.9xlarge
+      - c5.12xlarge
+      - c5.18xlarge
+      - c5.24xlarge
+      - c5.metal
+      - c5a.large
+      - c5a.xlarge
+      - c5a.2xlarge
+      - c5a.4xlarge
+      - c5a.8xlarge
+      - c5a.12xlarge
+      - c5a.16xlarge
+      - c5a.24xlarge
+      - c5ad.large
+      - c5ad.xlarge
+      - c5ad.2xlarge
+      - c5ad.4xlarge
+      - c5ad.8xlarge
+      - c5ad.12xlarge
+      - c5ad.16xlarge
+      - c5ad.24xlarge
+      - c5d.large
+      - c5d.xlarge
+      - c5d.2xlarge
+      - c5d.4xlarge
+      - c5d.9xlarge
+      - c5d.12xlarge
+      - c5d.18xlarge
+      - c5d.24xlarge
+      - c5d.metal
+      - c5n.large
+      - c5n.xlarge
+      - c5n.2xlarge
+      - c5n.4xlarge
+      - c5n.9xlarge
+      - c5n.18xlarge
+      - c5n.metal
+      - c6a.large
+      - c6a.xlarge
+      - c6a.2xlarge
+      - c6a.4xlarge
+      - c6a.8xlarge
+      - c6a.12xlarge
+      - c6a.16xlarge
+      - c6a.24xlarge
+      - c6a.32xlarge
+      - c6a.48xlarge
+      - c6a.metal
+      - c6g.medium
+      - c6g.large
+      - c6g.xlarge
+      - c6g.2xlarge
+      - c6g.4xlarge
+      - c6g.8xlarge
+      - c6g.12xlarge
+      - c6g.16xlarge
+      - c6g.metal
+      - c6gd.medium
+      - c6gd.large
+      - c6gd.xlarge
+      - c6gd.2xlarge
+      - c6gd.4xlarge
+      - c6gd.8xlarge
+      - c6gd.12xlarge
+      - c6gd.16xlarge
+      - c6gd.metal
+      - c6gn.medium
+      - c6gn.large
+      - c6gn.xlarge
+      - c6gn.2xlarge
+      - c6gn.4xlarge
+      - c6gn.8xlarge
+      - c6gn.12xlarge
+      - c6gn.16xlarge
+      - c6gn.metal
+      - c7g.medium
+      - c7g.large
+      - c7g.xlarge
+      - c7g.2xlarge
+      - c7g.4xlarge
+      - c7g.8xlarge
+      - c7g.12xlarge
+      - c7g.16xlarge
+      - c6i.large
+      - c6i.xlarge
+      - c6i.2xlarge
+      - c6i.4xlarge
+      - c6i.8xlarge
+      - c6i.12xlarge
+      - c6i.16xlarge
+      - c6i.24xlarge
+      - c6i.32xlarge
+      - c6i.metal
+      - c6id.medium
+      - c6id.large
+      - c6id.xlarge
+      - c6id.2xlarge
+      - c6id.4xlarge
+      - c6id.8xlarge
+      - c6id.12xlarge
+      - c6id.16xlarge
+      - c6id.24xlarge
+      - c6id.32xlarge
+      - c6id.metal
+      - cc2.8xlarge
+      - d2.xlarge
+      - d2.2xlarge
+      - d2.4xlarge
+      - d2.8xlarge
+      - d3.xlarge
+      - d3.2xlarge
+      - d3.4xlarge
+      - d3.8xlarge
+      - d3en.xlarge
+      - d3en.2xlarge
+      - d3en.4xlarge
+      - d3en.6xlarge
+      - d3en.8xlarge
+      - d3en.12xlarge
+      - f1.2xlarge
+      - f1.4xlarge
+      - f1.16xlarge
+      - g2.2xlarge
+      - g2.8xlarge
+      - g3.4xlarge
+      - g3.8xlarge
+      - g3.16xlarge
+      - g3s.xlarge
+      - g4ad.xlarge
+      - g4ad.2xlarge
+      - g4ad.4xlarge
+      - g4ad.8xlarge
+      - g4ad.12xlarge
+      - g4ad.16xlarge
+      - g4ad.metal
+      - g4dn.xlarge
+      - g4dn.2xlarge
+      - g4dn.4xlarge
+      - g4dn.8xlarge
+      - g4dn.12xlarge
+      - g4dn.16xlarge
+      - g4dn.metal
+      - g5.xlarge
+      - g5.2xlarge
+      - g5.4xlarge
+      - g5.8xlarge
+      - g5.12xlarge
+      - g5.16xlarge
+      - g5.24xlarge
+      - g5.48xlarge
+      - g5g.xlarge
+      - g5g.2xlarge
+      - g5g.4xlarge
+      - g5g.8xlarge
+      - g5g.16xlarge
+      - g5g.metal
+      - h1.2xlarge
+      - h1.4xlarge
+      - h1.8xlarge
+      - h1.16xlarge
+      - i2.xlarge
+      - i2.2xlarge
+      - i2.4xlarge
+      - i2.8xlarge
+      - i3.large
+      - i3.xlarge
+      - i3.2xlarge
+      - i3.4xlarge
+      - i3.8xlarge
+      - i3.16xlarge
+      - i3.metal
+      - i3en.large
+      - i3en.xlarge
+      - i3en.2xlarge
+      - i3en.3xlarge
+      - i3en.6xlarge
+      - i3en.12xlarge
+      - i3en.24xlarge
+      - i3en.metal
+      - i4i.large
+      - i4i.xlarge
+      - i4i.2xlarge
+      - i4i.4xlarge
+      - i4i.8xlarge
+      - i4i.16xlarge
+      - i4i.32xlarge
+      - i4i.metal
+      - im4gn.large
+      - im4gn.xlarge
+      - im4gn.2xlarge
+      - im4gn.4xlarge
+      - im4gn.8xlarge
+      - im4gn.16xlarge
+      - inf1.xlarge
+      - inf1.2xlarge
+      - inf1.6xlarge
+      - inf1.24xlarge
+      - is4gen.medium
+      - is4gen.large
+      - is4gen.xlarge
+      - is4gen.2xlarge
+      - is4gen.4xlarge
+      - is4gen.8xlarge
+      - m1.small
+      - m1.medium
+      - m1.large
+      - m1.xlarge
+      - m2.xlarge
+      - m2.2xlarge
+      - m2.4xlarge
+      - m3.medium
+      - m3.large
+      - m3.xlarge
+      - m3.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
+      - m4.4xlarge
+      - m4.10xlarge
+      - m4.16xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.12xlarge
+      - m5.16xlarge
+      - m5.24xlarge
+      - m5.metal
+      - m5a.large
+      - m5a.xlarge
+      - m5a.2xlarge
+      - m5a.4xlarge
+      - m5a.8xlarge
+      - m5a.12xlarge
+      - m5a.16xlarge
+      - m5a.24xlarge
+      - m5ad.large
+      - m5ad.xlarge
+      - m5ad.2xlarge
+      - m5ad.4xlarge
+      - m5ad.8xlarge
+      - m5ad.12xlarge
+      - m5ad.16xlarge
+      - m5ad.24xlarge
+      - m5d.large
+      - m5d.xlarge
+      - m5d.2xlarge
+      - m5d.4xlarge
+      - m5d.8xlarge
+      - m5d.12xlarge
+      - m5d.16xlarge
+      - m5d.24xlarge
+      - m5d.metal
+      - m5dn.large
+      - m5dn.xlarge
+      - m5dn.2xlarge
+      - m5dn.4xlarge
+      - m5dn.8xlarge
+      - m5dn.12xlarge
+      - m5dn.16xlarge
+      - m5dn.24xlarge
+      - m5dn.metal
+      - m5n.large
+      - m5n.xlarge
+      - m5n.2xlarge
+      - m5n.4xlarge
+      - m5n.8xlarge
+      - m5n.12xlarge
+      - m5n.16xlarge
+      - m5n.24xlarge
+      - m5n.metal
+      - m5zn.large
+      - m5zn.xlarge
+      - m5zn.2xlarge
+      - m5zn.4xlarge
+      - m5zn.8xlarge
+      - m5zn.12xlarge
+      - m5zn.16xlarge
+      - m5zn.24xlarge
+      - m5zn.metal
+      - m6a.large
+      - m6a.xlarge
+      - m6a.2xlarge
+      - m6a.4xlarge
+      - m6a.8xlarge
+      - m6a.12xlarge
+      - m6a.16xlarge
+      - m6a.24xlarge
+      - m6a.32xlarge
+      - m6a.48xlarge
+      - m6a.metal
+      - m6g.medium
+      - m6g.large
+      - m6g.xlarge
+      - m6g.2xlarge
+      - m6g.4xlarge
+      - m6g.8xlarge
+      - m6g.12xlarge
+      - m6g.16xlarge
+      - m6g.metal
+      - m6gd.medium
+      - m6gd.large
+      - m6gd.xlarge
+      - m6gd.2xlarge
+      - m6gd.4xlarge
+      - m6gd.8xlarge
+      - m6gd.12xlarge
+      - m6gd.16xlarge
+      - m6gd.metal
+      - m6i.large
+      - m6i.xlarge
+      - m6i.2xlarge
+      - m6i.4xlarge
+      - m6i.8xlarge
+      - m6i.12xlarge
+      - m6i.16xlarge
+      - m6i.24xlarge
+      - m6i.32xlarge
+      - m6i.metal
+      - m6id.large
+      - m6id.xlarge
+      - m6id.2xlarge
+      - m6id.4xlarge
+      - m6id.8xlarge
+      - m6id.12xlarge
+      - m6id.16xlarge
+      - m6id.24xlarge
+      - m6id.32xlarge
+      - m6id.metal
+      - p2.xlarge
+      - p2.8xlarge
+      - p2.16xlarge
+      - p3.2xlarge
+      - p3.8xlarge
+      - p3.16xlarge
+      - p3dn.24xlarge
+      - p4d.24xlarge
+      - r3.large
+      - r3.xlarge
+      - r3.2xlarge
+      - r3.4xlarge
+      - r3.8xlarge
+      - r4.large
+      - r4.xlarge
+      - r4.2xlarge
+      - r4.4xlarge
+      - r4.8xlarge
+      - r4.16xlarge
+      - r5.large
+      - r5.xlarge
+      - r5.2xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+      - r5.12xlarge
+      - r5.16xlarge
+      - r5.24xlarge
+      - r5.metal
+      - r5a.large
+      - r5a.xlarge
+      - r5a.2xlarge
+      - r5a.4xlarge
+      - r5a.8xlarge
+      - r5a.12xlarge
+      - r5a.16xlarge
+      - r5a.24xlarge
+      - r5ad.large
+      - r5ad.xlarge
+      - r5ad.2xlarge
+      - r5ad.4xlarge
+      - r5ad.8xlarge
+      - r5ad.12xlarge
+      - r5ad.16xlarge
+      - r5ad.24xlarge
+      - r5b.large
+      - r5b.xlarge
+      - r5b.2xlarge
+      - r5b.4xlarge
+      - r5b.8xlarge
+      - r5b.12xlarge
+      - r5b.16xlarge
+      - r5b.24xlarge
+      - r5b.metal
+      - r5d.large
+      - r5d.xlarge
+      - r5d.2xlarge
+      - r5d.4xlarge
+      - r5d.8xlarge
+      - r5d.12xlarge
+      - r5d.16xlarge
+      - r5d.24xlarge
+      - r5d.metal
+      - r5dn.large
+      - r5dn.xlarge
+      - r5dn.2xlarge
+      - r5dn.4xlarge
+      - r5dn.8xlarge
+      - r5dn.12xlarge
+      - r5dn.16xlarge
+      - r5dn.24xlarge
+      - r5dn.metal
+      - r5n.large
+      - r5n.xlarge
+      - r5n.2xlarge
+      - r5n.4xlarge
+      - r5n.8xlarge
+      - r5n.12xlarge
+      - r5n.16xlarge
+      - r5n.24xlarge
+      - r5n.metal
+      - r6g.medium
+      - r6g.large
+      - r6g.xlarge
+      - r6g.2xlarge
+      - r6g.4xlarge
+      - r6g.8xlarge
+      - r6g.12xlarge
+      - r6g.16xlarge
+      - r6g.metal
+      - r6gd.medium
+      - r6gd.large
+      - r6gd.xlarge
+      - r6gd.2xlarge
+      - r6gd.4xlarge
+      - r6gd.8xlarge
+      - r6gd.12xlarge
+      - r6gd.16xlarge
+      - r6gd.metal
+      - r6i.large
+      - r6i.xlarge
+      - r6i.2xlarge
+      - r6i.4xlarge
+      - r6i.8xlarge
+      - r6i.12xlarge
+      - r6i.16xlarge
+      - r6i.24xlarge
+      - r6i.32xlarge
+      - r6i.metal
+      - r6id.large
+      - r6id.xlarge
+      - r6id.2xlarge
+      - r6id.4xlarge
+      - r6id.8xlarge
+      - r6id.12xlarge
+      - r6id.16xlarge
+      - r6id.24xlarge
+      - r6id.32xlarge
+      - r6id.metal
+      - t1.micro
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - t3a.nano
+      - t3a.micro
+      - t3a.small
+      - t3a.medium
+      - t3a.large
+      - t3a.xlarge
+      - t3a.2xlarge
+      - t4g.nano
+      - t4g.micro
+      - t4g.small
+      - t4g.medium
+      - t4g.large
+      - t4g.xlarge
+      - t4g.2xlarge
+      - x1.16xlarge
+      - x1.32xlarge
+      - x1e.xlarge
+      - x1e.2xlarge
+      - x1e.4xlarge
+      - x1e.8xlarge
+      - x1e.16xlarge
+      - x1e.32xlarge
+      - x2gd.medium
+      - x2gd.large
+      - x2gd.xlarge
+      - x2gd.2xlarge
+      - x2gd.4xlarge
+      - x2gd.8xlarge
+      - x2gd.12xlarge
+      - x2gd.16xlarge
+      - x2gd.metal
+      - x2idn.16xlarge
+      - x2idn.24xlarge
+      - x2idn.32xlarge
+      - x2idn.metal
+      - x2iedn.xlarge
+      - x2iedn.2xlarge
+      - x2iedn.4xlarge
+      - x2iedn.8xlarge
+      - x2iedn.16xlarge
+      - x2iedn.24xlarge
+      - x2iedn.32xlarge
+      - x2iedn.metal
+      - x2iezn.2xlarge
+      - x2iezn.4xlarge
+      - x2iezn.6xlarge
+      - x2iezn.8xlarge
+      - x2iezn.12xlarge
+      - x2iezn.metal
+      - z1d.large
+      - z1d.xlarge
+      - z1d.2xlarge
+      - z1d.3xlarge
+      - z1d.6xlarge
+      - z1d.12xlarge
+      - z1d.metal
     ConstraintDescription: Must be a valid EC2 instance type
     Description: EC2 instance type.
     Type: String
   NumberOfNodes:
     Default: 3
+    MinValue: 0
+    MaxValue: 450
     Description: Number of Amazon EKS node instances. The default is one for each of the three Availability Zones.
     Type: Number
   MaxNumberOfNodes:
     Default: 3
+    MinValue: 0
+    MaxValue: 450
     Description: Maximum number of Amazon EKS node instances. The default is three.
     Type: Number
   ClusterAutoScaler:
@@ -565,57 +1110,9 @@ Parameters:
       - 'Bottlerocket'
       - 'Windows'
     Default: 'Amazon Linux 2'
-    Description: Operating system to use for node instances. Choose "Bottlerocket" for the Amazon purpose-built container OS 
+    Description: Operating system to use for node instances. Choose "Bottlerocket" for the Amazon purpose-built container OS
       (unmanaged node groups only). Note that if you choose "Windows," an additional Amazon Linux node group is created.
     Type: String
-  VaultIntegration:
-    Type: String
-    AllowedValues: [Enabled, Disabled]
-    Default: Disabled
-    Description: "For more information, see https://github.com/aws-quickstart/quickstart-eks-hashicorp-vault/."
-  VaultUIDomainName:
-    Type: String
-    Description: >-
-      Fully qualified DNS name for the vault-ui service load balancer.
-      If you don't provide a value for "ACM SSL certificate ARN", use the HostedZoneID.
-    MaxLength: 128
-    Default: ""
-  VaultUIHostedZoneID:
-    Type: String
-    Description: >-
-      Route 53-hosted zone ID of the domain name. If you don't provide an ACMSSLCertificateArn value, the Quick Start
-      creates an ACM certificate for you using HostedZoneID in conjunction with DomainName.
-    Default: ""
-  VaultUIACMSSLCertificateArn:
-    Description: >-
-      ARN of the load balancer's ACM SSL certificate. If you don't provide values for "Domain name" and
-      "Hosted zone id", provide a value for "ACM SSL certificate ARN".
-    Type: String
-    Default: ""
-  ConsulIntegration:
-    Type: String
-    AllowedValues: [Enabled, Disabled]
-    Default: Disabled
-    Description: "For more information, see https://github.com/aws-quickstart/quickstart-eks-hashicorp-consul/."
-  ConsulUIDomainName:
-    Type: String
-    Description: >-
-      Fully qualified DNS name for the consul-ui service load balancer.
-      If you don't provide a value for "ACM SSL certificate ARN", use the HostedZoneID.
-    MaxLength: 128
-    Default: ""
-  ConsulUIHostedZoneID:
-    Type: String
-    Description: >-
-      Route 53-hosted zone ID of the domain name. If you don't provide an ACMSSLCertificateArn value, the Quick Start
-      creates an ACM certificate for you using HostedZoneID in conjunction with DomainName.
-    Default: ""
-  ConsulUIACMSSLCertificateArn:
-    Description: >-
-      ARN of the load balancer's ACM SSL certificate. If you don't provide values for "Domain name" and
-      "Hosted zone id", provide a value for "ACM SSL certificate ARN".
-    Type: String
-    Default: ""
   RancherIntegration:
     Type: String
     AllowedValues: [Enabled, Disabled]
@@ -625,6 +1122,34 @@ Parameters:
     Description: DNS domain name that users can use to access the Rancher console.
     Type: String
     Default: aws.private
+  MuleSoftRtfIntegration:
+    Type: String
+    AllowedValues: [Enabled, Disabled]
+    Default: Disabled
+    Description: "For more information, see https://github.com/aws-quickstart/quickstart-eks-mulesoft-runtime-fabric/."
+  RTFFabricName:
+    Description: Runtime Fabric Name
+    Type: String
+    Default: ""
+  OrgID:
+    Description: Oraganization ID of your Anypoint
+    Type: String
+    Default: ""
+  UserName:
+    Description: Anypoint Platform Username
+    Type: String
+    Default: ""
+    NoEcho: true
+  Password:
+    Description: Anypoint Platform Password
+    Type: String
+    Default: ""
+    NoEcho: true
+  MuleLicenseKeyinbase64:
+    Description: Mule License Key in Base 64 Format
+    Type: String
+    Default: ""
+    NoEcho: true
 Conditions:
   EnablePrometheus: !Or
     - !Equals [!Ref PrometheusIntegration, "Enabled"]
@@ -633,8 +1158,8 @@ Conditions:
     - !Equals [!Ref GrafanaIntegration, "Enabled"]
     - !Equals [!Ref MonitoringStack, "Prometheus + Grafana"]
   DetectSharedStacks: !And
-  - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
-  - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
+    - !Equals [!Ref PerAccountSharedResources, 'AutoDetect']
+    - !Equals [!Ref PerRegionSharedResources, 'AutoDetect']
   CreateAdvancedConfigWithDefaults: !Equals [!Ref ConfigSetName, '']
   CreatePerAccountSharedResources: !Equals [!Ref PerAccountSharedResources, 'Yes']
   CreatePerRegionSharedResources: !Equals [!Ref PerRegionSharedResources, 'Yes']
@@ -642,9 +1167,9 @@ Conditions:
   2AZDeployment: !Or
     - !Equals [!Ref NumberOfAZs, "2"]
     - !Equals [!Ref NumberOfAZs, "3"]
+  OnlySsmAccess: !Equals [!Ref RemoteAccessCIDR, disabled-onlyssmaccess]
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   WindowsNodes: !Equals [!Ref NodeGroupOS, 'Windows']
-  VaultEnabled: !Equals [!Ref VaultIntegration, 'Enabled']
 Mappings:
   Config:
     Prefix: { Value: 'eks-quickstart' }
@@ -661,9 +1186,8 @@ Resources:
       Parameters:
         ConfigSetName: !Ref AWS::StackName
         NodeVolumeSize: !If [WindowsNodes, 50, !Ref 'AWS::NoValue']
-        KubernetesVersion: !If [VaultEnabled, '1.17', !Ref 'AWS::NoValue']
-        ConsulUIAccessCIDR: !Ref RemoteAccessCIDR
-        VaultUIAccessCIDR: !Ref RemoteAccessCIDR
+        # As of 08/03/2021 there are no eks optimized ami's for eks 1.21
+        # TODO: remove forcing windows clusters to 1.20 once ami's are available https://github.com/aws/containers-roadmap/issues/1461
   AutoDetectSharedResources:
     Type: AWS::CloudFormation::Stack
     Condition: DetectSharedStacks
@@ -790,16 +1314,14 @@ Resources:
         SnykIntegration: !Ref SnykIntegration
         NewRelicLicenseKey: !Ref NewRelicLicenseKey
         NewRelicIntegration: !Ref NewRelicIntegration
-        VaultIntegration: !Ref VaultIntegration
-        VaultUIACMSSLCertificateArn: !Ref VaultUIACMSSLCertificateArn
-        VaultUIHostedZoneID: !Ref VaultUIHostedZoneID
-        VaultUIDomainName: !Ref VaultUIDomainName
-        ConsulIntegration: !Ref ConsulIntegration
         RancherIntegration: !Ref RancherIntegration
         RancherDomainName: !Ref RancherDomainName
-        ConsulUIACMSSLCertificateArn: !Ref ConsulUIACMSSLCertificateArn
-        ConsulUIHostedZoneID: !Ref ConsulUIHostedZoneID
-        ConsulUIDomainName: !Ref ConsulUIDomainName
+        MuleSoftRtfIntegration: !Ref MuleSoftRtfIntegration
+        RTFFabricName: !Ref 'RTFFabricName'
+        OrgID: !Ref 'OrgID'
+        UserName: !Ref 'UserName'
+        Password: !Ref 'Password'
+        MuleLicenseKeyinbase64: !Ref MuleLicenseKeyinbase64
         ConfigSetName: !If [CreateAdvancedConfigWithDefaults, !Ref 'AWS::StackName', !Ref ConfigSetName]
         TestSuite: !Ref TestSuite
         CalicoIntegration: !Ref CalicoIntegration
@@ -862,67 +1384,3 @@ Rules:
       - AssertDescription: You must specify at least one Fargate namespace to enable Fargate.
         Assert: !Not
           - !Equals [ !Ref FargateNamespaces, "" ]
-  # Vault
-  VaultUIDomainNamePresentWithHostedID:
-    RuleCondition: !And
-      - !Equals [!Ref VaultIntegration, 'Enabled']
-      - !Equals [ !Ref VaultUIHostedZoneID, '' ]
-    Assertions:
-      - Assert: !Not [!Equals [!Ref VaultUIDomainName, '']]
-        AssertDescription: "Vault: Please specify a 'Domain Name' if you specify 'Route 53 Hosted Zone ID'"
-  VaultUIHostedIDPresentWithDomainName:
-    RuleCondition: !And
-      - !Equals [!Ref VaultIntegration, 'Enabled']
-      - !Equals [ !Ref VaultUIDomainName, '' ]
-    Assertions:
-      - Assert: !Not [!Equals [!Ref VaultUIHostedZoneID, '']]
-        AssertDescription: "Vault: Please specify a 'Route 53 Hosted Zone ID' if you specify 'Domain Name'"
-  VaultUIGenerateOrProvideSSL:
-    RuleCondition: !And
-      - !Equals [!Ref VaultIntegration, 'Enabled']
-      - !Not [!Equals [!Ref VaultUIACMSSLCertificateArn, '']]
-    Assertions:
-      - Assert: !And
-        - !Equals [!Ref VaultUIHostedZoneID, '']
-        - !Equals [!Ref VaultUIDomainName, '']
-        AssertDescription: "Vault1: Using an SSL certificate is enforced. A CertificateArn or a HostedZoneID and Domain Name must be provided."
-  VaultUINoLoadBalancerInfoSupplied:
-    RuleCondition: !Equals [!Ref VaultIntegration, 'Enabled']
-    Assertions:
-      - Assert: !Or
-        - !Not [!Equals [!Ref VaultUIHostedZoneID, '']]
-        - !Not [!Equals [!Ref VaultUIACMSSLCertificateArn, '']]
-        - !Not [!Equals [!Ref VaultUIDomainName, '']]
-        AssertDescription: "Vault2: Using an SSL certificate is enforced. A CertificateArn or a HostedZoneID and Domain Name must be provided."
-  # Consul
-  ConsulUIDomainNamePresentWithHostedID:
-    RuleCondition: !And
-     - !Equals [!Ref ConsulIntegration, 'Enabled']
-     - !Equals [ !Ref ConsulUIHostedZoneID, '' ]
-    Assertions:
-      - Assert: !Not [!Equals [!Ref ConsulUIDomainName, '']]
-        AssertDescription: "Consul: Please specify a 'Domain Name' if you specify 'Route 53 Hosted Zone ID'"
-  ConsulUIHostedIDPresentWithDomainName:
-    RuleCondition: !And
-      - !Equals [!Ref ConsulIntegration, 'Enabled']
-      - !Equals [ !Ref ConsulUIDomainName, '' ]
-    Assertions:
-      - Assert: !Not [!Equals [!Ref ConsulUIHostedZoneID, '']]
-        AssertDescription: "Consul: Please specify a 'Route 53 Hosted Zone ID' if you specify 'Domain Name'"
-  ConsulUIGenerateOrProvideSSL:
-    RuleCondition: !And
-      - !Equals [!Ref ConsulIntegration, 'Enabled']
-      - !Not [!Equals [!Ref ConsulUIACMSSLCertificateArn, '']]
-    Assertions:
-      - Assert: !And
-        - !Equals [!Ref ConsulUIHostedZoneID, '']
-        - !Equals [!Ref ConsulUIDomainName, '']
-        AssertDescription: "Consul1: Using an SSL certificate is enforced. A CertificateArn or a HostedZoneID and Domain Name must be provided."
-  ConsulUINoLoadBalancerInfoSupplied:
-    RuleCondition: !Equals [!Ref ConsulIntegration, 'Enabled']
-    Assertions:
-      - Assert: !Or
-        - !Not [!Equals [!Ref ConsulUIHostedZoneID, '']]
-        - !Not [!Equals [!Ref ConsulUIACMSSLCertificateArn, '']]
-        - !Not [!Equals [!Ref ConsulUIDomainName, '']]
-        AssertDescription: "Consul2: Using an SSL certificate is enforced. A CertificateArn or a HostedZoneID and Domain Name must be provided."

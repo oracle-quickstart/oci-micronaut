@@ -1,0 +1,70 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("events.*")
+    }
+}
+
+dependencies {
+    implementation(project(":app"))
+
+    // Metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    // Kafka IAM
+    implementation("software.amazon.msk:aws-msk-iam-auth:1.0.0")
+
+    // Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // Authentication
+    implementation("software.amazon.awssdk:sts")
+
+    testImplementation(project(":tck"))
+    testImplementation("org.testcontainers:junit-jupiter")
+}
+
+application {
+    mainClass.set("events.AwsApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
+    }
+} else {
+    dockerfile {
+        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/openjdk:16-alpine"
+    }
+}
+
+dockerBuild {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}
+
+dockerfileNative {
+    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
+}

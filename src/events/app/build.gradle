@@ -20,21 +20,15 @@ micronaut {
 
 dependencies {
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    implementation("io.swagger.core.v3:swagger-annotations")
+
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-validation")
 
-    // Metrics - Core
+    // Metrics
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-
-    // Metrics - OCI
-    runtimeOnly("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
-
-    // Metrics - AWS
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")
@@ -43,22 +37,12 @@ dependencies {
     // Streaming
     implementation("io.micronaut.kafka:micronaut-kafka")
 
-    // AWS - Kafka IAM
-    implementation 'software.amazon.msk:aws-msk-iam-auth:1.0.0'
+    implementation("io.swagger.core.v3:swagger-annotations")
 
-    // AWS - Configuration discovery
-    implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
-    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
-
-    // AWS - authentication
-    implementation("software.amazon.awssdk:sts")
-
-
-    testImplementation "org.testcontainers:testcontainers:1.15.2"
-    testImplementation "org.testcontainers:kafka:1.15.2"
-    testImplementation "org.testcontainers:junit-jupiter:1.15.2"
-    testImplementation 'org.awaitility:awaitility:4.0.3'
     runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation(project(":tck"))
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {
@@ -81,11 +65,11 @@ if (javaBaseImage == "graalvm") {
 }
 
 dockerBuild {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.name-${javaBaseImage}:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
 }
 
 dockerBuildNative {
-    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.name}-native:$project.version"]
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
 
 dockerfileNative {

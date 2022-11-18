@@ -10,5 +10,5 @@ GRAALVM_TAG=java11-21.1.0
 docker build -t ${REGISTRY}/${REPOSITORY}/base/openjdk:${OPENJDK_TAG} -f Dockerfile.base-openjdk .
 docker push ${REGISTRY}/${REPOSITORY}/base/openjdk:${OPENJDK_TAG}
 
-docker build -t ${REGISTRY}/${REPOSITORY}/base/graalvm-ce:${GRAALVM_TAG} -f Dockerfile.base-openjdk .
+docker build -t ${REGISTRY}/${REPOSITORY}/base/graalvm-ce:${GRAALVM_TAG} -f Dockerfile.base-graalvm .
 docker push ${REGISTRY}/${REPOSITORY}/base/graalvm-ce:${GRAALVM_TAG}

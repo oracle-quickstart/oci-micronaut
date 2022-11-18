@@ -8,16 +8,12 @@ micronaut:
       n-threads: 75
       type: fixed
   metrics:
+    enabled: true
     export:
       prometheus:
         enabled: true
         descriptions: true
         step: PT1M
-      oraclecloud:
-        enabled: false
-      cloudwatch:
-        enabled: false
-    enabled: true
   router:
     static-resources:
       swagger:
@@ -25,14 +21,11 @@ micronaut:
         mapping: /swagger/**
 
 endpoints:
-  prometheus:
-    sensitive: false
-    details-visible: ANONYMOUS
   health:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-
-kafka:
-  bootstrap:
-    servers: localhost:9092
+  prometheus:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS

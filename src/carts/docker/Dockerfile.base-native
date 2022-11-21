@@ -1,0 +1,14 @@
+FROM openjdk:16-alpine as builder
+
+RUN apk update \
+    && apk upgrade \
+    && apk --no-cache add curl openssl perl
+
+COPY import-aws-rds-certs.sh /certs/import-aws-rds-certs.sh
+
+RUN sh /certs/import-aws-rds-certs.sh /opt/openjdk-16/lib/security/cacerts
+
+
+FROM ghcr.io/graalvm/native-image:ol7-java11-22.2.0
+
+COPY --from=builder /opt/openjdk-16/lib/security/cacerts /usr/lib64/graalvm/graalvm22-ce-java11/lib/security/cacerts

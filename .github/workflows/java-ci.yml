@@ -221,9 +221,5 @@ jobs:
             ./mvnw deploy -Dpackaging=docker-native -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0 -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
             ./mvnw deploy -Dpackaging=docker-native -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0 -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
           elif [ -f "gradlew" ]; then
-            if [ "${{ matrix.project-path }}" == "events" ]; then
-              ./gradlew dockerPushNative -PjavaBaseImage=graalvm-cacerts --no-daemon
-            else
-              ./gradlew dockerPushNative --no-daemon
-            fi
+            ./gradlew dockerPushNative --no-daemon
           fi

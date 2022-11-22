@@ -51,10 +51,6 @@ if (javaBaseImage == "graalvm") {
     dockerfile {
         baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
     }
-} else if (javaBaseImage == "graalvm-cacerts") {
-    dockerfile {
-        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0"
-    }
 } else {
     dockerfile {
         baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/openjdk:16-alpine"
@@ -70,5 +66,6 @@ dockerBuildNative {
 }
 
 dockerfileNative {
+    graalImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0"
     instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

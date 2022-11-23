@@ -51,11 +51,11 @@ variable "mushop_mock_mode_all" {
 variable "mushop_micronaut_service_version" {
   default = "native"
   type = string
-  description = "Every MuShop service has one of three version: using GraalVM for java runtime, using openjdk for java runtime and GraalVM native image."
+  description = "GraalVM for java runtime or GraalVM native image for MuShop micronaut services."
 
   validation {
-    condition     = contains(["native", "graalvm", "openjdk"], var.mushop_micronaut_service_version)
-    error_message = "Allowed values for mushop_micronaut_service_version are \"native\", \"graalvm\", or \"openjdk\"."
+    condition     = contains(["native", "graalvm"], var.mushop_micronaut_service_version)
+    error_message = "Allowed values for mushop_micronaut_service_version are \"native\" or \"graalvm\"."
   }
 }
 

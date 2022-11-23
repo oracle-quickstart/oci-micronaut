@@ -34,7 +34,7 @@
         <release.version>11</release.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <micronaut.version>3.7.3</micronaut.version>
-        <docker.image.suffix>openjdk</docker.image.suffix>
+        <docker.image.suffix>graalvm</docker.image.suffix>
     </properties>
 
     <repositories>

@@ -104,7 +104,6 @@ abstract class AbstractDatabaseServiceTest implements TestPropertyProvider {
 
     enum DockerImageServiceType {
         GRAALVM,
-        OPENJDK,
         NATIVE
     }
 }

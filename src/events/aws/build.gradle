@@ -51,10 +51,6 @@ if (javaBaseImage == "graalvm") {
     dockerfile {
         baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
     }
-} else {
-    dockerfile {
-        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/openjdk:16-alpine"
-    }
 }
 
 dockerBuild {

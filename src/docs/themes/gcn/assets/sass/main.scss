@@ -103,12 +103,6 @@ $footer-height: $rw-prevnext-height + $global-margin;
   @media (min-width: $breakpoint-small) {
     margin-left: $rw-content-margin-offset;
   }
-  > :first-child {
-    @include content-background('../images/cloud.light.png');
-    .uk-light & {
-      @include content-background('../images/cloud.dark.png');
-    }
-  }
 }
 #content {
   // for body content overlay of footer

@@ -2,5 +2,5 @@ micronaut:
   object-storage:
     oracle-cloud:
       default:
-        bucket: mushop-catalogue-bucket-1
+        bucket: mushop-assets
         namespace: oraclelabs

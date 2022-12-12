@@ -7,5 +7,5 @@ micronaut:
   object-storage:
     aws:
       default:
-        bucket: ms-mushop-1
+        bucket: mushop-assets
 

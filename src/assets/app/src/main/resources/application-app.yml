@@ -1,0 +1,7 @@
+micronaut:
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: "/catalogue/images/**"
+        paths: "classpath:images/products"

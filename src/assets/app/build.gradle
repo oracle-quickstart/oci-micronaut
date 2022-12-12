@@ -1,0 +1,50 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("assets.*")
+    }
+}
+
+dependencies {
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-validation")
+
+    implementation("io.micronaut.objectstorage:micronaut-object-storage-core")
+}
+
+application {
+    mainClass.set("assets.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerBuild {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}

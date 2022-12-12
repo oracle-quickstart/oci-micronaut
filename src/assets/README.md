@@ -1,20 +1,14 @@
-# MuShop Assets
+## Micronaut 3.7.4 Documentation
 
-## Configure
+- [User Guide](https://docs.micronaut.io/3.7.4/guide/index.html)
+- [API Reference](https://docs.micronaut.io/3.7.4/api/index.html)
+- [Configuration Reference](https://docs.micronaut.io/3.7.4/guide/configurationreference.html)
+- [Micronaut Guides](https://guides.micronaut.io/index.html)
+---
 
-- Obtain an Object Storage Bucket Pre-Authenticated Request (PAR)
-- Set environment variable `BUCKET_PAR`
+- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
+## Feature http-client documentation
 
-## Optimize and Deploy
+- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
 
-Build with `BUCKET_PAR`
 
-```text
-docker build --build-arg BUCKET_PAR=$BUCKET_PAR -t mushop/assets .
-```
-
-Optimize and deploy to Object Storage
-
-```text
-docker run -t --rm -v $(pwd)/products:/usr/src/app/products mushop/assets
-```

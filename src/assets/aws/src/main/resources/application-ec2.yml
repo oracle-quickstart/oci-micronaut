@@ -1,0 +1,11 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
+  object-storage:
+    aws:
+      default:
+        bucket: ms-mushop-1
+

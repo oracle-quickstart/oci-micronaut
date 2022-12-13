@@ -23,7 +23,14 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-validation")
 
+    // Metrics
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    runtimeOnly("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+
     implementation("io.micronaut.objectstorage:micronaut-object-storage-core:1.1.0")
+
+    runtimeOnly("ch.qos.logback:logback-classic")
 }
 
 application {

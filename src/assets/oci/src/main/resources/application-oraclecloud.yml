@@ -1,6 +1,28 @@
 micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: true
+        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
+        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:assets}
+        compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
   object-storage:
     oracle-cloud:
       default:
         bucket: mushop-assets
         namespace: oraclelabs
+
+oci:
+  config:
+    instance-principal:
+      enabled: true
+
+tracing:
+  zipkin:
+    enabled: true
+    sampler:
+      probability: 1
+    http:
+      url: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL}
+      path: ${ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH}
+    supportsJoin: false

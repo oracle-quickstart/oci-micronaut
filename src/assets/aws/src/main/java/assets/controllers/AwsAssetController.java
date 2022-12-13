@@ -13,7 +13,7 @@ public class AwsAssetController extends AssetController {
     private final String productImagePath;
 
     public AwsAssetController(AwsS3Configuration configuration) {
-        productImagePath = String.format(PRODUCT_IMAGE_PATH_FORMAT, configuration.getBucket(), PRODUCT_IMAGE_BASE_PATH);
+        productImagePath = String.format(PRODUCT_IMAGE_PATH_FORMAT, configuration.getBucket(), "image/product/");
     }
 
     @Override

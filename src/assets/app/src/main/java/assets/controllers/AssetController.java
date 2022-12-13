@@ -6,15 +6,13 @@ import io.micronaut.http.annotation.Get;
 @Controller
 public class AssetController {
 
-    static final String PRODUCT_IMAGE_BASE_PATH = "image/product/";
-
-    @Get("/location")
+    @Get("/assets/location")
     public AssetLocationDTO getLocation() {
         return new AssetLocationDTO(getProductImagePath());
     }
 
     protected String getProductImagePath() {
-        return PRODUCT_IMAGE_BASE_PATH;
+        return "/assets/image/product/";
     }
 
 }

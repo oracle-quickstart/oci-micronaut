@@ -212,4 +212,4 @@ jobs:
 
       - name: Cleanup images
         if: ${{ always() }}
-        run: docker image prune -f
+        run: docker image prune -a -f

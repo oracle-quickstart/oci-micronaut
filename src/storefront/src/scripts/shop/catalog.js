@@ -24,14 +24,14 @@ const CATALOG_MU = {
   TILE: 'mu-product-tile',
 };
 
-export function getStaticUrl(src, cdn) {
-  const prefix = /^\/catalog/.test(src) ? '/api' : (cdn || '/api/catalogue/images').replace(/\/$/, '');
-  return `${prefix}/${src.replace(/^\//, '')}`;
+export function getStaticUrl(src, productImagePath) {
+  const prefix = /^\/assets/.test(productImagePath) ? '/api' + productImagePath : productImagePath;
+  return `${prefix}${src.replace(/^\//, '')}`;
 }
 
 export function normalizeProduct(product, config) {
   // image prefixer
-  const imageUrl = src => getStaticUrl(src, config.cdn);
+  const imageUrl = src => getStaticUrl(src, config.productImagePath);
 
   // create route link
   product.href = `product.html?id=${product.id}`;
@@ -81,7 +81,7 @@ export class CatalogController {
   config() {
     return this.mu.config.get()
       .then(conf => ({
-        cdn: conf.staticAssetPrefix,
+        productImagePath: conf.productImagePath,
       }));
   }
 

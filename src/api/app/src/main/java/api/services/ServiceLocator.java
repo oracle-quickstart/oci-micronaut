@@ -14,6 +14,7 @@ public interface ServiceLocator {
     String CATALOGUE = "mushop-catalogue";
     String EVENTS = "mushop-events";
     String NEWSLETTER = "mushop-newsletter";
+    String ASSETS = "mushop-assets";
 
     Mono<UriTemplate> getCartsURL();
 

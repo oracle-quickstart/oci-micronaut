@@ -3,5 +3,5 @@ micronaut:
     static-resources:
       default:
         enabled: true
-        mapping: "/image/product/**"
+        mapping: "/assets/image/product/**"
         paths: "classpath:mushop-assets/image/product"

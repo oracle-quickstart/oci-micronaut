@@ -5,10 +5,6 @@ import io.micronaut.context.annotation.Value;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.objectstorage.oraclecloud.OracleCloudStorageConfiguration;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 @Controller
 @Replaces(AssetController.class)
 public class OciAssetController extends AssetController {
@@ -18,18 +14,11 @@ public class OciAssetController extends AssetController {
     private final String productImagePath;
 
     public OciAssetController(OracleCloudStorageConfiguration configuration, @Value("${REGION}") String region) {
-        String productImageBasePath;
-        try {
-            productImageBasePath = URLEncoder.encode(PRODUCT_IMAGE_BASE_PATH, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("No available charset: " + e.getMessage());
-        }
-
         this.productImagePath = String.format(PRODUCT_IMAGE_PATH_FORMAT,
                 region,
                 configuration.getNamespace(),
                 configuration.getBucket(),
-                productImageBasePath);
+                "image%2Fproduct%2F");
     }
 
     @Override

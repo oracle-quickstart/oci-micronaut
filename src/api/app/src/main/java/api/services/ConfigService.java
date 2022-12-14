@@ -82,7 +82,7 @@ public class ConfigService {
         }
 
         /**
-         * Static assets prefix.
+         * Product image path.
          */
         public String getProductImagePath() {
             return productImagePath;

@@ -1,18 +1,20 @@
-package assets;
+package assets.storage;
 
-import io.micronaut.objectstorage.aws.AwsS3Operations;
+import io.micronaut.objectstorage.InputStreamMapper;
+import io.micronaut.objectstorage.oraclecloud.OracleCloudStorageOperations;
 import io.micronaut.objectstorage.request.UploadRequest;
 import jakarta.inject.Singleton;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 
+import java.util.Map;
 import java.util.Set;
 
 @Singleton
-public class AwsAssetUploadHandler extends AssetUploadHandler {
+public class OciAssetUploadHandler extends AssetUploadHandler {
 
-    private final AwsS3Operations objectStorage;
+    private final OracleCloudStorageOperations objectStorage;
 
-    public AwsAssetUploadHandler(AwsS3Operations objectStorage) {
+    public OciAssetUploadHandler(InputStreamMapper inputStreamMapper, OracleCloudStorageOperations objectStorage) {
+        super(inputStreamMapper);
         this.objectStorage = objectStorage;
     }
 
@@ -24,7 +26,7 @@ public class AwsAssetUploadHandler extends AssetUploadHandler {
     @Override
     void uploadAsset(UploadRequest uploadRequest) {
         objectStorage.upload(uploadRequest, builder -> {
-            builder.acl(ObjectCannedACL.PUBLIC_READ);
+            builder.opcMeta(Map.of("project", "MuShop"));
         });
     }
 

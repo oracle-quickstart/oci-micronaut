@@ -4,4 +4,4 @@ micronaut:
       default:
         enabled: true
         mapping: "/assets/image/product/**"
-        paths: "classpath:mushop-assets/image/product"
+        paths: "classpath:assets/image/product"

@@ -44,8 +44,6 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
           env:
-            - name: REGION
-              value: us-phoenix-1
           {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
           {{- if eq "oci" $cloud }}
             {{- include "assets.oapm.connection" . | nindent 12 }}

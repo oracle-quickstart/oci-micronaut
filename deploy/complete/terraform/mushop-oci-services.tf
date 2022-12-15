@@ -233,10 +233,10 @@ resource "kubernetes_secret" "oss-connection" {
 ##**************************************************************************
 ##                          Object Storage
 ##**************************************************************************
-resource "oci_objectstorage_bucket" "mushop_asset_bucket" {
+resource "oci_objectstorage_bucket" "mushop_assets_bucket" {
   compartment_id = local.oke_compartment_ocid
   namespace      = data.oci_objectstorage_namespace.ns.namespace
-  name           = "mushop-asset-bucket-${random_string.deploy_id.result}"
+  name           = "mushop-assets-bucket-${random_string.deploy_id.result}"
   access_type    = "ObjectReadWithoutList"
 
   count = var.mushop_mock_mode_all ? 0 : 1
@@ -249,7 +249,7 @@ resource "kubernetes_secret" "oos_bucket" {
   }
   data = {
     region    = var.region
-    name      = "mushop-asset-bucket-${random_string.deploy_id.result}"
+    name      = "mushop-assets-bucket-${random_string.deploy_id.result}"
     namespace = data.oci_objectstorage_namespace.ns.namespace
   }
   type = "Opaque"

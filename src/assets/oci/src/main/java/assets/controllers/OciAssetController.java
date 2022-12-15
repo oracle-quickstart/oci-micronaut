@@ -14,9 +14,8 @@ public class OciAssetController extends AssetController {
     private final String productImagePath;
 
     public OciAssetController(OracleCloudStorageConfiguration configuration, RegionProvider regionProvider) {
-        String region = regionProvider.getRegion().getRegionId();
         this.productImagePath = String.format(PRODUCT_IMAGE_PATH_FORMAT,
-                region,
+                regionProvider.getRegion().getRegionId(),
                 configuration.getNamespace(),
                 configuration.getBucket(),
                 "image%2Fproduct%2F");

@@ -233,21 +233,11 @@ resource "kubernetes_secret" "oss-connection" {
 ##**************************************************************************
 ##                          Object Storage
 ##**************************************************************************
-resource "oci_objectstorage_bucket" "mushop_catalogue_bucket" {
+resource "oci_objectstorage_bucket" "mushop_asset_bucket" {
   compartment_id = local.oke_compartment_ocid
   namespace      = data.oci_objectstorage_namespace.ns.namespace
-  name           = "mushop-catalogue-bucket-${random_string.deploy_id.result}"
+  name           = "mushop-asset-bucket-${random_string.deploy_id.result}"
   access_type    = "ObjectReadWithoutList"
-
-  count = var.mushop_mock_mode_all ? 0 : 1
-}
-
-resource "oci_objectstorage_preauthrequest" "mushop_catalogue_bucket_par" {
-  namespace    = data.oci_objectstorage_namespace.ns.namespace
-  bucket       = oci_objectstorage_bucket.mushop_catalogue_bucket[0].name
-  name         = "mushop-catalogue-bucket-par-${random_string.deploy_id.result}"
-  access_type  = "AnyObjectWrite"
-  time_expires = timeadd(timestamp(), "60m")
 
   count = var.mushop_mock_mode_all ? 0 : 1
 }
@@ -259,9 +249,8 @@ resource "kubernetes_secret" "oos_bucket" {
   }
   data = {
     region    = var.region
-    name      = "mushop-catalogue-bucket-${random_string.deploy_id.result}"
+    name      = "mushop-asset-bucket-${random_string.deploy_id.result}"
     namespace = data.oci_objectstorage_namespace.ns.namespace
-    parUrl    = "https://objectstorage.${var.region}.oraclecloud.com${oci_objectstorage_preauthrequest.mushop_catalogue_bucket_par[0].access_uri}"
   }
   type = "Opaque"
 

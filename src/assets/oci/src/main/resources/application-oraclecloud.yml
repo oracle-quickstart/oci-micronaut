@@ -9,8 +9,8 @@ micronaut:
   object-storage:
     oracle-cloud:
       default:
-        bucket: mushop-assets
-        namespace: oraclelabs
+        bucket: ${ASSETS_BUCKET_NAME}
+        namespace: ${ASSETS_BUCKET_NAMESPACE:oraclelabs}
 
 oci:
   config:

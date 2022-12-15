@@ -1,7 +1,7 @@
 package assets.controllers;
 
+import com.oracle.bmc.auth.RegionProvider;
 import io.micronaut.context.annotation.Replaces;
-import io.micronaut.context.annotation.Value;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.objectstorage.oraclecloud.OracleCloudStorageConfiguration;
 
@@ -13,7 +13,8 @@ public class OciAssetController extends AssetController {
 
     private final String productImagePath;
 
-    public OciAssetController(OracleCloudStorageConfiguration configuration, @Value("${REGION}") String region) {
+    public OciAssetController(OracleCloudStorageConfiguration configuration, RegionProvider regionProvider) {
+        String region = regionProvider.getRegion().getRegionId();
         this.productImagePath = String.format(PRODUCT_IMAGE_PATH_FORMAT,
                 region,
                 configuration.getNamespace(),

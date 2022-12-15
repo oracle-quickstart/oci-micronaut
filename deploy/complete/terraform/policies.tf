@@ -57,6 +57,7 @@ locals {
   oke_compartment_statements = concat(
     local.oci_grafana_logs_statements,
     local.allow_oke_to_manage_atp,
+    local.allow_oke_to_manage_objects,
     local.allow_oke_use_monitoring,
     var.use_encryption_from_oci_vault ? local.allow_oke_use_oci_vault_keys_statements : [],
     var.cluster_autoscaler_enabled ? local.cluster_autoscaler_statements : []
@@ -101,5 +102,8 @@ locals {
   ]
   allow_oke_to_manage_atp = [
     "Allow dynamic-group ${local.oke_nodes_dg} to manage autonomous-database-family in compartment id ${local.oke_compartment_ocid}"
+  ]
+  allow_oke_to_manage_objects = [
+    "Allow dynamic-group ${local.oke_nodes_dg} to manage objects in compartment id ${local.oke_compartment_ocid}"
   ]
 }

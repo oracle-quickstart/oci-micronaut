@@ -118,12 +118,15 @@ Resources:
                 Resource: !Ref MSKClusterArn
               - Effect: Allow
                 Action:
+                  - "s3:ListBucket"
+                Resource: !GetAtt MuShopAssetsBucket.Arn
+              - Effect: Allow
+                Action:
                   - "s3:PutObject"
                   - "s3:PutObjectAcl"
                   - "s3:GetObject"
-                  - "s3:ListBucket"
                   - "s3:DeleteObject"
-                Resource": !GetAtt MuShopAssetsBucket.Arn
+                Resource: !Join [ '', [ !GetAtt MuShopAssetsBucket.Arn, '/*' ] ]
 
 
   # This creates namespace for MuShop deployment

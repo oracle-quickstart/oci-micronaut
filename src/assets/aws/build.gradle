@@ -21,6 +21,12 @@ micronaut {
 dependencies {
     implementation(project(":app"))
 
+    // Authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
     // Metrics
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 

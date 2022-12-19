@@ -54,12 +54,15 @@ Parameters:
     Type: String
   MSKClusterBootstrapServerBrokers:
     Type: String
+  AssetsS3BucketName:
+    Type: String
 Resources:
 
   # This creates S3 bucket for mushop assets
   MuShopAssetsBucket:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: !Ref AssetsS3BucketName
       PublicAccessBlockConfiguration:
         RestrictPublicBuckets: true
 

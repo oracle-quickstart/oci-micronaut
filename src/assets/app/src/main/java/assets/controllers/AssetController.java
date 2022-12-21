@@ -2,19 +2,17 @@ package assets.controllers;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Delete;
-import io.micronaut.http.annotation.Get;
 import io.micronaut.http.exceptions.HttpStatusException;
 
 @Controller
-public class AssetController {
+public class AssetController implements AssetOperations {
 
-    @Get("/assets/location")
+    @Override
     public AssetLocationDTO getLocation() {
         return new AssetLocationDTO(getProductImagePath());
     }
 
-    @Delete("/assets")
+    @Override
     public void deleteAssets() {
         deleteUploadedAssets();
     }

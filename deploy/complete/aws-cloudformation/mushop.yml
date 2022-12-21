@@ -493,7 +493,9 @@ Resources:
   # This deploys helm chart
   MushopHelmChart:
     Type: "AWSQS::Kubernetes::Helm"
-    DependsOn: MushopNamespaceKubernetesResource
+    DependsOn:
+      - MushopNamespaceKubernetesResource
+      - MuShopAssetsBucket
     Properties:
       ClusterID: !Ref KubeClusterName
       Namespace: !Ref MushopNamespace

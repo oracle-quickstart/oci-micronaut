@@ -39,6 +39,8 @@ dependencies {
     implementation("io.micronaut.objectstorage:micronaut-object-storage-core:1.1.0")
 
     runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation(project(":tck"))
 }
 
 application {

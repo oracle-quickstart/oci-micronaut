@@ -1,0 +1,9 @@
+micronaut:
+  metrics:
+    export:
+      cloudwatch:
+        enabled: false
+  object-storage:
+    aws:
+      default:
+        bucket: test-bucket

@@ -16,15 +16,15 @@ import java.io.InputStreamReader;
 import java.util.Optional;
 import java.util.Set;
 
-abstract class AssetUploadHandler {
+abstract class AbstractObjectStorageHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AssetUploadHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractObjectStorageHandler.class);
 
     private static final String MANIFEST_FILE = "assets/manifest.txt";
 
     private final InputStreamMapper inputStreamMapper;
 
-    protected AssetUploadHandler(InputStreamMapper inputStreamMapper) {
+    protected AbstractObjectStorageHandler(InputStreamMapper inputStreamMapper) {
         this.inputStreamMapper = inputStreamMapper;
     }
 
@@ -60,7 +60,7 @@ abstract class AssetUploadHandler {
         });
     }
 
-    public byte[] loadLocalAsset(ResourceResolver resourceResolver, String assetPath) {
+    private byte[] loadLocalAsset(ResourceResolver resourceResolver, String assetPath) {
         Optional<InputStream> assetInputStream = resourceResolver.getResourceAsStream("classpath:" + assetPath);
         if (assetInputStream.isEmpty()) {
             throw new ApplicationStartupException(assetPath + " not found on the classpath");
@@ -73,6 +73,13 @@ abstract class AssetUploadHandler {
             LOG.warn("Failed to close asset input stream: assetPath={}", assetPath, e);
         }
         return assetBytes;
+    }
+
+    public void deleteAssets() {
+        listAssets().forEach(assetKey -> {
+            deleteAsset(assetKey);
+            LOG.info("Deleted: {}", assetKey);
+        });
     }
 
     abstract Set<String> listAssets();

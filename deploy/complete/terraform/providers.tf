@@ -17,8 +17,8 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.1.0" # Latest version as June 2021 = 2.2.0. Using 2.1.0 (March, 2021) for ORM compatibility
-      # https://registry.terraform.io/providers/hashicorp/helm/2.1.0
+      version = "2.8.0"
+      # https://registry.terraform.io/providers/hashicorp/helm/2.8.0
     }
     tls = {
       source  = "hashicorp/tls"

@@ -1,4 +1,4 @@
-eplicaCount: 1
+replicaCount: 1
 
 image:
   repository: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/assets

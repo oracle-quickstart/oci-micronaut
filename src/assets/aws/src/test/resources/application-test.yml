@@ -7,3 +7,6 @@ micronaut:
     aws:
       default:
         bucket: test-bucket
+
+aws:
+  region: us-east-1

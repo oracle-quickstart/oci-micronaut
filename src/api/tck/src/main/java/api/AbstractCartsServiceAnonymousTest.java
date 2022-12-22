@@ -1,6 +1,8 @@
 package api;
 
+import api.model.AssetsLocation;
 import api.model.Product;
+import api.services.AssetsClient;
 import api.services.AuthClient;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -162,6 +164,11 @@ abstract class AbstractCartsServiceAnonymousTest extends AbstractDatabaseService
     @MockBean(api.services.CartsService.CatalogueClient.class)
     api.services.CartsService.CatalogueClient catalogueClient() {
         return id -> Mono.just(new Product(id, 10.00));
+    }
+
+    @MockBean(AssetsClient.class)
+    AssetsClient assetsClient() {
+        return () -> Mono.just(new AssetsLocation("/test"));
     }
 
     @Introspected

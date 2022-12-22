@@ -1,12 +1,13 @@
 package assets.controllers;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
 public class AssetControllerTest extends AbstractAssetControllerTest {
@@ -26,5 +27,12 @@ public class AssetControllerTest extends AbstractAssetControllerTest {
             assertEquals(HttpStatus.METHOD_NOT_ALLOWED, e.getStatus());
             assertEquals("Method Not Allowed", e.getMessage());
         }
+    }
+
+    @Test
+    void testGetAsset() {
+        final HttpResponse<byte[]> response = getImage("MU-US-001.png");
+        assertTrue(response.getBody().isPresent());
+        assertEquals(MediaType.IMAGE_PNG_TYPE, response.getContentType().get());
     }
 }

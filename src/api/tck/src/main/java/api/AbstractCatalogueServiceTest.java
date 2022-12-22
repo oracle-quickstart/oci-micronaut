@@ -2,8 +2,6 @@ package api;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import jakarta.inject.Inject;
@@ -14,7 +12,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,15 +53,6 @@ abstract class AbstractCatalogueServiceTest extends AbstractDatabaseServiceTest 
     }
 
     @Test
-    void testStaticResources() {
-        final HttpResponse<byte[]> response = catalogueApiClient.getImage("MU-US-001.png");
-
-        assertTrue(response.getBody().isPresent());
-
-        assertEquals(MediaType.IMAGE_PNG_TYPE, response.getContentType().get());
-    }
-
-    @Test
     void testListCatalogue() {
         final List<?> catalogue = catalogueApiClient.getCatalogue(null);
         assertNotNull(catalogue);
@@ -91,8 +79,5 @@ abstract class AbstractCatalogueServiceTest extends AbstractDatabaseServiceTest 
 
         @Get("/catalogue{?categories}")
         List<?> getCatalogue(@Nullable List<String> categories);
-
-        @Get(value = "/catalogue/images/{name}", processes = MediaType.IMAGE_PNG)
-        HttpResponse<byte[]> getImage(String name);
     }
 }

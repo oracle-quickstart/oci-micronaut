@@ -60,10 +60,3 @@ dockerBuild {
 dockerBuildNative {
     images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
 }
-
-test {
-    testLogging {
-        showStackTraces = true
-        exceptionFormat = 'full'
-    }
-}

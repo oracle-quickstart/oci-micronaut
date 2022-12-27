@@ -8,7 +8,6 @@ image:
 
 env:
   trackingEnabled: false
-  mediaUrl: /assets
 
 hpa:
   enabled: true

@@ -51,7 +51,7 @@ In addition to these Cloud Native topics, MuShop demonstrates the use of several
 | Service | Technology  | Cloud Services | Description |
 | --- | --- | --- | --- |
 | `src/api` | Micronaut   | | Storefront API |
-| `src/assets` | Node.js   | Object Storage | Product images |
+| `src/assets` | Micronaut   | Object Storage | Product images |
 | `src/carts` | Micronaut | Autonomous DB (ATP) | Shopping cart |
 | `src/catalogue` | Micronaut | Autonomous DB (ATP) | Product catalogue |
 | `src/dbtools` | Linux | Autonomous DB (ATP) | Database schema initializations |

@@ -118,6 +118,27 @@ These services must be provisioned manually and are configured using kubernetes 
             Description: <PolicyDescription>
             Statement: Allow dynamic-group <DynamicGroupName> to manage autonomous-database-family in compartment id <COMPARTMENT ID>
 
+1. Create a public bucket in Object Storage service and authorize instances to manage objects
+
+    - Create a public bucket
+
+      Navigate to `Object Storage -> Buckets` and create a public bucket
+
+    - Authorize instances to manage objects in compartment
+
+        Navigate to `Identity -> Policies`, open the policy created in the previous step and edit policy statements by adding another statement
+
+            Statement: Allow dynamic-group <DynamicGroupName> to manage objects in compartment id <COMPARTMENT ID>
+
+   - Create `oos_bucket` secret containing the bucket name and object storage namespace
+
+       ```shell
+       kubectl create secret generic oos-bucket \
+         --namespace mushop \
+         --from-literal=name='<BUCKET_NAME>' \
+         --from-literal=namespace='<OBJECT_STORAGE_NAMESPACE>'
+       ```
+
 1. **Optional**: Provision a Streaming instance from the [Oracle Cloud Infrastructure Console](https://console.us-phoenix-1.oraclecloud.com/storage/streaming), and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.
 
    - Create `oss-connection` secret containing the Stream connection details.
@@ -188,10 +209,12 @@ These services must be provisioned manually and are configured using kubernetes 
 
     ```yaml
     global:
+      cloud: oci
       ossConnectionSecret: oss-connection     # Name of Stream connection secret
       oadbAdminSecret: oadb-admin             # Name of DB Admin secret
       oadbWalletSecret: oadb-wallet           # Name of Wallet secret
       oadbConnectionSecret: oadb-connection   # Name of DB Connection secret
+      oosBucketSecret: oos-bucket             # Name of Object Storage bucket secret
       ociDeploymentConfigMap: oci-deployment  # Name of Deployment details config map
     tags:
       atp: true                               # General flag to use Oracle Autonomous Database

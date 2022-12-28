@@ -126,6 +126,9 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
         setCord(data.BUCKET, col(4.5), row(0));
         setCord(data.STREAMING, col(5.5), row(0), { label: { offset: [0, 10] }});
         setCord(data.ATP, col(7.5), row(0));
+
+        setCord(data.APIGW, col(6.5), row(0));
+        setCord(data.EMAIL, col(8), row(2));
       }
 
 
@@ -145,11 +148,9 @@ export class MuServiceChart extends MuMx.compose(null, ViewTemplateMixin) {
       setCord(data.ORDERS, col(6), row(2), skew.java);
       setCord(data.NATS, col(7), row(2));
       setCord(data.FULFILLMENT, col(7), row(1));
-      //
-      // setCord(data.APIGW, col(6.5), row(0));
+
       setCord(data.SUBSCRIBE, col(8), row(1));
-      // setCord(data.EMAIL, col(8), row(2));
-      //
+
       setCord(data.PAYMENT, col(7), row(3), skew.go);
       setCord(data.USER, col(5), row(1));
     }

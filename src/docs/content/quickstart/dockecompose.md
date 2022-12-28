@@ -23,7 +23,7 @@ You need Docker and Docker Compose installed locally and at least 8GB of resourc
 ## Quick Start
 
 ### Pull images
-Start by pulling all necessary images. Note that it may take a little while to download all the images (in particular the Oracle Database image is 2GB to download).
+Start by pulling all necessary images.
 
 ```shell--linux-macos
 cd deploy/complete/docker-compose

@@ -33,12 +33,12 @@ Each topic in this material references the source code, which should be
 cloned to a personal workspace.
 
 ```shell--macos-linux
-git clone https://github.com/oracle-quickstart/oci-cloudnative.git mushop
+git clone https://github.com/oracle-quickstart/oci-micronaut.git mushop
 cd mushop
 ```
 
 ```shell--win
-git clone https://github.com/oracle-quickstart/oci-cloudnative.git
+git clone https://github.com/oracle-quickstart/oci-micronaut.git
 dir mushop
 ```
 

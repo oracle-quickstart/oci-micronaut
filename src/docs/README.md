@@ -2,7 +2,7 @@
 
 ## Looking for the Docs?
 
-See [https://oracle-quickstart.github.io/oci-cloudnative/](https://oracle-quickstart.github.io/oci-cloudnative/)
+See [https://oracle-quickstart.github.io/oci-micronaut/](https://oracle-quickstart.github.io/oci-micronaut/)
 
 ## Developing the Docs
 

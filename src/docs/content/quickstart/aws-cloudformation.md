@@ -49,7 +49,7 @@ Once you have provided the values, proceed next to the stack options.
 Configure here the Cloudformation stack options. Generally you can skip this page and proceed to the Stack Review page.
 
 {{% width 1-2 %}}
-![Mushop stack options](../images/aws/aws-stack-mandatory.png)
+![Mushop stack options](../images/aws/aws-stack-configure.png)
 {{% /width %}}
 
 ## Review

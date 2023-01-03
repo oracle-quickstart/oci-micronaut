@@ -591,7 +591,7 @@
   <div class="uk-margin-small">
     Made with <span uk-icon="icon: heart; ratio: 0.75"></span> by Oracle Developers
   </div>
-  Copyright © 2022 Oracle and/or its affiliates. All rights reserved.
+  Copyright © 2023 Oracle and/or its affiliates. All rights reserved.
 </div>
       </section>
     </div>
@@ -854,6 +854,28 @@ These services must be provisioned manually and are configured using kubernetes 
 </ul>
 </li>
 <li>
+<p>Create a public bucket in Object Storage service and authorize instances to manage objects</p>
+<ul>
+<li>
+<p>Create a public bucket</p>
+<p>Navigate to <code>Object Storage -&gt; Buckets</code> and create a public bucket</p>
+</li>
+<li>
+<p>Authorize instances to manage objects in compartment</p>
+<p>Navigate to <code>Identity -&gt; Policies</code>, open the policy created in the previous step and edit policy statements by adding another statement</p>
+<pre><code>  Statement: Allow dynamic-group &lt;DynamicGroupName&gt; to manage objects in compartment id &lt;COMPARTMENT ID&gt;
+</code></pre>
+</li>
+<li>
+<p>Create <code>oos_bucket</code> secret containing the bucket name and object storage namespace</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create secret generic oos-bucket <span class="se">\
+</span><span class="se"></span>  --namespace mushop <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;&lt;BUCKET_NAME&gt;&#39;</span> <span class="se">\
+</span><span class="se"></span>  --from-literal<span class="o">=</span><span class="nv">namespace</span><span class="o">=</span><span class="s1">&#39;&lt;OBJECT_STORAGE_NAMESPACE&gt;&#39;</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
 <p><strong>Optional</strong>: Provision a Streaming instance from the <a href="https://console.us-phoenix-1.oraclecloud.com/storage/streaming">Oracle Cloud Infrastructure Console</a>, and make note of the created Stream Pool configuration values bootstrapServers and stream pool ID.</p>
 <ul>
 <li>
@@ -913,10 +935,12 @@ These services must be provisioned manually and are configured using kubernetes 
 <li>
 <p>Make a copy of the <a href="./mushop/values-dev.yaml"><code>values-dev.yaml</code></a> file in this directory. Then complete the missing values (e.g. secrets) like the following:</p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">global</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">cloud</span><span class="p">:</span><span class="w"> </span>oci<span class="w">
 </span><span class="w">  </span><span class="k">ossConnectionSecret</span><span class="p">:</span><span class="w"> </span>oss-connection<span class="w">     </span><span class="c"># Name of Stream connection secret</span><span class="w">
 </span><span class="w">  </span><span class="k">oadbAdminSecret</span><span class="p">:</span><span class="w"> </span>oadb-admin<span class="w">             </span><span class="c"># Name of DB Admin secret</span><span class="w">
 </span><span class="w">  </span><span class="k">oadbWalletSecret</span><span class="p">:</span><span class="w"> </span>oadb-wallet<span class="w">           </span><span class="c"># Name of Wallet secret</span><span class="w">
 </span><span class="w">  </span><span class="k">oadbConnectionSecret</span><span class="p">:</span><span class="w"> </span>oadb-connection<span class="w">   </span><span class="c"># Name of DB Connection secret</span><span class="w">
+</span><span class="w">  </span><span class="k">oosBucketSecret</span><span class="p">:</span><span class="w"> </span>oos-bucket<span class="w">             </span><span class="c"># Name of Object Storage bucket secret</span><span class="w">
 </span><span class="w">  </span><span class="k">ociDeploymentConfigMap</span><span class="p">:</span><span class="w"> </span>oci-deployment<span class="w">  </span><span class="c"># Name of Deployment details config map</span><span class="w">
 </span><span class="w"></span><span class="k">tags</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="k">atp</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">                               </span><span class="c"># General flag to use Oracle Autonomous Database</span><span class="w">

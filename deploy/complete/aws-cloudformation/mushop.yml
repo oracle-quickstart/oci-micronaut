@@ -54,7 +54,17 @@ Parameters:
     Type: String
   MSKClusterBootstrapServerBrokers:
     Type: String
+  AssetsS3BucketName:
+    Type: String
 Resources:
+
+  # This creates S3 bucket for mushop assets
+  MuShopAssetsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref AssetsS3BucketName
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: true
 
   # This creates policy and role for the ServiceAccount the MuShop services will run with.
   MuShopServiceIamRole:
@@ -109,6 +119,17 @@ Resources:
                   - "kafka-cluster:*"
                   - "kafka:DescribeCluster"
                 Resource: !Ref MSKClusterArn
+              - Effect: Allow
+                Action:
+                  - "s3:ListBucket"
+                Resource: !GetAtt MuShopAssetsBucket.Arn
+              - Effect: Allow
+                Action:
+                  - "s3:PutObject"
+                  - "s3:PutObjectAcl"
+                  - "s3:GetObject"
+                  - "s3:DeleteObject"
+                Resource: !Join [ '', [ !GetAtt MuShopAssetsBucket.Arn, '/*' ] ]
 
 
   # This creates namespace for MuShop deployment
@@ -420,6 +441,15 @@ Resources:
       Value: !Ref MSKClusterBootstrapServerBrokers
       Description: Events service Kafka cluster bootstrap servers
 
+  # This creates parameter that holds the S3 bucket name used by the assets service
+  MuShopAssetsBucketNameParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /config/assets/micronaut/object-storage/aws/default/bucket
+      Type: String
+      Value: !Ref MuShopAssetsBucket
+      Description: Assets service S3 bucket name
+
   # MuShop utilities
   MushopUtilitiesNamespaceKubernetesResource:
     Type: "AWSQS::Kubernetes::Resource"
@@ -463,7 +493,9 @@ Resources:
   # This deploys helm chart
   MushopHelmChart:
     Type: "AWSQS::Kubernetes::Helm"
-    DependsOn: MushopNamespaceKubernetesResource
+    DependsOn:
+      - MushopNamespaceKubernetesResource
+      - MuShopAssetsBucket
     Properties:
       ClusterID: !Ref KubeClusterName
       Namespace: !Ref MushopNamespace

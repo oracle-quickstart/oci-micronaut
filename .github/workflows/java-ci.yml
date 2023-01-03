@@ -23,7 +23,8 @@ jobs:
             'functions/newsletter-subscription',
             'orders',
             'payment',
-            'user'
+            'user',
+            'assets'
         ]
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +63,8 @@ jobs:
             'fulfillment',
             'orders',
             'payment',
-            'user'
+            'user',
+            'assets'
         ]
     steps:
       - uses: actions/checkout@v2
@@ -158,7 +160,8 @@ jobs:
             'functions/newsletter-subscription',
             'orders',
             'payment',
-            'user'
+            'user',
+            'assets'
         ]
     steps:
       - uses: AutoModality/action-clean@v1
@@ -212,4 +215,4 @@ jobs:
 
       - name: Cleanup images
         if: ${{ always() }}
-        run: docker image prune -f
+        run: docker image prune -a -f

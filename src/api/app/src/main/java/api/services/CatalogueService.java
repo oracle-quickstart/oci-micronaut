@@ -5,14 +5,12 @@ import api.model.Categories;
 import api.services.annotation.MuService;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -24,15 +22,6 @@ import java.util.List;
 @Client(id = ServiceLocator.CATALOGUE)
 @Secured(SecurityRule.IS_ANONYMOUS)
 public interface CatalogueService {
-
-    /**
-     * Get catalogue item image.
-     * @param path The path to the image
-     * @return The resulting image
-     */
-    @Tag(name="catalogue")
-    @Get(uri = "/catalogue/images/{+path}", processes = MediaType.IMAGE_PNG)
-    Flux<HttpResponse<byte[]>> getImage(String path);
 
     /**
      * Get catalogue item.

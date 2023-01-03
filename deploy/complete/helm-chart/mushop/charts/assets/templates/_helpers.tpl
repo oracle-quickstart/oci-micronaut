@@ -44,30 +44,47 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
-{{/* OOS BUCKET PAR */}}
-{{- define "assets.env.par" -}}
-{{- $globalOsb := index (.Values.global | default .) "osb" -}}
-{{- $usesOsbBucket := (index .Values.global "osb").objectstorage  -}}
-{{- $bindingSecret := printf "%s-bucket-par-binding" ($globalOsb.instanceName | default "mushop") -}}
+{{/* OAPM Connection url */}}
+{{- define "assets.oapm.connection" -}}
+{{- $oapmConnection := .Values.oapmConnectionSecret | default (.Values.global.oapmConnectionSecret | default (printf "%s-oapm-connection" .Release.Name)) -}}
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_URL
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_url
+- name: ORACLECLOUD_TRACING_ZIPKIN_HTTP_PATH
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_path
+- name: TRACING_ZIPKIN_ENABLED
+  valueFrom:
+    secretKeyRef:
+      name: {{ $oapmConnection }}
+      key: zipkin_enabled
+{{- end -}}
+
+{{/* OIMS configuration */}}
+{{- define "assets.oims.config" -}}
+{{- $ociDeployment := .Values.ociDeploymentConfigMap | default (.Values.global.ociDeploymentConfigMap | default (printf "%s-oci-deployment" .Chart.Name)) -}}
+- name: ORACLECLOUD_METRICS_COMPARTMENT_ID
+  valueFrom:
+    configMapKeyRef:
+      name: {{ $ociDeployment }}
+      key: compartment_id
+{{- end -}}
+
+{{/* OOS BUCKET */}}
+{{- define "assets.oos.config" -}}
 {{- $bucketSecret := .Values.global.oosBucketSecret | default (printf "%s-bucket" .Release.Name) -}}
-{{- $credentialSecret := .Values.ociAuthSecret | default .Values.global.ociAuthSecret }}
-{{- if $credentialSecret -}}
-- name: REGION
+- name: ASSETS_BUCKET_NAME
   valueFrom:
     secretKeyRef:
-      name: {{ $credentialSecret }}
-      key: region
-      optional: true
-{{ end }}
-- name: BUCKET_PAR
-  valueFrom:
-    secretKeyRef:
-      {{- if $usesOsbBucket }}
-      name: {{ $bindingSecret }}
-      key: preAuthAccessUri
-      {{- else }}
       name: {{ $bucketSecret }}
-      key: parUrl
-      optional: true
-      {{- end -}}
+      key: name
+- name: ASSETS_BUCKET_NAMESPACE
+  valueFrom:
+    secretKeyRef:
+      name: {{ $bucketSecret }}
+      key: namespace
 {{- end -}}

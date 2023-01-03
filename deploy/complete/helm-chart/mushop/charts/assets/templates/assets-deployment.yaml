@@ -20,23 +20,35 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "8080"
     spec:
+      serviceAccountName: {{ .Values.global.serviceAccount | default .Values.serviceAccount | default (printf "default") }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}-{{ .Values.global.cloud }}-{{ .Values.global.imageSuffix | default .Values.image.suffix }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 3000
+            - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /health
-              port: http
+              path: /health/liveness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /health
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+              path: /health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+          {{- $cloud := .Values.cloud | default (.Values.global.cloud | default (printf "oci")) }}
+          {{- if eq "oci" $cloud }}
+            {{- include "assets.oapm.connection" . | nindent 12 }}
+            {{- include "assets.oims.config" . | nindent 12 }}
+            {{- include "assets.oos.config" . | nindent 12 }}
+          {{- end }}
+      nodeSelector:
+        beta.kubernetes.io/os: linux

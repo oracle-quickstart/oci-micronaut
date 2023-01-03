@@ -1,0 +1,15 @@
+plugins {
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":app"))
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("org.junit.jupiter:junit-jupiter-api")
+}

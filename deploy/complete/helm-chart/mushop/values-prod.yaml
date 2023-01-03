@@ -26,5 +26,4 @@ ingress:
 
 api:
   env:
-    mediaUrl:                 # Object Storage URL for catalog image assets
     trackingEnabled:          # Flag that enables sending of tracking events to events service. If event service is not deployed set to "false".

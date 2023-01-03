@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "assets.fullname" . }}-delete
+  labels: {{ include "assets.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  backoffLimit: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app.kubernetes.io/name: {{ include "assets.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: curl
+          image: "curlimages/curl:7.86.0"
+          imagePullPolicy: "IfNotPresent"
+          command: [ "curl"]
+          args: ["-X", "DELETE", "http://mushop-assets/assets"]

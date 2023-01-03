@@ -1,0 +1,62 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
+}
+
+group = "micronaut.mushop"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("assets.*")
+    }
+}
+
+dependencies {
+    implementation(project(":app"))
+
+    // Authentication
+    implementation("software.amazon.awssdk:sts")
+
+    // Configuration discovery
+    implementation("io.micronaut.aws:micronaut-aws-parameter-store")
+
+    // Metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
+
+    // Object Storage
+    implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
+    implementation("io.micronaut.objectstorage:micronaut-object-storage-aws:1.1.0")
+
+    testImplementation(project(":tck"))
+    testImplementation("org.mockito:mockito-core")
+}
+
+application {
+    mainClass.set("assets.AwsApplication")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+if (javaBaseImage == "graalvm") {
+    dockerfile {
+        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+    }
+}
+
+dockerBuild {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/$project.parent.name-$project.name-${javaBaseImage}:$project.version"]
+}
+
+dockerBuildNative {
+    images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
+}

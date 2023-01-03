@@ -108,6 +108,10 @@ Metadata:
           - QSS3BucketName
           - QSS3KeyPrefix
           - QSS3BucketRegion
+      - Label:
+          default: MuShop services configuration
+        Parameters:
+          - AssetsS3BucketName
     ParameterLabels:
       # Default
       CloudFormationVersion:
@@ -186,6 +190,10 @@ Metadata:
       DocDbMasterUser:
         default: Admin username
 
+      # MuShop stack labels
+      AssetsS3BucketName:
+        default: S3 bucket for MuShop Assets service
+
 Parameters:
   CloudFormationVersion:
     Type: String
@@ -236,6 +244,16 @@ Parameters:
     Description: Mushop CloudFormation configuration region
     Type: String
     Default: 'us-west-2'
+  AssetsS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: MuShop Assets bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: mushop-assets
+    Description: S3 bucket name for the MuShop Assets service. This string can include
+      numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start
+      or end with a hyphen (-).
+    Type: String
   RemoteAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
@@ -514,6 +532,7 @@ Resources:
         RandomStringLambdaFunctionArn: !GetAtt MushopUtilitiesStack.Outputs.RandomStringLambdaArn
 
         # MuShop
+        AssetsS3BucketName: !Ref AssetsS3BucketName
         HelmRepository: !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${Version}/charts'
           - S3Region: !Ref MMSS3BucketRegion

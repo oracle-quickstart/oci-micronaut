@@ -9,10 +9,6 @@ micronaut:
       type: fixed
   router:
     static-resources:
-      default:
-        enabled: true
-        mapping: "/catalogue/images/**"
-        paths: "classpath:images"
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**

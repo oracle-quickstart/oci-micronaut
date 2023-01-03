@@ -1,0 +1,10 @@
+micronaut:
+  metrics:
+    export:
+      oraclecloud:
+        enabled: false
+  object-storage:
+    oracle-cloud:
+      default:
+        bucket: test-bucket
+        namespace: test-namespace

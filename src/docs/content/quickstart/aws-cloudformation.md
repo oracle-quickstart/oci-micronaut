@@ -20,15 +20,19 @@ AWS account with configured billing.
 Note that the charges will be applied since used services are not part of the [AWS Free Tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all). 
 {{% /alert %}}
 
-## Create stack
-To start with the [AWS Cloudformation](https://aws.amazon.com/cloudformation/) click on the following button (currently disabled for maintenance):
-</br>
-<!-- [![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml) -->
+## Create S3 bucket
+Create a new S3 bucket and upload the latest [CloudFormation templates](https://github.com/oracle-quickstart/oci-micronaut/releases/latest/download/mushop-aws-latest.zip) to the new bucket.
+The CloudFormation templates should be uploaded together with its parent directory whose name defines CloudFormation templates version, for example: `3.1.0`
 
-Proceed to specify stack details:
+## Create stack
+To start with the [AWS Cloudformation](https://aws.amazon.com/cloudformation/), create a new stack using S3 URL of the uploaded mushop-entrypoint.yaml template file. 
+</br>
+
 {{% width 1-2 %}}
 ![Mushop stack create](../images/aws/aws-stack-create.png)
 {{% /width %}}
+
+Proceed next to the specify stack details.
 
 ## Specify stack details
 

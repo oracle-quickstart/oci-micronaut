@@ -1,9 +1,4 @@
-.PHONY: clean publish-aws oraclecloud-build
-
-#
-# Global AWS configuration
-AWS_S3_BUCKET                  := micronaut-mushop-aws
-AWS_S3_REGION                  := us-west-2
+.PHONY: clean oraclecloud-artefacts aws-artefacts
 
 #
 # Include external configuration
@@ -21,13 +16,10 @@ oraclecloud-artefacts:
 
 #
 # AWS
-aws-publish:
-	mkdir -p ./aws-cloudformation/charts
-	helm package -d ./aws-cloudformation/charts ./helm-chart/mushop
-	helm repo index ./aws-cloudformation/charts
-	aws s3 --recursive cp ./aws-cloudformation s3://$(AWS_S3_BUCKET)/$(VERSION)
-
-
-
-
-
+aws-artefacts:
+	mkdir -p ${VERSION}/charts
+	cp ./aws-cloudformation/* ./${VERSION}
+	helm package -d ${VERSION}/charts ./helm-chart/mushop
+	helm repo index ${VERSION}/charts
+	zip -rm mushop-aws-v${VERSION}.zip ${VERSION}
+	cp mushop-aws-v${VERSION}.zip mushop-aws-latest.zip

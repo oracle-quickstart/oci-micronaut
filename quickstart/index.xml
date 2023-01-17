@@ -70,7 +70,7 @@ cd deploy/complete/helm-chart dir deploy/complete/helm-chart  Path for Cloud Nat
       <description>Deploys the complete MuShop to Amazon Elastic Kubernetes Service (EKS) in combination with Amazon DocumentDb (with MongoDB compatibility), Amazon Relational Database Service (RDS) and Amazon Managed Streaming for Apache Kafka (MSK).
 Prerequisites AWS account with configured billing.
 Note that the charges will be applied since used services are not part of the AWS Free Tier.
- Create stack To start with the AWS Cloudformation click on the following button (currently disabled for maintenance):</description>
+ Create S3 bucket Create a new S3 bucket and upload the latest CloudFormation templates to the new bucket.</description>
     </item>
     
   </channel>

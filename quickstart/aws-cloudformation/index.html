@@ -613,6 +613,7 @@
     <li>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#create-s3-bucket">Create S3 bucket</a></li>
         <li><a href="#create-stack">Create stack</a></li>
         <li><a href="#specify-stack-details">Specify stack details</a></li>
         <li><a href="#stack-options">Stack options</a></li>
@@ -672,13 +673,15 @@
 <div uk-alert class="uk-alert-default uk-grid uk-grid-collapse uk-flex-nowrap "><span uk-icon="icon: warning; ratio: 1.2" class="uk-margin-small-right uk-flex-none"></span><div class="uk-width-expand">
 <p>Note that the charges will be applied since used services are not part of the <a href="https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&amp;all-free-tier.sort-order=asc&amp;awsf.Free%20Tier%20Types=*all&amp;awsf.Free%20Tier%20Categories=*all">AWS Free Tier</a>.</p>
 </div></div>
+<h2 id="create-s3-bucket">Create S3 bucket</h2>
+<p>Create a new S3 bucket and upload the latest <a href="https://github.com/oracle-quickstart/oci-micronaut/releases/latest/download/mushop-aws-latest.zip">CloudFormation templates</a> to the new bucket.
+The CloudFormation templates should be uploaded together with its parent directory whose name defines CloudFormation templates version, for example: <code>3.1.0</code></p>
 <h2 id="create-stack">Create stack</h2>
-<p>To start with the <a href="https://aws.amazon.com/cloudformation/">AWS Cloudformation</a> click on the following button (currently disabled for maintenance):
+<p>To start with the <a href="https://aws.amazon.com/cloudformation/">AWS Cloudformation</a>, create a new stack using S3 URL of the uploaded mushop-entrypoint.yaml template file.
 </br></p>
-<!-- [![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=MicronautMuShop&templateURL=https://micronaut-mushop-aws.s3.us-west-2.amazonaws.com/3.1.0/mushop-entrypoint.yaml) -->
-<p>Proceed to specify stack details:
 <div class="uk-margin-auto uk-width-1-1 uk-width-1-2@s"><p><img src="../images/aws/aws-stack-create.png" alt="Mushop stack create"></p>
-</div></p>
+</div>
+<p>Proceed next to the specify stack details.</p>
 <h2 id="specify-stack-details">Specify stack details</h2>
 <p>The stack contains lot of configuration options for AWS services. Majority of the options are already preconfigured however there are few options that needs to be configured manually:</p>
 <ul>

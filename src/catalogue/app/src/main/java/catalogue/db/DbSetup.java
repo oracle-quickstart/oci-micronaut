@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -44,7 +44,7 @@ public class DbSetup {
 
     @EventListener
     @Transactional
-    void init(StartupEvent startupEvent) {
+    void onStartupEvent(StartupEvent startupEvent) {
         if (repository.count() > 0) {
             return;
         }

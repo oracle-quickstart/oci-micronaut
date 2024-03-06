@@ -1,6 +1,7 @@
 package catalogue.controllers;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ import java.util.List;
  * Lists the available categories
  */
 @Introspected
+@Serdeable
 public class CategoriesDTO {
 
     private final String[] categories;

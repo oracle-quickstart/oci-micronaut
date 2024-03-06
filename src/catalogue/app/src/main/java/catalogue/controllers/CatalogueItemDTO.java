@@ -1,11 +1,13 @@
 package catalogue.controllers;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Represents a product in the catalog
  */
 @Introspected
+@Serdeable
 public class CatalogueItemDTO {
 
     private final String id;
@@ -47,6 +49,7 @@ public class CatalogueItemDTO {
 
     /**
      * The id of the product
+     * @return 
      */
     public String getId() {
         return id;
@@ -54,6 +57,7 @@ public class CatalogueItemDTO {
 
     /**
      * The brand of the product
+     * @return 
      */
     public String getBrand() {
         return brand;
@@ -61,6 +65,7 @@ public class CatalogueItemDTO {
 
     /**
      * The title of the product
+     * @return 
      */
     public String getTitle() {
         return title;
@@ -68,6 +73,7 @@ public class CatalogueItemDTO {
 
     /**
      * The description of the product
+     * @return 
      */
     public String getDescription() {
         return description;
@@ -75,6 +81,7 @@ public class CatalogueItemDTO {
 
     /**
      * The weight of the product
+     * @return 
      */
     public String getWeight() {
         return weight;
@@ -82,6 +89,7 @@ public class CatalogueItemDTO {
 
     /**
      * The size of the product
+     * @return 
      */
     public String getProductSize() {
         return productSize;
@@ -89,6 +97,7 @@ public class CatalogueItemDTO {
 
     /**
      * The available colors of the product
+     * @return 
      */
     public String getColors() {
         return colors;
@@ -96,6 +105,7 @@ public class CatalogueItemDTO {
 
     /**
      * The quantity of the product
+     * @return 
      */
     public int getQty() {
         return qty;
@@ -103,6 +113,7 @@ public class CatalogueItemDTO {
 
     /**
      * The price of the product
+     * @return 
      */
     public double getPrice() {
         return price;
@@ -110,6 +121,7 @@ public class CatalogueItemDTO {
 
     /**
      * An array of size 2 with the first image being the thumbnail and the second the full size image
+     * @return 
      */
     public String[] getImageUrl() {
         return imageUrl;
@@ -117,6 +129,7 @@ public class CatalogueItemDTO {
 
     /**
      * The categories of the image
+     * @return 
      */
     public String[] getCategory() {
         return category;

@@ -74,10 +74,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup GraalVM 
+        uses: graalvm/setup-graalvm@v1.1.22
         with:
-          distribution: 'adopt'
+          distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
       - name: Login to OCIR
         uses: docker/login-action@v1
@@ -170,10 +170,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup GraalVM 
+        uses: graalvm/setup-graalvm@v1.1.22
         with:
-          distribution: 'adopt'
+          distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
       - name: Login to OCIR
         uses: docker/login-action@v1

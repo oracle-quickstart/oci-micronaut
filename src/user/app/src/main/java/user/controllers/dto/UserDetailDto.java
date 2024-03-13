@@ -1,6 +1,7 @@
 package user.controllers.dto;
 
-import io.micronaut.core.annotation.Introspected;
+
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.UUID;
 /**
  * {@link user.model.User} detailed DTO.
  */
-@Introspected
+@Serdeable
 public class UserDetailDto {
 
     private final UUID id;

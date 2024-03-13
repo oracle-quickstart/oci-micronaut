@@ -11,7 +11,7 @@ import user.controllers.dto.UserDetailDto;
 import user.model.User;
 import user.repositories.UserRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import static io.micronaut.http.HttpStatus.UNAUTHORIZED;
 

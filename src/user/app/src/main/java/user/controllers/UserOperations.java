@@ -12,7 +12,7 @@ import user.controllers.dto.UserCardDto;
 import user.controllers.dto.UserDetailDto;
 import user.controllers.dto.UserDto;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -145,3 +145,4 @@ public interface UserOperations {
     void deleteUserCard(UUID userId, UUID cardId);
 
 }
+

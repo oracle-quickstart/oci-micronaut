@@ -52,7 +52,6 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:23.3.0.23.09")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    // implementation("io.micronaut.flyway:micronaut-flyway")
 
     runtimeOnly("org.flywaydb:flyway-database-oracle")
     runtimeOnly("com.oracle.database.security:oraclepki")

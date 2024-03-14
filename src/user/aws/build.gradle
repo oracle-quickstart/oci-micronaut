@@ -51,6 +51,9 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("org.flywaydb:flyway-mysql")
     implementation("mysql:mysql-connector-java")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut.flyway:micronaut-flyway")
+    implementation("io.micronaut:micronaut-jackson-databind")
 
     testImplementation("org.testcontainers:mysql")
     testImplementation(project(":tck"))

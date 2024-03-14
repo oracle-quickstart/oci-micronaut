@@ -31,6 +31,9 @@ micronaut {
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
 
+    runtimeOnly("org.flywaydb:flyway-database-oracle")
+    
+
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
     }
@@ -38,6 +41,8 @@ dependencies {
     // Metrics
     implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+    implementation("io.micronaut.tracing:micronaut-tracing-opentelemetry-zipkin-exporter")
+
 
     // SDK
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
@@ -46,7 +51,10 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
     implementation platform("com.oracle.database.jdbc:ojdbc-bom:23.3.0.23.09")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    // implementation("io.micronaut.flyway:micronaut-flyway")
 
+    runtimeOnly("org.flywaydb:flyway-database-oracle")
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")

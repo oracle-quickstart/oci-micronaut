@@ -52,7 +52,7 @@ dependencies {
     implementation("mysql:mysql-connector-java")
 
     testImplementation("org.testcontainers:mysql")
-    // testImplementation(project(":tck"))
+    testImplementation(project(":tck"))
 }
 
 application {

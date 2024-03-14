@@ -5,5 +5,3 @@ include "aws"
 include "oci"
 include "tck"
 
-startParameter.excludedTaskNames << ':tck:dockerPush'
-startParameter.excludedTaskNames << ':tck:dockerPushNative'

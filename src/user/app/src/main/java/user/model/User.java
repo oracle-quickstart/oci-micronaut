@@ -12,7 +12,7 @@ import io.micronaut.data.annotation.Version;
 import io.micronaut.data.annotation.event.PrePersist;
 import user.PasswordUtils;
 
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;

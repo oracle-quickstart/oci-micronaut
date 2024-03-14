@@ -21,7 +21,7 @@ import user.model.UserCard;
 import user.repositories.UserCardRepository;
 import user.repositories.UserRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;

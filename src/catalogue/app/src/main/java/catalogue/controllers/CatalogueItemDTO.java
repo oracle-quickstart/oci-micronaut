@@ -78,7 +78,7 @@ public class CatalogueItemDTO {
     }
 
     /**
-     * The weight of the produc
+     * The weight of the product
      * @return The weight of the product
      */
     public String getWeight() {

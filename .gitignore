@@ -32,6 +32,7 @@ installs/
 **/.idea/**
 **/node_modules/**
 deploy/basic/terraform/image*
+.micronaut/
 
 # Log file
 *.log

@@ -1,7 +1,7 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.3.3"
-    id("io.micronaut.aot") version "4.3.3"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -39,7 +39,6 @@ dependencies {
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-retry")
-    // implementation("io.micronaut.flyway:micronaut-flyway:7.1.0")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.validation:jakarta.validation-api")

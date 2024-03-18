@@ -1,7 +1,7 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.3.3"
-    id("io.micronaut.aot") version "4.3.3"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -37,11 +37,10 @@ dependencies {
     annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
-    annotationProcessor ("org.mapstruct:mapstruct-processor:1.6.0.Beta1")
+    annotationProcessor ("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
     implementation ("org.mapstruct:mapstruct:${mapstructVersion}")
-
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.validation:micronaut-validation")
@@ -49,7 +48,7 @@ dependencies {
     implementation("jakarta.validation:jakarta.validation-api")
 
     // Metrics
-    implementation("io.micronaut:micronaut-management:1.0.0")
+    implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
     runtimeOnly("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
@@ -70,11 +69,6 @@ dependencies {
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.yaml:snakeyaml")
-
-    
-
-    
-    
     
 
     testImplementation(project(":tck"))

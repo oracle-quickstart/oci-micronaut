@@ -1,11 +1,11 @@
 package payment;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Authorization information.
  */
-@Introspected
+@Serdeable
 public class Authorization {
 
     private final boolean authorised;

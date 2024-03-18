@@ -7,7 +7,7 @@ on:
     branches:
       - main
 env:
-  JAVA: '11'
+  JAVA: '21'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,10 +34,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup GraalVM 
+        uses: graalvm/setup-graalvm@v1.1.2
         with:
-          distribution: 'adopt'
+          distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
       - name: Build and test
         working-directory: src/${{ matrix.project-path }}
@@ -74,10 +74,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup GraalVM 
+        uses: graalvm/setup-graalvm@v1.1.22
         with:
-          distribution: 'adopt'
+          distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
       - name: Login to OCIR
         uses: docker/login-action@v1
@@ -93,7 +93,7 @@ jobs:
           if [ -f "mvnw" ]; then
             # Install only the `lib` module to the local repository so it can be used for building the `app` image
             ./mvnw install -Drevision=$GITHUB_SHA -pl -app,-aws,-oci
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm -Drevision=$GITHUB_SHA --no-transfer-progress -pl app
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=ghcr.io/graalvm/native-image-community:21 -Ddocker.image.suffix=graalvm -Drevision=$GITHUB_SHA --no-transfer-progress -pl app
           elif [ -f "gradlew" ]; then
             ./gradlew :app:dockerPush -Pversion=$GITHUB_SHA --no-daemon
           fi
@@ -102,7 +102,6 @@ jobs:
     needs: build-docker-compose-test-images
     runs-on: self-hosted
     steps:
-      - uses: AutoModality/action-clean@v1
       - uses: actions/checkout@v2
       - name: Login to OCIR
         uses: docker/login-action@v1
@@ -164,7 +163,6 @@ jobs:
             'assets'
         ]
     steps:
-      - uses: AutoModality/action-clean@v1
       - uses: actions/checkout@v2
       - uses: actions/cache@v2.1.4
         with:
@@ -172,10 +170,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup GraalVM 
+        uses: graalvm/setup-graalvm@v1.1.22
         with:
-          distribution: 'adopt'
+          distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
       - name: Login to OCIR
         uses: docker/login-action@v1
@@ -185,32 +183,18 @@ jobs:
           password: ${{ secrets.OCI_TOKEN }}
           logout: false
 
-      - name: Push docker image - GraalVM
+      - name: Push docker image - GraalVM Native Image
         working-directory: src/${{ matrix.project-path }}
         run: |
           if [ -f "mvnw" ]; then
             # Install only the `lib` module to the local repository so it can be used for building `app`, `aws` and `oci` GraalVM images
             ./mvnw install -pl -app,-aws,-oci
             # Build and deploy `app`, `aws` and `oci` GraalVM images
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl app
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl aws
-            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl oci
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native-image-community:21 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl app
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native-image-community:21 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl aws
+            ./mvnw deploy -Dpackaging=docker -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native-image-community:21 -Ddocker.image.suffix=graalvm --no-transfer-progress -pl oci
           elif [ -f "gradlew" ]; then
             ./gradlew dockerPush --no-daemon
-          fi
-
-      - name: Push - docker image GraalVM Native Image
-        working-directory: src/${{ matrix.project-path }}
-        run: |
-          if [ -f "mvnw" ]; then
-            # Install only the `lib` module to the local repository so it can be used for building `app`, `aws` and `oci` images
-            ./mvnw install -pl -app,-aws,-oci
-            # Build and deploy images one by one since the micronaut-maven-plugin doesn't support building of native images by executing `deploy` command on the parent in the multi module project
-            ./mvnw deploy -Dpackaging=docker-native -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0 -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl app
-            ./mvnw deploy -Dpackaging=docker-native -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0 -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl aws
-            ./mvnw deploy -Dpackaging=docker-native -Djib.from.image=phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/native:ol7-java11-22.2.0 -Ddocker.image.suffix=native --no-transfer-progress -Pgraalvm -pl oci
-          elif [ -f "gradlew" ]; then
-            ./gradlew dockerPushNative --no-daemon
           fi
 
       - name: Cleanup images

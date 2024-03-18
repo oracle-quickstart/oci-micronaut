@@ -1,12 +1,12 @@
 package payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * An authorization request for the payment.
  */
-@Introspected
+@Serdeable
 public class AuthorizationRequest {
 
     private final double amount;

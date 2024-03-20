@@ -4,10 +4,10 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.annotation.Relation;
-import io.micronaut.data.jdbc.annotation.JoinColumn;
-import io.micronaut.data.jdbc.annotation.JoinTable;
+import io.micronaut.data.annotation.sql.JoinColumn;
+import io.micronaut.data.annotation.sql.JoinTable;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.Collections;
 import java.util.List;
 

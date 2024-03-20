@@ -1,13 +1,13 @@
 package user.controllers.dto;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
 
 /**
  * {@link user.model.User} DTO.
  */
-@Introspected
+@Serdeable
 public class UserDto {
 
     private final String username;

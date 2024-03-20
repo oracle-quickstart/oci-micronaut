@@ -1,13 +1,13 @@
 package user.controllers.dto;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * {@link user.model.UserAddress} DTO.
  */
-@Introspected
+@Serdeable
 public class UserAddressDto {
 
     @NotEmpty

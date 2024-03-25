@@ -1,6 +1,7 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -16,6 +17,15 @@ micronaut {
         incremental(true)
         annotations("assets.*")
     }
+    aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
 }
 
 dependencies {
@@ -27,7 +37,7 @@ dependencies {
 
     // Object Storage
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
-    implementation("io.micronaut.objectstorage:micronaut-object-storage-oracle-cloud:1.1.0")
+    implementation("io.micronaut.objectstorage:micronaut-object-storage-oracle-cloud")
 
     testImplementation(project(":tck"))
     testImplementation("org.mockito:mockito-core")
@@ -38,13 +48,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

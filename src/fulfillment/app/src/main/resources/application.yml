@@ -33,5 +33,5 @@ mushop:
       shipments: ${ORDERS_SHIPPED:mushop-shipments}
 
 nats:
-  addresses:
-    - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
+  default:
+    server: nats://${NATS_HOST:localhost}:${NATS_PORT:4222}

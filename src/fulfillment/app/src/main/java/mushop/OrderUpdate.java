@@ -4,13 +4,13 @@
  **/
 package  mushop;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.core.annotation.Nullable;
 
 /**
  * The messaging business object.
  */
-@Introspected
+@Serdeable
 public class OrderUpdate {
 
     private final Long orderId;

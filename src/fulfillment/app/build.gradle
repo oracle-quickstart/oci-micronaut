@@ -1,7 +1,8 @@
 plugins {
     id("groovy")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4" 
 }
 
 group = "micronaut.mushop"
@@ -17,15 +18,28 @@ micronaut {
         incremental(true)
         annotations("mushop.*")
     }
+    aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
 }
 
 dependencies {
     annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
 
+    implementation("io.micronaut:micronaut-retry")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.validation:micronaut-validation")
 
     // Metrics
     implementation("io.micronaut:micronaut-management")
@@ -34,7 +48,8 @@ dependencies {
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")
-    implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
+    implementation("io.micronaut.tracing:micronaut-tracing-brave")
+    implementation("io.micronaut.tracing:micronaut-tracing-brave-http")
 
     // NATS
     implementation("io.micronaut.nats:micronaut-nats")
@@ -42,10 +57,16 @@ dependencies {
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
 
+    compileOnly("io.micronaut:micronaut-http-client")
+    compileOnly("io.micronaut:micronaut-http-validation")
+    compileOnly("io.micronaut.serde:micronaut-serde-processor")
+
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation(project(":tck"))
     testImplementation("org.testcontainers:testcontainers")
+    testImplementation("io.micronaut:micronaut-http-client")
 }
 
 application {
@@ -53,13 +74,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

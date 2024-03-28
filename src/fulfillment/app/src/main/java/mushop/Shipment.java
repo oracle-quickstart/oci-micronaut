@@ -4,12 +4,12 @@
  **/
 package  mushop;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * The messaging business object.
  */
-@Introspected
+@Serdeable
 public class Shipment {
 
     private final String id;

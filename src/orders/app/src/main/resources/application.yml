@@ -40,9 +40,12 @@ mushop:
       orders: ${ORDERS_NEW:mushop-orders}
       shipments: ${ORDERS_SHIPPED:mushop-shipments}
 
+# nats:
+#   addresses:
+#     - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
 nats:
-  addresses:
-    - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
+  default:
+    server: nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
 
 jpa:
   default:

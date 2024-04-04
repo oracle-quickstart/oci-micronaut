@@ -1,6 +1,6 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -17,6 +17,7 @@ micronaut {
         annotations("mushop.orders.*")
     }
 }
+tasks.withType(Jar).configureEach { zip64 = true }
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
@@ -51,8 +52,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {

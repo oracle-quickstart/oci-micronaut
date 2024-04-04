@@ -1,6 +1,7 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -15,20 +16,80 @@ micronaut {
     processing {
         incremental(true)
         annotations("mushop.orders.*")
+    }aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
     }
 }
-
+tasks.withType(Jar).configureEach { zip64 = true }
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    annotationProcessor("io.micronaut.micrometer:micronaut-micrometer-annotation")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    annotationProcessor("io.micronaut.tracing:micronaut-tracing-opentelemetry-annotation")
 
-    implementation("org.mapstruct:mapstruct:1.5.3.Final")
+
+     
+
+    
+    
+   
+   
+    // annotationProcessor("io.micronaut:micronaut-inject-java")
+
+
+  
+    // implementation("io.micronaut.data:micronaut-data-tx-hibernate")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.validation:micronaut-validation")
+    implementation("jakarta.validation:jakarta.validation-api")
+    implementation("io.micronaut:micronaut-retry")
+    
+//    implementation("io.micronaut:micronaut-jackson-databind")
+
+    
+    
+
+// implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    // compileOnly("io.micronaut:micronaut-http-client")
+    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
+    //    compileOnly("io.micronaut:micronaut-http-client")
+    // compileOnly("io.micronaut:micronaut-http-validation")
+
+    // runtimeOnly("io.micronaut:micronaut-core")
+    runtimeOnly("org.yaml:snakeyaml")
+    testImplementation("io.micronaut:micronaut-http-client")
+    // testImplementation("org.testcontainers:testcontainers")
+    // testImplementation("io.micronaut.testresources:micronaut-test-resources-extensions-junit-platform")
+    // implementation("io.micronaut:micronaut-inject-java:4.4.0")
+
+
+
+
+
+    
+    
+    
+   
+    
+    
+    
+    
+
+
+    implementation("org.mapstruct:mapstruct:1.5.5.Final")
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut:micronaut-validation")
+    // implementation("io.micronaut:micronaut-validation")
 
     // Metrics
     implementation("io.micronaut:micronaut-management")
@@ -44,11 +105,12 @@ dependencies {
     implementation("io.micronaut.nats:micronaut-nats")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client:3.2.0")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Tracing
     implementation("io.micronaut.tracing:micronaut-tracing-core")
-    implementation("io.micronaut.tracing:micronaut-tracing-zipkin")
+     implementation("io.micronaut.tracing:micronaut-tracing-opentelemetry-http")
+   implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
@@ -56,7 +118,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 
     testImplementation(project(":tck"))
-    testImplementation("com.openpojo:openpojo:0.8.12")
+    testImplementation("com.openpojo:openpojo:0.9.1")
     testImplementation("org.testcontainers:junit-jupiter")
 }
 
@@ -65,13 +127,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

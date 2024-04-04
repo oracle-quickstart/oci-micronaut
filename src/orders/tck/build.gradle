@@ -1,5 +1,5 @@
 plugins {
-    id("io.micronaut.application") version "3.6.2"
+    id("io.micronaut.application") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -7,7 +7,7 @@ group = "micronaut.mushop"
 repositories {
     mavenCentral()
 }
-
+tasks.withType(Jar).configureEach { zip64 = true }
 dependencies {
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'

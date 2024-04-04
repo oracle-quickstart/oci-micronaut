@@ -1,11 +1,11 @@
 package mushop.orders.controllers.dto;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * The {@link mushop.orders.entities.Customer} DTO.
  */
-@Introspected
+@Serdeable
 public class CustomerDto {
 
     private final String id;

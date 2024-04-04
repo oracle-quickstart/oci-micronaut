@@ -4,12 +4,12 @@
  **/
 package mushop.orders.resources;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * The messaging business object.
  */
-@Introspected
+@Serdeable
 public class PaymentResponse {
 
     private final boolean authorised;

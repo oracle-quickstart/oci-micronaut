@@ -16,7 +16,7 @@
 package mushop.orders.controllers.dto;
 
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.http.hateoas.AbstractResource;
 import mushop.orders.entities.Address;
 import mushop.orders.entities.Card;
@@ -28,7 +28,7 @@ import java.util.Date;
 /**
  * The {@link mushop.orders.entities.CustomerOrder} DTO.
  */
-@Introspected
+@Serdeable
 public class CustomerOrderDto extends AbstractResource<CustomerOrderDto> {
 
     private final Long id;

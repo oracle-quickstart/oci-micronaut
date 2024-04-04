@@ -6,21 +6,23 @@ package mushop.orders.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+// import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * The customer business object.
  */
 @Entity
-public class Customer implements Serializable {
+@Serdeable
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -39,6 +39,15 @@ jobs:
         with:
           distribution: 'graalvm'
           java-version: ${{ env.JAVA }}
+      - name: Start NATS server
+        run: |
+          docker run -d -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
+      - name: Wait NATS Server to be ready
+        run: |
+          until nc -z localhost 4222; do
+            echo "waitingfor Nats server to be ready..."
+            sleep 1
+          done
       - name: Build and test
         working-directory: src/${{ matrix.project-path }}
         run: |

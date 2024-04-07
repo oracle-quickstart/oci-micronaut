@@ -8,7 +8,7 @@ import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import jakarta.inject.Inject
 
-abstract class AbstractFulfillmentControllerSpec extends AbstractFulfillmentSpec {
+abstract class AbstractFulfillmentControllerSpec {
 
     @Inject
     @Client("/fulfillment")

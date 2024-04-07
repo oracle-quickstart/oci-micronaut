@@ -11,7 +11,7 @@ import io.micronaut.nats.annotation.Subject
 import jakarta.inject.Inject
 import spock.util.concurrent.AsyncConditions
 
-abstract class AbstractFulfillmentListenerSpec extends AbstractFulfillmentSpec {
+abstract class AbstractFulfillmentListenerSpec {
 
     @Inject
     @Client("/fulfillment")

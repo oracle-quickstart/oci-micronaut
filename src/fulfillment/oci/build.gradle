@@ -26,7 +26,6 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
     testImplementation(project(":tck"))
-    testImplementation("org.testcontainers:testcontainers")
     testImplementation("io.micronaut:micronaut-http-client")
 }
 
@@ -51,8 +50,4 @@ dockerBuild {
 
 dockerBuildNative {
     images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
-}
-
-dockerfileNative {
-    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

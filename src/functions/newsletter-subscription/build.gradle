@@ -1,6 +1,7 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "microanut.mushop.newsletter.subscription"
@@ -10,15 +11,22 @@ repositories {
 }
 
 dependencies {
-    implementation("io.micronaut:micronaut-validation")
-    implementation("io.micronaut:micronaut-jackson-databind")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+
+    implementation("io.micronaut.validation:micronaut-validation")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut:micronaut-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("io.micronaut:micronaut-http-client")
-    implementation 'javax.mail:mail:1.5.0-b01'
+    implementation("io.micronaut.email:micronaut-email-javamail")
 
+    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
+    
     runtimeOnly("org.slf4j:slf4j-simple")
-    implementation("io.micronaut:micronaut-validation")
+    runtimeOnly("org.yaml:snakeyaml")
 
     testImplementation("com.fnproject.fn:testing-junit4")
     testImplementation("io.micronaut:micronaut-http-client")
@@ -30,8 +38,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 tasks {
@@ -72,5 +80,13 @@ micronaut {
     processing {
         incremental(true)
         annotations("newsletter.subscription.*")
+    }aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
     }
 }

@@ -3,7 +3,7 @@ package newsletter.subscription;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.core.bind.annotation.Bindable;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @ConfigurationProperties("smtp")
 public interface MailConfiguration {

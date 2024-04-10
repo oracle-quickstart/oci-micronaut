@@ -7,8 +7,9 @@ package mushop
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import jakarta.inject.Inject
+import spock.lang.Specification
 
-abstract class AbstractFulfillmentControllerSpec {
+abstract class AbstractFulfillmentControllerSpec extends Specification {
 
     @Inject
     @Client("/fulfillment")

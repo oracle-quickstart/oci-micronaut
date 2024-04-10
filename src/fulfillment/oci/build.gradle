@@ -2,6 +2,7 @@ plugins {
     id("groovy")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.test-resources") version "4.3.4"
 }
 
 group = "micronaut.mushop"

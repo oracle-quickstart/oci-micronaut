@@ -1,8 +1,8 @@
 package assets.controllers;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
-@Introspected
+@Serdeable
 public class AssetLocationDTO {
 
     private final String productImagePath;

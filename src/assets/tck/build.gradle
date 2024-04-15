@@ -1,5 +1,5 @@
 plugins {
-    id("io.micronaut.application") version "3.6.2"
+    id("io.micronaut.application") version "4.3.4"
 }
 
 group = "micronaut.mushop"

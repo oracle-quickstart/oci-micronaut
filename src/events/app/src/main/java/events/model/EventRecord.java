@@ -1,7 +1,7 @@
 package events.model;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.time.Instant;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Event record.
  */
-@Introspected
+@Serdeable
 public class EventRecord extends Event {
 
     private final String source;

@@ -1,11 +1,11 @@
 package events.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Defines whether events were received.
  */
-@Introspected
+@Serdeable
 public class EventsReceived {
 
     private final boolean success;

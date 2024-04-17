@@ -1,6 +1,6 @@
 package events.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * The event to track.
  */
-@Introspected
+@Serdeable
 public class Event {
 
     private final String type;

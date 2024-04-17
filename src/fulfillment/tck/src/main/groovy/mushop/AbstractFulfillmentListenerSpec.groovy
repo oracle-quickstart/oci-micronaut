@@ -9,9 +9,10 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.nats.annotation.NatsListener
 import io.micronaut.nats.annotation.Subject
 import jakarta.inject.Inject
+import spock.lang.Specification
 import spock.util.concurrent.AsyncConditions
 
-abstract class AbstractFulfillmentListenerSpec extends AbstractFulfillmentSpec {
+abstract class AbstractFulfillmentListenerSpec extends Specification {
 
     @Inject
     @Client("/fulfillment")

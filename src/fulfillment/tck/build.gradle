@@ -1,6 +1,6 @@
 plugins {
     id("groovy")
-    id("io.micronaut.application") version "3.6.2"
+    id("io.micronaut.application") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -16,5 +16,4 @@ dependencies {
     implementation("io.micronaut:micronaut-inject-groovy")
     implementation("io.micronaut.test:micronaut-test-spock")
     implementation("org.testcontainers:spock")
-    implementation("org.testcontainers:testcontainers")
 }

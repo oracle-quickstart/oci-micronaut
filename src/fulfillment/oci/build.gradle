@@ -1,7 +1,8 @@
 plugins {
     id("groovy")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.test-resources") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -26,7 +27,7 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
 
     testImplementation(project(":tck"))
-    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("io.micronaut:micronaut-http-client")
 }
 
 application {
@@ -34,13 +35,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 
@@ -50,8 +51,4 @@ dockerBuild {
 
 dockerBuildNative {
     images = ["phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.parent.name}-${project.name}-native:$project.version"]
-}
-
-dockerfileNative {
-    instruction "RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.11/main' >> /etc/apk/repositories && apk update && apk add 'zlib<1.2.12'"
 }

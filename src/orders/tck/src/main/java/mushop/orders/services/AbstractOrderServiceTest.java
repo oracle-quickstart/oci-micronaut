@@ -5,7 +5,7 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.test.annotation.MockBean;
 import jakarta.inject.Inject;
-import mushop.orders.AbstractTest;
+// import mushop.orders.AbstractTest;
 import mushop.orders.client.PaymentClient;
 import mushop.orders.controllers.OrdersController;
 import mushop.orders.entities.Address;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-abstract class AbstractOrderServiceTest extends AbstractTest {
+abstract class AbstractOrderServiceTest {
 
     @Inject
     private OrdersService ordersService;

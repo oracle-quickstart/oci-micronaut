@@ -4,7 +4,7 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import jakarta.inject.Inject;
-import mushop.orders.AbstractTest;
+// import mushop.orders.AbstractTest;
 import mushop.orders.repositories.CustomerOrderRepository;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Property(name = "jpa.default.properties.hibernate.hbm2ddl.auto", value = "create-drop")
-abstract class AbstractOrderEntityUnitTest extends AbstractTest {
+abstract class AbstractOrderEntityUnitTest {
 
     @Inject
     private CustomerOrderRepository orderRepository;

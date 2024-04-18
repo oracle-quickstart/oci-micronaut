@@ -40,12 +40,18 @@ mushop:
       orders: ${ORDERS_NEW:mushop-orders}
       shipments: ${ORDERS_SHIPPED:mushop-shipments}
 
-# nats:
-#   addresses:
-#     - nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
+test-resources:
+  containers:
+    nats:
+      image-name: nats:latest
+      hostnames:
+        - nats.host
+      exposed-ports:
+        - nats.port: 4222
 nats:
   default:
-    server: nats://${NATS_HOST:localhost}:${NATS_PORT:4222}
+    addresses:
+      - "nats://${nats.host}:${nats.port}"
 
 jpa:
   default:
@@ -54,3 +60,4 @@ jpa:
         hbm2ddl:
           auto: update
         show_sql: true
+

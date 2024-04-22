@@ -23,11 +23,10 @@ micronaut {
         precomputeOperations = true
         cacheEnvironment = true
         optimizeClassLoading = true
-        deduceEnvironment = true
+        deduceEnvironment = true 
         optimizeNetty = true
-    }
-}
-tasks.withType(Jar).configureEach { zip64 = true }
+        }}
+        
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.openapi:micronaut-openapi")

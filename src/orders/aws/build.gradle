@@ -15,7 +15,7 @@ micronaut {
     runtime("netty")
     testRuntime("junit5")
     processing {
-        incremental(true)
+        incremental(false)
         annotations("mushop.orders.*")
     }aot {
     // Please review carefully the optimizations enabled below
@@ -48,8 +48,8 @@ test {
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor ("io.micronaut:micronaut-inject-java")
-     compileOnly ("io.micronaut:micronaut-inject-java:${micronautVersion}")
-     testImplementation("io.micronaut:micronaut-inject-java:${micronautVersion}")
+//     compileOnly ("io.micronaut:micronaut-inject-java:${micronautVersion}")
+//     testImplementation("io.micronaut:micronaut-inject-java:${micronautVersion}")
      implementation("io.micronaut.data:micronaut-data-jdbc")
      implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     
@@ -97,7 +97,7 @@ java {
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

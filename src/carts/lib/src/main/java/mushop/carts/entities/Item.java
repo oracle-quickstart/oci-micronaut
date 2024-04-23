@@ -2,7 +2,7 @@ package mushop.carts.entities;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;

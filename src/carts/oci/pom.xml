@@ -36,7 +36,11 @@
             <artifactId>micronaut-oraclecloud-micrometer</artifactId>
             <scope>compile</scope>
         </dependency>
-
+<dependency>
+  <groupId>org.yaml</groupId>
+  <artifactId>snakeyaml</artifactId>
+  <scope>runtime</scope>
+</dependency>
         <dependency>
             <groupId>micronaut.mushop.carts</groupId>
             <artifactId>carts-tck</artifactId>
@@ -48,7 +52,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>io.micronaut.build</groupId>
+                <groupId>io.micronaut.maven</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
                 <configuration>
                     <nativeImageBuildArgs>

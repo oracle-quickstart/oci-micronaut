@@ -3,7 +3,7 @@ package mushop.carts.entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.data.annotation.Id;

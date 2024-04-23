@@ -43,6 +43,11 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
 </project>

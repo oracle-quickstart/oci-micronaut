@@ -43,13 +43,11 @@ java {
 }
 
 tasks {
-    // the base image for Oracle Function is fnproject/fn-java-fdk:jre11-latest
-    // TODO: build fnproject image on top of graalvm-ce
-//    if (javaBaseImage == "graalvm") {
-//        dockerfile {
-//            baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-22"
-//        }
-//    }
+   if (javaBaseImage == "graalvm") {
+       dockerfile {
+           baseImage = "ghcr.io/graalvm/native-image-community:21"
+       }
+   }
 
     dockerfileNative {
         args("-XX:MaximumHeapSizePercent=80")

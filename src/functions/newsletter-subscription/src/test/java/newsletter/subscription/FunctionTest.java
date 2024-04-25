@@ -5,7 +5,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Replaces;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

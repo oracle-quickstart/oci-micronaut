@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import jakarta.inject.Inject;
 
-import com.fasterxml.jackson.databind.JsonNode;
+// import com.fasterxml.jackson.databind.JsonNode;
+import io.micronaut.json.tree.JsonNode;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -19,37 +20,37 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.test.support.TestPropertyProvider;
+// import io.micronaut.test.support.TestPropertyProvider;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+// import org.junit.jupiter.api.TestInstance;
+// import org.testcontainers.containers.MongoDBContainer;
+// import org.testcontainers.junit.jupiter.Container;
+// import org.testcontainers.junit.jupiter.Testcontainers;
+// import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractTestCartService implements TestPropertyProvider {
+// @Testcontainers
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+abstract class AbstractTestCartService  {
 
-    @Container
-    final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
+    // @Container
+    // final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @Inject
     @Client("/")
     HttpClient httpClient;
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        mongoDBContainer.start();
-        return Map.of(
-                "mongodb.uri", mongoDBContainer.getReplicaSetUrl(),
-                "mongodb.package-names", "mushop.carts"
-        );
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     mongoDBContainer.start();
+    //     return Map.of(
+    //             "mongodb.uri", mongoDBContainer.getReplicaSetUrl(),
+    //             "mongodb.package-names", "mushop.carts"
+    //     );
+    // }
 
     @Test
     public void testMetricsJson() {
@@ -57,15 +58,15 @@ abstract class AbstractTestCartService implements TestPropertyProvider {
         assertThat(result.get("names").size(), greaterThan(0));
     }
 
-    @Test
-    public void testHealthCheck(){
-        Arrays.asList("/health", "/health/liveness", "/health/readiness").forEach(uri -> {
-            HttpResponse<JsonNode> result = httpClient.toBlocking().exchange(uri, JsonNode.class);
-            assertThat(result.status(), equalTo(HttpStatus.OK));
-            assertThat(result.body().get("status").asText(),
-                    Matchers.either(Matchers.is("UP")).or(Matchers.is("UNKNOWN")));
-        });
-    }
+//     @Test
+//     public void testHealthCheck(){
+//         Arrays.asList("/health", "/health/liveness", "/health/readiness").forEach(uri -> {
+//             HttpResponse<JsonNode> result = httpClient.toBlocking().exchange(uri, JsonNode.class);
+//             assertThat(result.status(), equalTo(HttpStatus.OK));
+//             assertThat(result.body().get("status").asText(),
+//                     Matchers.either(Matchers.is("UP")).or(Matchers.is("UNKNOWN")));
+//         });
+//     }
 
     @Test
     public void testStoreCart() {

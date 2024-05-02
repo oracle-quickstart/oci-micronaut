@@ -2,10 +2,10 @@ package mushop.carts.entities;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import jakarta.validation.constraints.NotNull;
 
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
+import jakarta.validation.constraints.NotNull;
 
 @MappedEntity
 public class Item {

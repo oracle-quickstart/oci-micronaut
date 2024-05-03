@@ -52,6 +52,8 @@ dependencies {
 //     testImplementation("io.micronaut:micronaut-inject-java:${micronautVersion}")
      implementation("io.micronaut.data:micronaut-data-jdbc")
      implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'

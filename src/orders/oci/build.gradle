@@ -22,6 +22,8 @@ tasks.withType(Jar).configureEach { zip64 = true }
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
 
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
@@ -46,6 +48,16 @@ dependencies {
     testImplementation("io.micronaut.nats:micronaut-nats")
     // testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:oracle-xe")
+    // testRuntimeOnly("org.testcontainers:oracle-xe")
+     runtimeOnly("org.yaml:snakeyaml")
+      testImplementation("io.micronaut:micronaut-http-client")
+      implementation("io.micronaut:micronaut-http-client")
+      implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-bmc-monitoring")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-httpclient-netty")
+    implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
+        implementation("io.micronaut.validation:micronaut-validation")
+    implementation("jakarta.validation:jakarta.validation-api")
 }
 
 application {

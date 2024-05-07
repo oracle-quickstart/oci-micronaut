@@ -25,7 +25,8 @@ micronaut {
         optimizeClassLoading = true
         deduceEnvironment = true 
         optimizeNetty = true
-        }}
+        }
+        }
         
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")

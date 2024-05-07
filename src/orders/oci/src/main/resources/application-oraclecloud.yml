@@ -2,10 +2,10 @@ micronaut:
   metrics:
     export:
       oraclecloud:
-        enabled: true
-        namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
-        resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:orders}
-        compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
+        enabled: false  
+        # namespace: ${ORACLECLOUD_METRICS_NAMESPACE:micronaut_mushop}
+        # resourceGroup: ${ORACLECLOUD_METRICS_RESOURCEGROUP:orders}
+        # compartmentId: ${ORACLECLOUD_METRICS_COMPARTMENT_ID}
 
 oci:
   config:

@@ -47,25 +47,16 @@ test {
 }
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor ("io.micronaut:micronaut-inject-java")
-//     compileOnly ("io.micronaut:micronaut-inject-java:${micronautVersion}")
-//     testImplementation("io.micronaut:micronaut-inject-java:${micronautVersion}")
-     implementation("io.micronaut.data:micronaut-data-jdbc")
-     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-     implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
-implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+    implementation("io.micronaut.nats:micronaut-nats")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
     }
- testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-   
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("io.micronaut.test:micronaut-test-junit5")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine")
     implementation("org.slf4j:jcl-over-slf4j")
-    //  runtimeOnly("ch.qos.logback:logback-classic")
+    testImplementation(project(":tck"))
 
     // Authentication
     implementation("software.amazon.awssdk:sts")
@@ -78,14 +69,7 @@ implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Database
-    // implementation("mysql:mysql-connector-java")
     runtimeOnly("mysql:mysql-connector-java")
-    testImplementation(project(":tck"))
-    implementation("io.micronaut.nats:micronaut-nats")
-    // testImplementation("org.testcontainers:junit-jupiter")
-    //  runtimeOnly("mysql:mysql-connector-java")
-    // testImplementation("org.testcontainers:junit-jupiter")
-    // testImplementation("org.testcontainers:mysql")
 }
 
 application {

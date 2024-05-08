@@ -1,9 +1,8 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+   id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.3.4"
     id("io.micronaut.test-resources") version "4.3.4"
     id("io.micronaut.aot") version "4.3.4"
-
 }
 
 group = "micronaut.mushop"
@@ -28,17 +27,19 @@ micronaut {
         optimizeNetty = true
         }
 }
-tasks.withType(Jar).configureEach { zip64 = true }
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor("io.micronaut:micronaut-http-validation")
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
     }
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+        runtimeOnly("org.yaml:snakeyaml")
+    runtimeOnly("ch.qos.logback:logback-classic")
+       implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-httpclient-netty")
 
     // Metrics
     implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
@@ -56,81 +57,9 @@ dependencies {
     runtimeOnly("com.oracle.database.security:osdt_core")
 
     testImplementation(project(":tck"))
-    // testImplementation("io.micronaut.nats:micronaut-nats")
+    testImplementation("io.micronaut.nats:micronaut-nats")
     // testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:oracle-xe")
-    // testRuntimeOnly("org.testcontainers:oracle-xe")
-     runtimeOnly("org.yaml:snakeyaml")
-      implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-      implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
-// implementation("io.micronaut.data:micronaut-data-tx-hibernate")
-   testImplementation("io.micronaut:micronaut-http-client")
-   implementation("io.micronaut.serde:micronaut-serde-jackson")
-       implementation("jakarta.validation:jakarta.validation-api")
-       implementation("io.micronaut.validation:micronaut-validation")
-    // implementation("jakarta.validation:jakarta.validation-api")
-    implementation("io.micronaut:micronaut-retry")
-    // implementation("io.micronaut:micronaut-http-client")
-      
-    //   testImplementation("io.micronaut:micronaut-http-client")
-    //   implementation("io.micronaut:micronaut-http-client")
-    //   implementation("io.micronaut.micrometer:micronaut-micrometer-core")
-    // implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-bmc-monitoring")
-    // implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-httpclient-netty")
-    // implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
-    //     implementation("io.micronaut.validation:micronaut-validation")
-    // implementation("jakarta.validation:jakarta.validation-api")
-
-
-
-    ///////////////////////
-    // annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    // annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    // annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-    // annotationProcessor("io.micronaut:micronaut-http-validation")
-    // annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    // annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
-    // annotationProcessor("io.micronaut.tracing:micronaut-tracing-opentelemetry-annotation")
-
-    // implementation("io.micronaut.serde:micronaut-serde-jackson")
-    // implementation("io.micronaut.validation:micronaut-validation")
-    // implementation("jakarta.validation:jakarta.validation-api")
-    // implementation("io.micronaut:micronaut-retry")
-    // implementation("io.micronaut:micronaut-http-client")
-    // implementation("org.mapstruct:mapstruct:1.5.5.Final")
-
-    // Metrics
-    // implementation("io.micronaut:micronaut-management")
-    // implementation("io.micronaut.micrometer:micronaut-micrometer-core")
-    // implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-
-    // Database
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    // implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    // runtimeOnly("com.h2database:h2")
-
-    // Nats.io support
-    implementation("io.micronaut.nats:micronaut-nats")
-
-    // Kubernetes service discovery
-    // implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
-
-    // Tracing
-//     implementation("io.micronaut.tracing:micronaut-tracing-core")
-//      implementation("io.micronaut.tracing:micronaut-tracing-opentelemetry-http")
-//    implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
-
-    // Swagger
-    // implementation("io.swagger.core.v3:swagger-annotations")
-
-    compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
-    runtimeOnly("org.yaml:snakeyaml")
-    runtimeOnly("ch.qos.logback:logback-classic")
-       implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-httpclient-netty")
-
-    // testImplementation(project(":tck"))
-    // testImplementation("com.openpojo:openpojo:0.9.1")
-    // testImplementation("io.micronaut:micronaut-http-client")
 }
 
 application {

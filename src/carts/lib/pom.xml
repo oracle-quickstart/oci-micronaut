@@ -77,11 +77,15 @@
             <artifactId>micronaut-serde-jackson</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency> -->
+        <dependency>
+    <groupId>io.micronaut.mongodb</groupId>
+    <artifactId>micronaut-mongo-reactive</artifactId>
+</dependency>
         <dependency>
             <groupId>io.micronaut.testresources</groupId>
             <artifactId>micronaut-test-resources-client</artifactId>
@@ -126,5 +130,15 @@
       <scope>compile</scope>
     </dependency>
     </dependencies>
-
+ <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

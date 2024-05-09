@@ -5,7 +5,6 @@
     <parent>
         <groupId>micronaut.mushop.carts</groupId>
         <artifactId>carts-parent</artifactId>
-        <!-- <version>${revision}</version> -->
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -37,11 +36,11 @@
             <artifactId>micronaut-oraclecloud-micrometer</artifactId>
             <scope>compile</scope>
         </dependency>
-<dependency>
-  <groupId>org.yaml</groupId>
-  <artifactId>snakeyaml</artifactId>
-  <scope>runtime</scope>
-</dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>micronaut.mushop.carts</groupId>
             <artifactId>carts-tck</artifactId>
@@ -49,8 +48,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
+<build>
         <plugins>
             <plugin>
                 <groupId>io.micronaut.maven</groupId>
@@ -58,8 +56,19 @@
                 <configuration>
                     <nativeImageBuildArgs>
                         <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
+                        <buildArg>-H:-UseServiceLoaderFeature</buildArg>
                     </nativeImageBuildArgs>
-                </configuration>
+                    <testResourcesDependencies>
+                        <dependency>
+                             <groupId>io.micronaut.testresources</groupId>
+                             <artifactId>micronaut-test-resources-mongodb</artifactId>
+                        </dependency>
+                    </testResourcesDependencies>
+            </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
@@ -72,5 +81,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -5,7 +5,6 @@
     <parent>
         <groupId>micronaut.mushop.carts</groupId>
         <artifactId>carts-parent</artifactId>
-        <!-- <version>${revision}</version> -->
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -31,26 +30,11 @@
             <artifactId>micronaut-micrometer-registry-prometheus</artifactId>
             <scope>compile</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>io.micronaut.data</groupId>
-            <artifactId>micronaut-data-mongodb</artifactId>
-            <scope>compile</scope>
-        </dependency>
-         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>io.micronaut.testresources</groupId>
-            <artifactId>micronaut-test-resources-client</artifactId>
-            <scope>provided</scope>
-        </dependency> -->
-<dependency>
-  <groupId>org.yaml</groupId>
-  <artifactId>snakeyaml</artifactId>
-  <scope>runtime</scope>
-</dependency>
         <dependency>
             <groupId>micronaut.mushop.carts</groupId>
             <artifactId>carts-tck</artifactId>
@@ -69,7 +53,13 @@
                         <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
                         <buildArg>-H:-UseServiceLoaderFeature</buildArg>
                     </nativeImageBuildArgs>
-                </configuration>
+                    <testResourcesDependencies>
+                      <dependency>
+                        <groupId>io.micronaut.testresources</groupId>
+                        <artifactId>micronaut-test-resources-mongodb</artifactId>
+                    </dependency>
+                </testResourcesDependencies>
+            </configuration>
             </plugin>
              <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

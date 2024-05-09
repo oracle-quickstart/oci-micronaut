@@ -25,7 +25,11 @@
             <artifactId>carts-lib</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <!-- <dependency>
+             <groupId>org.yaml</groupId>
+             <artifactId>snakeyaml</artifactId>
+             <scope>runtime</scope>
+        </dependency> -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sts</artifactId>
@@ -60,7 +64,7 @@
 </dependency>
     </dependencies>
 
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>io.micronaut.maven</groupId>
@@ -69,7 +73,53 @@
                     <nativeImageBuildArgs>
                         <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
                     </nativeImageBuildArgs>
+                    <testResourcesDependencies>
+                    <dependency>
+                        <groupId>io.micronaut.testresources</groupId>
+                        <artifactId>micronaut-test-resources-mongodb</artifactId>
+                    </dependency>
+                </testResourcesDependencies>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <configuration>
+                    <to>
+                        <image>phx.ocir.io/oraclelabs/micronaut-showcase/mushop/${project.artifactId}-${docker.image.suffix}:${project.version}</image>
+                    </to>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build> -->
+<build>
+        <plugins>
+            <plugin>
+                <groupId>io.micronaut.maven</groupId>
+                <artifactId>micronaut-maven-plugin</artifactId>
+                <configuration>
+                    <nativeImageBuildArgs>
+                        <nativeImageBuildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</nativeImageBuildArg>
+                        <buildArg>-H:-UseServiceLoaderFeature</buildArg>
+                    </nativeImageBuildArgs>
+                <testResourcesDependencies>
+                    <dependency>
+                        <groupId>io.micronaut.testresources</groupId>
+                        <artifactId>micronaut-test-resources-mongodb</artifactId>
+                    </dependency>
+                </testResourcesDependencies>
+            </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
@@ -82,5 +132,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

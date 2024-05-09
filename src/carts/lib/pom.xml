@@ -5,7 +5,6 @@
     <parent>
         <groupId>micronaut.mushop.carts</groupId>
         <artifactId>carts-parent</artifactId>
-        <!-- <version>${revision}</version> -->
         <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -23,8 +22,6 @@
         <dependency>
             <groupId>io.micronaut.validation</groupId>
             <artifactId>micronaut-validation</artifactId>
-              <!-- <version>${micronaut.core.version}</version> -->
-               <!-- <version>4.3.4</version> -->
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -33,16 +30,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-  <groupId>org.yaml</groupId>
-  <artifactId>snakeyaml</artifactId>
-  <scope>runtime</scope>
-</dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>io.micronaut</groupId>
             <artifactId>micronaut-http-client</artifactId>
@@ -53,12 +49,11 @@
             <artifactId>micronaut-runtime</artifactId>
             <scope>compile</scope>
         </dependency>
-        
-<dependency>
-      <groupId>jakarta.validation</groupId>
-      <artifactId>jakarta.validation-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- Swagger -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
@@ -77,15 +72,10 @@
             <artifactId>micronaut-serde-jackson</artifactId>
             <scope>compile</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <scope>runtime</scope>
-        </dependency> -->
         <dependency>
-    <groupId>io.micronaut.mongodb</groupId>
-    <artifactId>micronaut-mongo-reactive</artifactId>
-</dependency>
+            <groupId>io.micronaut.mongodb</groupId>
+            <artifactId>micronaut-mongo-reactive</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.micronaut.testresources</groupId>
             <artifactId>micronaut-test-resources-client</artifactId>
@@ -124,11 +114,11 @@
             <artifactId>micronaut-tracing-core</artifactId>
             <scope>compile</scope>
         </dependency>
-<dependency>
-      <groupId>io.micronaut.tracing</groupId>
-      <artifactId>micronaut-tracing-brave-http</artifactId>
-      <scope>compile</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.micronaut.tracing</groupId>
+            <artifactId>micronaut-tracing-brave-http</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
  <build>
         <plugins>

@@ -15,47 +15,25 @@
  */
 package mushop.carts;
 
-// import io.micronaut.test.support.TestPropertyProvider;
-import mushop.carts.entities.Cart;
-import mushop.carts.entities.Item;
-import mushop.carts.repositories.CartRepository;
-import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.TestInstance;
-// import org.testcontainers.containers.MongoDBContainer;
-// import org.testcontainers.junit.jupiter.Container;
-// import org.testcontainers.junit.jupiter.Testcontainers;
-// import org.testcontainers.utility.DockerImageName;
-
-import jakarta.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
-// @Testcontainers
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+import jakarta.inject.Inject;
+import mushop.carts.entities.Cart;
+import mushop.carts.entities.Item;
+import mushop.carts.repositories.CartRepository;
+
 abstract class AbstractCartRepositoryMongoTest  {
-
-    // @Container
-    // final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @Inject
     CartRepository cartRepository;
 
-    // @Override
-    // public Map<String, String> getProperties() {
-    //     mongoDBContainer.start();
-    //     return Map.of(
-    //             "mongodb.uri", mongoDBContainer.getReplicaSetUrl("mushop"),
-    //             "mongodb.package-names", "mushop.carts",
-    //             "micronaut.data.mongodb.create-collections", "true",
-    //             "carts.database", "mushop"
-    //     );
-    // }
 
     @Test
     void testCartRepositoryResolution(){

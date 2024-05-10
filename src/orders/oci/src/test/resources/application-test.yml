@@ -3,12 +3,8 @@ micronaut:
     export:
       oraclecloud:
         enabled: false
+
 datasources:
   default:
     url: jdbc:tc:oracle:thin:@/xe
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-
-flyway:
-  datasources:
-    default:
-      locations: classpath:db/migration

@@ -12,7 +12,6 @@
     <artifactId>carts-tck</artifactId>
 
     <packaging>jar</packaging>
- 
     <dependencies>
         <dependency>
             <groupId>micronaut.mushop.carts</groupId>
@@ -42,7 +41,7 @@
         <dependency>
             <groupId>io.micronaut.testresources</groupId>
             <artifactId>micronaut-test-resources-client</artifactId>
-       </dependency>
+        </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>

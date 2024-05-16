@@ -36,7 +36,7 @@ dependencies {
 
     // Kafka IAM
     implementation("software.amazon.msk:aws-msk-iam-auth:1.0.0")
-
+    implementation("io.micronaut.kafka:micronaut-kafka")
     // Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
@@ -45,7 +45,6 @@ dependencies {
     implementation("software.amazon.awssdk:sts")
 
     testImplementation(project(":tck"))
-    // testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {

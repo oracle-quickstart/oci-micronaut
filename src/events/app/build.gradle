@@ -41,6 +41,7 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("io.micronaut:micronaut-retry")
+    implementation("jakarta.validation:jakarta.validation-api")
     // Metrics
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
@@ -62,7 +63,7 @@ dependencies {
 
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation(project(":tck"))
-    // testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("io.micronaut:micronaut-http-client")
 }
 
 application {

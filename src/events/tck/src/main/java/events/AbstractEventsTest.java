@@ -7,18 +7,11 @@ import events.service.EventService;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.OffsetReset;
 import io.micronaut.configuration.kafka.annotation.Topic;
-// import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.test.support.TestPropertyProvider;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.TestInstance;
-// import org.testcontainers.containers.KafkaContainer;
-// import org.testcontainers.junit.jupiter.Container;
-// import org.testcontainers.junit.jupiter.Testcontainers;
-// import org.testcontainers.utility.DockerImageName;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,12 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// @Testcontainers
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class AbstractEventsTest {
-
-    // @Container
-    // static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
 
     @Inject
     EventsListener eventsListener;
@@ -92,13 +80,6 @@ abstract class AbstractEventsTest {
         assertEquals(details, eventRecord.getDetail());
     }
 
-    // @NonNull
-    // @Override
-    // public Map<String, String> getProperties() {
-    //     return Collections.singletonMap(
-    //             "kafka.bootstrap.servers", kafka.getBootstrapServers()
-    //     );
-    // }
 
     @KafkaListener(offsetReset = OffsetReset.EARLIEST)
     static class EventsListener {

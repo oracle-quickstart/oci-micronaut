@@ -33,9 +33,8 @@ dependencies {
 
     // Metrics
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-micrometer")
-
+    implementation("io.micronaut.kafka:micronaut-kafka")
     testImplementation(project(":tck"))
-    // testImplementation("org.testcontainers:junit-jupiter")
 
 }
 

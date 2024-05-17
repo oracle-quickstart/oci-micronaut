@@ -23,12 +23,12 @@ abstract class AbstractTestCartService  {
   
     @Inject
     @Client("/")
-    HttpClient httpClient;
+    HttpClient client;
 
 
     @Test
     public void testMetricsJson() {
-        JsonNode result = httpClient.toBlocking().retrieve("/metrics", JsonNode.class);
+        JsonNode result = client.toBlocking().retrieve("/metrics", JsonNode.class);
         assertThat(result.get("names").size(), greaterThan(0));
     }
 
@@ -36,27 +36,25 @@ abstract class AbstractTestCartService  {
 
     @Test
     public void testStoreCart() {
-        Item i = new Item();
-        i.setUnitPrice(BigDecimal.valueOf(123));
-        i.setQuantity(47);
-        i.setItemId("I123");
+        Item i = Item.of("I123", 47, BigDecimal.valueOf(123));
+        Cart c = Cart.of("c1", List.of(i));
 
-        Cart c = new Cart();
-        c.setCustomerId("c1");
-        c.getItems().add(i);
-
-        HttpResponse<Cart> created = httpClient.toBlocking().exchange(HttpRequest.POST("/carts/" + c.getId(), c), Cart.class);
+        HttpResponse<Cart> created = client.toBlocking().exchange(HttpRequest.POST("/carts/" + c.id(), c), Cart.class);
         assertEquals(HttpStatus.CREATED, created.getStatus());
-        assertEquals(c.getId(), created.body().getId());
+        assertEquals(c.id(), created.body().id());
 
-        HttpResponse<List<Item>> items = httpClient.toBlocking().exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class));
+        HttpResponse<List<Item>> items = client.toBlocking().exchange(HttpRequest.GET("/carts/" + c.id() + "/items"), Argument.listOf(Item.class));
         assertEquals(1, items.body().size());
-        assertEquals(i.getId(), items.body().get(0).getId());
+        assertEquals(i.id(), items.body().get(0).id());
 
-        HttpResponse<Cart> deleteItem = httpClient.toBlocking().exchange(HttpRequest.DELETE("/carts/" + c.getId() + "/items/" + i.getItemId()), Cart.class);
+        HttpResponse<Cart> updateItem = client.toBlocking().exchange(HttpRequest.PUT("/carts/" + c.id() + "/items", i.withQuantity(23)), Cart.class);
+        assertEquals(HttpStatus.OK, updateItem.getStatus());
+        assertEquals(23, updateItem.body().getItems().getFirst().quantity());
+
+        HttpResponse<Cart> deleteItem = client.toBlocking().exchange(HttpRequest.DELETE("/carts/" + c.id() + "/items/" + i.itemId()), Cart.class);
         assertEquals(HttpStatus.OK, deleteItem.getStatus());
 
-        items = httpClient.toBlocking().exchange(HttpRequest.GET("/carts/" + c.getId() + "/items"), Argument.listOf(Item.class));
+        items = client.toBlocking().exchange(HttpRequest.GET("/carts/" + c.id() + "/items"), Argument.listOf(Item.class));
         assertEquals(0, items.body().size());
     }
 }

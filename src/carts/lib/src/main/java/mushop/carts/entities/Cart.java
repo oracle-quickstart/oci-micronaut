@@ -1,82 +1,58 @@
 package mushop.carts.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import jakarta.validation.constraints.NotNull;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import io.micronaut.core.annotation.Creator;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 
 @MappedEntity
-public class Cart {
+public record Cart(@Id String id, String customerId, Map<String, Item> items) {
 
-    @Id
-    private String id;
-
-    private String customerId;
-
-    private List<Item> items = new ArrayList<>();
-
-    public Cart() {
-        id = UUID.randomUUID().toString();
+    public static Cart of(String customerId, List<Item> items) {
+        return new Cart(UUID.randomUUID().toString(), customerId, items);
     }
 
-    public Cart(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public Cart(@Id String id, String customerId, List<Item> itemList) {
+        this(id, customerId, itemList.stream().collect(Collectors.toMap(Item::itemId, Function.identity())));
     }
 
     public boolean removeItem(String itemId) {
-        return items.removeIf(item -> itemId.equalsIgnoreCase(item.getItemId()));
+        Item removed = items.remove(itemId);
+        return removed != null;
     }
 
-    public void merge(Cart cart) {
-        customerId = cart.getCustomerId();
-        for (Item item : cart.items) {
-            mergeItem(item);
+    public void updateItem(Item item) {
+        items.put(item.itemId(), item);
+    }
+
+    public Cart merge(Cart cart) {
+        return new Cart(id, cart.customerId(), mergeItems(cart.items));
+    }
+
+    private Map<String, Item> mergeItems(Map<String, Item> newItems) {
+        Map<String, Item> result = new HashMap<>(items);
+        for (Item newItem : newItems.values()) {
+            result.computeIfPresent(newItem.itemId(), (itemId, existing) -> new Item(existing.id(), itemId, existing.quantity() + newItem.quantity(), existing.unitPrice()));
+            result.putIfAbsent(newItem.itemId(), newItem);
         }
+        return result;
     }
 
-    private void mergeItem(Item item) {
-        for (Item existing : items) {
-            if (existing.getItemId().equals(item.getItemId())) {
-                existing.setQuantity(existing.getQuantity() + item.getQuantity());
-                return;
-            }
-        }
-        items.add(item);
+    public Cart withId(String cartId) {
+        return new Cart(cartId, customerId, items);
     }
 
-    @Override
-    public String toString() {
-        return "Cart [customerId=" + customerId +
-                ", id=" + id +
-                ", items=" + items +
-                "]";
+    public List<Item> getItems() {
+        return Optional.ofNullable(items)
+            .map(Map::values)
+            .map(ArrayList::new)
+            .orElseGet(ArrayList::new);
     }
 }

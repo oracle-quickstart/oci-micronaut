@@ -28,6 +28,7 @@ import jakarta.inject.Inject;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import mushop.carts.repositories.CartRepository;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 abstract class AbstractCartRepositoryMongoTest  {
 
@@ -42,23 +43,18 @@ abstract class AbstractCartRepositoryMongoTest  {
 
     @Test
     void testCartRepository() {
-        Cart cart = new Cart("1234");
-        cart.setCustomerId("abcd");
-        Item item = new Item();
-        item.setItemId("item id");
-        item.setId("ab");
-        item.setQuantity(3);
-        item.setUnitPrice(new BigDecimal(101));
+        Item item = new Item("ab", "item id", 3, new BigDecimal(101));
+        Cart cart = new Cart("1234", "abcd", List.of(item));
         cart.getItems().add(item);
         cartRepository.save(cart);
 
         Optional<Cart> acart = cartRepository.findById("1234");
         assertTrue(acart.isPresent());
-        assertEquals(cart.getCustomerId(), acart.get().getCustomerId());
+        assertEquals(cart.customerId(), acart.get().customerId());
 
         List<Cart> customerCart = cartRepository.getByCustomerId("abcd");
         assertNotNull(customerCart);
         assertEquals(1, customerCart.size());
-        assertEquals(cart.getCustomerId(), customerCart.get(0).getCustomerId());
+        assertEquals(cart.customerId(), customerCart.get(0).customerId());
     }
 }

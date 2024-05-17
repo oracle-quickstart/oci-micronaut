@@ -28,7 +28,6 @@ import jakarta.inject.Inject;
 import mushop.carts.entities.Cart;
 import mushop.carts.entities.Item;
 import mushop.carts.repositories.CartRepository;
-import org.testcontainers.shaded.org.checkerframework.checker.units.qual.C;
 
 abstract class AbstractCartRepositoryMongoTest  {
 

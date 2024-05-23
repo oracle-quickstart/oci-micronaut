@@ -14,26 +14,30 @@
     </modules>
 
     <parent>
-        <groupId>io.micronaut</groupId>
+        <groupId>io.micronaut.platform</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>3.7.3</version>
+        <version>4.3.4</version>
     </parent>
-
-    <groupId>micronaut.mushop.carts</groupId>
-    <artifactId>carts-parent</artifactId>
-    <version>${revision}</version>
-
-    <name>carts</name>
-    <description>Cart service</description>
+   <groupId>micronaut.mushop.carts</groupId>
+        <artifactId>carts-parent</artifactId>
+        <version>0.1</version>
+        
+        <name>carts</name>
+        <description>Cart service</description>
 
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.0.0-SNAPSHOT</revision>
-        <jdk.version>11</jdk.version>
-        <release.version>11</release.version>
+        <jdk.version>21</jdk.version>
+        <release.version>21</release.version>
+        <micronaut.version>4.3.4</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
-        <micronaut.version>3.7.3</micronaut.version>
+        <micronaut.aot.enabled>false</micronaut.aot.enabled>
+        <exec.mainClass>mushop.carts.Application</exec.mainClass>
+        <micronaut-maven-plugin.version>4.5.2</micronaut-maven-plugin.version>
+        <micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
+        <micronaut.test.resources.version>2.4.0</micronaut.test.resources.version>
+        <micronaut.aot.packageName>mushop.micronaut.aot.generated</micronaut.aot.packageName>
         <docker.image.suffix>graalvm</docker.image.suffix>
     </properties>
 
@@ -42,10 +46,22 @@
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+        
     </repositories>
 
     <build>
         <plugins>
+        <plugin>
+        <groupId>io.micronaut.maven</groupId>
+        <artifactId>micronaut-maven-plugin</artifactId>
+        <configuration>
+          <configFile>aot-${packaging}.properties</configFile>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -53,11 +69,14 @@
                     <!-- Uncomment to enable incremental compilation -->
                     <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
 
+                    <source>21</source>
+                    <target>21</target>
+            
                     <annotationProcessorPaths combine.children="append">
                         <path>
                             <groupId>io.micronaut</groupId>
                             <artifactId>micronaut-inject-java</artifactId>
-                            <version>${micronaut.version}</version>
+                            <version>${micronaut.core.version}</version>
                         </path>
                         <path>
                             <groupId>io.micronaut.data</groupId>
@@ -67,22 +86,28 @@
                         <path>
                             <groupId>io.micronaut</groupId>
                             <artifactId>micronaut-graal</artifactId>
-                            <version>${micronaut.version}</version>
+                            <version>${micronaut.core.version}</version>
                         </path>
                         <path>
                             <groupId>io.micronaut</groupId>
                             <artifactId>micronaut-http-validation</artifactId>
-                            <version>${micronaut.version}</version>
+                            <version>${micronaut.core.version}</version>
                         </path>
                         <path>
-                            <groupId>io.micronaut</groupId>
-                            <artifactId>micronaut-validation</artifactId>
-                            <version>${micronaut.version}</version>
+                            <groupId>io.micronaut.serde</groupId>
+                            <artifactId>micronaut-serde-processor</artifactId>
+                            <version>${micronaut.serialization.version}</version>
                         </path>
                         <path>
                             <groupId>io.micronaut.data</groupId>
                             <artifactId>micronaut-data-document-processor</artifactId>
                             <version>${micronaut.data.version}</version>
+                            <exclusions>
+                            <exclusion>
+                                <groupId>io.micronaut</groupId>
+                                <artifactId>micronaut-inject</artifactId>
+                            </exclusion>
+                            </exclusions>
                         </path>
                         <path>
                             <groupId>io.micronaut.openapi</groupId>
@@ -94,11 +119,16 @@
                             <artifactId>micronaut-micrometer-annotation</artifactId>
                             <version>${micronaut.micrometer.version}</version>
                         </path>
-                    </annotationProcessorPaths>
-                    <compilerArgs>
-                        <arg>-Amicronaut.processing.group=mushop</arg>
-                        <arg>-Amicronaut.processing.module=carts</arg>
-                    </compilerArgs>
+                        <path>
+                            <groupId>io.micronaut.validation</groupId>
+                            <artifactId>micronaut-validation-processor</artifactId>
+                            <version>${micronaut.validation.version}</version>
+                        </path>
+                            </annotationProcessorPaths>
+                                <compilerArgs>
+                                    <arg>-Amicronaut.processing.group=mushop</arg>
+                                    <arg>-Amicronaut.processing.module=carts</arg>
+                                </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

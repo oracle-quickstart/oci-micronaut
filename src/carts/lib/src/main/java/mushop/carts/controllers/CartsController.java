@@ -113,7 +113,7 @@ class CartsController {
         LOG.info("Received {} with cart {}", cartId, newCart);
         Optional<Cart> cartHolder = cartRepository.findById(cartId);
         if (cartHolder.isEmpty()) {
-            newCart.setId(cartId);
+            newCart = newCart.withId(cartId);
             cartRepository.save(newCart);
             LOG.info("Cart created: {}", newCart);
             return HttpResponse.created(newCart);
@@ -136,9 +136,8 @@ class CartsController {
             );
 
         for (Item item : cart.getItems()) {
-            if (item.getItemId().equals(qItem.getItemId())) {
-                item.setQuantity(qItem.getQuantity());
-
+            if (item.itemId().equals(qItem.itemId())) {
+                cart.updateItem(item.withQuantity(qItem.quantity()));
                 cartRepository.update(cart);
                 LOG.info("Cart item updated: {}", cart);
                 return cart;

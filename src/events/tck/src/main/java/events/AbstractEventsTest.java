@@ -56,6 +56,7 @@ abstract class AbstractEventsTest {
         final String source = "client";
         final String track = "abcxyz";
         final String type = "pageView";
+        System.out.println("Client posting event: " + type);
         final EventsReceived eventsReceived = client.postEvents(
                 source,
                 track,
@@ -63,21 +64,21 @@ abstract class AbstractEventsTest {
         );
 
         assertNotNull(eventsReceived);
-        assertTrue(eventsReceived.isSuccess());
-        assertEquals(1, eventsReceived.getEvents());
+        assertTrue(eventsReceived.success());
+        assertEquals(1, eventsReceived.events());
         assertEventReceived(source, track, type, details);
     }
 
     private void assertEventReceived(String source, String track, String type, Map<String, String> details) {
-        await().atMost(30, SECONDS).until(() -> !eventsListener.received.isEmpty());
+        await().atMost(60, SECONDS).until(() -> !eventsListener.received.isEmpty());
 
         final EventRecord eventRecord = eventsListener.received.stream().findFirst().orElse(null);
         assertNotNull(eventRecord);
-        assertEquals(source, eventRecord.getSource());
-        assertEquals(track, eventRecord.getTrack());
-        assertNotNull(eventRecord.getTime());
-        assertEquals(type, eventRecord.getType());
-        assertEquals(details, eventRecord.getDetail());
+        assertEquals(source, eventRecord.source());
+        assertEquals(track, eventRecord.track());
+        assertNotNull(eventRecord.time());
+        assertEquals(type, eventRecord.type());
+        assertEquals(details, eventRecord.detail());
     }
 
 

@@ -10,39 +10,27 @@ import java.util.Objects;
 /**
  * Event record.
  */
+// import java.time.Instant;
+// import java.util.Map;
+// import java.util.Objects;
+
 @Serdeable
-public class EventRecord extends Event {
+public record EventRecord(String source, String track, Instant time, Event event) {
 
-    private final String source;
-    private final String track;
-    private final Instant time;
-
-    public EventRecord(String source,
-                       String track,
-                       Event event) {
-        this(source, track, Objects.requireNonNull(event, "Event cannot be null").getType(), event.getDetail());
+    public EventRecord(String source, String track, Event event) {
+        this(source, track, Instant.now(), Objects.requireNonNull(event, "Event cannot be null"));
     }
 
     @Creator
-    public EventRecord(String source,
-                       String track,
-                       String type,
-                       Map<String, String> detail) {
-        super(type, detail);
-        this.source = source;
-        this.track = track;
-        time = Instant.now();
+    public EventRecord(String source, String track, String type, Map<String, String> detail) {
+        this(source, track, Instant.now(), new Event(type, detail));
     }
 
-    public String getSource() {
-        return source;
+    public String type() {
+        return event.type();
     }
 
-    public String getTrack() {
-        return track;
-    }
-
-    public Instant getTime() {
-        return time;
+    public Map<String, String> detail() {
+        return event.detail();
     }
 }

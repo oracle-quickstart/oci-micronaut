@@ -1,7 +1,0 @@
-kafka:
-  bootstrap:
-    servers: localhost:9092
-test-resources:
- containers:
-   kafka:
-     image-name: "confluentinc/cp-kafka:7.3.3"

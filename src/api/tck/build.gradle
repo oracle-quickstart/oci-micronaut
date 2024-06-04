@@ -21,6 +21,8 @@ dependencies {
     implementation("org.testcontainers:testcontainers")
     // implementation("org.testcontainers:mongodb")
     implementation("io.micronaut.data:micronaut-data-mongodb")
+        implementation("io.micronaut.redis:micronaut-redis-lettuce")
+
     implementation("org.mockito:mockito-core")
-    implementation("org.testcontainers:junit-jupiter")
+    //implementation("org.testcontainers:junit-jupiter")
 }

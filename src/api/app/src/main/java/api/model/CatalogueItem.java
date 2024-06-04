@@ -15,11 +15,11 @@
  */
 package api.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(title = "Catalogue item")
-@Introspected
+@Serdeable
 public class CatalogueItem {
 
     private final String id;

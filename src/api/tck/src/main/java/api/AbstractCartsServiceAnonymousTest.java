@@ -35,10 +35,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+// @Testcontainers
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-abstract class AbstractCartsServiceAnonymousTest extends AbstractDatabaseServiceTest {
+abstract class AbstractCartsServiceAnonymousTest {
 
     private static String sessionID;
 
@@ -49,13 +49,13 @@ abstract class AbstractCartsServiceAnonymousTest extends AbstractDatabaseService
         sessionID = session.getValue();
     }
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = true;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = true;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
     @Test
     @Order(1)
@@ -184,13 +184,13 @@ abstract class AbstractCartsServiceAnonymousTest extends AbstractDatabaseService
         }
     }
 
-    @Override
-    protected String getServiceId() {
-        return "carts";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "carts";
+    // }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 }

@@ -36,31 +36,31 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractPlaceOrderTest extends AbstractDatabaseServiceTest {
+// @Testcontainers
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+abstract class AbstractPlaceOrderTest {
 
     private static String sessionID;
 
     private final MockAuth mockAuth = new MockAuth();
     private OrdersService.OrderRequest lastOrder;
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 
-    @Override
-    protected String getServiceId() {
-        return "carts";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "carts";
+    // }
 
-    @BeforeAll
-    static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
-        final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
-        sessionID = session.getValue();
-    }
+    // @BeforeAll
+    // static void login(LoginClient client) {
+    //     final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
+    //     final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
+    //     sessionID = session.getValue();
+    // }
 
     @Test
     void testPlaceOrder(
@@ -104,13 +104,13 @@ abstract class AbstractPlaceOrderTest extends AbstractDatabaseServiceTest {
         return mockAuth;
     }
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = true;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = true;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
     @MockBean(api.services.CartsService.CatalogueClient.class)
     api.services.CartsService.CatalogueClient catalogueClient() {

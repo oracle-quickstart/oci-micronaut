@@ -1,6 +1,6 @@
 package api.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 @Schema(title = "Tracking event")
-@Introspected
+@Serdeable
 public class Event {
 
     private final String type;

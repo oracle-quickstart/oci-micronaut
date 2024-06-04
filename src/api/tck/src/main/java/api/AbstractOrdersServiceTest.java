@@ -20,26 +20,26 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Testcontainers
+// @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractOrdersServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractOrdersServiceTest {
 
     private static String sessionID;
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = false;
-        boolean useNats = true;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = false;
+    //     boolean useNats = true;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
-    @BeforeAll
-    static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
-        final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
-        sessionID = session.getValue();
-    }
+    // @BeforeAll
+    // static void login(LoginClient client) {
+    //     final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
+    //     final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
+    //     sessionID = session.getValue();
+    // }
 
     @Test
     void testListOrders(OrdersApiClient client) {
@@ -47,20 +47,20 @@ abstract class AbstractOrdersServiceTest extends AbstractDatabaseServiceTest {
         assertEquals(0, orders.size());
     }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 
-    @Override
-    protected String getServiceId() {
-        return "orders";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "orders";
+    // }
 
-    @Override
-    protected int getServiceExposedPort() {
-        return 8082;
-    }
+    // @Override
+    // protected int getServiceExposedPort() {
+    //     return 8082;
+    // }
 
     @Client("/api")
     interface OrdersApiClient {

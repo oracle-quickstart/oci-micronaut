@@ -31,18 +31,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-abstract class AbstractUsersServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractUsersServiceTest {
 
     private UserRegistrationRequest userRegistrationRequest;
     private String sessionID;
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = false;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = false;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
     @Test
     @Order(1)
@@ -136,15 +136,15 @@ abstract class AbstractUsersServiceTest extends AbstractDatabaseServiceTest {
         );
     }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 
-    @Override
-    protected String getServiceId() {
-        return "user";
-    }
+    // // @Override
+    // protected String getServiceId() {
+    //     return "user";
+    // }
 
     @Client("/api")
     interface UserApiClient {

@@ -1,13 +1,13 @@
 package api.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Schema(title = "User", description = "User details.")
-@Introspected
+@Serdeable
 public class UserDetail {
 
     @Schema(title = "User uuid.",

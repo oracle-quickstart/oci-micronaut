@@ -1,15 +1,15 @@
 package api.model;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.core.annotation.Nullable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Objects;
 
 @Schema(title = "User address", description = "User address details.")
-@Introspected
+@Serdeable
 public class AddressInfo {
     @Schema(title = "Address id", example = "22")
     @Nullable

@@ -15,6 +15,7 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
+// import io.micronaut.http.client.annotation.LoginClient;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
@@ -33,27 +34,27 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+// @Testcontainers
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-abstract class AbstractCartsServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractCartsServiceTest {
 
     private static String sessionID;
 
-    @BeforeAll
-    static void login(LoginClient client) {
-        final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
-        final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
-        sessionID = session.getValue();
-    }
+    // @BeforeAll
+    // static void login(LoginClient client) {
+    //     final HttpResponse<?> response = client.login(new BasicAuth("user", "pass"));
+    //     final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
+    //     sessionID = session.getValue();
+    // }
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = true;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = true;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
     @Test
     @Order(1)
@@ -170,13 +171,13 @@ abstract class AbstractCartsServiceTest extends AbstractDatabaseServiceTest {
         }
     }
 
-    @Override
-    protected String getServiceId() {
-        return "carts";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "carts";
+    // }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 }

@@ -1,16 +1,16 @@
 package api.model;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.core.annotation.Nullable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Optional;
 
 @Schema(title = "Payment card", description = "User payment card details.")
-@Introspected
+@Serdeable
 public class CardInfo {
 
     @Schema(title = "Card id.", example = "22")

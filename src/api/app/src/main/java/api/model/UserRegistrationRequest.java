@@ -1,14 +1,15 @@
 package api.model;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+// import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Schema(title = "User registration", description = "User registration request.")
-@Introspected
+@Serdeable
 public class UserRegistrationRequest {
     @Schema(description = "User username.", example = "johndoe", required = true)
     @NotBlank

@@ -1,8 +1,8 @@
 package api.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
-@Introspected
+@Serdeable
 public class AssetsLocation {
 
     private final String productImagePath;

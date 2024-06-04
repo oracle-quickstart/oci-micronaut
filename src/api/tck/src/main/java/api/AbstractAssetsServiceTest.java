@@ -15,28 +15,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractAssetsServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractAssetsServiceTest {
 
     @Inject
     AssetsApiClient assetsApiClient;
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = false;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = false;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 
-    @Override
-    protected String getServiceId() {
-        return "assets";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "assets";
+    // }
 
     @Test
     void testStaticResources() {

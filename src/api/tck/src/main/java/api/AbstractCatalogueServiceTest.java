@@ -17,18 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractCatalogueServiceTest extends AbstractDatabaseServiceTest {
+abstract class AbstractCatalogueServiceTest {
 
     @Inject
     CatalogueApiClient catalogueApiClient;
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        boolean useMongoDB = false;
-        boolean useNats = false;
-        return getProperties(useMongoDB, useNats);
-    }
+    // @NonNull
+    // @Override
+    // public Map<String, String> getProperties() {
+    //     boolean useMongoDB = false;
+    //     boolean useNats = false;
+    //     return getProperties(useMongoDB, useNats);
+    // }
 
     @Test
     void testListCategories() {
@@ -59,15 +59,15 @@ abstract class AbstractCatalogueServiceTest extends AbstractDatabaseServiceTest 
         assertTrue(catalogue.size() > 1);
     }
 
-    @Override
-    protected String getServiceVersion() {
-        return "2.0.0-SNAPSHOT";
-    }
+    // @Override
+    // protected String getServiceVersion() {
+    //     return "2.0.0-SNAPSHOT";
+    // }
 
-    @Override
-    protected String getServiceId() {
-        return "catalogue";
-    }
+    // @Override
+    // protected String getServiceId() {
+    //     return "catalogue";
+    // }
 
     @Client("/api")
     interface CatalogueApiClient {

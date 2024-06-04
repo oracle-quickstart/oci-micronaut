@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.ClientAuthentication;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MuShop User Details.
  */
 @Schema(title = "Authentication details")
-@Introspected
+@Serdeable
 @JsonDeserialize(as = MuUserDetails.class)
 public class MuUserDetails extends ClientAuthentication {
 

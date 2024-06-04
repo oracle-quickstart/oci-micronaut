@@ -20,13 +20,13 @@ micronaut:
         path: /api/logout
         get-allowed: true
       login:
-        enabled: false
+        enabled: true
   http:
     client:
-      follow-redirects: false
+      follow-redirects: true
   caches:
     discovery-client:
-      enabled: false
+      enabled: true
   router:
     static-resources:
       swagger:
@@ -37,10 +37,10 @@ micronaut:
       header: true
       cookie: true
       redis:
-        enabled: false
+        enabled: true
         namespace: 'mushop:sessions'
         write-mode: BACKGROUND
-        enable-keyspace-events: false
+        enable-keyspace-events: true
 
 endpoints:
   health:
@@ -51,3 +51,15 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
+test-resources:
+  containers:
+    nats:
+      image-name: nats:latest
+      hostnames:
+        - nats.host
+      exposed-ports:
+        - nats.port: 4222
+nats:
+  default:
+    addresses:
+      - "nats://${nats.host}:${nats.port}"

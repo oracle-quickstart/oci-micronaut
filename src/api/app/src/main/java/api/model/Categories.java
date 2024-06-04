@@ -15,13 +15,13 @@
  */
 package api.model;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
 @Schema(title = "Categories list")
-@Introspected
+@Serdeable
 public class Categories {
 
     private final String[] categories;

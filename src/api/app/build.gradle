@@ -17,7 +17,7 @@ micronaut {
     processing {
         incremental(true)
         annotations("api.*")
-    }aot {
+    } aot {
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
@@ -40,14 +40,15 @@ dependencies {
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
+    compileOnly("com.fasterxml.jackson.core:jackson-databind")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("jakarta.validation:jakarta.validation-api")
     implementation("io.micronaut:micronaut-retry")
     implementation("io.micronaut.security:micronaut-security-annotations")
     implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut.session:micronaut-session")
-    // implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut.data:micronaut-data-mongodb")
+
     // Metrics
     implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
@@ -59,35 +60,28 @@ dependencies {
     implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 
     // Kubernetes service discovery
-    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+//    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Redis HTTP session store
     implementation("io.micronaut.redis:micronaut-redis-lettuce")
-    
 
     // Swagger
     implementation("io.swagger.core.v3:swagger-annotations")
-    //nats 
+
+    //nats
     implementation("io.micronaut.nats:micronaut-nats")
-    
 
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     compileOnly("io.micronaut:micronaut-http-client")
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.yaml:snakeyaml")
-    //runtimeOnly("org.mongodb:mongodb-driver-sync")
     implementation("org.mongodb:mongodb-driver-reactivestreams")
 
     testImplementation(project(":tck"))
-    // testImplementation("org.testcontainers:junit-jupiter")
-    
     testImplementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut.reactor:micronaut-reactor")
-implementation("io.micronaut.reactor:micronaut-reactor-http-client")
-
-
-    
+    implementation("io.micronaut.reactor:micronaut-reactor-http-client")
 }
 
 application {

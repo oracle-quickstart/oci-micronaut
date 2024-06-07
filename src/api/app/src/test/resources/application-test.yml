@@ -1,0 +1,19 @@
+micronaut:
+  http:
+    services:
+      mushop-assets:
+        url: http://${mushop-assets.host}:${mushop-assets.port}
+test-resources:
+  containers:
+    nats:
+      image-name: nats:latest
+      hostnames:
+        - nats.host
+      exposed-ports:
+        - nats.port: 4222
+    mushop-assets:
+      image-name: phx.ocir.io/oraclelabs/micronaut-showcase/mushop/assets-app-graalvm:2.0.0-SNAPSHOT
+      hostnames:
+        - mushop-assets.host
+      exposed-ports:
+        - mushop-assets.port: 8080

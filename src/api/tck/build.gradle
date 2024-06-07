@@ -18,11 +18,8 @@ dependencies {
     implementation("io.micronaut.security:micronaut-security-session")
     implementation("io.micronaut.test:micronaut-test-junit5")
     implementation("io.projectreactor:reactor-core")
-    implementation("org.testcontainers:testcontainers")
-    // implementation("org.testcontainers:mongodb")
     implementation("io.micronaut.data:micronaut-data-mongodb")
-        implementation("io.micronaut.redis:micronaut-redis-lettuce")
-
+    implementation("io.micronaut.redis:micronaut-redis-lettuce")
     implementation("org.mockito:mockito-core")
-    //implementation("org.testcontainers:junit-jupiter")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
 }

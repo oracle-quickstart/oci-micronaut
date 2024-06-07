@@ -1,6 +1,5 @@
 package api;
 
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
@@ -9,7 +8,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,24 +17,6 @@ abstract class AbstractAssetsServiceTest {
 
     @Inject
     AssetsApiClient assetsApiClient;
-
-    // @NonNull
-    // @Override
-    // public Map<String, String> getProperties() {
-    //     boolean useMongoDB = false;
-    //     boolean useNats = false;
-    //     return getProperties(useMongoDB, useNats);
-    // }
-
-    // @Override
-    // protected String getServiceVersion() {
-    //     return "2.0.0-SNAPSHOT";
-    // }
-
-    // @Override
-    // protected String getServiceId() {
-    //     return "assets";
-    // }
 
     @Test
     void testStaticResources() {

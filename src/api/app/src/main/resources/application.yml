@@ -51,14 +51,7 @@ endpoints:
     enabled: true
     sensitive: false
     details-visible: ANONYMOUS
-test-resources:
-  containers:
-    nats:
-      image-name: nats:latest
-      hostnames:
-        - nats.host
-      exposed-ports:
-        - nats.port: 4222
+
 nats:
   default:
     addresses:

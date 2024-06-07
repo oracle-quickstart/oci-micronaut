@@ -6,8 +6,6 @@ import api.services.AssetsClient;
 import api.services.AuthClient;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -17,15 +15,14 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.cookie.Cookie;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -35,8 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// @Testcontainers
-// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 abstract class AbstractCartsServiceAnonymousTest {
 
@@ -48,14 +43,6 @@ abstract class AbstractCartsServiceAnonymousTest {
         final Cookie session = response.getCookie(HttpSessionConfiguration.DEFAULT_COOKIENAME).get();
         sessionID = session.getValue();
     }
-
-    // @NonNull
-    // @Override
-    // public Map<String, String> getProperties() {
-    //     boolean useMongoDB = true;
-    //     boolean useNats = false;
-    //     return getProperties(useMongoDB, useNats);
-    // }
 
     @Test
     @Order(1)
@@ -171,7 +158,7 @@ abstract class AbstractCartsServiceAnonymousTest {
         return () -> Mono.just(new AssetsLocation("/test"));
     }
 
-    @Introspected
+    @Serdeable
     static class ProductAndQuantity extends Product {
         public final int quantity;
 
@@ -183,14 +170,4 @@ abstract class AbstractCartsServiceAnonymousTest {
             this.quantity = quantity;
         }
     }
-
-    // @Override
-    // protected String getServiceId() {
-    //     return "carts";
-    // }
-
-    // @Override
-    // protected String getServiceVersion() {
-    //     return "2.0.0-SNAPSHOT";
-    // }
 }

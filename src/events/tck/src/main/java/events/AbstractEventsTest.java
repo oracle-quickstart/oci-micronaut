@@ -7,18 +7,11 @@ import events.service.EventService;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.OffsetReset;
 import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.test.support.TestPropertyProvider;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,12 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Testcontainers
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class AbstractEventsTest implements TestPropertyProvider {
-
-    @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+abstract class AbstractEventsTest {
 
     @Inject
     EventsListener eventsListener;
@@ -68,6 +56,7 @@ abstract class AbstractEventsTest implements TestPropertyProvider {
         final String source = "client";
         final String track = "abcxyz";
         final String type = "pageView";
+        System.out.println("Client posting event: " + type);
         final EventsReceived eventsReceived = client.postEvents(
                 source,
                 track,
@@ -75,30 +64,23 @@ abstract class AbstractEventsTest implements TestPropertyProvider {
         );
 
         assertNotNull(eventsReceived);
-        assertTrue(eventsReceived.isSuccess());
-        assertEquals(1, eventsReceived.getEvents());
+        assertTrue(eventsReceived.success());
+        assertEquals(1, eventsReceived.events());
         assertEventReceived(source, track, type, details);
     }
 
     private void assertEventReceived(String source, String track, String type, Map<String, String> details) {
-        await().atMost(30, SECONDS).until(() -> !eventsListener.received.isEmpty());
+        await().atMost(60, SECONDS).until(() -> !eventsListener.received.isEmpty());
 
         final EventRecord eventRecord = eventsListener.received.stream().findFirst().orElse(null);
         assertNotNull(eventRecord);
-        assertEquals(source, eventRecord.getSource());
-        assertEquals(track, eventRecord.getTrack());
-        assertNotNull(eventRecord.getTime());
-        assertEquals(type, eventRecord.getType());
-        assertEquals(details, eventRecord.getDetail());
+        assertEquals(source, eventRecord.source());
+        assertEquals(track, eventRecord.track());
+        assertNotNull(eventRecord.time());
+        assertEquals(type, eventRecord.type());
+        assertEquals(details, eventRecord.detail());
     }
 
-    @NonNull
-    @Override
-    public Map<String, String> getProperties() {
-        return Collections.singletonMap(
-                "kafka.bootstrap.servers", kafka.getBootstrapServers()
-        );
-    }
 
     @KafkaListener(offsetReset = OffsetReset.EARLIEST)
     static class EventsListener {

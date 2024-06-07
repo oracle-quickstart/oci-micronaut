@@ -1,0 +1,10 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+dependencies {
+    implementation("com.bmuschko:gradle-docker-plugin:9.4.0")
+}

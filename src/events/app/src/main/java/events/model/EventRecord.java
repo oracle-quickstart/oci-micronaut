@@ -1,7 +1,7 @@
 package events.model;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.time.Instant;
 import java.util.Map;
@@ -10,39 +10,26 @@ import java.util.Objects;
 /**
  * Event record.
  */
-@Introspected
-public class EventRecord extends Event {
 
-    private final String source;
-    private final String track;
-    private final Instant time;
 
-    public EventRecord(String source,
-                       String track,
-                       Event event) {
-        this(source, track, Objects.requireNonNull(event, "Event cannot be null").getType(), event.getDetail());
-    }
+@Serdeable
+public record EventRecord(String source, String track, Instant time, Event event) {
 
     @Creator
-    public EventRecord(String source,
-                       String track,
-                       String type,
-                       Map<String, String> detail) {
-        super(type, detail);
-        this.source = source;
-        this.track = track;
-        time = Instant.now();
+    public EventRecord(String source, String track, Event event) {
+        this(source, track, Instant.now(), Objects.requireNonNull(event, "Event cannot be null"));
     }
 
-    public String getSource() {
-        return source;
+
+    public EventRecord(String source, String track, String type, Map<String, String> detail) {
+        this(source, track, Instant.now(), new Event(type, detail));
     }
 
-    public String getTrack() {
-        return track;
+    public String type() {
+        return event.type();
     }
 
-    public Instant getTime() {
-        return time;
+    public Map<String, String> detail() {
+        return event.detail();
     }
 }

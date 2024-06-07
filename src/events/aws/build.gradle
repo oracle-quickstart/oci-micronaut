@@ -1,6 +1,8 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
+    id("io.micronaut.test-resources") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -15,6 +17,14 @@ micronaut {
     processing {
         incremental(true)
         annotations("events.*")
+    }aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
     }
 }
 
@@ -26,7 +36,7 @@ dependencies {
 
     // Kafka IAM
     implementation("software.amazon.msk:aws-msk-iam-auth:1.0.0")
-
+    implementation("io.micronaut.kafka:micronaut-kafka")
     // Configuration discovery
     implementation("io.micronaut.aws:micronaut-aws-secretsmanager")
     implementation("io.micronaut.aws:micronaut-aws-parameter-store")
@@ -35,7 +45,6 @@ dependencies {
     implementation("software.amazon.awssdk:sts")
 
     testImplementation(project(":tck"))
-    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 application {
@@ -43,13 +52,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "phx.ocir.io/oraclelabs/micronaut-showcase/mushop/base/graalvm-ce:java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

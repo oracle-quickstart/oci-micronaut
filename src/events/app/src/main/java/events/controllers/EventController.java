@@ -6,9 +6,7 @@ import events.service.EventService;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Controller("/events")
 class EventController {
@@ -31,7 +29,7 @@ class EventController {
     EventsReceived postEvents(
             @NotBlank String source,
             @NotBlank String track,
-            @Min(1) Event...events) {
+            Event...events) {
         return eventService.postEvents(source, track, events);
     }
 }

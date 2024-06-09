@@ -19,6 +19,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -37,6 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 // @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 abstract class AbstractCartsServiceTest {
+    @Inject
+    CartClient cartClient;
 
     private static String sessionID;
 
@@ -57,66 +60,66 @@ abstract class AbstractCartsServiceTest {
 
     @Test
     @Order(1)
-    void testReadNonExistentCart(CartClient client) {
-        final List<ProductAndQuantity> cart = client.getCart(sessionID);
+    void testReadNonExistentCart() {
+        final List<ProductAndQuantity> cart = cartClient.getCart(sessionID);
         assertNotNull(cart);
     }
 
     @Test
     @Order(2)
-    void testDeleteNonExistentCart(CartClient client) {
-        final HttpStatus status = client.deleteCart(sessionID);
+    void testDeleteNonExistentCart() {
+        final HttpStatus status = cartClient.deleteCart(sessionID);
         assertNotNull(status);
         assertEquals(HttpStatus.NO_CONTENT, status);
     }
 
     @Test
     @Order(3)
-    void testAddItemToCart(CartClient client) {
-        final HttpStatus status = client.addItem(sessionID, Map.of(
+    void testAddItemToCart() {
+        final HttpStatus status = cartClient.addItem(sessionID, Map.of(
                 "id", 1234,
                 "quantity", 2
         ));
 
         assertEquals(HttpStatus.CREATED, status);
 
-        final List<ProductAndQuantity> cart = client.getCart(sessionID);
+        final List<ProductAndQuantity> cart = cartClient.getCart(sessionID);
 
         assertEquals(1, cart.size());
 
         final ProductAndQuantity product = cart.iterator().next();
-        assertEquals(10.00, product.getPrice());
+        assertEquals(10.00, product.price());
         assertEquals(2, product.quantity);
 
     }
 
     @Test
     @Order(4)
-    void testUpdateItem(CartClient client) {
-        List<ProductAndQuantity> cart = client.getCart(sessionID);
+    void testUpdateItem() {
+        List<ProductAndQuantity> cart = cartClient.getCart(sessionID);
         assertEquals(1, cart.size());
-        client.updateItem(sessionID, Map.of(
+        cartClient.updateItem(sessionID, Map.of(
                 "id", 1234,
                 "quantity", 3
         ));
 
-        cart = client.getCart(sessionID);
+        cart = cartClient.getCart(sessionID);
         assertEquals(1, cart.size());
 
         final ProductAndQuantity product = cart.iterator().next();
-        assertEquals(10.00, product.getPrice());
+        assertEquals(10.00, product.price());
         assertEquals(3, product.quantity);
     }
 
     @Test
     @Order(5)
-    void testDeleteItemFromCart(CartClient client) {
-        List<ProductAndQuantity> cart = client.getCart(sessionID);
+    void testDeleteItemFromCart() {
+        List<ProductAndQuantity> cart = cartClient.getCart(sessionID);
         assertEquals(1, cart.size());
-        final HttpStatus status = client.deleteCartItem(sessionID, "1234");
+        final HttpStatus status = cartClient.deleteCartItem(sessionID, "1234");
         assertEquals(HttpStatus.NO_CONTENT, status);
 
-        cart = client.getCart(sessionID);
+        cart = cartClient.getCart(sessionID);
         assertEquals(0, cart.size());
     }
 
@@ -158,18 +161,36 @@ abstract class AbstractCartsServiceTest {
     }
 
     @Introspected
-    static class ProductAndQuantity extends Product {
-        public final int quantity;
+//    static class ProductAndQuantity extends Product {
+//        public final int quantity;
+//
+//        @JsonCreator
+//        public ProductAndQuantity(@JsonProperty("id") String id,
+//                                  @JsonProperty("unitPrice") double price,
+//                                  @JsonProperty("quantity") int quantity) {
+//            super(id, price);
+//            this.quantity = quantity;
+//        }
+//    }
+    public record ProductAndQuantity(Product product, int quantity) {
 
         @JsonCreator
         public ProductAndQuantity(@JsonProperty("id") String id,
                                   @JsonProperty("unitPrice") double price,
                                   @JsonProperty("quantity") int quantity) {
-            super(id, price);
-            this.quantity = quantity;
+            this(new Product(id, price), quantity);
+        }
+
+        @JsonProperty("id")
+        public String id() {
+            return product.id();
+        }
+
+        @JsonProperty("unitPrice")
+        public Double price() {
+            return product.price();
         }
     }
-
     // @Override
     // protected String getServiceId() {
     //     return "carts";

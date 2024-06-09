@@ -22,20 +22,4 @@ import java.util.List;
 
 @Schema(title = "Categories list")
 @Serdeable
-public class Categories {
-
-    private final String[] categories;
-
-    public Categories(List<String> categories) {
-        this.categories = categories.toArray(new String[0]);
-    }
-
-    /**
-     * An array of category names
-     *
-     * @return An array of category names
-     */
-    public String[] getCategories() {
-        return categories;
-    }
-}
+public record Categories(String[] categories){}

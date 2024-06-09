@@ -6,6 +6,7 @@ plugins {
 }
 
 group = "micronaut.mushop"
+//comment this
 
 repositories {
     mavenCentral()

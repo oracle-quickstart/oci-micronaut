@@ -16,6 +16,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.cookie.Cookie;
 import io.micronaut.session.http.HttpSessionConfiguration;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,8 @@ abstract class AbstractUsersServiceTest {
 
     private UserRegistrationRequest userRegistrationRequest;
     private String sessionID;
+    @Inject
+    UserApiClient client;
 
     // @NonNull
     // // @Override
@@ -46,7 +49,7 @@ abstract class AbstractUsersServiceTest {
 
     @Test
     @Order(1)
-    void testShouldFailLogin(UserApiClient client) {
+    void testShouldFailLogin() {
         HttpClientResponseException error = assertThrows(HttpClientResponseException.class, () ->
                 client.login(new BasicAuth("junk", "junk"))
         );
@@ -55,7 +58,7 @@ abstract class AbstractUsersServiceTest {
 
     @Test
     @Order(2)
-    void testRegister(UserApiClient client) {
+    void testRegister() {
         userRegistrationRequest = new UserRegistrationRequest(
                 "fred",
                 "testpass",
@@ -71,7 +74,7 @@ abstract class AbstractUsersServiceTest {
 
     @Test
     @Order(3)
-    void testLogin(UserApiClient client) {
+    void testLogin() {
         final HttpResponse<?> loginResult = client.login(
                 new BasicAuth(userRegistrationRequest.getUsername(), userRegistrationRequest.getPassword()));
         assertEquals(HttpStatus.SEE_OTHER, loginResult.getStatus());
@@ -87,12 +90,12 @@ abstract class AbstractUsersServiceTest {
 
     @Order(4)
     @Test
-    void testAddAddress(UserApiClient client) {
-        final AddressInfo original = new AddressInfo("10", "Smith St.", "Fooville", "Foo", "12345");
+    void testAddAddress() {
+        final AddressInfo original = AddressInfo.createWithoutId("10", "Smith St.", "Fooville", "Foo", "12345");
         AddressInfo addressInfo = client.addAddress(sessionID, original);
 
         assertNotNull(addressInfo);
-        assertEquals("Smith St.", addressInfo.getStreet());
+        assertEquals("Smith St.", addressInfo.street());
         assertEquals(
                 original,
                 addressInfo
@@ -107,27 +110,27 @@ abstract class AbstractUsersServiceTest {
 
     @Order(5)
     @Test
-    void testAddCard(UserApiClient client) {
-        final CardInfo original = new CardInfo("123", "1234123412341234", "0222");
+    void testAddCard() {
+        final CardInfo original = CardInfo.createWithoutId("123", "1234123412341234", "0222");
         CardInfo cardInfo = client.addCard(sessionID, original);
         assertEquals(
-                original.getExpires(),
-                cardInfo.getExpires()
+                original.expires(),
+                cardInfo.expires()
         );
 
-        assertTrue(cardInfo.getLongNum().startsWith("xxxx"));
+        assertTrue(cardInfo.longNum().startsWith("xxxx"));
 
         final CardInfo retrieved = client.getCard(sessionID);
         assertEquals(
-                cardInfo.getExpires(),
-                retrieved.getExpires()
+                cardInfo.expires(),
+                retrieved.expires()
         );
-        assertTrue(retrieved.getLongNum().startsWith("xxxx"));
+        assertTrue(retrieved.longNum().startsWith("xxxx"));
     }
 
     @Test
     @Order(10)
-    void testLogout(UserApiClient client) {
+    void testLogout() {
         client.logout(sessionID);
 
         assertEquals(

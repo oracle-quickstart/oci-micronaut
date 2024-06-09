@@ -41,7 +41,7 @@ public class ConfigService {
     Mono<Configuration> getConfig(Session session) {
         final String trackId = session != null ? session.getId() : "";
         return assetsClient.getAssetsLocation()
-                .flatMap(location -> Mono.just(new Configuration(trackId, false, location.getProductImagePath(), cloudProvider)));
+                .flatMap(location -> Mono.just(new Configuration(trackId, false, location.productImagePath(), cloudProvider)));
     }
 
     /**

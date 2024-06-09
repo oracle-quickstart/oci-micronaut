@@ -1,5 +1,6 @@
 package api.model;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -9,26 +10,10 @@ import java.util.Objects;
 
 @Schema(title = "Tracking event")
 @Serdeable
-public class Event {
+public record Event (String type,Object detail,LocalDateTime time){
+public Event createWithoutTime(@NonNull String type, Object detail) {
 
-    private final String type;
-    private final Object detail;
-    private final LocalDateTime time = LocalDateTime.now();
+    return new Event(type, detail, null);
+}}
 
-    public Event(String type, Object detail) {
-        this.type = Objects.requireNonNull(type, "Type cannot be null");
-        this.detail = detail != null ? detail : Collections.emptyMap();
-    }
 
-    public String getType() {
-        return type;
-    }
-
-    public Object getDetail() {
-        return detail;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-}

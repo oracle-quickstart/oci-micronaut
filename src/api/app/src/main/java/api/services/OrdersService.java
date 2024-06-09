@@ -125,8 +125,8 @@ public class OrdersService {
                                         OrderRequest orderRequest = new OrderRequest(
                                                 cartURI.nest(URI_CART_ITEMS).expand(Map.of("cartId", cartId)),
                                                 customerURI.nest(URI_USER_ID).expand(Map.of(USER_ID, userId)),
-                                                customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.getId())),
-                                                customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.getId()))
+                                                customerURI.nest(URI_USER_ADDRESS).expand(Map.of(USER_ID, userId, "addressId", addressInfo.id())),
+                                                customerURI.nest(URI_USER_CARD).expand(Map.of(USER_ID, userId, "cardId", cardInfo.id()))
                                         );
                                         return client.newOrder(orderRequest);
                                     }));

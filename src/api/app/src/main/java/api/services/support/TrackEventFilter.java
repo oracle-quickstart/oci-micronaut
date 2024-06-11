@@ -65,6 +65,7 @@ public class TrackEventFilter implements HttpServerFilter {
             if (body == null) {
                 body = Collections.singletonMap("message", throwable.getMessage());
             }
+
             final Event evt = new Event(event + ":error", body);
             return eventsService.trackEvents("api", session.getId(), evt)
                     .onErrorResume(t -> Mono.empty())

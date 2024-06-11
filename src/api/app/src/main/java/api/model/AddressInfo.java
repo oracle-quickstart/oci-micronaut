@@ -1,4 +1,5 @@
 package api.model;
+
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.core.annotation.Nullable;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +19,7 @@ public record AddressInfo(
         @NotEmpty String country,
         @Schema(title="Postcode",example="96763")
         @NotEmpty String postcode){
+
 
 
 

@@ -20,6 +20,7 @@ import io.micronaut.http.cookie.Cookie;
 import io.micronaut.http.uri.UriTemplate;
 import io.micronaut.session.http.HttpSessionConfiguration;
 import io.micronaut.test.annotation.MockBean;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -40,6 +41,13 @@ import static org.mockito.Mockito.when;
 abstract class AbstractPlaceOrderTest {
 
     private static String sessionID;
+    @Inject
+    AbstractCartsServiceTest.CartClient cartClient;
+    @Inject
+    UsersClient usersClient;
+
+    @Inject
+    OrdersApiClient ordersApiClient;
 
     private final MockAuth mockAuth = new MockAuth();
     private OrdersService.OrderRequest lastOrder;
@@ -62,10 +70,7 @@ abstract class AbstractPlaceOrderTest {
     // }
 
     @Test
-    void testPlaceOrder(
-            AbstractCartsServiceTest.CartClient cartClient,
-            UsersClient usersClient,
-            OrdersApiClient ordersApiClient) {
+    void testPlaceOrder() {
         final HttpStatus status = cartClient.addItem(sessionID, Map.of(
                 "id", 1234,
                 "quantity", 2

@@ -2,6 +2,8 @@ package api;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;
 import jakarta.inject.Inject;
@@ -71,13 +73,14 @@ abstract class AbstractCatalogueServiceTest {
 
     @Client("/api")
     interface CatalogueApiClient {
-        @Get("/catalogue/{id}")
+        @Get(value ="/catalogue/{id}")
         Mono<Map<String, Object>> getItem(String id);
 
-        @Get("/categories")
+        @Get(value ="/categories")
         Map<String, Object> getCategories();
 
-        @Get("/catalogue{?categories}")
+        @Get(value ="/catalogue{?categories}")
         List<?> getCatalogue(@Nullable List<String> categories);
     }
+
 }

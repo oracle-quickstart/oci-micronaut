@@ -61,7 +61,7 @@ dependencies {
     implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 
     // Kubernetes service discovery
-//    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+   // implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Redis HTTP session store
     implementation("io.micronaut.redis:micronaut-redis-lettuce")

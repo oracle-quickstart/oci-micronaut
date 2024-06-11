@@ -76,7 +76,7 @@ abstract class AbstractUsersServiceTest {
     @Order(3)
     void testLogin() {
         final HttpResponse<?> loginResult = client.login(
-                new BasicAuth(userRegistrationRequest.getUsername(), userRegistrationRequest.getPassword()));
+                new BasicAuth(userRegistrationRequest.username(), userRegistrationRequest.password()));
         assertEquals(HttpStatus.SEE_OTHER, loginResult.getStatus());
         assertTrue(loginResult.getHeaders().contains(HttpHeaders.AUTHORIZATION_INFO));
         assertTrue(loginResult.getHeaders().contains(HttpHeaders.SET_COOKIE));

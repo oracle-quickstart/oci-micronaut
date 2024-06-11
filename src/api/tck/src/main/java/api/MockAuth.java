@@ -18,6 +18,6 @@ class MockAuth implements AuthClient {
 
     @Override
     public Mono<MuUserDetails> register(UserRegistrationRequest registrationRequest) {
-        return Mono.just(new MuUserDetails(userId, registrationRequest.getUsername()));
+        return Mono.just(new MuUserDetails(userId, registrationRequest.username()));
     }
 }

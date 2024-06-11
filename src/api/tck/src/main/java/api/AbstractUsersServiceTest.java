@@ -55,7 +55,7 @@ abstract class AbstractUsersServiceTest {
         assertEquals(HttpStatus.UNAUTHORIZED, error.getStatus());
     }
 
-//    @Test
+    @Test
     @Order(2)
     void testRegister() {
         userRegistrationRequest = new UserRegistrationRequest(
@@ -71,7 +71,7 @@ abstract class AbstractUsersServiceTest {
         assertTrue(((Map)result.get("attributes")).containsKey("id"));
     }
 
-//    @Test
+    @Test
     @Order(3)
     void testLogin() {
         final HttpResponse<?> loginResult = client.login(
@@ -88,7 +88,7 @@ abstract class AbstractUsersServiceTest {
     }
 
     @Order(4)
-//    @Test
+    @Test
     void testAddAddress() {
         final AddressInfo original = AddressInfo.createWithoutId("10", "Smith St.", "Fooville", "Foo", "12345");
         AddressInfo addressInfo = client.addAddress(sessionID, original);
@@ -108,7 +108,7 @@ abstract class AbstractUsersServiceTest {
     }
 
     @Order(5)
-//    @Test
+    @Test
     void testAddCard() {
         final CardInfo original = CardInfo.createWithoutId("123", "1234123412341234", "0222");
         CardInfo cardInfo = client.addCard(sessionID, original);
@@ -127,7 +127,7 @@ abstract class AbstractUsersServiceTest {
         assertTrue(retrieved.longNum().startsWith("xxxx"));
     }
 
-//    @Test
+    @Test
     @Order(10)
     void testLogout() {
         client.logout(sessionID);

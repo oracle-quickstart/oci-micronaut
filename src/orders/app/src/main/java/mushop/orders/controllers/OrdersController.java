@@ -21,8 +21,8 @@ import io.micronaut.http.hateoas.Link;
 import io.micronaut.transaction.annotation.ReadOnly;
 
 import java.util.Optional;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 
 import mushop.orders.controllers.dto.CustomerOrderDto;
 import mushop.orders.controllers.dto.CustomerOrdersDto;

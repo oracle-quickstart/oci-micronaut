@@ -4,17 +4,19 @@
  **/
 package mushop.orders.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+// import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * The cart shipment business object.
  */
+@Serdeable
 @Entity
-public class Shipment implements Serializable {
+public class Shipment {
 
     @Id
     private String id;

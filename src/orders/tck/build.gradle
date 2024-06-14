@@ -1,5 +1,5 @@
 plugins {
-    id("io.micronaut.application") version "3.6.2"
+    id("io.micronaut.application") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -7,7 +7,7 @@ group = "micronaut.mushop"
 repositories {
     mavenCentral()
 }
-
+tasks.withType(Jar).configureEach { zip64 = true }
 dependencies {
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
@@ -16,6 +16,11 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.test:micronaut-test-junit5")
     implementation("io.projectreactor:reactor-core")
+    implementation("io.micronaut.nats:micronaut-nats")
     implementation("org.mockito:mockito-core")
-    implementation("org.testcontainers:junit-jupiter")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+
+    // implementation("org.testcontainers:junit-jupiter")
 }

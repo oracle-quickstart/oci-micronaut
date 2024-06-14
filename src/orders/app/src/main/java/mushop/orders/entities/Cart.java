@@ -4,21 +4,24 @@
  **/
 package mushop.orders.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+// import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.micronaut.serde.annotation.Serdeable;
+
 /**
  * The cart business object.
  */
+@Serdeable
 @Entity
-public class Cart implements Serializable {
+public class Cart {
 
     @NotNull
     @ManyToOne

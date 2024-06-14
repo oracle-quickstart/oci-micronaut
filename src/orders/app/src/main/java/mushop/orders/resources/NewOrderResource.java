@@ -4,16 +4,16 @@
  **/
 package  mushop.orders.resources;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
 import java.net.URI;
 import java.util.Objects;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * The messaging business object.
  */
-@Introspected
+@Serdeable
 public class NewOrderResource {
 
     @NotNull

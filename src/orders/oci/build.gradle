@@ -1,6 +1,8 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+   id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.test-resources") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -15,15 +17,24 @@ micronaut {
     processing {
         incremental(true)
         annotations("mushop.orders.*")
-    }
+    }aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true 
+        optimizeNetty = true
+        }
 }
 
 dependencies {
-    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+   annotationProcessor("io.micronaut.data:micronaut-data-processor")
 
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
     }
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
 
     // Metrics
     implementation("com.oracle.oci.sdk:oci-java-sdk-monitoring")
@@ -33,17 +44,17 @@ dependencies {
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-sdk")
 
     // Database
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.oraclecloud:micronaut-oraclecloud-atp")
-    implementation platform("com.oracle.database.jdbc:ojdbc-bom:21.1.0.0")
-
+    implementation platform("com.oracle.database.jdbc:ojdbc-bom:23.3.0.23.09")
     runtimeOnly("com.oracle.database.security:oraclepki")
     runtimeOnly("com.oracle.database.security:osdt_cert")
     runtimeOnly("com.oracle.database.security:osdt_core")
 
     testImplementation(project(":tck"))
     testImplementation("io.micronaut.nats:micronaut-nats")
-    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:oracle-xe")
+
 }
 
 application {
@@ -51,13 +62,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 

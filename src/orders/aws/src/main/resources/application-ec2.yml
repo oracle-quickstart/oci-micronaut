@@ -5,6 +5,25 @@ micronaut:
         enabled: true
         namespace: ${AWS_METRICS_NAMESPACE:micronaut_mushop}
 
+# datasources:
+#   default:
+#     driverClassName: com.mysql.cj.jdbc.Driver
+test-resources:
+  containers:
+    mssql:
+      accept-license: true
+    nats:
+      image-name: nats:latest
+      hostnames:
+        - nats.host
+      exposed-ports:
+        - nats.port: 4222
+nats:
+  default:
+    addresses:
+      - "nats://${nats.host}:${nats.port}"
 datasources:
   default:
-    driverClassName: com.mysql.cj.jdbc.Driver
+   db-type: mysql
+   dialect: MYSQL
+   driver-class-name: com.mysql.cj.jdbc.Driver

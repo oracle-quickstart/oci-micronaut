@@ -40,13 +40,27 @@ Note that you will have to create and configure the needed Oracle Cloud services
 ### Helm + Terraform
 Deploy the complete MuShop with all Oracle Cloud services automatically using the Terraform scripts. The [terraform documentation](https://oracle-quickstart.github.io/oci-micronaut/quickstart/terraform/) walks through the configuration process and various options for customizing the deployment.
 
-
 #### Topology
 
 The following diagram shows the topology created by this stack.
 
 ![MuShop Infra](./images/complete/00-Topology.png)
 
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
 ## Questions
 
 If you have an issue or a question, please take a look at our [FAQs](./deploy/basic/FAQs.md) or [open an issue](https://github.com/oracle-quickstart/oci-micronaut/issues/new).
+
+## License
+
+Copyright (c) 2019 Oracle and/or its affiliates.
+
+Released under the Universal Permissive License v1.0 as shown at
+<https://oss.oracle.com/licenses/upl/>.

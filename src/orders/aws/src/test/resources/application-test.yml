@@ -3,8 +3,8 @@ micronaut:
     export:
       cloudwatch:
         enabled: false
-
 datasources:
   default:
-    url: jdbc:tc:mysql:8:///db
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+   db-type: mysql
+   dialect: MYSQL
+   driver-class-name: com.mysql.cj.jdbc.Driver

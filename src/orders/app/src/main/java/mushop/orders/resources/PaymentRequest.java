@@ -5,7 +5,7 @@
 package mushop.orders.resources;
 
 import io.micronaut.core.annotation.Creator;
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import mushop.orders.entities.Address;
 import mushop.orders.entities.Card;
 import mushop.orders.entities.Customer;
@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * The messaging business object.
  */
-@Introspected
+@Serdeable
 public class PaymentRequest {
 
     private Address address;

@@ -15,7 +15,7 @@
  */
 package mushop.orders.controllers.dto;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.hateoas.AbstractResource;
 import mushop.orders.entities.CustomerOrder;
@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * The collection of {@link CustomerOrderDto}s.
  */
-@Introspected
+@Serdeable
 public class CustomerOrdersDto extends AbstractResource<CustomerOrdersDto> {
 
     private final Map<String, Integer> page;

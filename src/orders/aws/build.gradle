@@ -1,6 +1,8 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.3.4"
+    id("io.micronaut.aot") version "4.3.4"
+    id("io.micronaut.test-resources") version "4.3.4"
 }
 
 group = "micronaut.mushop"
@@ -13,19 +15,48 @@ micronaut {
     runtime("netty")
     testRuntime("junit5")
     processing {
-        incremental(true)
+        incremental(false)
         annotations("mushop.orders.*")
+    }aot {
+    // Please review carefully the optimizations enabled below
+    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+        replaceLogbackXml = true
     }
+//      testResources {
+//          enabled = true 
+//          version = "2.5.0" // override Micronaut Test Resources version
+//          explicitPort = 15471 // by default, uses a random port
+//          inferClasspath = true // true by default
+//          additionalModules.add(JDBC_MYSQL) // empty by default
+//          clientTimeout = 60 // in seconds, maximum time to wait for resources to be available, 60s by default
+//          serverIdleTimeoutMinutes = 60 // if the server doesn't receive any request for this amount of time, it will be shut down
+//          sharedServer = true // false by default
+//          sharedServerNamespace = 'custom' // unset by default
+//      }
 }
-
+tasks.withType(Jar).configureEach { zip64 = true }
+test {
+    useJUnitPlatform()
+}
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
-
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+    implementation("io.micronaut.nats:micronaut-nats")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation(project(":app")) {
         exclude group:'com.h2database', module:'h2'
     }
-
     implementation("org.slf4j:jcl-over-slf4j")
+    testImplementation(project(":tck"))
 
     // Authentication
     implementation("software.amazon.awssdk:sts")
@@ -38,12 +69,7 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-cloudwatch")
 
     // Database
-    implementation("mysql:mysql-connector-java")
-
-    testImplementation(project(":tck"))
-    testImplementation("io.micronaut.nats:micronaut-nats")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:mysql")
+    runtimeOnly("mysql:mysql-connector-java")
 }
 
 application {
@@ -51,13 +77,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 if (javaBaseImage == "graalvm") {
     dockerfile {
-        baseImage = "ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0"
+        baseImage = "ghcr.io/graalvm/native-image-community:21"
     }
 }
 
